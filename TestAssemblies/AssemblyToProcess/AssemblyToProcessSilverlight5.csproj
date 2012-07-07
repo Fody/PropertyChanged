@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>obj\Silverlight5</BaseIntermediateOutputPath>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{546240C3-4342-4F90-B0FD-3BA76507DCEF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>AssemblyToProcess</RootNamespace>
+    <AssemblyName>AssemblyToProcess</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugSilverlight5\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>0067</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleaseSilverlight4\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractProperty\ClassWithAbstractProperty.cs" />
+    <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
+    <Compile Include="ClassAlreadyHasNotifcation.cs" />
+    <Compile Include="ClassAlsoNotifyFor.cs" />
+    <Compile Include="ClassCircularProperties.cs" />
+    <Compile Include="ClassDependsOn.cs" />
+    <Compile Include="ClassEquality.cs" />
+    <Compile Include="ClassEqualityWithDouble.cs" />
+    <Compile Include="ClassEqualityWithStruct.cs" />
+    <Compile Include="ClassEqualityWithStructOverload.cs" />
+    <Compile Include="ClassMissingSetGet.cs" />
+    <Compile Include="ClassNoBackingNoEqualityField.cs" />
+    <Compile Include="ClassNoBackingWithEqualityField.cs" />
+    <Compile Include="ClassStaticProperties.cs" />
+    <Compile Include="ClassThatIsNotSealed.cs" />
+    <Compile Include="ClassThatIsSealed.cs" />
+    <Compile Include="ClassWithBeforeAfterAndSimpleImplementation.cs" />
+    <Compile Include="ClassWithBeforeAfterImplementation.cs" />
+    <Compile Include="ClassWithBeforeAfterImplementationMissingSetGet.cs" />
+    <Compile Include="ClassWithBoolPropUsingStringProp.cs" />
+    <Compile Include="ClassWithBranchingReturn1.cs" />
+    <Compile Include="ClassWithBranchingReturn2.cs" />
+    <Compile Include="ClassWithBranchingReturnAndBeforeAfter.cs" />
+    <Compile Include="ClassWithBranchingReturnAndNoField.cs" />
+    <Compile Include="ClassWithCustomPropertyChanged.cs" />
+    <Compile Include="ClassWithDependencyAfterSet.cs" />
+    <Compile Include="ClassWithDependsOnAndDoNotNotify.cs" />
+    <Compile Include="ClassWithDoNotNotify.cs" />
+    <Compile Include="ClassWithDoNotSetChanged.cs" />
+    <Compile Include="ClassWithFieldGetButNoFieldSet.cs" />
+    <Compile Include="ClassWithPropertySetInCatch.cs" />
+    <Compile Include="ClassWithExceptionInProperty.cs" />
+    <Compile Include="ClassWithExplicitPropertyChanged.cs" />
+    <Compile Include="ClassWithExpression.cs" />
+    <Compile Include="ClassWithGenericAndLambda.cs" />
+    <Compile Include="ClassWithIndexer.cs" />
+    <Compile Include="ClassWithInvalidIsChangedType.cs" />
+    <Compile Include="ClassWithIsChanged.cs" />
+    <Compile Include="ClassWithLogicInSet.cs" />
+    <Compile Include="ClassWithNested.cs" />
+    <Compile Include="ClassWithOnChanged.cs" />
+    <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
+    <Compile Include="ClassWithOwnImplementation.cs" />
+    <Compile Include="ClassWithTryCatchInSet.cs" />
+    <Compile Include="CodeGenAttribute\ClassWithCompilerGeneratedAttribute.cs" />
+    <Compile Include="CodeGenAttribute\ClassWithGeneratedCodeAttribute.cs" />
+    <Compile Include="ComplexHierachy\ClassChild1.cs" />
+    <Compile Include="ComplexHierachy\ClassChild2.cs" />
+    <Compile Include="ComplexHierachy\ClassChild3.cs" />
+    <Compile Include="ComplexHierachy\ClassParent.cs" />
+    <Compile Include="ExplicitPropertyChangedFromOtherClass\ClassWithForwardedEvent.cs" />
+    <Compile Include="ExplicitPropertyChangedFromOtherClass\InnerClass.cs" />
+    <Compile Include="FieldsFromOtherClass\ClassWithFieldFromOtherClass.cs" />
+    <Compile Include="FieldsFromOtherClass\OtherClass.cs" />
+    <Compile Include="GenericBaseWithPropertyBeforeAfter\ClassWithGenericProperty.cs" />
+    <Compile Include="GenericBaseWithPropertyBeforeAfter\ClassWithGenericPropertyChild.cs" />
+    <Compile Include="GenericBaseWithPropertyOnChanged\ClassWithGenericProperty.cs" />
+    <Compile Include="GenericBaseWithPropertyOnChanged\ClassWithGenericPropertyChild.cs" />
+    <Compile Include="GenericBaseWithProperty\ClassWithGenericProperty.cs" />
+    <Compile Include="GenericBaseWithProperty\ClassWithGenericPropertyChild.cs" />
+    <Compile Include="GenericBase\ClassWithGenericChild.cs" />
+    <Compile Include="GenericBase\ClassWithGenericParent.cs" />
+    <Compile Include="GenericChildWithPropertyBeforeAfter\ClassWithGenericProperty.cs" />
+    <Compile Include="GenericChildWithPropertyBeforeAfter\ClassWithGenericPropertyChild.cs" />
+    <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericProperty.cs" />
+    <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericPropertyChild.cs" />
+    <Compile Include="GenericChildWithProperty\ClassWithGenericProperty.cs" />
+    <Compile Include="GenericChildWithProperty\ClassWithGenericPropertyChild.cs" />
+    <Compile Include="HierachyBeforeAfterAndSimple\ClassBase.cs" />
+    <Compile Include="HierachyBeforeAfterAndSimple\ClassChild.cs" />
+    <Compile Include="InterfaceWithAttributes.cs" />
+    <Compile Include="NotifyInBase\ClassParentWithProperty.cs" />
+    <Compile Include="NotifyInBase\ClassWithNotifyInBase.cs" />
+    <Compile Include="OnceRemovedINotify\ClassWithOnceRemovedINotify.cs" />
+    <Compile Include="OnceRemovedINotify\INotifyPropertyChangedChild.cs" />
+    <Compile Include="StructWithAttributes.cs" />
+    <Compile Include="SupportedLibraries\BaseClasses.cs" />
+    <Compile Include="SupportedLibraries\ClassCaliburn.cs" />
+    <Compile Include="SupportedLibraries\ClassCaliburnMicro.cs" />
+    <Compile Include="SupportedLibraries\ClassCaliburnOverriddenInvoker.cs" />
+    <Compile Include="SupportedLibraries\ClassCatel.cs" />
+    <Compile Include="SupportedLibraries\ClassCinch.cs" />
+    <Compile Include="SupportedLibraries\ClassJounceBaseNotify.cs" />
+    <Compile Include="SupportedLibraries\ClassJounceBaseViewModel.cs" />
+    <Compile Include="SupportedLibraries\ClassMagellan.cs" />
+    <Compile Include="SupportedLibraries\ClassMvvmLight.cs" />
+    <Compile Include="SupportedLibraries\ClassPrism.cs" />
+    <Compile Include="TransitiveDependencies.cs" />
+    <Compile Include="UsingPublicFieldThroughParameter\ClassUsingPublicFieldThroughParameter.cs" />
+    <Compile Include="UsingPublicFieldThroughParameter\ClassWithPublicField.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_PCL.csproj">
+      <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
+      <Name>PropertyChanged_PCL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+</Project>
