@@ -7,7 +7,7 @@
     <authors>Simon Cropp</authors>
     <owners>Simon Cropp</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
-    <projectUrl>http://code.google.com/p/propertychanged</projectUrl>
+    <projectUrl>http://github.com/SimonCropp/PropertyChanged</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Fody add-in for injecting INotifyPropertyChanged code into properties.</description>
     <summary />
