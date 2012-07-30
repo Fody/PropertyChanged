@@ -80,3 +80,18 @@ Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.
         }
     }
 
+## More Info
+
+* [Attributes](https://github.com/SimonCropp/PropertyChanged/wiki/Attributes)
+* [BeforeAfter](https://github.com/SimonCropp/PropertyChanged/wiki/BeforeAfter)
+* [EqualityChecking](https://github.com/SimonCropp/PropertyChanged/wiki/EqualityChecking)
+* [EventInvokerSelectionInjection](https://github.com/SimonCropp/PropertyChanged/wiki/EventInvokerSelectionInjection)
+* [ExampleUsage](https://github.com/SimonCropp/PropertyChanged/wiki/ExampleUsage)
+* [ImplementingAnIsChangedFlag](https://github.com/SimonCropp/PropertyChanged/wiki/ImplementingAnIsChangedFlag)
+* [MVVMLightBroadcast](https://github.com/SimonCropp/PropertyChanged/wiki/MVVMLightBroadcast)
+* [NotificationInterception](https://github.com/SimonCropp/PropertyChanged/wiki/NotificationInterception)
+* [On_PropertyName_Changed](https://github.com/SimonCropp/PropertyChanged/wiki/On_PropertyName_Changed)
+* [PropertyDependencies](https://github.com/SimonCropp/PropertyChanged/wiki/PropertyDependencies)
+* [SupportedToolkits](https://github.com/SimonCropp/PropertyChanged/wiki/SupportedToolkits)
+* [WeavingTaskOptions](https://github.com/SimonCropp/PropertyChanged/wiki/WeavingTaskOptions)
+* [WeavingWithoutAddingAReference](https://github.com/SimonCropp/PropertyChanged/wiki/WeavingWithoutAddingAReference)
