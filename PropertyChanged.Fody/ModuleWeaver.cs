@@ -28,8 +28,13 @@ public class ModuleWeaver
         interceptorFinder.Execute();
         var typeResolver = new TypeResolver();
         var notifyInterfaceFinder = new NotifyInterfaceFinder(typeResolver);
-        
-        var typeNodeBuilder = new TypeNodeBuilder(this, notifyInterfaceFinder, typeResolver, ModuleDefinition.GetTypes().ToList());
+
+
+        var typeDefinitions = ModuleDefinition
+            .GetTypes()
+            .Where(x => x.IsClass && x.BaseType != null)
+            .ToList();
+        var typeNodeBuilder = new TypeNodeBuilder(this, notifyInterfaceFinder, typeResolver, typeDefinitions);
         typeNodeBuilder.Execute();
         new DoNotNotifyTypeCleaner(typeNodeBuilder).Execute();
         new CodeGenTypeCleaner(typeNodeBuilder).Execute();
