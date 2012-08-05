@@ -7,10 +7,10 @@ using Mono.Collections.Generic;
 public class AttributeCleaner
 {
     ModuleWeaver moduleWeaver;
-    AllTypesFinder allTypesFinder;
+    List<TypeDefinition> allTypesFinder;
     List<string> propertyAttributeNames;
 
-    public AttributeCleaner(ModuleWeaver moduleWeaver, AllTypesFinder allTypesFinder)
+    public AttributeCleaner(ModuleWeaver moduleWeaver, List<TypeDefinition> allTypesFinder)
     {
         propertyAttributeNames = new List<string> { "PropertyChanged.DoNotNotifyAttribute", "PropertyChanged.DoNotSetChangedAttribute", "PropertyChanged.AlsoNotifyForAttribute", "PropertyChanged.DependsOnAttribute" };
         this.moduleWeaver = moduleWeaver;
@@ -45,7 +45,7 @@ public class AttributeCleaner
 
     public void Execute()
     {
-        foreach (var type in allTypesFinder.AllTypes)
+        foreach (var type in allTypesFinder)
         {
             ProcessType(type);
         }

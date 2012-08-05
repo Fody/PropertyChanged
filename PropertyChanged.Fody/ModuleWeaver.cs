@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using Mono.Cecil;
 
@@ -27,9 +28,8 @@ public class ModuleWeaver
         interceptorFinder.Execute();
         var typeResolver = new TypeResolver();
         var notifyInterfaceFinder = new NotifyInterfaceFinder(typeResolver);
-        var allTypesFinder = new AllTypesFinder(ModuleDefinition);
-        allTypesFinder.Execute();
-        var typeNodeBuilder = new TypeNodeBuilder(this, notifyInterfaceFinder, typeResolver, allTypesFinder);
+        
+        var typeNodeBuilder = new TypeNodeBuilder(this, notifyInterfaceFinder, typeResolver, ModuleDefinition.GetTypes().ToList());
         typeNodeBuilder.Execute();
         new DoNotNotifyTypeCleaner(typeNodeBuilder).Execute();
         new CodeGenTypeCleaner(typeNodeBuilder).Execute();

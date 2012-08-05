@@ -13,12 +13,12 @@ public class TypeNodeBuilder
     public List<TypeNode> NotifyNodes;
     ModuleDefinition moduleDefinition;
 
-    public TypeNodeBuilder(ModuleWeaver moduleWeaver, NotifyInterfaceFinder notifyInterfaceFinder, TypeResolver typeResolver, AllTypesFinder allTypesFinder)
+    public TypeNodeBuilder(ModuleWeaver moduleWeaver, NotifyInterfaceFinder notifyInterfaceFinder, TypeResolver typeResolver, List<TypeDefinition> allTypesFinder)
     {
         this.moduleWeaver = moduleWeaver;
         this.notifyInterfaceFinder = notifyInterfaceFinder;
         this.typeResolver = typeResolver;
-        allClasses = allTypesFinder.AllTypes.Where(x => x.IsClass).ToList();
+        allClasses = allTypesFinder.Where(x => x.IsClass).ToList();
     }
 
     public void Execute()
