@@ -56,7 +56,7 @@ public class ModuleWeaver
         new StackOverflowChecker(typeNodeBuilder, typeResolver).Execute();
         var typeEqualityFinder = new TypeEqualityFinder(this, msCoreReferenceFinder, typeResolver);
         new TypeProcessor(typeNodeBuilder, this, msCoreReferenceFinder, typeEqualityFinder).Execute();
-        new AttributeCleaner(this, allTypesFinder).Execute();
+        new AttributeCleaner(typeDefinitions).Execute();
         new ReferenceCleaner(this).Execute();
     }
 }

@@ -6,15 +6,13 @@ using Mono.Collections.Generic;
 
 public class AttributeCleaner
 {
-    ModuleWeaver moduleWeaver;
-    List<TypeDefinition> allTypesFinder;
+    List<TypeDefinition> allTypes;
     List<string> propertyAttributeNames;
 
-    public AttributeCleaner(ModuleWeaver moduleWeaver, List<TypeDefinition> allTypesFinder)
+    public AttributeCleaner(List<TypeDefinition> allTypes)
     {
         propertyAttributeNames = new List<string> { "PropertyChanged.DoNotNotifyAttribute", "PropertyChanged.DoNotSetChangedAttribute", "PropertyChanged.AlsoNotifyForAttribute", "PropertyChanged.DependsOnAttribute" };
-        this.moduleWeaver = moduleWeaver;
-        this.allTypesFinder = allTypesFinder;
+        this.allTypes = allTypes;
     }
 
     void ProcessType(TypeDefinition type)
@@ -45,7 +43,7 @@ public class AttributeCleaner
 
     public void Execute()
     {
-        foreach (var type in allTypesFinder)
+        foreach (var type in allTypes)
         {
             ProcessType(type);
         }
