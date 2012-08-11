@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable UnusedParameter.Local
 namespace PropertyChanged
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
@@ -11,3 +12,5 @@ namespace PropertyChanged
         }
     }
 }
+
+// ReSharper restore UnusedParameter.Local

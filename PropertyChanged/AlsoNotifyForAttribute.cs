@@ -1,5 +1,6 @@
 using System;
 
+// ReSharper disable UnusedParameter.Local
 namespace PropertyChanged
 {
     /// <summary>
@@ -28,3 +29,4 @@ namespace PropertyChanged
 
     }
 }
+// ReSharper restore UnusedParameter.Local

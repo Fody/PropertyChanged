@@ -2,7 +2,9 @@
 
 public class ClassWithCustomPropertyChanged : INotifyPropertyChanged
 {
+// ReSharper disable NotAccessedField.Local
     PropertyChangedEventHandler propertyChanged;
+// ReSharper restore NotAccessedField.Local
 
     public event PropertyChangedEventHandler PropertyChanged
     {

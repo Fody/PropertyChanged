@@ -109,7 +109,7 @@
     <Compile Include="Attributes\DoNotNotifyAttribute.cs" />
     <Compile Include="PropertyInfoCheckers\AbstractInfoCheckerTest.cs" />
     <Compile Include="TypeEqualityFinderTests.cs" />
-    <Compile Include="TypeProcessorTest.cs" />
+    <Compile Include="AlreadyNotifyFinderTest.cs" />
     <Compile Include="PropertyInfoCheckers\CheckForEqualityWithNoBackingFieldSetInfoCheckerTest.cs" />
     <Compile Include="SL4WeavingTaskTests.cs" />
     <Compile Include="SL5WeavingTaskTests.cs" />

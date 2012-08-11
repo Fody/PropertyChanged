@@ -6,13 +6,11 @@ public class PropertyDataWalker
 {
     TypeNodeBuilder typeNodeBuilder;
     NotifyPropertyDataAttributeReader notifyPropertyDataAttributeReader;
-    ModuleWeaver moduleWeaver;
 
-    public PropertyDataWalker(TypeNodeBuilder typeNodeBuilder, NotifyPropertyDataAttributeReader notifyPropertyDataAttributeReader, ModuleWeaver moduleWeaver)
+    public PropertyDataWalker(TypeNodeBuilder typeNodeBuilder, NotifyPropertyDataAttributeReader notifyPropertyDataAttributeReader)
     {
         this.typeNodeBuilder = typeNodeBuilder;
         this.notifyPropertyDataAttributeReader = notifyPropertyDataAttributeReader;
-        this.moduleWeaver = moduleWeaver;
     }
 
     void Process(List<TypeNode> notifyNodes)
@@ -42,10 +40,17 @@ public class PropertyDataWalker
         }
     }
 
+      //if (AlreadyContainsNotification(propertyData.PropertyDefinition, node.EventInvoker.MethodReference.Name))
+      //          {
+      //              moduleWeaver.LogInfo(string.Format("\t{0} Already has notification functionality. Property will be ignored.", propertyData.PropertyDefinition.GetName()));
+      //              continue;
+      //          }
     void GetPropertyData(PropertyDefinition propertyDefinition, TypeNode node)
     {
         var notifyPropertyData = notifyPropertyDataAttributeReader.Read(propertyDefinition, node.AllProperties);
-        var dependenciesForProperty = node.PropertyDependencies.Where(x => x.WhenPropertyIsSet == propertyDefinition).Select(x => x.ShouldAlsoNotifyFor);
+        var dependenciesForProperty = node.PropertyDependencies
+            .Where(x => x.WhenPropertyIsSet == propertyDefinition)
+            .Select(x => x.ShouldAlsoNotifyFor);
 
         var backingFieldReference = node.Mappings.First(x => x.PropertyDefinition == propertyDefinition).FieldDefinition;
         if (notifyPropertyData == null)
@@ -59,7 +64,8 @@ public class PropertyDataWalker
                                            BackingFieldReference = backingFieldReference,
                                            PropertyDefinition = propertyDefinition,
                                            // Compute full dependencies for the current property
-                                           AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node)
+                                           AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node),
+                                           AlreadyNotifies = propertyDefinition.GetAlreadyNotifies(node.EventInvoker.MethodReference.Name).ToList()
                                        });
             return;
         }
@@ -77,6 +83,7 @@ The most likely cause is that you have implemented a custom event accessor for t
                                        PropertyDefinition = propertyDefinition,
                                        // Compute full dependencies for the current property
                                        AlsoNotifyFor = GetFullDependencies(propertyDefinition, notifyPropertyData.AlsoNotifyFor.Union(dependenciesForProperty), node),
+                                       AlreadyNotifies = propertyDefinition.GetAlreadyNotifies(node.EventInvoker.MethodReference.Name).ToList()
                                    });
     }
 

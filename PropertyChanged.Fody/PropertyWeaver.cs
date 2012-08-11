@@ -6,17 +6,15 @@ using Mono.Collections.Generic;
 
 public class PropertyWeaver
 {
-    MsCoreReferenceFinder msCoreReferenceFinder;
     ModuleWeaver moduleWeaver;
     PropertyData propertyData;
     TypeNode typeNode;
-    readonly TypeSystem typeSystem;
+    TypeSystem typeSystem;
     MethodBody setMethodBody;
     Collection<Instruction> instructions;
 
-    public PropertyWeaver(MsCoreReferenceFinder msCoreReferenceFinder, ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem )
+    public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem )
     {
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.moduleWeaver = moduleWeaver;
         this.propertyData = propertyData;
         this.typeNode = typeNode;
@@ -101,8 +99,14 @@ public class PropertyWeaver
 
     int AddEventInvokeCall(int index, PropertyDefinition property)
     {
-        moduleWeaver.LogInfo(string.Format("\t\t\t{0}", property.Name));
         index = AddOnChangedMethodCall(index, property);
+        if (propertyData.AlreadyNotifies.Contains(property.Name))
+        {
+            moduleWeaver.LogInfo(string.Format("\t\t\t{0} skipped since call already exists", property.Name));
+            return index;
+        }
+
+        moduleWeaver.LogInfo(string.Format("\t\t\t{0}", property.Name));
         if (typeNode.EventInvoker.IsBeforeAfter)
         {
             return AddBeforeAfterInvokerCall(index, property);
@@ -112,13 +116,15 @@ public class PropertyWeaver
 
     int AddOnChangedMethodCall(int index, PropertyDefinition property)
     {
-        var onChangedMethod = typeNode.OnChangedMethods.FirstOrDefault(x => x.Name == string.Format("On{0}Changed", property.Name));
+        var onChangedMethodName = string.Format("On{0}Changed", property.Name);
+        var onChangedMethod = typeNode
+            .OnChangedMethods
+            .FirstOrDefault(x => x.Name == onChangedMethodName);
         if (onChangedMethod != null)
         {
-            return instructions.Insert(index,
-                                       Instruction.Create(OpCodes.Ldarg_0),
-                                       CreateCall(onChangedMethod)
-                );
+            return instructions.Insert(index, 
+                Instruction.Create(OpCodes.Ldarg_0), 
+                CreateCall(onChangedMethod));
         }
         return index;
     }

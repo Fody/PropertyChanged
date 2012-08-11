@@ -4,7 +4,7 @@ using Mono.Cecil.Cil;
 
 public class RecursiveIlFinder
 {
-    readonly TypeDefinition typeDefinition;
+    TypeDefinition typeDefinition;
     List<MethodDefinition> processedMethods;
     public List<Instruction> Instructions;
 

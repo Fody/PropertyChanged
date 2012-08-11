@@ -6,17 +6,15 @@ public class IsChangedMethodFinder
 {
     MethodGenerifier methodGenerifier;
     ModuleWeaver moduleWeaver;
-    MsCoreReferenceFinder msCoreReferenceFinder;
     TypeNodeBuilder typeNodeBuilder;
     TypeResolver typeResolver;
-    readonly TypeSystem typeSystem;
+    TypeSystem typeSystem;
     string isChangedPropertyName = "IsChanged";
 
-    public IsChangedMethodFinder(MethodGenerifier methodGenerifier, ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder, TypeNodeBuilder typeNodeBuilder, TypeResolver typeResolver, TypeSystem typeSystem)
+    public IsChangedMethodFinder(MethodGenerifier methodGenerifier, ModuleWeaver moduleWeaver, TypeNodeBuilder typeNodeBuilder, TypeResolver typeResolver, TypeSystem typeSystem)
     {
         this.methodGenerifier = methodGenerifier;
         this.moduleWeaver = moduleWeaver;
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.typeNodeBuilder = typeNodeBuilder;
         this.typeResolver = typeResolver;
         this.typeSystem = typeSystem;

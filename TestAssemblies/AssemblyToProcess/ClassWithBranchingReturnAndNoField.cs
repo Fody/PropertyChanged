@@ -2,7 +2,9 @@ using System.ComponentModel;
 
 public class ClassWithBranchingReturnAndNoField : INotifyPropertyChanged
 {
+// ReSharper disable NotAccessedField.Local
     int x;
+// ReSharper restore NotAccessedField.Local
     public bool HasValue;
 
     public string Property1

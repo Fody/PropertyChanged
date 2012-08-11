@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllPropertiesFinder.cs" />
+    <Compile Include="AlreadyNotifyFinder.cs" />
     <Compile Include="AttributeCleaner.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="CodeGenTypeCleaner.cs" />

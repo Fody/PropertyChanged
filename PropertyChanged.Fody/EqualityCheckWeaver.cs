@@ -5,14 +5,12 @@ using Mono.Collections.Generic;
 
 public class EqualityCheckWeaver
 {
-    MsCoreReferenceFinder msCoreReferenceFinder;
     PropertyData propertyData;
     TypeEqualityFinder typeEqualityFinder;
     Collection<Instruction> instructions;
 
-    public EqualityCheckWeaver(MsCoreReferenceFinder msCoreReferenceFinder, PropertyData propertyData, TypeEqualityFinder typeEqualityFinder)
+    public EqualityCheckWeaver(PropertyData propertyData, TypeEqualityFinder typeEqualityFinder)
     {
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.propertyData = propertyData;
         this.typeEqualityFinder = typeEqualityFinder;
     }

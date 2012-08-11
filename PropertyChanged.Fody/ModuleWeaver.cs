@@ -43,19 +43,19 @@ public class ModuleWeaver
         var methodInjector = new MethodInjector(interceptorFinder, delegateHolderInjector, msCoreReferenceFinder, eventInvokerNameResolver, ModuleDefinition.TypeSystem);
         new MethodFinder(methodGenerifier, methodInjector, typeNodeBuilder, this, typeResolver, eventInvokerNameResolver).Execute();
 
-        new IsChangedMethodFinder(methodGenerifier, this, msCoreReferenceFinder, typeNodeBuilder, typeResolver, ModuleDefinition.TypeSystem).Execute();
+        new IsChangedMethodFinder(methodGenerifier, this, typeNodeBuilder, typeResolver, ModuleDefinition.TypeSystem).Execute();
 
         new AllPropertiesFinder(typeNodeBuilder).Execute();
         new MappingFinder(typeNodeBuilder).Execute();
         new IlGeneratedByDependencyProcessor(typeNodeBuilder).Execute();
         new DependsOnDataAttributeReader(typeNodeBuilder, this).Execute();
         var notifyPropertyDataAttributeReader = new NotifyPropertyDataAttributeReader();
-        new PropertyDataWalker(typeNodeBuilder, notifyPropertyDataAttributeReader, this).Execute();
+        new PropertyDataWalker(typeNodeBuilder, notifyPropertyDataAttributeReader).Execute();
         new WarningChecker(typeNodeBuilder, this).Execute();
         new OnChangedWalker(methodGenerifier, typeNodeBuilder).Execute();
         new StackOverflowChecker(typeNodeBuilder, typeResolver).Execute();
         var typeEqualityFinder = new TypeEqualityFinder(this, msCoreReferenceFinder, typeResolver);
-        new TypeProcessor(typeNodeBuilder, this, msCoreReferenceFinder, typeEqualityFinder).Execute();
+        new TypeProcessor(typeNodeBuilder, this, typeEqualityFinder).Execute();
         new AttributeCleaner(typeDefinitions).Execute();
         new ReferenceCleaner(this).Execute();
     }

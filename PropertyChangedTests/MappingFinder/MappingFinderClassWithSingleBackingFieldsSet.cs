@@ -14,6 +14,7 @@ public class MappingFinderClassWithSingleBackingFieldsSet
     public class ClassWithSingleBackingFieldsSet
     {
         // ReSharper disable ConvertToAutoProperty
+// ReSharper disable NotAccessedField.Local
         string propertya;
         public string Property1
         {
@@ -27,6 +28,7 @@ public class MappingFinderClassWithSingleBackingFieldsSet
             get { return null; }
             set { propertyb = value; }
         }
+        // ReSharper restore NotAccessedField.Local
         // ReSharper restore ConvertToAutoProperty
     }
 }

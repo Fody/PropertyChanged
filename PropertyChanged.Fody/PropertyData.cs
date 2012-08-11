@@ -3,13 +3,8 @@ using Mono.Cecil;
 
 public class PropertyData
 {
-
-    public PropertyData()
-    {
-        AlsoNotifyFor = new List<PropertyDefinition>();
-    }
-
     public FieldReference BackingFieldReference;
-    public List<PropertyDefinition> AlsoNotifyFor;
+    public List<PropertyDefinition> AlsoNotifyFor = new List<PropertyDefinition>();
     public PropertyDefinition PropertyDefinition;
+    public List<string> AlreadyNotifies = new List<string>();
 }

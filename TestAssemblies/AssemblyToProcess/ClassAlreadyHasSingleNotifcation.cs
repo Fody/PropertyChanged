@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
-public class ClassAlreadyHasNotifcation : INotifyPropertyChanged
+public class ClassAlreadyHasSingleNotifcation : INotifyPropertyChanged
 {
     string property1;
 
@@ -11,9 +11,9 @@ public class ClassAlreadyHasNotifcation : INotifyPropertyChanged
         {
             property1 = value;
             OnPropertyChanged("Property1");
-            OnPropertyChanged("Property2");
         }
     }
+    public string Property2 { get { return Property1; } }
 
     public virtual void OnPropertyChanged(string propertyName)
     {
