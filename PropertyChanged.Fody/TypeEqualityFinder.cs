@@ -8,6 +8,8 @@ public class TypeEqualityFinder
     MsCoreReferenceFinder msCoreReferenceFinder;
     TypeResolver typeResolver;
     Dictionary<string, MethodReference> methodCache;
+    public MethodReference StringEquals;
+    public int OrdinalStringComparison;
 
     public TypeEqualityFinder(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder, TypeResolver typeResolver)
     {
@@ -16,6 +18,28 @@ public class TypeEqualityFinder
         this.moduleWeaver = moduleWeaver;
         this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.typeResolver = typeResolver;
+
+
+        var stringEquals = moduleWeaver
+            .ModuleDefinition
+            .TypeSystem
+            .String
+            .Resolve()
+            .Methods
+            .First(x => x.IsStatic && 
+                x.Name == "Equals" && 
+                x.Parameters.Count == 3 &&
+                x.Parameters[0].ParameterType.Name == "String" && 
+                x.Parameters[1].ParameterType.Name == "String" && 
+                x.Parameters[2].ParameterType.Name == "StringComparison");
+        StringEquals = moduleWeaver.ModuleDefinition.Import(stringEquals);
+        OrdinalStringComparison = (int) StringEquals
+                                            .Parameters[2]
+                                            .ParameterType
+                                            .Resolve()
+                                            .Fields
+                                            .First(x => x.Name == "Ordinal")
+                                            .Constant;
     }
 
 

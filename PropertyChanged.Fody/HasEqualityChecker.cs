@@ -12,25 +12,25 @@ public static class HasEqualityChecker
         {
             return false;
         }
-        var firstFour = list.Take(4).ToList();
-        if (firstFour.All(x => x.OpCode != OpCodes.Ldarg_1))
+        var firstFive = list.Take(5).ToList();
+        if (firstFive.All(x => x.OpCode != OpCodes.Ldarg_1))
         {
             return false;
         }
-        if (firstFour.All(x => x.OpCode != OpCodes.Ldarg_0))
+        if (firstFive.All(x => x.OpCode != OpCodes.Ldarg_0))
         {
             return false;
         }
-        if (firstFour.All(x => !x.IsEquality()))
+        if (firstFive.All(x => !x.IsEquality()))
         {
             return false;
         }
 
-        if (firstFour.Any(x => x.Operand == backingFieldReference))
+        if (firstFive.Any(x => x.Operand == backingFieldReference))
         {
             return true;
         }
-        if (firstFour.Any(x => x.Operand == propertyDefinition))
+        if (firstFive.Any(x => x.Operand == propertyDefinition))
         {
             return true;
         }

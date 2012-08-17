@@ -115,6 +115,13 @@ public class HasEqualityCheckerTests
         Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
     [Test]
+    public void StringEqualsOrdinalTest()
+    {
+        var instructions = GetInstructions("StringEqualsOrdinal");
+        var field = GetField("stringField");
+        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+    }
+    [Test]
     public void StringEqualsNestedInverseTest()
     {
         var instructions = GetInstructions("StringEqualsNestedInverse");
@@ -293,6 +300,18 @@ public class HasEqualityCheckerTests
         set
         {
             if (!String.Equals(stringField, value))
+            {
+                stringField = value;
+            }
+        }
+    }
+
+    public string StringEqualsOrdinal
+    {
+        get { return stringField; }
+        set
+        {
+            if (!String.Equals(stringField, value, StringComparison.Ordinal))
             {
                 stringField = value;
             }
