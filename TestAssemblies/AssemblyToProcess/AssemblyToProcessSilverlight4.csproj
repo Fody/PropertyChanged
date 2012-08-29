@@ -98,6 +98,7 @@
     <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
+    <Compile Include="ClassWithTernary.cs" />
     <Compile Include="ClassWithTryCatchInSet.cs" />
     <Compile Include="CodeGenAttribute\ClassWithCompilerGeneratedAttribute.cs" />
     <Compile Include="CodeGenAttribute\ClassWithGeneratedCodeAttribute.cs" />

@@ -35,11 +35,13 @@ public static class ReturnFixer
             var instruction = instructions[index];
             if (instruction.OpCode == OpCodes.Ret)
             {
-                instructions[index] = Instruction.Create(OpCodes.Br, secondLastInstruction);
+                instruction.OpCode = OpCodes.Br;
+                instruction.Operand = secondLastInstruction;
+                continue;
             }
             if (instruction.Operand == last)
             {
-                instructions[index] = Instruction.Create(instruction.OpCode, secondLastInstruction);
+                instruction.Operand = secondLastInstruction;
             }
         }
     }

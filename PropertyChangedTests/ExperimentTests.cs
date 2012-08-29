@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.ComponentModel;
+using NUnit.Framework;
 
 [TestFixture]
 public class ExperimentTests
@@ -8,6 +9,19 @@ public class ExperimentTests
     public void Foo()
     {
         var weaverHelper = new WeaverHelper(@"AssemblyExperiments\AssemblyExperiments.csproj");
-         weaverHelper.Assembly.GetInstance("ExperimentClass");
+
+        var instance = weaverHelper.Assembly.GetInstance("ExperimentClass");
+
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        };
+        instance.Property1 = 1;
+
+        Assert.IsTrue(property1EventCalled);
     }
 }

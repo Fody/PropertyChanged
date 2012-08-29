@@ -1,9 +1,7 @@
-﻿using System.ComponentModel;
-using PropertyChanged;
+using System.ComponentModel;
 
-public class ExperimentClass : INotifyPropertyChanged
+public class ClassWithTernary : INotifyPropertyChanged
 {
-
     decimal? property1;
     public event PropertyChangedEventHandler PropertyChanged;
 
