@@ -65,19 +65,31 @@ public class PropertyWeaver
         for (var index = 0; index < instructions.Count; index++)
         {
             var instruction = instructions[index];
-            if (instruction.OpCode != OpCodes.Stfld)
+            if (instruction.OpCode == OpCodes.Stfld)
             {
-                continue;
-            }
-            var fieldReference = instruction.Operand as FieldReference;
-            if (fieldReference == null)
-            {
-                continue;
-            }
+                var fieldReference = instruction.Operand as FieldReference;
+                if (fieldReference == null)
+                {
+                    continue;
+                }
 
-            if (fieldReference.Name == propertyData.BackingFieldReference.Name)
+                if (fieldReference.Name == propertyData.BackingFieldReference.Name)
+                {
+                    yield return index + 1;
+                }
+            }
+            else if (instruction.OpCode == OpCodes.Ldflda)
             {
-                yield return index + 1;
+                var fieldReference = instruction.Operand as FieldReference;
+                if (fieldReference == null)
+                {
+                    continue;
+                }
+
+                if (fieldReference.Name == propertyData.BackingFieldReference.Name)
+                {
+                    yield return index + 2;
+                }
             }
         }
     }

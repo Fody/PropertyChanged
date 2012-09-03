@@ -71,6 +71,7 @@
     <Compile Include="ClassWithGenericAndLambda.cs" />
     <Compile Include="ClassWithInvalidIsChangedType.cs" />
     <Compile Include="ClassWithIsChanged.cs" />
+    <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs">

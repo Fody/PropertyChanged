@@ -87,6 +87,7 @@
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
+    <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithTernary.cs" />
     <Compile Include="ClassWithTryCatchInSet.cs" />
     <Compile Include="CodeGenAttribute\ClassWithCompilerGeneratedAttribute.cs" />
