@@ -80,6 +80,14 @@ public class PropertyWeaver
             }
             else if (instruction.OpCode == OpCodes.Ldflda)
             {
+                if (instruction.Next==null)
+                {
+                    continue;
+                }
+                if (instruction.Next.OpCode!=OpCodes.Initobj)
+                {
+                    continue;
+                }
                 var fieldReference = instruction.Operand as FieldReference;
                 if (fieldReference == null)
                 {

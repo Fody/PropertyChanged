@@ -312,16 +312,28 @@ public abstract class BaseTaskTests
 
         var property1EventCalled = false;
         ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
-        {
-            if (args.PropertyName == "Property1")
             {
-                property1EventCalled = true;
-            }
-        };
+               property1EventCalled = true;
+            };
         instance.Property1 = (Nullable<decimal>) 0.0;
 
         Assert.IsTrue(property1EventCalled);
     }
+    [Test]
+    public void WithLdfldaShortCircut()
+    {
+        var instance = assembly.GetInstance("ClassWithLdfldaShortCircut");
+
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+            {
+                property1EventCalled = true;
+            };
+        instance.Property1 = (Nullable<decimal>) 0.0;
+
+        Assert.IsFalse(property1EventCalled);
+    }
+    
 
 
 

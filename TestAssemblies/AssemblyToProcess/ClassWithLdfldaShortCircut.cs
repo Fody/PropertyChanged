@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
-public class ExperimentClass : INotifyPropertyChanged
+public class ClassWithLdfldaShortCircut : INotifyPropertyChanged
 {
-
     decimal? property1;
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -18,10 +17,6 @@ public class ExperimentClass : INotifyPropertyChanged
                     return;
                 }
                 property1 = null;
-            }
-            else
-            {
-                property1 = value;
             }
         }
     }

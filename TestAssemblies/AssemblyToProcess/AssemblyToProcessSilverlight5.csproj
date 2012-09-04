@@ -87,6 +87,7 @@
     <Compile Include="ClassWithDoNotSetChanged.cs" />
     <Compile Include="ClassWithFieldGetButNoFieldSet.cs" />
     <Compile Include="ClassWithLdflda.cs" />
+    <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
     <Compile Include="ClassWithExceptionInProperty.cs" />
     <Compile Include="ClassWithExplicitPropertyChanged.cs" />

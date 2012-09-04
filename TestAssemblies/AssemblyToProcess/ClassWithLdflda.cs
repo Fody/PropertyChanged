@@ -11,9 +11,13 @@ public class ClassWithLdflda : INotifyPropertyChanged
         set
         {
             if (value == 0.0m)
+            {
                 property1 = null;
+            }
             else
+            {
                 property1 = value;
+            }
         }
     }
 }

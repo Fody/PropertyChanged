@@ -80,6 +80,7 @@
     <Compile Include="ClassWithIndexer.cs" />
     <Compile Include="ClassWithInvalidIsChangedType.cs" />
     <Compile Include="ClassWithIsChanged.cs" />
+    <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithLogicInSet.cs" />
     <Compile Include="ClassWithNested.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
