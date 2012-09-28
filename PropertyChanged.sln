@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessDotNet4", "TestAssemblies\AssemblyToProcess\AssemblyToProcessDotNet4.csproj", "{7DEC4E2D-F872-434E-A267-0BAD65299950}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged.Fody", "PropertyChanged.Fody\PropertyChanged.Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyInheritingBadNamedI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithBlockingClass", "TestAssemblies\AssemblyWithBlockingClass\AssemblyWithBlockingClass.csproj", "{4E375B19-D418-4FCC-8433-9CD740537450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetProject", "NuGet\NugetProject.csproj", "{63786CE5-D899-43DF-AD4E-C2CA3BAC3FC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nuget", "NuGet\Nuget.csproj", "{63786CE5-D899-43DF-AD4E-C2CA3BAC3FC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessSilverlight5", "TestAssemblies\AssemblyToProcess\AssemblyToProcessSilverlight5.csproj", "{546240C3-4342-4F90-B0FD-3BA76507DCEF}"
 EndProject

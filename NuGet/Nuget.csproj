@@ -16,7 +16,7 @@
   </Target>
   <Target Name="Build" DependsOnTargets="NuGetBuild" />
   <Target Name="ReBuild" DependsOnTargets="NuGetBuild" />
-  <UsingTask TaskName="PepitaPackage.WeavingTask" AssemblyFile="$(SolutionDir)Tools\PepitaPackage.dll" />
+  <UsingTask TaskName="PepitaPackage.WeavingTask" AssemblyFile="$(SolutionDir)Tools\Pepita\PepitaPackage.dll" />
   <Target Name="NuGetBuild" DependsOnTargets="Clean">
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_3.5\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\NET35" />
@@ -37,16 +37,24 @@
   </Target>
   <ItemGroup>
     <None Include="PropertyChanged.Fody.nuspec" />
+    <None Include="install.ps1" />
+    <None Include="uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Project>{C3578A7B-09A6-4444-9383-0DEAFA4958BD}</Project>
+      <Name>PropertyChanged.Fody</Name>
     </ProjectReference>
     <ProjectReference Include="..\PropertyChanged\PropertyChanged_3.5.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Project>{9BC15CD4-32A5-4046-ACB5-83EB221047D3}</Project>
+      <Name>PropertyChanged_3.5</Name>
     </ProjectReference>
     <ProjectReference Include="..\PropertyChanged\PropertyChanged_PCL.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
+      <Name>PropertyChanged_PCL</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
