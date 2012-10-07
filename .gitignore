@@ -10,6 +10,8 @@
 *.user
 *.sln.docstates
 *.pidb
+*.ncrunchsolution
+*.ncrunchproject
 
 # Build results
 [Dd]ebug/
@@ -36,6 +38,8 @@
 ##  If you have NuGet Package Restore enabled, uncomment this
 packages/
 ForSample/
+NugetBuild/
+
 
 # Visual Studio profiler
 *.psess
