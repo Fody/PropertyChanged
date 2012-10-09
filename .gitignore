@@ -10,8 +10,8 @@
 *.user
 *.sln.docstates
 *.pidb
-*.ncrunchsolution
 *.ncrunchproject
+*.ncrunchsolution
 
 # Build results
 [Dd]ebug/
@@ -39,7 +39,6 @@
 packages/
 ForSample/
 NugetBuild/
-
 
 # Visual Studio profiler
 *.psess
