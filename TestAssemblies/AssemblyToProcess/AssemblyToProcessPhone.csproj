@@ -73,6 +73,8 @@
     <Compile Include="ClassWithBeforeAfterAndSimpleImplementation.cs" />
     <Compile Include="ClassWithBeforeAfterImplementation.cs" />
     <Compile Include="ClassWithBeforeAfterImplementationMissingSetGet.cs" />
+    <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructProp.cs" />
+    <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructPropImpl.cs" />
     <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericProperty.cs" />
     <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericPropertyChild.cs" />
     <Compile Include="ClassWithBoolPropUsingStringProp.cs" />

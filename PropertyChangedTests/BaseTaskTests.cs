@@ -116,6 +116,24 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithGenericStructPropImpl()
+    {
+        var instance = assembly.GetInstance("ClassWithGenericStructPropImpl");
+
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        };
+        instance.Property1 = 2;
+
+        Assert.IsTrue(property1EventCalled);
+    }
+
+    [Test]
     public void WithDoNotNotify()
     {
         var type = assembly.GetType("ClassWithDoNotNotify", true);

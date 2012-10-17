@@ -69,6 +69,8 @@
     <Compile Include="ClassWithExceptionInProperty.cs" />
     <Compile Include="ClassWithFieldGetButNoFieldSet.cs" />
     <Compile Include="ClassWithGenericAndLambda.cs" />
+    <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructProp.cs" />
+    <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructPropImpl.cs" />
     <Compile Include="ClassWithInvalidIsChangedType.cs" />
     <Compile Include="ClassWithIsChanged.cs" />
     <Compile Include="ClassWithLdflda.cs" />

@@ -86,6 +86,8 @@
     <Compile Include="ClassWithDoNotNotify.cs" />
     <Compile Include="ClassWithDoNotSetChanged.cs" />
     <Compile Include="ClassWithFieldGetButNoFieldSet.cs" />
+    <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructProp.cs" />
+    <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructPropImpl.cs" />
     <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />

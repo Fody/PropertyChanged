@@ -78,6 +78,10 @@ public class TypeEqualityFinder
             if (typeDefinition.FullName.StartsWith("System.Nullable"))
             {
                 var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
+                if (typeWrappedByNullable.IsGenericParameter)
+                {
+                    return null;
+                }
                 var genericInstanceMethod = new GenericInstanceMethod(msCoreReferenceFinder.NullableEqualsMethod);
                 genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
                 return moduleWeaver.ModuleDefinition.Import(genericInstanceMethod);
