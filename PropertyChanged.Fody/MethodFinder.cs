@@ -133,7 +133,7 @@ public class MethodFinder
                 eventInvoker = methodInjector.AddOnPropertyChangedMethod(notifyNode.TypeDefinition);
                 if (eventInvoker == null)
                 {
-                    var message = string.Format("\tCould not derive or inject '{0}' into '{1}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to supress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", eventInvokerNameResolver.EventInvokerNames), notifyNode.TypeDefinition.Name);
+                    var message = string.Format("\tCould not derive or inject '{0}' into '{1}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to suppress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", eventInvokerNameResolver.EventInvokerNames), notifyNode.TypeDefinition.Name);
                     moduleWeaver.LogWarning(message);
                     continue;
                 }
