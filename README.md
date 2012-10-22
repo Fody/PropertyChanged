@@ -23,6 +23,7 @@ Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.
             }
         }
     }
+	
 
 
 ### What gets compiled
