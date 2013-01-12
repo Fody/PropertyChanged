@@ -1,5 +1,4 @@
-﻿#if (DEBUG)
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -9,10 +8,12 @@ public static class Verifier
 {
     public static void Verify(string beforeAssemblyPath, string afterAssemblyPath)
     {
+#if (DEBUG)
         var before = Validate(beforeAssemblyPath);
         var after = Validate(afterAssemblyPath);
         var message = string.Format("Failed processing {0}\r\n{1}", Path.GetFileName(afterAssemblyPath), after);
         Assert.AreEqual(TrimLineNumbers(before), TrimLineNumbers(after), message);
+#endif
     }
 
     public static string Validate(string assemblyPath2)
@@ -39,4 +40,3 @@ public static class Verifier
         return Regex.Replace(foo, @"0x.*]", "");
     }
 }
-#endif
