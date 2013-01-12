@@ -8,7 +8,8 @@ using Mono.Cecil;
 public class WeaverHelper
 {
     string projectPath;
-    string assemblyPath;
+    public string BeforeAssemblyPath;
+    public string AfterAssemblyPath;
     public Assembly Assembly { get; set; }
 
     public WeaverHelper(string projectPath)
@@ -18,12 +19,12 @@ public class WeaverHelper
         GetAssemblyPath();
 
 
-        var newAssembly = assemblyPath.Replace(".dll", "2.dll");
-        File.Copy(assemblyPath, newAssembly, true);
+        AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
+        File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
 
 
-        var assemblyResolver = new TestAssemblyResolver(assemblyPath, this.projectPath);
-        var moduleDefinition = ModuleDefinition.ReadModule(newAssembly, new ReaderParameters
+        var assemblyResolver = new TestAssemblyResolver(BeforeAssemblyPath, this.projectPath);
+        var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, new ReaderParameters
                                                                             {
                                                                                 AssemblyResolver = assemblyResolver
                                                                             });
@@ -35,14 +36,14 @@ public class WeaverHelper
 
         weavingTask.Execute();
 
-        moduleDefinition.Write(newAssembly);
+        moduleDefinition.Write(AfterAssemblyPath);
 
-        Assembly = Assembly.LoadFile(newAssembly);
+        Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
 
     void GetAssemblyPath()
     {
-        assemblyPath = Path.Combine(Path.GetDirectoryName(projectPath), GetOutputPathValue(), GetAssemblyName() + ".dll");
+        BeforeAssemblyPath = Path.Combine(Path.GetDirectoryName(projectPath), GetOutputPathValue(), GetAssemblyName() + ".dll");
     }
 
     string GetAssemblyName()

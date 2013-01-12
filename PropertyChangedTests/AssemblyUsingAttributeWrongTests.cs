@@ -11,6 +11,6 @@ public class AssemblyUsingAttributeWrongTests
         new WeaverHelper(@"AssemblyUsingAttributeWrong\AssemblyUsingAttributeWrong.csproj");
 
         var assemblyPath2 = assemblyPath.Replace(".dll", "2.dll");
-        Verifier.Verify(assemblyPath2);
+        Verifier.Verify(assemblyPath,assemblyPath2);
     }
 }

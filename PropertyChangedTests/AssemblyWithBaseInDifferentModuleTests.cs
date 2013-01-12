@@ -44,6 +44,6 @@ public class AssemblyWithBaseInDifferentModuleTests
     [Test]
     public void Verify()
     {
-        Verifier.Verify(weaverHelper.Assembly.Location);
+        Verifier.Verify(weaverHelper.BeforeAssemblyPath,weaverHelper.AfterAssemblyPath);
     }
 }

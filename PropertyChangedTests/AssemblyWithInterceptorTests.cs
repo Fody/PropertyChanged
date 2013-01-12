@@ -17,7 +17,7 @@ public class AssemblyWithInterceptorTests
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public);
         var value = (bool)propertyInfo.GetValue(null, null);
         Assert.IsTrue(value);
-        Verifier.Verify(assembly.CodeBase.Replace("file:///", string.Empty));
+        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
 
     }
     [Test]
@@ -31,6 +31,6 @@ public class AssemblyWithInterceptorTests
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public);
         var value = (bool)propertyInfo.GetValue(null, null);
         Assert.IsTrue(value);
-        Verifier.Verify(assembly.CodeBase.Replace("file:///", string.Empty));
+        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
     }
 }

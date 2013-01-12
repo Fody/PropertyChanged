@@ -13,6 +13,7 @@ public abstract class BaseTaskTests
 {
     string projectPath;
     Assembly assembly;
+    WeaverHelper weaverHelper;
 
     protected BaseTaskTests(string projectPath)
     {
@@ -26,7 +27,7 @@ public abstract class BaseTaskTests
     [TestFixtureSetUp]
     public void Setup()
     {
-        var weaverHelper = new WeaverHelper(projectPath);
+        weaverHelper = new WeaverHelper(projectPath);
         assembly = weaverHelper.Assembly;
     }
 
@@ -892,7 +893,7 @@ public abstract class BaseTaskTests
     [Test]
     public void PeVerify()
     {
-        Verifier.Verify(assembly.CodeBase.Remove(0, 8));
+        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
     }
 
 }
