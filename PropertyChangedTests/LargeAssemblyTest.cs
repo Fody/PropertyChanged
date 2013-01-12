@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if (DEBUG)
+using System;
 using System.Diagnostics;
 using System.IO;
 using Mono.Cecil;
@@ -47,3 +48,4 @@ public class LargeAssemblyTest
         Verifier.Verify(cleanAssembly, newAssembly);
     }
 }
+#endif

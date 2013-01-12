@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if (DEBUG)
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -38,3 +39,4 @@ public static class Verifier
         return Regex.Replace(foo, @"0x.*]", "");
     }
 }
+#endif
