@@ -10,7 +10,7 @@
     <RootNamespace>
     </RootNamespace>
     <AssemblyName>PropertyChangedTests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
@@ -50,6 +52,12 @@
     <Reference Include="Mono.Cecil.Rocks">
       <HintPath>..\Lib\Cecil\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\packages\NServiceBus.Interfaces.4.0.0-unstable2577\lib\net40\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\packages\NServiceBus.4.0.0-unstable2577\lib\net40\NServiceBus.Core.dll</HintPath>
+    </Reference>
     <Reference Include="NSubstitute, Version=1.4.3.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
@@ -58,7 +66,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\packages\RavenDB.Client.2.0.2230\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Embedded">
+      <HintPath>..\packages\RavenDB.Embedded.2.0.2230\lib\net40\Raven.Client.Embedded.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\packages\RavenDB.Client.2.0.2230\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database">
+      <HintPath>..\packages\RavenDB.Database.2.0.2230\lib\net40\Raven.Database.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -71,12 +92,14 @@
     <Compile Include="HasEqualityCheckerTests.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithGenericAutoProperties.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithGenericFields.cs" />
+    <Compile Include="LargeAssemblyTest.cs" />
     <Compile Include="MappingFinder\MappingClassWithAutoPropertiesAndDodgyField.cs" />
     <Compile Include="MappingFinder\MappingFinderClassWithInnerClass.cs" />
     <Compile Include="MappingFinder\MappingFinderClassWithLowerCaseBackingFields.cs" />
     <Compile Include="MappingFinder\MappingFinderClassWithSingleBackingFieldsGet.cs" />
     <Compile Include="MappingFinder\MappingFinderClassWithSingleBackingFieldsSet.cs" />
     <Compile Include="MappingFinder\MappingFinderWithAutoProperties.cs" />
+    <Compile Include="DotNet4AssemblyResolver.cs" />
     <Compile Include="RecursiveIlFinderTests.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithLambda.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithVirtualAutoProperties.cs" />
