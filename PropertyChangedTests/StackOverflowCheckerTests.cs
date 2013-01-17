@@ -4,12 +4,12 @@ using NUnit.Framework;
 [TestFixture]
 public class StackOverflowCheckerTests
 {
-    StackOverflowChecker stackOverflowChecker;
+    ModuleWeaver stackOverflowChecker;
 
     [SetUp]
     public void SetUp()
     {
-        stackOverflowChecker = new StackOverflowChecker(null, new TypeResolver());
+        stackOverflowChecker = new ModuleWeaver();
     }
 
     [Test]

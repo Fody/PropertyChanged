@@ -8,7 +8,7 @@ public class MappingFinderClassWithLowerCaseBackingFields
     [Test]
     public void Run()
     {
-        var memberMappings = MappingFinder.GetMappings(DefinitionFinder.FindType<ClassWithLowerCaseBackingFields>()).ToList();
+        var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithLowerCaseBackingFields>()).ToList();
         Assert.AreEqual("property1", memberMappings.First(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
         Assert.AreEqual("property2", memberMappings.First(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }

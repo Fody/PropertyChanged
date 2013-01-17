@@ -35,7 +35,7 @@
     <DocumentationFile>bin\Release_3.5\PropertyChanged.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>

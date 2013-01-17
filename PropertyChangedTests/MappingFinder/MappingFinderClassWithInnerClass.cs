@@ -7,7 +7,7 @@ public class MappingFinderClassWithInnerClass
     [Test]
     public void Run()
     {
-        var memberMappings = MappingFinder.GetMappings(DefinitionFinder.FindType<Model>()).ToList();
+        var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<Model>()).ToList();
         Assert.IsNull(memberMappings.First().FieldDefinition);
     }
 

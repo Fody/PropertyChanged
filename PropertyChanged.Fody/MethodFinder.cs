@@ -2,24 +2,8 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class MethodFinder
+public partial class ModuleWeaver
 {
-    MethodGenerifier methodGenerifier;
-    MethodInjector methodInjector;
-    TypeNodeBuilder typeNodeBuilder;
-    ModuleWeaver moduleWeaver;
-    TypeResolver typeResolver;
-    EventInvokerNameResolver eventInvokerNameResolver;
-
-    public MethodFinder(MethodGenerifier methodGenerifier, MethodInjector methodInjector, TypeNodeBuilder typeNodeBuilder, ModuleWeaver moduleWeaver, TypeResolver typeResolver, EventInvokerNameResolver eventInvokerNameResolver)
-    {
-        this.methodGenerifier = methodGenerifier;
-        this.methodInjector = methodInjector;
-        this.typeNodeBuilder = typeNodeBuilder;
-        this.moduleWeaver = moduleWeaver;
-        this.typeResolver = typeResolver;
-        this.eventInvokerNameResolver = eventInvokerNameResolver;
-    }
 
 
     void ProcessChildNode(TypeNode node, EventInvokerMethod eventInvoker)
@@ -29,7 +13,7 @@ public class MethodFinder
         {
             if (node.TypeDefinition.BaseType.IsGenericInstance)
             {
-                var methodReference = MethodGenerifier.MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
+                var methodReference = ModuleWeaver.MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
                 eventInvoker = new EventInvokerMethod
                                    {
                                        IsBeforeAfter = eventInvoker.IsBeforeAfter,
@@ -52,7 +36,7 @@ public class MethodFinder
 
 
 
-    public EventInvokerMethod RecursiveFindMethod(TypeDefinition typeDefinition)
+    public EventInvokerMethod RecursiveFindEventInvoker(TypeDefinition typeDefinition)
     {
         var typeDefinitions = new Stack<TypeDefinition>();
         MethodDefinition methodDefinition;
@@ -71,12 +55,12 @@ public class MethodFinder
             {
                 return null;
             }
-            currentTypeDefinition = typeResolver.Resolve(baseType);
+            currentTypeDefinition = Resolve(baseType);
         } while (true);
 
         return new EventInvokerMethod
                    {
-                       MethodReference = methodGenerifier.GetMethodReference(typeDefinitions, methodDefinition),
+                       MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
                        IsBeforeAfter = IsBeforeAfterMethod(methodDefinition),
                    };
     }
@@ -87,7 +71,7 @@ public class MethodFinder
         MethodDefinition methodDefinition;
         if (FindEventInvokerMethodDefinition(type, out methodDefinition))
         {
-            var methodReference = moduleWeaver.ModuleDefinition.Import(methodDefinition);
+            var methodReference = ModuleDefinition.Import(methodDefinition);
             return new EventInvokerMethod
                        {
                            MethodReference = methodReference.GetGeneric(),
@@ -100,7 +84,7 @@ public class MethodFinder
     bool FindEventInvokerMethodDefinition(TypeDefinition type, out MethodDefinition methodDefinition)
     {
         methodDefinition = type.Methods
-            .Where(x => eventInvokerNameResolver.EventInvokerNames.Contains(x.Name))
+            .Where(x => EventInvokerNames.Contains(x.Name))
             .OrderByDescending(definition => definition.Parameters.Count)
             .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x));
         return methodDefinition != null;
@@ -123,18 +107,18 @@ public class MethodFinder
     }
 
 
-    public void Execute()
+    public void FindMethodsForNodes()
     {
-        foreach (var notifyNode in typeNodeBuilder.NotifyNodes)
+        foreach (var notifyNode in NotifyNodes)
         {
-            var eventInvoker = RecursiveFindMethod(notifyNode.TypeDefinition);
+            var eventInvoker = RecursiveFindEventInvoker(notifyNode.TypeDefinition);
             if (eventInvoker == null)
             {
-                eventInvoker = methodInjector.AddOnPropertyChangedMethod(notifyNode.TypeDefinition);
+                eventInvoker = AddOnPropertyChangedMethod(notifyNode.TypeDefinition);
                 if (eventInvoker == null)
                 {
-                    var message = string.Format("\tCould not derive or inject '{0}' into '{1}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to suppress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", eventInvokerNameResolver.EventInvokerNames), notifyNode.TypeDefinition.Name);
-                    moduleWeaver.LogWarning(message);
+                    var message = string.Format("\tCould not derive or inject '{0}' into '{1}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to suppress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", EventInvokerNames), notifyNode.TypeDefinition.Name);
+                    LogWarning(message);
                     continue;
                 }
             }

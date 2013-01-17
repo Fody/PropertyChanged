@@ -1,24 +1,18 @@
 ﻿using System.Linq;
 
-public class ReferenceCleaner
+public partial class ModuleWeaver
 {
-    ModuleWeaver moduleWeaver;
 
-    public ReferenceCleaner(ModuleWeaver moduleWeaver)
+    public void CleanReferences()
     {
-        this.moduleWeaver = moduleWeaver;
-    }
-
-    public void Execute()
-    {
-        var referenceToRemove = moduleWeaver.ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "PropertyChanged");
+        var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "PropertyChanged");
         if (referenceToRemove == null)
         {
-            moduleWeaver.LogInfo("\tNo reference to 'PropertyChanged' found. References not modified.");
+            LogInfo("\tNo reference to 'PropertyChanged' found. References not modified.");
             return;
         }
 
-        moduleWeaver.ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
-        moduleWeaver.LogInfo("\tRemoving reference to 'PropertyChanged'.");
+        ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
+        LogInfo("\tRemoving reference to 'PropertyChanged'.");
     }
 }

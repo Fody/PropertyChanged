@@ -11,7 +11,7 @@ public class WithUnderScoreFields
         var node = new TypeNode
         {
             TypeDefinition = typeDefinition,
-            Mappings = MappingFinder.GetMappings(typeDefinition).ToList()
+            Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
         };
         new IlGeneratedByDependencyReader(node).Process();
         Assert.AreEqual(2, node.PropertyDependencies.Count);

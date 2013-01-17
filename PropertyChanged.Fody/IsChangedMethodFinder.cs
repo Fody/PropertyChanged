@@ -2,35 +2,20 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class IsChangedMethodFinder
+public partial class ModuleWeaver
 {
-    MethodGenerifier methodGenerifier;
-    ModuleWeaver moduleWeaver;
-    TypeNodeBuilder typeNodeBuilder;
-    TypeResolver typeResolver;
-    TypeSystem typeSystem;
     string isChangedPropertyName = "IsChanged";
-
-    public IsChangedMethodFinder(MethodGenerifier methodGenerifier, ModuleWeaver moduleWeaver, TypeNodeBuilder typeNodeBuilder, TypeResolver typeResolver, TypeSystem typeSystem)
-    {
-        this.methodGenerifier = methodGenerifier;
-        this.moduleWeaver = moduleWeaver;
-        this.typeNodeBuilder = typeNodeBuilder;
-        this.typeResolver = typeResolver;
-        this.typeSystem = typeSystem;
-    }
-
 
     void ProcessChildNode(TypeNode node, MethodReference changedInvokerMethod)
     {
-        var childEventInvoker = FindEventInvokerMethod(node.TypeDefinition);
+        var childEventInvoker = FindEventInvokerMethodRef(node.TypeDefinition);
         if (childEventInvoker == null)
         {
             if (changedInvokerMethod != null)
             {
                 if (node.TypeDefinition.BaseType.IsGenericInstance)
                 {
-                    var methodReference = MethodGenerifier.MakeGeneric(node.TypeDefinition.BaseType, changedInvokerMethod);
+                    var methodReference = ModuleWeaver.MakeGeneric(node.TypeDefinition.BaseType, changedInvokerMethod);
                     changedInvokerMethod = methodReference;
                 }
             }
@@ -58,7 +43,7 @@ public class IsChangedMethodFinder
         do
         {
             typeDefinitions.Push(currentTypeDefinition);
-            if (FindEventInvokerMethodDefinition(currentTypeDefinition, out methodDefinition))
+            if (FindIsChangedEventInvokerMethodDefinition(currentTypeDefinition, out methodDefinition))
             {
                 break;
             }
@@ -68,25 +53,25 @@ public class IsChangedMethodFinder
             {
                 return null;
             }
-            currentTypeDefinition = typeResolver.Resolve(baseType);
+            currentTypeDefinition = Resolve(baseType);
         } while (true);
 
-        return methodGenerifier.GetMethodReference(typeDefinitions, methodDefinition);
+        return GetMethodReference(typeDefinitions, methodDefinition);
     }
 
 
-    MethodReference FindEventInvokerMethod(TypeDefinition type)
+    MethodReference FindEventInvokerMethodRef(TypeDefinition type)
     {
         MethodDefinition methodDefinition;
-        if (FindEventInvokerMethodDefinition(type, out methodDefinition))
+        if (FindIsChangedEventInvokerMethodDefinition(type, out methodDefinition))
         {
-            var methodReference = moduleWeaver.ModuleDefinition.Import(methodDefinition);
+            var methodReference = ModuleDefinition.Import(methodDefinition);
             return methodReference.GetGeneric();
         }
         return null;
     }
 
-    bool FindEventInvokerMethodDefinition(TypeDefinition type, out MethodDefinition methodDefinition)
+    bool FindIsChangedEventInvokerMethodDefinition(TypeDefinition type, out MethodDefinition methodDefinition)
     {
         //todo: check bool type
         methodDefinition = null;
@@ -99,9 +84,9 @@ public class IsChangedMethodFinder
 
         if (propertyDefinition != null)
         {
-            if (propertyDefinition.PropertyType.FullName != typeSystem.Boolean.FullName)
+            if (propertyDefinition.PropertyType.FullName != ModuleDefinition.TypeSystem.Boolean.FullName)
             {
-                moduleWeaver.LogWarning(string.Format("Found '{0}' but is was of type '{1}' instead of '{2}' so it will not be used.", propertyDefinition.GetName(), propertyDefinition.PropertyType.Name, typeSystem.Boolean.Name));
+                LogWarning(string.Format("Found '{0}' but is was of type '{1}' instead of '{2}' so it will not be used.", propertyDefinition.GetName(), propertyDefinition.PropertyType.Name, ModuleDefinition.TypeSystem.Boolean.Name));
                 return false;
             }
             methodDefinition = propertyDefinition.SetMethod;
@@ -109,9 +94,9 @@ public class IsChangedMethodFinder
         return methodDefinition != null;
     }
 
-    public void Execute()
+    public void FindIsChangedMethod()
     {
-        foreach (var notifyNode in typeNodeBuilder.NotifyNodes)
+        foreach (var notifyNode in NotifyNodes)
         {
             var eventInvoker = RecursiveFindMethod(notifyNode.TypeDefinition);
 

@@ -1,18 +1,11 @@
 ﻿using System.Collections.Generic;
 using Mono.Cecil;
 
-public class MethodGenerifier
+public partial class ModuleWeaver
 {
-    ModuleWeaver moduleWeaver;
-
-    public MethodGenerifier(ModuleWeaver moduleWeaver)
-    {
-        this.moduleWeaver = moduleWeaver;
-    }
-
     public MethodReference GetMethodReference(Stack<TypeDefinition> typeDefinitions, MethodDefinition methodDefinition)
     {
-        var methodReference = moduleWeaver.ModuleDefinition.Import(methodDefinition).GetGeneric();
+        var methodReference = ModuleDefinition.Import(methodDefinition).GetGeneric();
         typeDefinitions.Pop();
         while (typeDefinitions.Count > 0)
         {

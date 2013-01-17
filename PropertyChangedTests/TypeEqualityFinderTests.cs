@@ -8,21 +8,21 @@ public class TypeEqualityFinderTests
     public void TestSqlGuid()
     {
         var typeDefinition = DefinitionFinder.FindType<SqlGuid>();
-        var findNamedMethod = TypeEqualityFinder.FindNamedMethod(typeDefinition);
+        var findNamedMethod = ModuleWeaver  .FindNamedMethod(typeDefinition);
         Assert.IsNull(findNamedMethod);
     }
     [Test]
     public void TestInt()
     {
         var typeDefinition = DefinitionFinder.FindType<int>();
-        var findNamedMethod = TypeEqualityFinder.FindNamedMethod(typeDefinition);
+        var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
         Assert.IsNull(findNamedMethod);
     }
     [Test]
     public void TestString()
     {
         var typeDefinition = DefinitionFinder.FindType<string>();
-        var findNamedMethod = TypeEqualityFinder.FindNamedMethod(typeDefinition);
+        var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
         Assert.AreEqual("System.Boolean System.String::Equals(System.String,System.String)", findNamedMethod.FullName);
     }
 }

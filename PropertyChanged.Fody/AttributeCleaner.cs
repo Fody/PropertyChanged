@@ -4,16 +4,9 @@ using Mono.Cecil;
 using Mono.Collections.Generic;
 
 
-public class AttributeCleaner
+public partial class ModuleWeaver
 {
-    List<TypeDefinition> allTypes;
-    List<string> propertyAttributeNames;
-
-    public AttributeCleaner(List<TypeDefinition> allTypes)
-    {
-        propertyAttributeNames = new List<string> { "PropertyChanged.DoNotNotifyAttribute", "PropertyChanged.DoNotSetChangedAttribute", "PropertyChanged.AlsoNotifyForAttribute", "PropertyChanged.DependsOnAttribute" };
-        this.allTypes = allTypes;
-    }
+    List<string> propertyAttributeNames = new List<string> { "PropertyChanged.DoNotNotifyAttribute", "PropertyChanged.DoNotSetChangedAttribute", "PropertyChanged.AlsoNotifyForAttribute", "PropertyChanged.DependsOnAttribute" };
 
     void ProcessType(TypeDefinition type)
     {
@@ -41,9 +34,9 @@ public class AttributeCleaner
         }
     }
 
-    public void Execute()
+    public void CleanAttributes()
     {
-        foreach (var type in allTypes)
+        foreach (var type in ModuleDefinition.GetTypes())
         {
             ProcessType(type);
         }

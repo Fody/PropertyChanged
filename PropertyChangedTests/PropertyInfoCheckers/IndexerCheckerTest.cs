@@ -8,7 +8,7 @@ public class IndexerCheckerTest
     [Test]
     public void IsIndexer()
     {
-        var checker = new WarningChecker(null, null);
+        var checker = new ModuleWeaver();
         var propertyDefinition = DefinitionFinder.FindType<IndexerClass>().Properties.First();
 
         var message = checker.CheckForWarning(new PropertyData

@@ -1,18 +1,11 @@
 ﻿using System.Linq;
 using Mono.Cecil;
 
-public class InterceptorFinder
+public partial class ModuleWeaver
 {
-    ModuleWeaver moduleWeaver;
     public bool Found;
     public MethodDefinition InterceptMethod;
     public bool IsBeforeAfter;
-
-    public InterceptorFinder(ModuleWeaver moduleWeaver)
-    {
-        this.moduleWeaver = moduleWeaver;
-    }
-
 
     void SearchForMethod(TypeDefinition typeDefinition)
     {
@@ -30,13 +23,13 @@ public class InterceptorFinder
             throw new WeavingException(string.Format("Found Type '{0}.Intercept' but it is not public.", typeDefinition.FullName));
         }
 
-        if (IsSingleStringMethod(methodDefinition))
+        if (IsSingleStringInterceptionMethod(methodDefinition))
         {
             Found = true;
             InterceptMethod = methodDefinition;
             return;
         }
-        if (IsBeforeAfterMethod(methodDefinition))
+        if (IsBeforeAfterInterceptionMethod(methodDefinition))
         {
             Found = true;
             InterceptMethod = methodDefinition;
@@ -52,7 +45,7 @@ Intercept(object target, Action firePropertyChanged, string propertyName, object
     }
 
 
-    public bool IsSingleStringMethod(MethodDefinition method)
+    public bool IsSingleStringInterceptionMethod(MethodDefinition method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 3
@@ -61,7 +54,7 @@ Intercept(object target, Action firePropertyChanged, string propertyName, object
                && parameters[2].ParameterType.FullName == "System.String";
     }
 
-    public bool IsBeforeAfterMethod(MethodDefinition method)
+    public bool IsBeforeAfterInterceptionMethod(MethodDefinition method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 5
@@ -72,9 +65,9 @@ Intercept(object target, Action firePropertyChanged, string propertyName, object
                && parameters[4].ParameterType.FullName == "System.Object";
     }
 
-    public void Execute()
+    public void FindInterceptor()
     {
-        var typeDefinition = moduleWeaver.ModuleDefinition.Types.FirstOrDefault(x => x.Name == "PropertyChangedNotificationInterceptor");
+        var typeDefinition = ModuleDefinition.Types.FirstOrDefault(x => x.Name == "PropertyChangedNotificationInterceptor");
         if (typeDefinition == null)
         {
             Found = false;

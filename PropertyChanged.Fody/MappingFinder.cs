@@ -3,22 +3,15 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public class MappingFinder
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-
-    public MappingFinder(TypeNodeBuilder typeNodeBuilder)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-    }
-
-    void Process(List<TypeNode> notifyNodes)
+    void FindMappings(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
         {
             var typeDefinition = node.TypeDefinition;
             node.Mappings = GetMappings(typeDefinition).ToList();
-            Process(node.Nodes);
+            FindMappings(node.Nodes);
         }
     }
 
@@ -118,9 +111,8 @@ public class MappingFinder
         return null;
     }
 
-    public void Execute()
+    public void FindMappings()
     {
-        var notifyNodes = typeNodeBuilder.NotifyNodes;
-        Process(notifyNodes);
+        FindMappings(NotifyNodes);
     }
 }

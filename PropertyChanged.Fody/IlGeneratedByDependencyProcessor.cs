@@ -1,27 +1,20 @@
 using System.Collections.Generic;
 
-public class IlGeneratedByDependencyProcessor
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-
-    public IlGeneratedByDependencyProcessor(TypeNodeBuilder typeNodeBuilder)
+    public void DetectIlGeneratedByDependency()
     {
-        this.typeNodeBuilder = typeNodeBuilder;
-    }
-
-    public void Execute()
-    {
-        Process(typeNodeBuilder.NotifyNodes);
+        DetectIlGeneratedByDependency(NotifyNodes);
     }
 
 
-    void Process(List<TypeNode> notifyNodes)
+    void DetectIlGeneratedByDependency(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
         {
             var ilGeneratedByDependencyReader = new IlGeneratedByDependencyReader(node);
             ilGeneratedByDependencyReader.Process(); 
-            Process(node.Nodes);
+            DetectIlGeneratedByDependency(node.Nodes);
         }
     }
 

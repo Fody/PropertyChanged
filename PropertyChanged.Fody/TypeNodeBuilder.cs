@@ -3,27 +3,18 @@ using System.Linq;
 using Mono.Cecil;
 
 
-public class TypeNodeBuilder
+public partial class ModuleWeaver
 {
-    ModuleWeaver moduleWeaver;
-    NotifyInterfaceFinder notifyInterfaceFinder;
-    TypeResolver typeResolver;
     List<TypeDefinition> allClasses;
     public List<TypeNode> Nodes;
     public List<TypeNode> NotifyNodes;
-    ModuleDefinition moduleDefinition;
 
-    public TypeNodeBuilder(ModuleWeaver moduleWeaver, NotifyInterfaceFinder notifyInterfaceFinder, TypeResolver typeResolver, List<TypeDefinition> allTypesFinder)
+    public void BuildTypeNodes()
     {
-        this.moduleWeaver = moduleWeaver;
-        this.notifyInterfaceFinder = notifyInterfaceFinder;
-        this.typeResolver = typeResolver;
-        allClasses = allTypesFinder.Where(x => x.IsClass).ToList();
-    }
-
-    public void Execute()
-    {
-        moduleDefinition = moduleWeaver.ModuleDefinition;
+        allClasses= ModuleDefinition
+            .GetTypes()
+            .Where(x => x.IsClass && x.BaseType != null)
+            .ToList();
         Nodes = new List<TypeNode>();
         NotifyNodes = new List<TypeNode>();
         TypeDefinition typeDefinition;
@@ -40,7 +31,7 @@ public class TypeNodeBuilder
     {
         foreach (var node in typeNodes)
         {
-            if (notifyInterfaceFinder.HierachyImplementsINotify(node.TypeDefinition))
+            if (HierachyImplementsINotify(node.TypeDefinition))
             {
                 NotifyNodes.Add(node);
                 continue;
@@ -56,13 +47,13 @@ public class TypeNodeBuilder
                            {
                                TypeDefinition = typeDefinition
                            };
-        if (typeDefinition.BaseType.Scope.Name != moduleDefinition.Name)
+        if (typeDefinition.BaseType.Scope.Name != ModuleDefinition.Name)
         {
             Nodes.Add(typeNode);
         }
         else
         {
-            var baseType = typeResolver.Resolve(typeDefinition.BaseType);
+            var baseType = Resolve(typeDefinition.BaseType);
             var parentNode = FindClassNode(baseType, Nodes);
             if (parentNode == null)
             {

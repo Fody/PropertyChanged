@@ -2,18 +2,10 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class PropertyDataWalker
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-    NotifyPropertyDataAttributeReader notifyPropertyDataAttributeReader;
 
-    public PropertyDataWalker(TypeNodeBuilder typeNodeBuilder, NotifyPropertyDataAttributeReader notifyPropertyDataAttributeReader)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-        this.notifyPropertyDataAttributeReader = notifyPropertyDataAttributeReader;
-    }
-
-    void Process(List<TypeNode> notifyNodes)
+    void WalkPropertyData(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
         {
@@ -36,7 +28,7 @@ public class PropertyDataWalker
                 
                 GetPropertyData(property, node);
             }
-            Process(node.Nodes);
+            WalkPropertyData(node.Nodes);
         }
     }
 
@@ -47,7 +39,7 @@ public class PropertyDataWalker
       //          }
     void GetPropertyData(PropertyDefinition propertyDefinition, TypeNode node)
     {
-        var notifyPropertyData = notifyPropertyDataAttributeReader.Read(propertyDefinition, node.AllProperties);
+        var notifyPropertyData = ReadAlsoNotifyForData(propertyDefinition, node.AllProperties);
         var dependenciesForProperty = node.PropertyDependencies
             .Where(x => x.WhenPropertyIsSet == propertyDefinition)
             .Select(x => x.ShouldAlsoNotifyFor);
@@ -129,8 +121,8 @@ The most likely cause is that you have implemented a custom event accessor for t
     }
 
 
-    public void Execute()
+    public void WalkPropertyData()
     {
-        Process(typeNodeBuilder.NotifyNodes);
+        WalkPropertyData(NotifyNodes);
     }
 }

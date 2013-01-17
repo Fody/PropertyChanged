@@ -2,10 +2,8 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class MsCoreReferenceFinder
+public partial class ModuleWeaver
 {
-    ModuleWeaver moduleWeaver;
-    IAssemblyResolver assemblyResolver;
     public MethodReference ComponentModelPropertyChangedEventHandlerInvokeReference;
     public MethodReference ComponentModelPropertyChangedEventConstructorReference;
     public MethodReference ActionConstructorReference;
@@ -14,16 +12,10 @@ public class MsCoreReferenceFinder
     public MethodDefinition NullableEqualsMethod;
     public TypeReference PropChangedHandlerReference;
 
-    public MsCoreReferenceFinder(ModuleWeaver moduleWeaver, IAssemblyResolver assemblyResolver)
+
+    public void FindCoreReferences()
     {
-        this.moduleWeaver = moduleWeaver;
-        this.assemblyResolver = assemblyResolver;
-    }
-
-
-
-    public void Execute()
-    {
+        var assemblyResolver = ModuleDefinition.AssemblyResolver;
         var msCoreLibDefinition = assemblyResolver.Resolve("mscorlib");
         var msCoreTypes = msCoreLibDefinition.MainModule.Types;
 
@@ -33,13 +25,12 @@ public class MsCoreReferenceFinder
             ExecuteWinRT();
             return;
         }
-        var module = moduleWeaver.ModuleDefinition;
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
-        ObjectConstructor = module.Import(constructorDefinition);
+        ObjectConstructor = ModuleDefinition.Import(constructorDefinition);
 
 
         var nullableDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Nullable");
-        NullableEqualsMethod = module.Import(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
+        NullableEqualsMethod = ModuleDefinition.Import(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
 
         var systemDefinition = assemblyResolver.Resolve("System");
         var systemTypes = systemDefinition.MainModule.Types;
@@ -54,49 +45,49 @@ public class MsCoreReferenceFinder
         {
             actionDefinition = systemCoreDefinition.MainModule.Types.FirstOrDefault(x => x.Name == "Action");
         }
-        ActionTypeReference = module.Import(actionDefinition);
+        ActionTypeReference = ModuleDefinition.Import(actionDefinition);
 
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
-        ActionConstructorReference = module.Import(actionConstructor);
+        ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
 
 
         var propChangedHandlerDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventHandler");
-        PropChangedHandlerReference = module.Import(propChangedHandlerDefinition);
-        ComponentModelPropertyChangedEventHandlerInvokeReference = module.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
+        PropChangedHandlerReference = ModuleDefinition.Import(propChangedHandlerDefinition);
+        ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
         var propChangedArgsDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventArgs");
-        ComponentModelPropertyChangedEventConstructorReference = module.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
+        ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
     }
 
     public void ExecuteWinRT()
     {
+        var assemblyResolver = ModuleDefinition.AssemblyResolver;
         var systemRuntime = assemblyResolver.Resolve("System.Runtime");
         var systemRuntimeTypes = systemRuntime.MainModule.Types;
 
         var objectDefinition = systemRuntimeTypes.First(x => x.Name == "Object");
 
-        var module = moduleWeaver.ModuleDefinition;
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
-        ObjectConstructor = module.Import(constructorDefinition);
+        ObjectConstructor = ModuleDefinition.Import(constructorDefinition);
 
 
         var nullableDefinition = systemRuntimeTypes.FirstOrDefault(x => x.Name == "Nullable");
-        NullableEqualsMethod = module.Import(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
+        NullableEqualsMethod = ModuleDefinition.Import(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
 
 
         var actionDefinition = systemRuntimeTypes.First(x => x.Name == "Action");
-        ActionTypeReference = module.Import(actionDefinition);
+        ActionTypeReference = ModuleDefinition.Import(actionDefinition);
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
-        ActionConstructorReference = module.Import(actionConstructor);
+        ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
 
 
         var systemObjectModel = assemblyResolver.Resolve("System.ObjectModel");
         var systemObjectModelTypes = systemObjectModel.MainModule.Types;
         var propChangedHandlerDefinition = systemObjectModelTypes.First(x => x.Name == "PropertyChangedEventHandler");
-        PropChangedHandlerReference = module.Import(propChangedHandlerDefinition);
-        ComponentModelPropertyChangedEventHandlerInvokeReference = module.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
+        PropChangedHandlerReference = ModuleDefinition.Import(propChangedHandlerDefinition);
+        ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
         var propChangedArgsDefinition = systemObjectModelTypes.First(x => x.Name == "PropertyChangedEventArgs");
-        ComponentModelPropertyChangedEventConstructorReference = module.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
+        ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
         var windowsRuntime = assemblyResolver.Resolve("System.Runtime.InteropServices.WindowsRuntime");
         var genericInstanceType = new GenericInstanceType(windowsRuntime.MainModule.Types.First(x => x.Name == "EventRegistrationTokenTable`1"));
@@ -109,7 +100,7 @@ public class MsCoreReferenceFinder
     {
         try
         {
-            return assemblyResolver.Resolve("System.Core");
+            return ModuleDefinition.AssemblyResolver.Resolve("System.Core");
         }
         catch (Exception exception)
         {

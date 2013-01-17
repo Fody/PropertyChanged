@@ -1,20 +1,12 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public class DelegateHolderInjector
+public partial class ModuleWeaver
 {
-    MsCoreReferenceFinder msCoreReferenceFinder;
-    TypeSystem typeSystem;
 
-    public DelegateHolderInjector(MsCoreReferenceFinder msCoreReferenceFinder, TypeSystem typeSystem)
+    public void InjectDelegateHolder(TypeDefinition targetTypeDefinition, MethodReference onPropertyChangedMethodReference)
     {
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
-        this.typeSystem = typeSystem;
-    }
-
-    public void Execute(TypeDefinition targetTypeDefinition, MethodReference onPropertyChangedMethodReference)
-    {
-        TypeDefinition = new TypeDefinition(null, "<>PropertyNotificationDelegateHolder", TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.Sealed | TypeAttributes.NestedPrivate | TypeAttributes.BeforeFieldInit, typeSystem.Object);
+        TypeDefinition = new TypeDefinition(null, "<>PropertyNotificationDelegateHolder", TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.Sealed | TypeAttributes.NestedPrivate | TypeAttributes.BeforeFieldInit, ModuleDefinition.TypeSystem.Object);
         CreateFields(targetTypeDefinition);
         CreateOnPropChanged(onPropertyChangedMethodReference);
         CreateConstructor();
@@ -25,13 +17,13 @@ public class DelegateHolderInjector
     {
         Target = new FieldDefinition("target", FieldAttributes.Public, targetTypeDefinition);
         TypeDefinition.Fields.Add(Target);
-        PropertyName = new FieldDefinition("propertyName", FieldAttributes.Public, typeSystem.String);
+        PropertyName = new FieldDefinition("propertyName", FieldAttributes.Public, ModuleDefinition.TypeSystem.String);
         TypeDefinition.Fields.Add(PropertyName);
     }
 
     void CreateOnPropChanged(MethodReference onPropertyChangedMethodReference)
     {
-        MethodDefinition = new MethodDefinition("OnPropertyChanged", MethodAttributes.Public | MethodAttributes.HideBySig, typeSystem.Void);
+        MethodDefinition = new MethodDefinition("OnPropertyChanged", MethodAttributes.Public | MethodAttributes.HideBySig, ModuleDefinition.TypeSystem.Void);
         MethodDefinition.Body.Instructions.Append(
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldfld, Target),
@@ -45,10 +37,10 @@ public class DelegateHolderInjector
 
     void CreateConstructor()
     {
-        ConstructorDefinition = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, typeSystem.Void);
+        ConstructorDefinition = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, ModuleDefinition.TypeSystem.Void);
         ConstructorDefinition.Body.Instructions.Append(
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Call, msCoreReferenceFinder.ObjectConstructor),
+            Instruction.Create(OpCodes.Call, ObjectConstructor),
             Instruction.Create(OpCodes.Ret)
             );
         TypeDefinition.Methods.Add(ConstructorDefinition);

@@ -2,26 +2,18 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class TypeEqualityFinder
+public partial class ModuleWeaver
 {
-    ModuleWeaver moduleWeaver;
-    MsCoreReferenceFinder msCoreReferenceFinder;
-    TypeResolver typeResolver;
     Dictionary<string, MethodReference> methodCache;
     public MethodReference StringEquals;
     public int OrdinalStringComparison;
 
-    public TypeEqualityFinder(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder, TypeResolver typeResolver)
+    public void FindComparisonMethods()
     {
         methodCache = new Dictionary<string, MethodReference>();
 
-        this.moduleWeaver = moduleWeaver;
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
-        this.typeResolver = typeResolver;
 
-
-        var stringEquals = moduleWeaver
-            .ModuleDefinition
+        var stringEquals = ModuleDefinition
             .TypeSystem
             .String
             .Resolve()
@@ -32,7 +24,7 @@ public class TypeEqualityFinder
                 x.Parameters[0].ParameterType.Name == "String" && 
                 x.Parameters[1].ParameterType.Name == "String" && 
                 x.Parameters[2].ParameterType.Name == "StringComparison");
-        StringEquals = moduleWeaver.ModuleDefinition.Import(stringEquals);
+        StringEquals = ModuleDefinition.Import(stringEquals);
         OrdinalStringComparison = (int) StringEquals
                                             .Parameters[2]
                                             .ParameterType
@@ -44,7 +36,7 @@ public class TypeEqualityFinder
 
 
 
-    public MethodReference Find(TypeReference typeDefinition)
+    public MethodReference FindTypeEquality(TypeReference typeDefinition)
     {
         MethodReference methodReference;
         var fullName = typeDefinition.FullName;
@@ -82,22 +74,22 @@ public class TypeEqualityFinder
                 {
                     return null;
                 }
-                var genericInstanceMethod = new GenericInstanceMethod(msCoreReferenceFinder.NullableEqualsMethod);
+                var genericInstanceMethod = new GenericInstanceMethod(NullableEqualsMethod);
                 genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
-                return moduleWeaver.ModuleDefinition.Import(genericInstanceMethod);
+                return ModuleDefinition.Import(genericInstanceMethod);
             }
         }
         var equality = GetStaticEquality(typeDefinition);
         if (equality != null)
         {
-            return moduleWeaver.ModuleDefinition.Import(equality);
+            return ModuleDefinition.Import(equality);
         }
         return null;
     }
 
     MethodReference GetStaticEquality(TypeReference typeReference)
     {
-        var typeDefinition = typeResolver.Resolve(typeReference);
+        var typeDefinition = Resolve(typeReference);
         if (typeDefinition.IsInterface)
         {
             return null;

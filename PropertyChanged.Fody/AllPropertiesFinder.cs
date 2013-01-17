@@ -2,30 +2,21 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class AllPropertiesFinder
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-
-    public AllPropertiesFinder(TypeNodeBuilder typeNodeBuilder)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-    }
-
-    void Process(List<TypeNode> notifyNodes, List<PropertyDefinition> list)
+    void FindAllProperties(List<TypeNode> notifyNodes, List<PropertyDefinition> list)
     {
         foreach (var node in notifyNodes)
         {
             var properties = node.TypeDefinition.Properties.ToList();
             properties.AddRange(list);
             node.AllProperties = properties;
-            Process(node.Nodes, properties);
+            FindAllProperties(node.Nodes, properties);
         }
     }
 
-
-    public void Execute()
+    public void FindAllProperties()
     {
-        var notifyNodes = typeNodeBuilder.NotifyNodes;
-        Process(notifyNodes, new List<PropertyDefinition>());
+        FindAllProperties(NotifyNodes, new List<PropertyDefinition>());
     }
 }

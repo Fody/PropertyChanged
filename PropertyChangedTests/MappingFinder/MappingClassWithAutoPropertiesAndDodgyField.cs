@@ -9,7 +9,7 @@ public class MappingFinderClassWithAutoPropertiesAndDodgyField
     [Test]
     public void Run()
     {
-        var memberMappings = MappingFinder.GetMappings(DefinitionFinder.FindType<ClassWithAutoPropertiesAndDodgyField>()).ToList();
+        var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithAutoPropertiesAndDodgyField>()).ToList();
         Assert.AreEqual("<Property1>k__BackingField", memberMappings.First(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
         Assert.AreEqual("<Property2>k__BackingField", memberMappings.First(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }

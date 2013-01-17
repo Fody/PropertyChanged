@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using Mono.Cecil;
 
-public class TypeResolver
+public partial class ModuleWeaver
 {
-    Dictionary<string, TypeDefinition> definitions;
-
-    public TypeResolver()
-    {
-        definitions = new Dictionary<string, TypeDefinition>();
-    }
+    Dictionary<string, TypeDefinition> definitions = new Dictionary<string, TypeDefinition>();
 
     public TypeDefinition Resolve(TypeReference reference)
     {

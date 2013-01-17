@@ -6,10 +6,10 @@ using Mono.Collections.Generic;
 public class EqualityCheckWeaver
 {
     PropertyData propertyData;
-    TypeEqualityFinder typeEqualityFinder;
+    ModuleWeaver typeEqualityFinder;
     Collection<Instruction> instructions;
 
-    public EqualityCheckWeaver(PropertyData propertyData, TypeEqualityFinder typeEqualityFinder)
+    public EqualityCheckWeaver(PropertyData propertyData, ModuleWeaver typeEqualityFinder)
     {
         this.propertyData = propertyData;
         this.typeEqualityFinder = typeEqualityFinder;
@@ -66,7 +66,7 @@ public class EqualityCheckWeaver
                 Instruction.Create(OpCodes.Ret));
             return;
         }
-        var typeEqualityMethod = typeEqualityFinder.Find(targetType);
+        var typeEqualityMethod = typeEqualityFinder.FindTypeEquality(targetType);
         if (typeEqualityMethod == null)
         {
             if (targetType.IsGenericParameter)

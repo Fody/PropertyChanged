@@ -2,10 +2,10 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class NotifyPropertyDataAttributeReader
+public partial class ModuleWeaver
 {
 
-    public NotifyPropertyData Read(PropertyDefinition property, List<PropertyDefinition> allProperties)
+    public NotifyPropertyData ReadAlsoNotifyForData(PropertyDefinition property, List<PropertyDefinition> allProperties)
     {
         var notifyAttribute = property.CustomAttributes.GetAttribute("PropertyChanged.AlsoNotifyForAttribute");
         if (notifyAttribute == null)

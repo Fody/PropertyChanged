@@ -7,7 +7,7 @@ public class BeforeAfterWithNoGetInfoCheckerTest
     [Test]
     public void WithGet()
     {
-        var checker = new WarningChecker(null, null);
+        var checker = new ModuleWeaver();
 
         var propertyDefinition = DefinitionFinder.FindProperty<BeforeAfterWithNoGetInfoCheckerTest>("PropertyWithGet");
 
@@ -21,7 +21,7 @@ public class BeforeAfterWithNoGetInfoCheckerTest
     [Test]
     public void NoGet()
     {
-        var checker = new WarningChecker(null, null);
+        var checker = new ModuleWeaver();
 
         var propertyDefinition = DefinitionFinder.FindProperty<BeforeAfterWithNoGetInfoCheckerTest>("PropertyNoGet");
 

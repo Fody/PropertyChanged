@@ -1,19 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-public class WarningChecker
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-    ModuleWeaver moduleWeaver;
-
-
-    public WarningChecker(TypeNodeBuilder typeNodeBuilder, ModuleWeaver moduleWeaver)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-        this.moduleWeaver = moduleWeaver;
-    }
-
-    void Process(List<TypeNode> notifyNodes)
+    void CheckForWarnings(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
         {
@@ -22,11 +12,11 @@ public class WarningChecker
                 var warning = CheckForWarning(propertyData, node.EventInvoker.IsBeforeAfter);
                 if (warning != null)
                 {
-                    moduleWeaver.LogInfo(string.Format("\t{0} {1} Property will be ignored.", propertyData.PropertyDefinition.GetName(), warning));
+                    LogInfo(string.Format("\t{0} {1} Property will be ignored.", propertyData.PropertyDefinition.GetName(), warning));
                     node.PropertyDatas.Remove(propertyData);
                 }
             }
-            Process(node.Nodes);
+            CheckForWarnings(node.Nodes);
         }
     }
 
@@ -54,8 +44,8 @@ public class WarningChecker
     }
 
 
-    public void Execute()
+    public void CheckForWarnings()
     {
-        Process(typeNodeBuilder.NotifyNodes);
+        CheckForWarnings(NotifyNodes);
     }
 }

@@ -4,18 +4,10 @@ using Mono.Cecil.Cil;
 using System.Linq;
 
 
-public class StackOverflowChecker
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-    TypeResolver typeResolver;
 
-    public StackOverflowChecker(TypeNodeBuilder typeNodeBuilder, TypeResolver typeResolver)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-        this.typeResolver = typeResolver;
-    }
-
-    void Process(IEnumerable<TypeNode> notifyNodes)
+    void CheckForStackOverflow(IEnumerable<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
         {
@@ -35,7 +27,7 @@ public class StackOverflowChecker
                 }
             }
 
-            Process(node.Nodes);
+            CheckForStackOverflow(node.Nodes);
         }
     }
 
@@ -61,7 +53,7 @@ public class StackOverflowChecker
     {
         if (propertyDefinition.SetMethod.IsVirtual)
         {
-            var baseType = typeResolver.Resolve(propertyDefinition.DeclaringType.BaseType);
+            var baseType = Resolve(propertyDefinition.DeclaringType.BaseType);
             var baseProperty = baseType.Properties.FirstOrDefault(x => x.Name == propertyDefinition.Name);
 
             if (baseProperty != null)
@@ -85,8 +77,8 @@ public class StackOverflowChecker
         return false;
     }
 
-    public void Execute()
+    public void CheckForStackOverflow()
     {
-        Process(typeNodeBuilder.NotifyNodes);
+        CheckForStackOverflow(NotifyNodes);
     }
 }

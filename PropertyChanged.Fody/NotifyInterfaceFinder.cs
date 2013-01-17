@@ -2,16 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
-public class NotifyInterfaceFinder
+public partial class ModuleWeaver
 {
-    TypeResolver typeResolver;
-    Dictionary<string, bool> typeReferencesImplementingINotify;
-
-    public NotifyInterfaceFinder(TypeResolver typeResolver)
-    {
-        this.typeResolver = typeResolver;
-        typeReferencesImplementingINotify = new Dictionary<string, bool>();
-    }
+    Dictionary<string, bool> typeReferencesImplementingINotify = new Dictionary<string, bool>();
 
     public bool HierachyImplementsINotify(TypeReference typeReference)
     {
@@ -30,7 +23,7 @@ public class NotifyInterfaceFinder
         }
         else
         {
-            typeDefinition = typeResolver.Resolve(typeReference);
+            typeDefinition = Resolve(typeReference);
         }
         if (HasPropertyChangedEvent(typeDefinition))
         {

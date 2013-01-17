@@ -2,35 +2,27 @@
 using System.Linq;
 using Mono.Cecil;
 
-public class DependsOnDataAttributeReader
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-    ModuleWeaver moduleWeaver;
 
-    public DependsOnDataAttributeReader(TypeNodeBuilder typeNodeBuilder, ModuleWeaver moduleWeaver)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-        this.moduleWeaver = moduleWeaver;
-    }
-
-    void Process(List<TypeNode> notifyNodes)
+    void ProcessDependsOnAttributes(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
         {
-            Process(node);
-            Process(node.Nodes);
+            ProcessDependsOnAttributes(node);
+            ProcessDependsOnAttributes(node.Nodes);
         }
     }
 
-    public void Process(TypeNode node)
+    public void ProcessDependsOnAttributes(TypeNode node)
     {
         foreach (var propertyDefinition in node.TypeDefinition.Properties)
         {
-            Read(propertyDefinition, node);
+            ReadDependsOnData(propertyDefinition, node);
         }
     }
 
-    public void Read(PropertyDefinition property, TypeNode node)
+    public void ReadDependsOnData(PropertyDefinition property, TypeNode node)
     {
         var dependsOnAttribute = property.CustomAttributes.GetAttribute("PropertyChanged.DependsOnAttribute");
         if (dependsOnAttribute == null)
@@ -56,7 +48,7 @@ public class DependsOnDataAttributeReader
         var propertyDefinition = targetProperty.DeclaringType.Properties.FirstOrDefault(x => x.Name == isGeneratedUsingPropertyName);
         if (propertyDefinition == null)
         {
-            moduleWeaver.LogInfo(string.Format("Could not find property '{0}' for DependsOnAttribute assigged to '{1}'.", isGeneratedUsingPropertyName, targetProperty.Name));
+            LogInfo(string.Format("Could not find property '{0}' for DependsOnAttribute assigged to '{1}'.", isGeneratedUsingPropertyName, targetProperty.Name));
             return;
         }
         node.PropertyDependencies.Add(new PropertyDependency
@@ -67,8 +59,8 @@ public class DependsOnDataAttributeReader
     }
 
 
-    public void Execute()
+    public void ProcessDependsOnAttributes()
     {
-        Process(typeNodeBuilder.NotifyNodes);
+        ProcessDependsOnAttributes(NotifyNodes);
     }
 }

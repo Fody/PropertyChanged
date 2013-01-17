@@ -1,14 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-public class DoNotNotifyTypeCleaner
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-
-    public DoNotNotifyTypeCleaner(TypeNodeBuilder typeNodeBuilder)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-    }
 
     void Process(List<TypeNode> notifyNodes)
     {
@@ -24,8 +18,8 @@ public class DoNotNotifyTypeCleaner
         }
     }
 
-    public void Execute()
+    public void CleanDoNotNotifyTypes()
     {
-        Process(typeNodeBuilder.NotifyNodes);
+        Process(NotifyNodes);
     }
 }

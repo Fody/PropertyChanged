@@ -1,16 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class CodeGenTypeCleaner
+public partial class ModuleWeaver
 {
-    TypeNodeBuilder typeNodeBuilder;
-
-    public CodeGenTypeCleaner(TypeNodeBuilder typeNodeBuilder)
-    {
-        this.typeNodeBuilder = typeNodeBuilder;
-    }
-
-    void Process(List<TypeNode> notifyNodes)
+    void ProcessNotifyNodes(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes.ToList())
         {
@@ -20,12 +13,12 @@ public class CodeGenTypeCleaner
                 notifyNodes.Remove(node);
                 continue;
             }
-            Process(node.Nodes);
+            ProcessNotifyNodes(node.Nodes);
         }
     }
 
-    public void Execute()
+    public void CleanCodeGenedTypes()
     {
-        Process(typeNodeBuilder.NotifyNodes);
+        ProcessNotifyNodes(NotifyNodes);
     }
 }

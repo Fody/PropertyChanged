@@ -7,7 +7,7 @@ public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
     [Test]
     public void WithBackingField()
     {
-        var checker = new WarningChecker(null, null);
+        var checker = new ModuleWeaver();
 
         var propertyDefinition = DefinitionFinder.FindProperty(() => WithBackingFieldProperty);
 
@@ -22,7 +22,7 @@ public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
     [Test]
     public void WithoutBackingField()
     {
-        var checker = new WarningChecker(null, null);
+        var checker = new ModuleWeaver();
 
         var propertyDefinition = DefinitionFinder.FindProperty<CheckForEqualityWithNoBackingFieldSetInfoCheckerTest>("WithoutBackingFieldProperty");
 
