@@ -31,8 +31,8 @@
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP71" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP71" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />	
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />	
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)install.ps1" DestinationFolder="$(SolutionDir)NuGetBuild\Tools" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps1" DestinationFolder="$(SolutionDir)NuGetBuild\Tools" />
@@ -40,7 +40,9 @@
     <PepitaPackage.WeavingTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.dll" />
   </Target>
   <ItemGroup>
-    <None Include="PropertyChanged.Fody.nuspec" />
+    <None Include="PropertyChanged.Fody.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="install.ps1" />
     <None Include="uninstall.ps1" />
   </ItemGroup>
