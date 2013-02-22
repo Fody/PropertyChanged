@@ -134,7 +134,6 @@
     <Compile Include="TypeEqualityFinderTests.cs" />
     <Compile Include="AlreadyNotifyFinderTest.cs" />
     <Compile Include="PropertyInfoCheckers\CheckForEqualityWithNoBackingFieldSetInfoCheckerTest.cs" />
-    <Compile Include="SL4WeavingTaskTests.cs" />
     <Compile Include="SL5WeavingTaskTests.cs" />
     <Compile Include="Verifier.cs" />
     <Compile Include="VersionReader.cs" />

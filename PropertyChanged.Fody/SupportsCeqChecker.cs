@@ -17,6 +17,11 @@ public static class SupportsCeqChecker
                                  typeof (float).Name,
                                  typeof (double).Name,
                                  typeof (bool).Name,
+                                 typeof (short).Name,
+                                 typeof (ushort).Name,
+                                 typeof (byte).Name,
+                                 typeof (sbyte).Name,
+                                 typeof (char).Name,
                              };
     }
 
