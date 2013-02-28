@@ -4,17 +4,21 @@ using Mono.Cecil.Cil;
 
 public partial class ModuleWeaver
 {
-
     public EventInvokerMethod AddOnPropertyChangedMethod(TypeDefinition targetType)
     {
-        var propertyChangedField = FindPropertyChangedField(targetType);
+        FieldReference propertyChangedField = FindPropertyChangedField(targetType);
         if (propertyChangedField == null)
         {
-            return null;
+            propertyChangedField = this.interfaceInjector.TryInjectINotifyPropertyChangedInterface(targetType);
+            if (propertyChangedField == null)
+            {
+                return null;
+            }
         }
+
         if (Found)
         {
-            var methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
+            MethodDefinition methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
 
             return new EventInvokerMethod
                        {

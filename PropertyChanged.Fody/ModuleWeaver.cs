@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Xml.Linq;
 using Mono.Cecil;
+using PropertyChanged.Fody;
 
 public partial class ModuleWeaver
 {
+    private InterfaceInjector interfaceInjector;
+
     public XElement Config { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
@@ -18,6 +21,8 @@ public partial class ModuleWeaver
 
     public void Execute()
     {
+        this.interfaceInjector = new InterfaceInjector(ModuleDefinition);
+
         ResolveEventInvokerName();
         FindCoreReferences();
         FindInterceptor();
