@@ -47,14 +47,16 @@
             return targetType.Interfaces.Any(x => x.FullName == "System.ComponentModel.INotifyPropertyChanged");
         }
 
+        // Thank you to Romain Verdier
+        // largely copied from http://codingly.com/2008/11/10/introduction-a-monocecil-implementer-inotifypropertychanged/
         private FieldReference WeaveEvent(TypeDefinition type)
         {
             const string EventName = "PropertyChanged";
 
-            var eventField = new FieldDefinition("PropertyChanged", FieldAttributes.Private, this.notifyPropertyChangedTypeReference);
+            var eventField = new FieldDefinition("PropertyChanged", FieldAttributes.Private, this.propertyChangedEventHandlerTypeReference);
             type.Fields.Add(eventField);
 
-            var eventDefinition = new EventDefinition(EventName, EventAttributes.None, this.notifyPropertyChangedTypeReference)
+            var eventDefinition = new EventDefinition(EventName, EventAttributes.None, this.propertyChangedEventHandlerTypeReference)
             {
                 AddMethod = this.CreateEventMethod(string.Format("add_{0}", EventName), this.combineMethodRef, eventField),
                 RemoveMethod = this.CreateEventMethod(string.Format("remove_{0}", EventName), this.removeMethodRef, eventField)
