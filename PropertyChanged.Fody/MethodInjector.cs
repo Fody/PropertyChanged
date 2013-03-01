@@ -9,7 +9,7 @@ public partial class ModuleWeaver
         FieldReference propertyChangedField = FindPropertyChangedField(targetType);
         if (propertyChangedField == null)
         {
-            propertyChangedField = this.interfaceInjector.TryInjectINotifyPropertyChangedInterface(targetType);
+            propertyChangedField = TryInjectINotifyPropertyChangedInterface(targetType);
             if (propertyChangedField == null)
             {
                 return null;

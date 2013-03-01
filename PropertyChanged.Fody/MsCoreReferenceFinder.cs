@@ -10,7 +10,11 @@ public partial class ModuleWeaver
     public MethodReference ObjectConstructor;
     public TypeReference ActionTypeReference;
     public MethodDefinition NullableEqualsMethod;
+    public TypeReference PropChangedInterfaceReference;
     public TypeReference PropChangedHandlerReference;
+    public TypeReference VoidTypeReference;
+    public MethodReference DelegateCombineMethodRef;
+    public MethodReference DelegateRemoveMethodRef;
 
 
     public void FindCoreReferences()
@@ -50,13 +54,26 @@ public partial class ModuleWeaver
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
 
-
+        var propChangedInterfaceDefinition = systemTypes.First(x => x.Name == "INotifyPropertyChanged");
+        PropChangedInterfaceReference = ModuleDefinition.Import(propChangedInterfaceDefinition);
         var propChangedHandlerDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventHandler");
         PropChangedHandlerReference = ModuleDefinition.Import(propChangedHandlerDefinition);
         ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
         var propChangedArgsDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventArgs");
         ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
+        var delegateDefinition = msCoreTypes.First(x => x.Name == "Delegate");
+        var combineMethodBase = delegateDefinition.Methods
+            .Where(x => x.Name == "Combine")
+            .Where(x => x.Parameters.Count == 2)
+            .Where(x => x.Parameters.All(p => p.ParameterType == delegateDefinition))
+            .Single();
+        this.DelegateCombineMethodRef = ModuleDefinition.Import(combineMethodBase);
+        var removeMethodBase = delegateDefinition.Methods.First(x => x.Name == "Remove");
+        this.DelegateRemoveMethodRef = ModuleDefinition.Import(removeMethodBase);
+
+        var voidDefinition = msCoreTypes.First(x => x.Name == "Void");
+        this.VoidTypeReference = ModuleDefinition.Import(voidDefinition);
     }
 
     public void ExecuteWinRT()

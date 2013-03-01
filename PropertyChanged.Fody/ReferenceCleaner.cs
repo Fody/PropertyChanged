@@ -2,6 +2,7 @@
 
 public partial class ModuleWeaver
 {
+
     public void CleanReferences()
     {
         var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "PropertyChanged");
