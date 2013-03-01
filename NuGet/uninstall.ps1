@@ -25,4 +25,4 @@ function Update-FodyConfig($addinName, $project)
 
 
 
-Update-FodyConfig "PropertyChanged" $project
+Update-FodyConfig $package.Id.Replace(".Fody", "") $project
