@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
@@ -16,7 +17,7 @@ public partial class ModuleWeaver
             targetType.Interfaces.Add(PropChangedInterfaceReference);
         }
 
-        return WeaveEvent(targetType);
+        return this.WeaveEvent(targetType);
     }
 
     private static bool AlreadyImplementsInterface(TypeDefinition targetType)
@@ -30,23 +31,23 @@ public partial class ModuleWeaver
     {
         const string EventName = "PropertyChanged";
 
-        var eventField = new FieldDefinition("PropertyChanged", FieldAttributes.Private, PropChangedHandlerReference);
-        type.Fields.Add(eventField);
+        var propertyChangedField = new FieldDefinition("PropertyChanged", FieldAttributes.Private, PropChangedHandlerReference);
+        type.Fields.Add(propertyChangedField);
 
         var eventDefinition = new EventDefinition(EventName, EventAttributes.None, PropChangedHandlerReference)
         {
-            AddMethod = CreateEventMethod(string.Format("add_{0}", EventName), this.DelegateCombineMethodRef, eventField),
-            RemoveMethod = CreateEventMethod(string.Format("remove_{0}", EventName), this.DelegateRemoveMethodRef, eventField)
+            AddMethod = this.CreateEventMethod(string.Format("add_{0}", EventName), this.DelegateCombineMethodRef, propertyChangedField),
+            RemoveMethod = this.CreateEventMethod(string.Format("remove_{0}", EventName), this.DelegateRemoveMethodRef, propertyChangedField)
         };
 
         type.Methods.Add(eventDefinition.AddMethod);
         type.Methods.Add(eventDefinition.RemoveMethod);
         type.Events.Add(eventDefinition);
 
-        return eventField;
+        return propertyChangedField;
     }
-
-    private MethodDefinition CreateEventMethod(string methodName, MethodReference delegateMethodReference, FieldReference eventField)
+    
+    private MethodDefinition CreateEventMethod(string methodName, MethodReference delegateMethodReference, FieldReference propertyChangedField)
     {
         const MethodAttributes Attributes = MethodAttributes.Public |
                                             MethodAttributes.HideBySig |
@@ -55,19 +56,48 @@ public partial class ModuleWeaver
                                             MethodAttributes.NewSlot |
                                             MethodAttributes.Virtual;
 
-        var methodDef = new MethodDefinition(methodName, Attributes, this.VoidTypeReference);
+        var method = new MethodDefinition(methodName, Attributes, this.VoidTypeReference);
 
-        methodDef.Parameters.Add(new ParameterDefinition(PropChangedHandlerReference));
+        method.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, PropChangedHandlerReference));
+        var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
+        method.Body.Variables.Add(handlerVariable);
+        method.Body.Variables.Add(handlerVariable);
+        method.Body.Variables.Add(handlerVariable);
+        var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
+        method.Body.Variables.Add(boolVariable);
 
-        var cilWorker = methodDef.Body.GetILProcessor();
-        cilWorker.Emit(OpCodes.Ldarg_0);
-        cilWorker.Emit(OpCodes.Ldarg_0);
-        cilWorker.Emit(OpCodes.Ldfld, eventField);
-        cilWorker.Emit(OpCodes.Ldarg_1);
-        cilWorker.Emit(OpCodes.Call, delegateMethodReference);
-        cilWorker.Emit(OpCodes.Castclass, PropChangedHandlerReference);
-        cilWorker.Emit(OpCodes.Stfld, eventField);
-        cilWorker.Emit(OpCodes.Ret);
-        return methodDef;
+        Collection<Instruction> instructions = method.Body.Instructions;
+
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldfld, propertyChangedField)); 
+        instructions.Add(Instruction.Create(OpCodes.Stloc_0));
+
+        var loopBegin = Instruction.Create(OpCodes.Ldloc_0);
+        instructions.Add(loopBegin);
+        instructions.Add(Instruction.Create(OpCodes.Stloc_1));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
+        instructions.Add(Instruction.Create(OpCodes.Call, delegateMethodReference));
+        instructions.Add(Instruction.Create(OpCodes.Castclass, PropChangedHandlerReference));
+        instructions.Add(Instruction.Create(OpCodes.Stloc_2));
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldflda, propertyChangedField));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_2));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
+        instructions.Add(Instruction.Create(OpCodes.Call, InterlockedCompareExchangeForPropChangedHandler));
+        instructions.Add(Instruction.Create(OpCodes.Stloc_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
+        instructions.Add(Instruction.Create(OpCodes.Ceq));
+        instructions.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        instructions.Add(Instruction.Create(OpCodes.Ceq));
+        instructions.Add(Instruction.Create(OpCodes.Stloc_3));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_3));
+        instructions.Add(Instruction.Create(OpCodes.Brtrue_S, loopBegin)); // goto begin of loop
+
+        instructions.Add(Instruction.Create(OpCodes.Ret));
+        method.Body.InitLocals = true;
+
+        return method;
     }
 }
