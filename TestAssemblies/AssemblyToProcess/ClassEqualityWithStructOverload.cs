@@ -6,7 +6,9 @@ public class ClassEqualityWithStructOverload : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
     
+#pragma warning disable 660,661
     public struct SimpleStruct
+#pragma warning restore 660,661
     {
 
         public int X ;
