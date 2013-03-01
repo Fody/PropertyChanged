@@ -6,7 +6,14 @@ using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
-    List<string> propertyAttributeNames = new List<string> { "PropertyChanged.DoNotNotifyAttribute", "PropertyChanged.DoNotSetChangedAttribute", "PropertyChanged.AlsoNotifyForAttribute", "PropertyChanged.DependsOnAttribute" };
+    List<string> propertyAttributeNames = new List<string>
+    {
+        "PropertyChanged.DoNotNotifyAttribute",
+        "PropertyChanged.DoNotSetChangedAttribute", 
+        "PropertyChanged.AlsoNotifyForAttribute",
+        "PropertyChanged.DependsOnAttribute",
+        "PropertyChanged.NotifyPropertyChangedAttribute"
+    };
 
     void ProcessType(TypeDefinition type)
     {
@@ -20,8 +27,6 @@ public partial class ModuleWeaver
             RemoveAttributes(field.CustomAttributes);
         }
     }
-
-
 
     void RemoveAttributes(Collection<CustomAttribute> customAttributes)
     {

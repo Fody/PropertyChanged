@@ -142,6 +142,31 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithNotifyPropertyChangedAttribute_MustCleanAttribute()
+    {
+        var type = assembly.GetType("ClassWithNotifyPropertyChangedAttribute", true);
+        Assert.IsEmpty(type.GetCustomAttributes(false));
+    }
+
+    [Test]
+    public void WithNotifyPropertyChangedAttribute_MustWeaveNotification()
+    {
+        var instance = assembly.GetInstance("ClassWithNotifyPropertyChangedAttribute");
+
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        };
+        instance.Property1 = "a";
+
+        Assert.IsTrue(property1EventCalled);
+    }
+
+    [Test]
     public void WithDependencyAfterSet()
     {
         var instance = assembly.GetInstance("ClassWithDependencyAfterSet");

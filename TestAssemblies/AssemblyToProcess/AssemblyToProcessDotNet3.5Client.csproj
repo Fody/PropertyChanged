@@ -90,6 +90,7 @@
     <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithLogicInSet.cs" />
     <Compile Include="ClassWithNested.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />

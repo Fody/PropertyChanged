@@ -10,7 +10,12 @@ public partial class ModuleWeaver
     public MethodReference ObjectConstructor;
     public TypeReference ActionTypeReference;
     public MethodDefinition NullableEqualsMethod;
+    public TypeReference PropChangedInterfaceReference;
     public TypeReference PropChangedHandlerReference;
+    public TypeReference VoidTypeReference;
+    public MethodReference DelegateCombineMethodRef;
+    public MethodReference DelegateRemoveMethodRef;
+    public MethodReference InterlockedCompareExchangeForPropChangedHandler;
 
 
     public void FindCoreReferences()
@@ -50,13 +55,41 @@ public partial class ModuleWeaver
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
 
-
+        var propChangedInterfaceDefinition = systemTypes.First(x => x.Name == "INotifyPropertyChanged");
+        PropChangedInterfaceReference = ModuleDefinition.Import(propChangedInterfaceDefinition);
         var propChangedHandlerDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventHandler");
         PropChangedHandlerReference = ModuleDefinition.Import(propChangedHandlerDefinition);
         ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
         var propChangedArgsDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventArgs");
         ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
+        TypeDefinition delegateDefinition = msCoreTypes.First(x => x.Name == "Delegate");
+        MethodDefinition combineMethodDefinition = delegateDefinition
+            .Methods
+            .Where(x => x.Name == "Combine")
+            .Where(x => x.Parameters.Count == 2)
+            .Where(x => x.Parameters.All(p => p.ParameterType == delegateDefinition))
+            .Single();
+        this.DelegateCombineMethodRef = ModuleDefinition.Import(combineMethodDefinition);
+        MethodDefinition removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
+        this.DelegateRemoveMethodRef = ModuleDefinition.Import(removeMethodDefinition);
+
+        TypeDefinition voidDefinition = msCoreTypes.First(x => x.Name == "Void");
+        this.VoidTypeReference = ModuleDefinition.Import(voidDefinition);
+
+        TypeDefinition interlockedDefinition = msCoreTypes.First(x => x.FullName == "System.Threading.Interlocked");
+        MethodDefinition genericCompareExchangeMethodDefinition = interlockedDefinition
+            .Methods
+            .Where(x => x.IsStatic)
+            .Where(x => x.Name == "CompareExchange")
+            .Where(x => x.GenericParameters.Count == 1)
+            .Where(x => x.Parameters.Count == 3)
+            .First();
+        MethodReference genericCompareExchangeMethod = ModuleDefinition.Import(genericCompareExchangeMethodDefinition);
+
+        var concreteCompareExchangeMethod = new GenericInstanceMethod(genericCompareExchangeMethod);
+        concreteCompareExchangeMethod.GenericArguments.Add(this.PropChangedHandlerReference);
+        InterlockedCompareExchangeForPropChangedHandler = concreteCompareExchangeMethod;
     }
 
     public void ExecuteWinRT()

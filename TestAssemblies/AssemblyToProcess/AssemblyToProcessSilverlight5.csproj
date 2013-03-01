@@ -90,6 +90,7 @@
     <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructPropImpl.cs" />
     <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithLdfldaShortCircut.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
     <Compile Include="ClassWithExceptionInProperty.cs" />
     <Compile Include="ClassWithExplicitPropertyChanged.cs" />
