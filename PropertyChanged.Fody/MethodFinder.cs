@@ -13,7 +13,7 @@ public partial class ModuleWeaver
         {
             if (node.TypeDefinition.BaseType.IsGenericInstance)
             {
-                var methodReference = ModuleWeaver.MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
+                var methodReference = MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
                 eventInvoker = new EventInvokerMethod
                                    {
                                        IsBeforeAfter = eventInvoker.IsBeforeAfter,

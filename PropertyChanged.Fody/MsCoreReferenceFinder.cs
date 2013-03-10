@@ -63,32 +63,30 @@ public partial class ModuleWeaver
         var propChangedArgsDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventArgs");
         ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.Import(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
-        TypeDefinition delegateDefinition = msCoreTypes.First(x => x.Name == "Delegate");
-        MethodDefinition combineMethodDefinition = delegateDefinition
-            .Methods
-            .Where(x => x.Name == "Combine")
-            .Where(x => x.Parameters.Count == 2)
-            .Where(x => x.Parameters.All(p => p.ParameterType == delegateDefinition))
-            .Single();
-        this.DelegateCombineMethodRef = ModuleDefinition.Import(combineMethodDefinition);
-        MethodDefinition removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
-        this.DelegateRemoveMethodRef = ModuleDefinition.Import(removeMethodDefinition);
+        var delegateDefinition = msCoreTypes.First(x => x.Name == "Delegate");
+        var combineMethodDefinition = delegateDefinition.Methods
+            .Single(x => 
+                x.Name == "Combine" && 
+                x.Parameters.Count == 2 && 
+                x.Parameters.All(p => p.ParameterType == delegateDefinition));
+        DelegateCombineMethodRef = ModuleDefinition.Import(combineMethodDefinition);
+        var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
+        DelegateRemoveMethodRef = ModuleDefinition.Import(removeMethodDefinition);
 
-        TypeDefinition voidDefinition = msCoreTypes.First(x => x.Name == "Void");
-        this.VoidTypeReference = ModuleDefinition.Import(voidDefinition);
+        var voidDefinition = msCoreTypes.First(x => x.Name == "Void");
+        VoidTypeReference = ModuleDefinition.Import(voidDefinition);
 
-        TypeDefinition interlockedDefinition = msCoreTypes.First(x => x.FullName == "System.Threading.Interlocked");
-        MethodDefinition genericCompareExchangeMethodDefinition = interlockedDefinition
-            .Methods
-            .Where(x => x.IsStatic)
-            .Where(x => x.Name == "CompareExchange")
-            .Where(x => x.GenericParameters.Count == 1)
-            .Where(x => x.Parameters.Count == 3)
-            .First();
-        MethodReference genericCompareExchangeMethod = ModuleDefinition.Import(genericCompareExchangeMethodDefinition);
+        var interlockedDefinition = msCoreTypes.First(x => x.FullName == "System.Threading.Interlocked");
+        var genericCompareExchangeMethodDefinition = interlockedDefinition
+            .Methods.First(x => 
+                x.IsStatic && 
+                x.Name == "CompareExchange" && 
+                x.GenericParameters.Count == 1 && 
+                x.Parameters.Count == 3);
+        var genericCompareExchangeMethod = ModuleDefinition.Import(genericCompareExchangeMethodDefinition);
 
         var concreteCompareExchangeMethod = new GenericInstanceMethod(genericCompareExchangeMethod);
-        concreteCompareExchangeMethod.GenericArguments.Add(this.PropChangedHandlerReference);
+        concreteCompareExchangeMethod.GenericArguments.Add(PropChangedHandlerReference);
         InterlockedCompareExchangeForPropChangedHandler = concreteCompareExchangeMethod;
     }
 

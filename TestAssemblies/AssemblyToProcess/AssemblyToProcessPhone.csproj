@@ -75,7 +75,10 @@
     <Compile Include="ClassWithBeforeAfterImplementationMissingSetGet.cs" />
     <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructProp.cs" />
     <Compile Include="ClassWithGenericStructProp\ClassWithGenericStructPropImpl.cs" />
+    <Compile Include="ClassWithLdflda.cs" />
+    <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ClassWithTernary.cs" />
     <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericProperty.cs" />
     <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericPropertyChild.cs" />
     <Compile Include="ClassWithBoolPropUsingStringProp.cs" />

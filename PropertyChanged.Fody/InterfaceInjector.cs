@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
@@ -17,7 +16,7 @@ public partial class ModuleWeaver
             targetType.Interfaces.Add(PropChangedInterfaceReference);
         }
 
-        return this.WeaveEvent(targetType);
+        return WeaveEvent(targetType);
     }
 
     private static bool AlreadyImplementsInterface(TypeDefinition targetType)
@@ -36,8 +35,8 @@ public partial class ModuleWeaver
 
         var eventDefinition = new EventDefinition(EventName, EventAttributes.None, PropChangedHandlerReference)
         {
-            AddMethod = this.CreateEventMethod(string.Format("add_{0}", EventName), this.DelegateCombineMethodRef, propertyChangedField),
-            RemoveMethod = this.CreateEventMethod(string.Format("remove_{0}", EventName), this.DelegateRemoveMethodRef, propertyChangedField)
+            AddMethod = CreateEventMethod(string.Format("add_{0}", EventName), DelegateCombineMethodRef, propertyChangedField),
+            RemoveMethod = CreateEventMethod(string.Format("remove_{0}", EventName), DelegateRemoveMethodRef, propertyChangedField)
         };
 
         type.Methods.Add(eventDefinition.AddMethod);
@@ -56,7 +55,7 @@ public partial class ModuleWeaver
                                             MethodAttributes.NewSlot |
                                             MethodAttributes.Virtual;
 
-        var method = new MethodDefinition(methodName, Attributes, this.VoidTypeReference);
+        var method = new MethodDefinition(methodName, Attributes, VoidTypeReference);
 
         method.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, PropChangedHandlerReference));
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
@@ -66,7 +65,7 @@ public partial class ModuleWeaver
         var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
         method.Body.Variables.Add(boolVariable);
 
-        Collection<Instruction> instructions = method.Body.Instructions;
+        var instructions = method.Body.Instructions;
 
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldfld, propertyChangedField)); 

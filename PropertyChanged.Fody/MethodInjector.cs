@@ -6,7 +6,7 @@ public partial class ModuleWeaver
 {
     public EventInvokerMethod AddOnPropertyChangedMethod(TypeDefinition targetType)
     {
-        FieldReference propertyChangedField = FindPropertyChangedField(targetType);
+        var propertyChangedField = FindPropertyChangedField(targetType);
         if (propertyChangedField == null)
         {
             propertyChangedField = TryInjectINotifyPropertyChangedInterface(targetType);
@@ -18,7 +18,7 @@ public partial class ModuleWeaver
 
         if (Found)
         {
-            MethodDefinition methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
+            var methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
 
             return new EventInvokerMethod
                        {
@@ -92,7 +92,7 @@ public partial class ModuleWeaver
 
     public static FieldReference FindPropertyChangedField(TypeDefinition targetType)
     {
-        var findPropertyChangedField = targetType.Fields.FirstOrDefault(x => ModuleWeaver.IsPropertyChangedEventHandler(x.FieldType));
+        var findPropertyChangedField = targetType.Fields.FirstOrDefault(x => IsPropertyChangedEventHandler(x.FieldType));
         if (findPropertyChangedField == null)
         {
             return null;

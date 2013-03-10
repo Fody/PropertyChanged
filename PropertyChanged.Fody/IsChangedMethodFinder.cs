@@ -15,7 +15,7 @@ public partial class ModuleWeaver
             {
                 if (node.TypeDefinition.BaseType.IsGenericInstance)
                 {
-                    var methodReference = ModuleWeaver.MakeGeneric(node.TypeDefinition.BaseType, changedInvokerMethod);
+                    var methodReference = MakeGeneric(node.TypeDefinition.BaseType, changedInvokerMethod);
                     changedInvokerMethod = methodReference;
                 }
             }
