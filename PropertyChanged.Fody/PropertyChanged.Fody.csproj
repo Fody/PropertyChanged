@@ -70,6 +70,7 @@
     <Compile Include="HasEqualityChecker.cs" />
     <Compile Include="IlGeneratedByDependencyProcessor.cs" />
     <Compile Include="InstructionListExtensions.cs" />
+    <Compile Include="InterfaceInjector.cs" />
     <Compile Include="MsCoreReferenceFinder.cs" />
     <Compile Include="OnChangedWalker.cs" />
     <Compile Include="IsChangedMethodFinder.cs" />

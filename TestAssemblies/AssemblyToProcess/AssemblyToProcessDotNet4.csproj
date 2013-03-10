@@ -87,6 +87,7 @@
     <Compile Include="ClassWithNested.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />

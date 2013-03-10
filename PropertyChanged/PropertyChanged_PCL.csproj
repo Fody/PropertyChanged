@@ -58,9 +58,9 @@
     <Compile Include="DoNotNotifyAttribute.cs" />
     <Compile Include="DoNotSetChangedAttribute.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
+    <Compile Include="NotifyPropertyChangedAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(ProjectPath)\..\..\Tools\Fody\Fody.targets" />
   <Import Project="$(ProjectPath)\..\..\Tools\Pepita\PepitaGet.targets" />
-
 </Project>

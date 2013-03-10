@@ -15,7 +15,6 @@ public partial class ModuleWeaver
             return implementsINotify;
         }
 
-        
         TypeDefinition typeDefinition;
         if (typeReference.IsDefinition)
         {
@@ -24,6 +23,12 @@ public partial class ModuleWeaver
         else
         {
             typeDefinition = Resolve(typeReference);
+        }
+
+        if (HasNotifyPropertyChangedAttribute(typeDefinition))
+        {
+            typeReferencesImplementingINotify[fullName] = true;
+            return true;
         }
         if (HasPropertyChangedEvent(typeDefinition))
         {
@@ -50,11 +55,19 @@ public partial class ModuleWeaver
         return baseTypeImplementsINotify;
     }
 
+    private static bool HasNotifyPropertyChangedAttribute(TypeDefinition typeDefinition)
+    {
+        return typeDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.NotifyPropertyChangedAttribute");
+    }
+
     public static bool HasPropertyChangedEvent(TypeDefinition typeDefinition)
     {
-        return typeDefinition.Events.Any(x =>
-                                         IsNamedPropertyChanged(x) &&
-                                         IsPropertyChangedEventHandler(x.EventType));
+        return typeDefinition.Events.Any(IsPropertyChangedEvent);
+    }
+
+    public static bool IsPropertyChangedEvent(EventDefinition eventDefinition)
+    {
+        return IsNamedPropertyChanged(eventDefinition) && IsPropertyChangedEventHandler(eventDefinition.EventType);
     }
 
     static bool IsNamedPropertyChanged(EventDefinition eventDefinition)
@@ -71,7 +84,7 @@ public partial class ModuleWeaver
                typeReference.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
     }
 
-    bool HasPropertyChangedField(TypeDefinition typeDefinition)
+    private static bool HasPropertyChangedField(TypeDefinition typeDefinition)
     {
         foreach (var fieldType in typeDefinition.Fields.Select(x => x.FieldType))
         {

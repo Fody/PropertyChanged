@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyWithBadNamedInvokerTests.cs" />
+    <Compile Include="Attributes\NotifyPropertyChangedAttribute.cs" />
     <Compile Include="FSharpTest.cs" />
     <Compile Include="HasEqualityCheckerTests.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithGenericAutoProperties.cs" />
