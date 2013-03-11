@@ -55,7 +55,7 @@ public partial class ModuleWeaver
         return baseTypeImplementsINotify;
     }
 
-    private static bool HasNotifyPropertyChangedAttribute(TypeDefinition typeDefinition)
+    static bool HasNotifyPropertyChangedAttribute(TypeDefinition typeDefinition)
     {
         return typeDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.NotifyPropertyChangedAttribute");
     }
@@ -84,7 +84,7 @@ public partial class ModuleWeaver
                typeReference.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
     }
 
-    private static bool HasPropertyChangedField(TypeDefinition typeDefinition)
+    static bool HasPropertyChangedField(TypeDefinition typeDefinition)
     {
         foreach (var fieldType in typeDefinition.Fields.Select(x => x.FieldType))
         {
