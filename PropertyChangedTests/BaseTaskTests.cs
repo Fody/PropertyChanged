@@ -167,6 +167,32 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithNotifyPropertyChangedAttributeOnParentAndChild()
+    {
+        var instance = assembly.GetInstance("ClassWithNotifyPropertyChangedAttributeChild");
+
+        var property1EventCalled = false;
+        var property2EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+                                                                   {
+                                                                       if (args.PropertyName == "Property1")
+                                                                       {
+                                                                           property1EventCalled = true;
+                                                                       }
+                                                                       if (args.PropertyName == "Property2")
+                                                                       {
+                                                                           property2EventCalled = true;
+                                                                           Assert.AreEqual("a", instance.Property2);
+                                                                       }
+                                                                   };
+        instance.Property1 = "a";
+        instance.Property2 = "a";
+
+        Assert.IsTrue(property1EventCalled);
+        Assert.IsTrue(property2EventCalled);
+    }
+
+    [Test]
     public void WithDependencyAfterSet()
     {
         var instance = assembly.GetInstance("ClassWithDependencyAfterSet");

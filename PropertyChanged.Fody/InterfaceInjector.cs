@@ -56,36 +56,40 @@ public partial class ModuleWeaver
         var method = new MethodDefinition(methodName, Attributes, VoidTypeReference);
 
         method.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, PropChangedHandlerReference));
-        var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
-        method.Body.Variables.Add(handlerVariable);
+        var handlerVariable0 = new VariableDefinition(PropChangedHandlerReference);
+        method.Body.Variables.Add(handlerVariable0);
+        var handlerVariable1 = new VariableDefinition(PropChangedHandlerReference);
+        method.Body.Variables.Add(handlerVariable1);
+        var handlerVariable2 = new VariableDefinition(PropChangedHandlerReference);
+        method.Body.Variables.Add(handlerVariable2);
         var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
         method.Body.Variables.Add(boolVariable);
 
-        var loopBegin = Instruction.Create(OpCodes.Ldloc_0);
+        var loopBegin = Instruction.Create(OpCodes.Ldloc, handlerVariable0);
         method.Body.Instructions.Append(
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldfld, propertyChangedField),
-            Instruction.Create(OpCodes.Stloc_0),
+            Instruction.Create(OpCodes.Stloc, handlerVariable0),
             loopBegin,
-            Instruction.Create(OpCodes.Stloc_1),
-            Instruction.Create(OpCodes.Ldloc_1),
+            Instruction.Create(OpCodes.Stloc, handlerVariable1),
+            Instruction.Create(OpCodes.Ldloc, handlerVariable1),
             Instruction.Create(OpCodes.Ldarg_1),
             Instruction.Create(OpCodes.Call, delegateMethodReference),
             Instruction.Create(OpCodes.Castclass, PropChangedHandlerReference),
-            Instruction.Create(OpCodes.Stloc_2),
+            Instruction.Create(OpCodes.Stloc, handlerVariable2),
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldflda, propertyChangedField),
-            Instruction.Create(OpCodes.Ldloc_2),
-            Instruction.Create(OpCodes.Ldloc_1),
+            Instruction.Create(OpCodes.Ldloc, handlerVariable2),
+            Instruction.Create(OpCodes.Ldloc, handlerVariable1),
             Instruction.Create(OpCodes.Call, InterlockedCompareExchangeForPropChangedHandler),
-            Instruction.Create(OpCodes.Stloc_0),
-            Instruction.Create(OpCodes.Ldloc_0),
-            Instruction.Create(OpCodes.Ldloc_1),
+            Instruction.Create(OpCodes.Stloc, handlerVariable0),
+            Instruction.Create(OpCodes.Ldloc, handlerVariable0),
+            Instruction.Create(OpCodes.Ldloc, handlerVariable1),
             Instruction.Create(OpCodes.Ceq),
             Instruction.Create(OpCodes.Ldc_I4_0),
             Instruction.Create(OpCodes.Ceq),
-            Instruction.Create(OpCodes.Stloc_3),
-            Instruction.Create(OpCodes.Ldloc_3),
+            Instruction.Create(OpCodes.Stloc, boolVariable),
+            Instruction.Create(OpCodes.Ldloc, boolVariable),
             Instruction.Create(OpCodes.Brtrue_S, loopBegin), // goto begin of loop
             Instruction.Create(OpCodes.Ret));
         method.Body.InitLocals = true;
