@@ -76,6 +76,8 @@
     <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttributeChild.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttributeChildParent.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs">

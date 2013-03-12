@@ -85,6 +85,8 @@
     <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithLogicInSet.cs" />
     <Compile Include="ClassWithNested.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttributeChild.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttributeChildParent.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOnChangedBerforeAfter.cs" />
     <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />

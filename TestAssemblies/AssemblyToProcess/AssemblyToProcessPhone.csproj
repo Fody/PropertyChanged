@@ -78,6 +78,8 @@
     <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithLdfldaShortCircut.cs" />
     <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttributeChild.cs" />
+    <Compile Include="ClassWithNotifyPropertyChangedAttributeChildParent.cs" />
     <Compile Include="ClassWithTernary.cs" />
     <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericProperty.cs" />
     <Compile Include="GenericChildWithPropertyOnChanged\ClassWithGenericPropertyChild.cs" />
