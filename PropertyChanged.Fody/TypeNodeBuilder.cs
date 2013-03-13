@@ -24,6 +24,10 @@ public partial class ModuleWeaver
         }
 
         PopulateINotifyNodes(Nodes);
+        foreach (var notifyNode in NotifyNodes)
+        {
+            Nodes.Remove(notifyNode);
+        }
         PopulateInjectedINotifyNodes(Nodes);
     }
 
@@ -34,7 +38,6 @@ public partial class ModuleWeaver
             if (HierachyImplementsINotify(node.TypeDefinition))
             {
                 NotifyNodes.Add(node);
-                Nodes.Remove(node);
                 continue;
             }
             PopulateINotifyNodes(node.Nodes);
