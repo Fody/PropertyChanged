@@ -50,8 +50,70 @@ public abstract class BaseTaskTests
     public void AlsoNotifyFor()
     {
         var instance = assembly.GetInstance("ClassAlsoNotifyFor");
-        EventTester.TestProperty(instance, true);
+
+        var property1EventCalled = false;
+        var property2EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCalled = true;
+            }
+        };
+        instance.Property1 = "a";
+
+        Assert.IsTrue(property1EventCalled);
+            Assert.IsTrue(property2EventCalled);
+        property1EventCalled = false;
+        property2EventCalled = false;
+        //Property has not changed on re-set so event not fired
+        instance.Property1 = "a";
+        Assert.IsFalse(property1EventCalled);
+            Assert.IsFalse(property2EventCalled);
     }
+
+    [Test]
+    public void AlsoNotifyForMultiple()
+    {
+        var instance = assembly.GetInstance("ClassAlsoNotifyForMultiple");
+
+        var property1EventCalled = false;
+        var property2EventCalled = false;
+        var property3EventCalled = false;
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "Property1")
+                {
+                    property1EventCalled = true;
+                }
+                if (args.PropertyName == "Property2")
+                {
+                    property2EventCalled = true;
+                }
+                if (args.PropertyName == "Property3")
+                {
+                    property3EventCalled = true;
+                }
+            };
+        instance.Property1 = "a";
+
+        Assert.IsTrue(property1EventCalled);
+        Assert.IsTrue(property2EventCalled);
+        Assert.IsTrue(property3EventCalled);
+        property1EventCalled = false;
+        property2EventCalled = false;
+        property3EventCalled = false;
+        //Property has not changed on re-set so event not fired
+        instance.Property1 = "a";
+        Assert.IsFalse(property1EventCalled);
+        Assert.IsFalse(property2EventCalled);
+        Assert.IsFalse(property3EventCalled);
+    }
+
     [Test]
     public void AlreadyHasNotifcation()
     {

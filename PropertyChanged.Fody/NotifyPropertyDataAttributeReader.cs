@@ -27,7 +27,8 @@ public partial class ModuleWeaver
         yield return GetPropertyDefinition(property, allProperties, value);
         if (customAttributeArguments.Count > 1)
         {
-            foreach (string argument in customAttributeArguments.Select(x => x.Value))
+            var paramsArguments = (CustomAttributeArgument[]) customAttributeArguments[1].Value;
+            foreach (string argument in paramsArguments.Select(x=>x.Value))
             {
                 yield return GetPropertyDefinition(property, allProperties, argument);
             }

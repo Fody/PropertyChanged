@@ -49,6 +49,7 @@
     <Compile Include="ClassAlreadyHasNotifcation.cs" />
     <Compile Include="ClassAlreadyHasSingleNotifcation.cs" />
     <Compile Include="ClassAlsoNotifyFor.cs" />
+    <Compile Include="ClassAlsoNotifyForMultiple.cs" />
     <Compile Include="ClassCircularProperties.cs" />
     <Compile Include="ClassDependsOn.cs" />
     <Compile Include="ClassEquality.cs" />
