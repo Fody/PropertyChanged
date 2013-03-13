@@ -12,7 +12,7 @@ public partial class ModuleWeaver
         "PropertyChanged.DoNotSetChangedAttribute", 
         "PropertyChanged.AlsoNotifyForAttribute",
         "PropertyChanged.DependsOnAttribute",
-        "PropertyChanged.NotifyPropertyChangedAttribute"
+        "PropertyChanged.ImplementPropertyChangedAttribute"
     };
 
     void ProcessType(TypeDefinition type)

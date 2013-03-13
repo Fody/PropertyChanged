@@ -57,6 +57,11 @@ public partial class ModuleWeaver
         }
     }
 
+    static bool HasNotifyPropertyChangedAttribute(TypeDefinition typeDefinition)
+    {
+        return typeDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.ImplementPropertyChangedAttribute");
+    }
+
     TypeNode AddClass(TypeDefinition typeDefinition)
     {
         allClasses.Remove(typeDefinition);

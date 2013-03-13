@@ -50,10 +50,6 @@ public partial class ModuleWeaver
         return baseTypeImplementsINotify;
     }
 
-    static bool HasNotifyPropertyChangedAttribute(TypeDefinition typeDefinition)
-    {
-        return typeDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.NotifyPropertyChangedAttribute");
-    }
 
     public static bool HasPropertyChangedEvent(TypeDefinition typeDefinition)
     {

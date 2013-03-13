@@ -849,6 +849,14 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void Telerik()
+    {
+        var instance = assembly.GetInstance("ClassTelerik");
+        EventTester.TestProperty(instance, false);
+        Assert.IsTrue(instance.BaseNotifyCalled);
+    }
+
+    [Test]
     public void Cinch()
     {
         var instance = assembly.GetInstance("ClassCinch");

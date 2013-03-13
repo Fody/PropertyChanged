@@ -1,28 +1,32 @@
-﻿using System.ComponentModel;
+﻿
+using System.ComponentModel;
+using Telerik.Windows.Controls;
 
-public class ExperimentClass : INotifyPropertyChanged
+public class ClassTelerik : ViewModelBase
 {
-
-    decimal? property1;
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public decimal? Property1
+    public string Property1 { get; set; }
+}
+namespace Telerik.Windows.Controls
+{
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
-        get { return property1; }
-        set
+        public bool BaseNotifyCalled { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void RaisePropertyChanged(string propertyName)
         {
-            if (value == 0.0m)
+            BaseNotifyCalled = true;
+            var handler = PropertyChanged;
+            if (handler != null)
             {
-                if (property1 == null)
-                {
-                    return;
-                }
-                property1 = null;
-            }
-            else
-            {
-                property1 = value;
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            RaisePropertyChanged(propertyName);
+        }
+
     }
 }
