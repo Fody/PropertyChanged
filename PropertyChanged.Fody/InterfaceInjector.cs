@@ -1,32 +1,18 @@
-﻿using System.Linq;
-using Mono.Cecil;
+﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
 
 public partial class ModuleWeaver
 {
-    public FieldReference TryInjectINotifyPropertyChangedInterface(TypeDefinition targetType)
+    public void InjectINotifyPropertyChangedInterface(TypeDefinition targetType)
     {
-        if (HasPropertyChangedEvent(targetType))
-        {
-            return null;
-        }
-
-        if (!AlreadyImplementsInterface(targetType))
-        {
-            targetType.Interfaces.Add(PropChangedInterfaceReference);
-        }
-
-        return WeaveEvent(targetType);
+        targetType.Interfaces.Add(PropChangedInterfaceReference);
+        WeaveEvent(targetType);
     }
 
-    static bool AlreadyImplementsInterface(TypeDefinition targetType)
-    {
-        return targetType.Interfaces.Any(x => x.FullName == "System.ComponentModel.INotifyPropertyChanged");
-    }
 
     // Thank you to Romain Verdier
     // largely copied from http://codingly.com/2008/11/10/introduction-a-monocecil-implementer-inotifypropertychanged/
-    FieldReference WeaveEvent(TypeDefinition type)
+    void WeaveEvent(TypeDefinition type)
     {
         var propertyChangedField = new FieldDefinition("PropertyChanged", FieldAttributes.Private, PropChangedHandlerReference);
         type.Fields.Add(propertyChangedField);
@@ -40,8 +26,6 @@ public partial class ModuleWeaver
         type.Methods.Add(eventDefinition.AddMethod);
         type.Methods.Add(eventDefinition.RemoveMethod);
         type.Events.Add(eventDefinition);
-
-        return propertyChangedField;
     }
 
     MethodDefinition CreateEventMethod(string methodName, MethodReference delegateMethodReference, FieldReference propertyChangedField)

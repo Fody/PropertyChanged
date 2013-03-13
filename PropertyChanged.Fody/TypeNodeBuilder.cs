@@ -22,9 +22,9 @@ public partial class ModuleWeaver
         {
             AddClass(typeDefinition);
         }
-        var typeNodes = Nodes;
 
-        PopulateINotifyNodes(typeNodes);
+        PopulateINotifyNodes(Nodes);
+        PopulateInjectedINotifyNodes(Nodes);
     }
 
     void PopulateINotifyNodes(List<TypeNode> typeNodes)
@@ -33,6 +33,20 @@ public partial class ModuleWeaver
         {
             if (HierachyImplementsINotify(node.TypeDefinition))
             {
+                NotifyNodes.Add(node);
+                Nodes.Remove(node);
+                continue;
+            }
+            PopulateINotifyNodes(node.Nodes);
+        }
+    }
+    void PopulateInjectedINotifyNodes(List<TypeNode> typeNodes)
+    {
+        foreach (var node in typeNodes)
+        {
+            if (HasNotifyPropertyChangedAttribute(node.TypeDefinition))
+            {
+                InjectINotifyPropertyChangedInterface(node.TypeDefinition);
                 NotifyNodes.Add(node);
                 continue;
             }

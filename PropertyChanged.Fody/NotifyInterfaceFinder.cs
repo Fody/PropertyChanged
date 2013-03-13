@@ -25,11 +25,6 @@ public partial class ModuleWeaver
             typeDefinition = Resolve(typeReference);
         }
 
-        if (HasNotifyPropertyChangedAttribute(typeDefinition))
-        {
-            typeReferencesImplementingINotify[fullName] = true;
-            return true;
-        }
         if (HasPropertyChangedEvent(typeDefinition))
         {
             typeReferencesImplementingINotify[fullName] = true;

@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    public bool Found;
+    public bool FoundInterceptor;
     public MethodDefinition InterceptMethod;
     public bool IsBeforeAfter;
 
@@ -25,13 +25,13 @@ public partial class ModuleWeaver
 
         if (IsSingleStringInterceptionMethod(methodDefinition))
         {
-            Found = true;
+            FoundInterceptor = true;
             InterceptMethod = methodDefinition;
             return;
         }
         if (IsBeforeAfterInterceptionMethod(methodDefinition))
         {
-            Found = true;
+            FoundInterceptor = true;
             InterceptMethod = methodDefinition;
             IsBeforeAfter = true;
             return;
@@ -70,7 +70,7 @@ Intercept(object target, Action firePropertyChanged, string propertyName, object
         var typeDefinition = ModuleDefinition.Types.FirstOrDefault(x => x.Name == "PropertyChangedNotificationInterceptor");
         if (typeDefinition == null)
         {
-            Found = false;
+            FoundInterceptor = false;
             return;
         }
         SearchForMethod(typeDefinition);

@@ -35,12 +35,14 @@ public class AssemblyWithBaseInDifferentModuleTests
         var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.DirectGeneric.ChildClass");
         EventTester.TestProperty(instance, false);
     }
+    
     [Test]
     public void GenericChildClassFromMultiType()
     {
         var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.MultiTypes.ChildClass");
         EventTester.TestProperty(instance, false);
     }
+
     [Test]
     public void Verify()
     {

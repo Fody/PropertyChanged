@@ -9,14 +9,10 @@ public partial class ModuleWeaver
         var propertyChangedField = FindPropertyChangedField(targetType);
         if (propertyChangedField == null)
         {
-            propertyChangedField = TryInjectINotifyPropertyChangedInterface(targetType);
-            if (propertyChangedField == null)
-            {
-                return null;
-            }
+            return null;
         }
 
-        if (Found)
+        if (FoundInterceptor)
         {
             var methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
 
