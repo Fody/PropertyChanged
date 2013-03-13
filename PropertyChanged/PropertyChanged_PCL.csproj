@@ -58,7 +58,7 @@
     <Compile Include="DoNotNotifyAttribute.cs" />
     <Compile Include="DoNotSetChangedAttribute.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
-    <Compile Include="NotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ImplementPropertyChangedAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(ProjectPath)\..\..\Tools\Fody\Fody.targets" />

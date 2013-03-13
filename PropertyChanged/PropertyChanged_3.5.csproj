@@ -35,7 +35,7 @@
     <DocumentationFile>bin\Release_3.5\PropertyChanged.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlsoNotifyForAttribute.cs" />
-    <Compile Include="NotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ImplementPropertyChangedAttribute.cs" />
     <Compile Include="DependsOnAttribute.cs" />
     <Compile Include="DoNotNotifyAttribute.cs" />
     <Compile Include="DoNotSetChangedAttribute.cs" />

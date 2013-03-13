@@ -8,7 +8,7 @@ namespace PropertyChanged
     /// The <see cref="INotifyPropertyChanged"/> interface is added to the type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class NotifyPropertyChangedAttribute : Attribute
+    public class ImplementPropertyChangedAttribute : Attribute
     {
     }
 }
