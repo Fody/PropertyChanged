@@ -87,6 +87,14 @@ public partial class ModuleWeaver
             .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
             .OrderByDescending(definition => definition.Parameters.Count)
             .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x));
+        if (methodDefinition == null)
+        {
+            //TODO: when injecting calls to this method should check visibility
+            methodDefinition = type.Methods
+                .Where(x => EventInvokerNames.Contains(x.Name))
+                .OrderByDescending(definition => definition.Parameters.Count)
+                .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x));
+        }
         return methodDefinition != null;
     }
 
