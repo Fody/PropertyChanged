@@ -98,5 +98,5 @@ Users of the [NotifyPropertyWeaver](https://github.com/SimonCropp/NotifyProperty
 * [On_PropertyName_Changed](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed)
 * [PropertyDependencies](https://github.com/Fody/PropertyChanged/wiki/PropertyDependencies)
 * [SupportedToolkits](https://github.com/Fody/PropertyChanged/wiki/SupportedToolkits)
-* [WeavingTaskOptions](https://github.com/Fody/PropertyChanged/wiki/WeavingTaskOptions)
+* [Options](https://github.com/Fody/PropertyChanged/wiki/Options)
 * [WeavingWithoutAddingAReference](https://github.com/Fody/PropertyChanged/wiki/WeavingWithoutAddingAReference)
