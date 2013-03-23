@@ -13,5 +13,8 @@
     <summary />
     <language>en-AU</language>
     <tags>WPF, Silverlight, MVVM, WP7, WindowsPhone, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
+    <dependencies>
+      <dependency id="Fody"/>
+    </dependencies>
   </metadata>
 </package>
