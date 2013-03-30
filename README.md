@@ -18,10 +18,10 @@ To Install from the Nuget Package Manager Console
 
 ### Your Code
 
-    public class Person : INotifyPropertyChanged
+    [ImplementPropertyChanged]
+    public class Person 
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
 
