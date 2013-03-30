@@ -20,8 +20,7 @@ To Install from the Nuget Package Manager Console
 
     [ImplementPropertyChanged]
     public class Person 
-    {
-        
+    {        
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
 
@@ -40,7 +39,6 @@ To Install from the Nuget Package Manager Console
 
     public class Person : INotifyPropertyChanged
     {
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         string givenNames;
