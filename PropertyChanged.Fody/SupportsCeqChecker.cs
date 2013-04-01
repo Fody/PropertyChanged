@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mono.Cecil;
 
@@ -31,7 +32,15 @@ public static class SupportsCeqChecker
         {
             return true;
         }
+        if (typeReference.IsArray)
+        {
+            return false;
+        }
         var typeDefinition = typeReference.Resolve();
+        if (typeDefinition == null)
+        {
+            throw new Exception(string.Format("Could not resolve '{0}'.", typeReference.FullName));
+        }
         if (typeDefinition.IsEnum)
         {
             return true;

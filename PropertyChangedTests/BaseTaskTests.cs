@@ -329,7 +329,6 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, "BoolProperty", true);
         EventTester.TestProperty(instance, "NullableBoolProperty", true);
         EventTester.TestProperty(instance, "ObjectProperty", "foo");
-        EventTester.TestProperty(instance, "ArrayProperty", new[] { "foo" });
         EventTester.TestProperty(instance, "ShortProperty", (short)1);
         EventTester.TestProperty(instance, "UShortProperty", (ushort)1);
         EventTester.TestProperty(instance, "ByteProperty", (byte)1);

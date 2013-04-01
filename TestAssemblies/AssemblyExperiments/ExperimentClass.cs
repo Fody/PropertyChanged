@@ -1,32 +1,13 @@
-﻿
-using System.ComponentModel;
-using Telerik.Windows.Controls;
-
-public class ClassTelerik : ViewModelBase
+﻿public class Class1<T> : Caliburn.Micro.PropertyChangedBase, IClass1<T> where T : class, new()
 {
-    public string Property1 { get; set; }
+    public T[] SelectedItems { get; set; }
+
+    public T SelectedItem { get; set; }
 }
-namespace Telerik.Windows.Controls
+
+public interface IClass1<T> where T : class, new()
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
-    {
-        public bool BaseNotifyCalled { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
+    T[] SelectedItems { get; }
 
-        internal void RaisePropertyChanged(string propertyName)
-        {
-            BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            RaisePropertyChanged(propertyName);
-        }
-
-    }
+    T SelectedItem { get; }
 }
