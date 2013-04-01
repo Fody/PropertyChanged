@@ -88,6 +88,10 @@ To Install from the Nuget Package Manager Console
             }
         }
     }
+    
+## Icon
+
+Icon courtesy of [The Noun Project](http://thenounproject.com)
 
 ## More Info
 

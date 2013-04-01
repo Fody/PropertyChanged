@@ -9,8 +9,8 @@
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/Fody/PropertyChanged</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://github.com/Fody/PropertyChanged/blob/master/icons/icon_100x100.png</iconUrl>
     <description>Fody add-in for injecting INotifyPropertyChanged code into properties.</description>
-    <summary />
     <language>en-AU</language>
     <tags>WPF, Silverlight, MVVM, WP7, WindowsPhone, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
     <dependencies>
