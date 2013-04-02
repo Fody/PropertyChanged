@@ -12,7 +12,10 @@
     <ConfigurationName>Release</ConfigurationName>
   </PropertyGroup>
   <Target Name="Clean">
-    <RemoveDir Directories="$(SolutionDir)NuGetBuild" />
+    <ItemGroup>
+      <FilesToDelete Include="$(SolutionDir)NuGetBuild\**\*.*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
   </Target>
   <Target Name="Build" DependsOnTargets="NuGetBuild" />
   <Target Name="ReBuild" DependsOnTargets="NuGetBuild" />
