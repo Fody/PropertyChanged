@@ -15,9 +15,10 @@ public static class AlreadyNotifyFinder
         for (var index = 0; index < instructions.Count; index++)
         {
             var instruction = instructions[index];
-            if (instruction.IsCallToMethod(methodName))
+            int propertyNameIndex;
+            if (instruction.IsCallToMethod(methodName, out  propertyNameIndex))
             {
-                var before = instructions[index - 1];
+                var before = instructions[index - propertyNameIndex];
                 if (before.OpCode == OpCodes.Ldstr)
                 {
                     yield return (string) before.Operand;

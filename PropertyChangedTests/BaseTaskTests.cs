@@ -143,6 +143,48 @@ public abstract class BaseTaskTests
         Assert.AreEqual(0,property2EventCount);
     }
     [Test]
+    public void AlreadyHasSingleNotifcationDiffSignature()
+    {
+        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotifcationDiffSignature");
+        var property1EventCount = 0;
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "Property1")
+                {
+                    property1EventCount++;
+                }
+            };
+        instance.Property1 = "a";
+
+        Assert.AreEqual(1,property1EventCount);
+        property1EventCount = 0;
+        //Property has not changed on re-set so event not fired
+        instance.Property1 = "a";
+        Assert.AreEqual(0,property1EventCount);
+    }
+
+    [Test]
+    public void AlreadyHasSingleNotifcationDiffParamLocation()
+    {
+        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotifcationDiffParamLocation");
+        var property1EventCount = 0;
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "Property1")
+                {
+                    property1EventCount++;
+                }
+            };
+        instance.Property1 = "a";
+
+        Assert.AreEqual(1,property1EventCount);
+        property1EventCount = 0;
+        //Property has not changed on re-set so event not fired
+        instance.Property1 = "a";
+        Assert.AreEqual(0,property1EventCount);
+    }
+
+    [Test]
     public void AlreadyHasSingleNotifcation()
     {
         var instance = assembly.GetInstance("ClassAlreadyHasSingleNotifcation");

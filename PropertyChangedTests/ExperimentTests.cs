@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 [TestFixture]
 public class ExperimentTests

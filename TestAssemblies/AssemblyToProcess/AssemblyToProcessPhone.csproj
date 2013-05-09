@@ -56,6 +56,8 @@
     <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
     <Compile Include="ClassAlreadyHasNotifcation.cs" />
     <Compile Include="ClassAlreadyHasSingleNotifcation.cs" />
+    <Compile Include="ClassAlreadyHasSingleNotifcationDiffParamLocation.cs" />
+    <Compile Include="ClassAlreadyHasSingleNotifcationDiffSignature.cs" />
     <Compile Include="ClassAlsoNotifyFor.cs" />
     <Compile Include="ClassAlsoNotifyForMultiple.cs" />
     <Compile Include="ClassCircularProperties.cs" />

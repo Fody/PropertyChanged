@@ -10,12 +10,31 @@ public static class CecilExtensions
         return string.Format("{0}.{1}", propertyDefinition.DeclaringType.FullName, propertyDefinition.Name);
     }
 
-  public   static bool IsCallToMethod(this Instruction x, string methodName)
+    public static bool IsCallToMethod(this Instruction instruction, string methodName, out int propertyNameIndex)
     {
-        return x.OpCode.IsCall() &&
-               x.Operand is MethodReference &&
-               ((MethodReference)x.Operand).Name == methodName;
+        propertyNameIndex = 1;
+        if (!instruction.OpCode.IsCall())
+        {
+            return false;
+        }
+        var methodReference = instruction.Operand as MethodReference;
+        if (methodReference == null)
+        {
+            return false;
+        }
+        if (methodReference.Name != methodName)
+        {
+            return false;
+        }
+        var parameterDefinition = methodReference.Parameters.FirstOrDefault(x => x.Name == "propertyName");
+        if (parameterDefinition != null)
+        {
+            propertyNameIndex = methodReference.Parameters.Count - parameterDefinition.Index;
+        }
+
+        return true;
     }
+
     public static bool IsCall(this OpCode opCode)
     {
         return (opCode.Code == Code.Call) || (opCode.Code == Code.Callvirt);

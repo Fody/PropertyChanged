@@ -16,7 +16,9 @@ public class MappingFinderClassWithAutoPropertiesAndDodgyField
 
     public class ClassWithAutoPropertiesAndDodgyField
     {
+#pragma warning disable 169
         string _property2;
+#pragma warning restore 169
         public string Property1 { get; set; }
         public string Property2 { get; set; }
     }
