@@ -47,7 +47,7 @@ public partial class ModuleWeaver
         var systemCoreDefinition = GetSystemCoreDefinition();
         if (actionDefinition == null)
         {
-            actionDefinition = systemCoreDefinition.MainModule.Types.FirstOrDefault(x => x.Name == "Action");
+            actionDefinition = systemCoreDefinition.MainModule.Types.First(x => x.Name == "Action");
         }
         ActionTypeReference = ModuleDefinition.Import(actionDefinition);
 

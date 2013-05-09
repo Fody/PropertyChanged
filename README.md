@@ -1,5 +1,7 @@
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
+![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
+
 Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx)  code into properties at compile time.
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
