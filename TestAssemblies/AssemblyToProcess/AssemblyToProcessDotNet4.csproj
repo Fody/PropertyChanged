@@ -139,6 +139,7 @@
     <Compile Include="SupportedLibraries\ClassMvvmLight.cs" />
     <Compile Include="SupportedLibraries\ClassPrism.cs" />
     <Compile Include="SupportedLibraries\ClassTelerik.cs" />
+    <Compile Include="SupportedLibraries\ClassReactiveUI.cs" />
     <Compile Include="TransitiveDependencies.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassUsingPublicFieldThroughParameter.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassWithPublicField.cs" />
