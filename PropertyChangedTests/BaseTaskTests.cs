@@ -976,6 +976,14 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void ReactiveUI()
+    {
+        var instance = assembly.GetInstance("ClassReactiveUI");
+        EventTester.TestProperty(instance, false);
+        Assert.IsTrue(instance.BaseNotifyCalled);
+    }
+
+    [Test]
     public void MvvmLightFromObservableObject()
     {
         var instance = assembly.GetInstance("ClassMvvmLightFromObservableObject");

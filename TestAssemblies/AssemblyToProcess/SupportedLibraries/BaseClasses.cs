@@ -188,3 +188,21 @@ namespace Jounce.Core.ViewModel
     {
     }
 }
+
+namespace ReactiveUI
+{
+    public abstract class ReactiveObject : INotifyPropertyChanged
+    {
+        public bool BaseNotifyCalled { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public virtual void raisePropertyChanged(string propertyName)
+        {
+            BaseNotifyCalled = true;
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}
