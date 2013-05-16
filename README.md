@@ -95,6 +95,14 @@ To Install from the Nuget Package Manager Console
 
 Icon courtesy of [The Noun Project](http://thenounproject.com)
 
+
+## Contributors
+
+ * [Cameron MacFarland](https://github.com/distantcam)
+ * [Geert van Horrik](https://github.com/GeertvanHorrik)
+ * [Simon Cropp](https://github.com/simoncropp)
+ * [Bruno Juchli]
+
 ## More Info
 
 * [Attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes)
