@@ -14,6 +14,11 @@ public partial class ModuleWeaver
 
         if (FoundInterceptor)
         {
+            if (targetType.HasGenericParameters)
+            {
+                var message = string.Format("Error processing '{0}'. Interception is not supported on generic types. To manually work around this problem add a [DoNotNotify] to the class and then manually implement INotifyPropertyChanged for that class and all child classes. If you would like this feature handled automatically please feel free to submit a pull request.", targetType.Name);
+                throw new WeavingException(message);
+            }
             var methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
 
             return new EventInvokerMethod
@@ -98,7 +103,13 @@ public partial class ModuleWeaver
 
     MethodDefinition InjectInterceptedMethod(TypeDefinition targetType, MethodDefinition innerOnPropertyChanged)
     {
-        InjectDelegateHolder(targetType, innerOnPropertyChanged);
+        var delegateHolderInjector = new DelegateHolderInjector
+                                     {
+                                         TargetTypeDefinition = targetType,
+                                         OnPropertyChangedMethodReference = innerOnPropertyChanged,
+                                         ModuleWeaver = this,
+                                     };
+        delegateHolderInjector.InjectDelegateHolder();
         var method = new MethodDefinition(EventInvokerNames.First(), GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
 
         var propertyName = new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String);
@@ -114,29 +125,29 @@ public partial class ModuleWeaver
         var action = new VariableDefinition("firePropertyChanged", ActionTypeReference);
         method.Body.Variables.Add(action);
 
-        var variableDefinition = new VariableDefinition("delegateHolder", TypeDefinition);
+        var variableDefinition = new VariableDefinition("delegateHolder", delegateHolderInjector.TypeDefinition);
         method.Body.Variables.Add(variableDefinition);
 
 
         var instructions = method.Body.Instructions;
 
         var last = Instruction.Create(OpCodes.Ret);
-        instructions.Add(Instruction.Create(OpCodes.Newobj, ConstructorDefinition));
+        instructions.Add(Instruction.Create(OpCodes.Newobj, delegateHolderInjector.ConstructorDefinition));
         instructions.Add(Instruction.Create(OpCodes.Stloc_1));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
-        instructions.Add(Instruction.Create(OpCodes.Stfld, PropertyName));
+        instructions.Add(Instruction.Create(OpCodes.Stfld, delegateHolderInjector.PropertyNameField));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
-        instructions.Add(Instruction.Create(OpCodes.Stfld, Target));
+        instructions.Add(Instruction.Create(OpCodes.Stfld, delegateHolderInjector.TargetField));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Ldftn, MethodDefinition));
+        instructions.Add(Instruction.Create(OpCodes.Ldftn, delegateHolderInjector.MethodDefinition));
         instructions.Add(Instruction.Create(OpCodes.Newobj, ActionConstructorReference));
         instructions.Add(Instruction.Create(OpCodes.Stloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Ldfld, PropertyName));
+        instructions.Add(Instruction.Create(OpCodes.Ldfld, delegateHolderInjector.PropertyNameField));
         if (IsBeforeAfter)
         {
             instructions.Add(Instruction.Create(OpCodes.Ldarg_2));
