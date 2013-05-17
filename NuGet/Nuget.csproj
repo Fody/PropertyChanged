@@ -24,18 +24,8 @@
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_3.5\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\NET35" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_3.5\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\NET35" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\NET40" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\NET40" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\WinRT45" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\WinRT45" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP71" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP71" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)_PCL\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)install.ps1" DestinationFolder="$(SolutionDir)NuGetBuild\Tools" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps1" DestinationFolder="$(SolutionDir)NuGetBuild\Tools" />
