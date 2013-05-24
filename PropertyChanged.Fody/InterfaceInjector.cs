@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 
 public partial class ModuleWeaver
 {
@@ -46,8 +47,6 @@ public partial class ModuleWeaver
         method.Body.Variables.Add(handlerVariable1);
         var handlerVariable2 = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable2);
-        var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
-        method.Body.Variables.Add(boolVariable);
 
         var loopBegin = Instruction.Create(OpCodes.Ldloc, handlerVariable0);
         method.Body.Instructions.Append(
@@ -69,14 +68,10 @@ public partial class ModuleWeaver
             Instruction.Create(OpCodes.Stloc, handlerVariable0),
             Instruction.Create(OpCodes.Ldloc, handlerVariable0),
             Instruction.Create(OpCodes.Ldloc, handlerVariable1),
-            Instruction.Create(OpCodes.Ceq),
-            Instruction.Create(OpCodes.Ldc_I4_0),
-            Instruction.Create(OpCodes.Ceq),
-            Instruction.Create(OpCodes.Stloc, boolVariable),
-            Instruction.Create(OpCodes.Ldloc, boolVariable),
-            Instruction.Create(OpCodes.Brtrue_S, loopBegin), // goto begin of loop
+            Instruction.Create(OpCodes.Bne_Un_S, loopBegin), // goto begin of loop
             Instruction.Create(OpCodes.Ret));
         method.Body.InitLocals = true;
+        method.Body.OptimizeMacros();
 
         return method;
     }
