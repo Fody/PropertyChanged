@@ -271,6 +271,26 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void ClassWithNotifyPropertyChangedAttributeGeneric_MustWeaveNotification()
+    {
+        var type = assembly.GetType("ClassWithNotifyPropertyChangedAttributeGeneric`1", true);
+        var makeGenericType = type.MakeGenericType(typeof(string));
+
+        var instance = (dynamic)Activator.CreateInstance(makeGenericType);
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        };
+        instance.Property1 = "a";
+
+        Assert.IsTrue(property1EventCalled);
+    }
+
+    [Test]
     public void WithNotifyPropertyChangedAttributeOnParentAndChild()
     {
         var instance = assembly.GetInstance("ClassWithNotifyPropertyChangedAttributeChild");
