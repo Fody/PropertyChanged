@@ -77,7 +77,7 @@ public class EqualityCheckWeaver
                     Instruction.Create(OpCodes.Box, targetType),
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Box, targetType),
-                    Instruction.Create(OpCodes.Ceq),
+                    Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
                     Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                     Instruction.Create(OpCodes.Ret));
             }

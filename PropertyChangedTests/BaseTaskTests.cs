@@ -397,6 +397,14 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, "SByteProperty", (sbyte)1);
         EventTester.TestProperty(instance, "CharProperty", 'd');
     }
+
+    [Test]
+    public void EqualityWithGeneric()
+    {
+        var instance = assembly.GetInstance("GenericBaseWithProperty.ClassWithGenericPropertyDouble");
+        EventTester.TestProperty(instance, "Property1", 1.0);
+    }
+
     [Test]
     public void WithCompilerGeneratedAttribute()
     {
