@@ -8,6 +8,7 @@ public partial class ModuleWeaver
     public MethodReference ComponentModelPropertyChangedEventConstructorReference;
     public MethodReference ActionConstructorReference;
     public MethodReference ObjectConstructor;
+    public MethodReference ObjectEqualsMethod;
     public TypeReference ActionTypeReference;
     public MethodDefinition NullableEqualsMethod;
     public TypeReference PropChangedInterfaceReference;
@@ -31,6 +32,8 @@ public partial class ModuleWeaver
         }
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
         ObjectConstructor = ModuleDefinition.Import(constructorDefinition);
+        var objectEqualsMethodDefiniton = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
+        ObjectEqualsMethod = ModuleDefinition.Import(objectEqualsMethodDefiniton);
 
 
         var nullableDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Nullable");
@@ -95,6 +98,8 @@ public partial class ModuleWeaver
 
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
         ObjectConstructor = ModuleDefinition.Import(constructorDefinition);
+        var objectEqualsMethodDefiniton = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
+        ObjectEqualsMethod = ModuleDefinition.Import(objectEqualsMethodDefiniton);
 
 
         var nullableDefinition = systemRuntimeTypes.FirstOrDefault(x => x.Name == "Nullable");
