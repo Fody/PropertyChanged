@@ -1,7 +1,7 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public partial class DelegateHolderInjector
+public class DelegateHolderInjector
 {
     public TypeDefinition TargetTypeDefinition;
     public MethodReference OnPropertyChangedMethodReference;

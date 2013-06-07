@@ -131,6 +131,9 @@
     <Compile Include="InterfaceWithAttributes.cs" />
     <Compile Include="NotifyInBase\ClassParentWithProperty.cs" />
     <Compile Include="NotifyInBase\ClassWithNotifyInBase.cs" />
+    <Compile Include="NotifyInChild\ClassWithNotifyInChildByAttribute.cs" />
+    <Compile Include="NotifyInChild\ClassWithNotifyInChildByInterface.cs" />
+    <Compile Include="NotifyInChild\ParentClass.cs" />
     <Compile Include="OnceRemovedINotify\ClassWithOnceRemovedINotify.cs" />
     <Compile Include="OnceRemovedINotify\INotifyPropertyChangedChild.cs" />
     <Compile Include="StructWithAttributes.cs" />

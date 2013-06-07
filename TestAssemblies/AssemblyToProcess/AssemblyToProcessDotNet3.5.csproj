@@ -121,6 +121,9 @@
     <Compile Include="ClassWithLogicInSet.cs" />
     <Compile Include="ClassWithNested.cs" />
     <Compile Include="NotifyInBase\ClassWithNotifyInBase.cs" />
+    <Compile Include="NotifyInChild\ParentClass.cs" />
+    <Compile Include="NotifyInChild\ClassWithNotifyInChildByAttribute.cs" />
+    <Compile Include="NotifyInChild\ClassWithNotifyInChildByInterface.cs" />
     <Compile Include="OnceRemovedINotify\ClassWithOnceRemovedINotify.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="FieldsFromOtherClass\OtherClass.cs" />

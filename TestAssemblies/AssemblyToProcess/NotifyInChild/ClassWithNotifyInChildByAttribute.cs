@@ -3,9 +3,5 @@
 [ImplementPropertyChanged]
 public class ClassWithNotifyInChildByAttribute : ParentClass
 {
-    public string Property1 { get; set; }
-}
-
-public class ParentClass
-{
+    public string Property { get; set; }
 }

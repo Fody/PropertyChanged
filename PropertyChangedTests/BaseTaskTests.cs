@@ -142,6 +142,43 @@ public abstract class BaseTaskTests
         Assert.AreEqual(0,property1EventCount);
         Assert.AreEqual(0,property2EventCount);
     }
+
+    [Test]
+    public void WithNotifyInChildByInterface()
+    {
+        var instance = assembly.GetInstance("ClassWithNotifyInChildByInterface");
+        var propertyEventCount = 0;
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+            {
+                propertyEventCount++;
+            };
+        instance.Property = "a";
+
+        Assert.AreEqual(1, propertyEventCount);
+        propertyEventCount = 0;
+        //Property has not changed on re-set so event not fired
+        instance.Property = "a";
+        Assert.AreEqual(0, propertyEventCount);
+    }
+
+    [Test]
+    public void WithNotifyInChildByAttribute()
+    {
+        var instance = assembly.GetInstance("ClassWithNotifyInChildByAttribute");
+        var propertyEventCount = 0;
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+            {
+                propertyEventCount++;
+            };
+        instance.Property = "a";
+
+        Assert.AreEqual(1, propertyEventCount);
+        propertyEventCount = 0;
+        //Property has not changed on re-set so event not fired
+        instance.Property = "a";
+        Assert.AreEqual(0, propertyEventCount);
+    }
+
     [Test]
     public void AlreadyHasSingleNotifcationDiffSignature()
     {
