@@ -53,7 +53,7 @@ public partial class ModuleWeaver
                 NotifyNodes.Add(node);
                 continue;
             }
-            PopulateINotifyNodes(node.Nodes);
+            PopulateInjectedINotifyNodes(node.Nodes);
         }
     }
 
