@@ -32,8 +32,8 @@ public partial class ModuleWeaver
         }
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
         ObjectConstructor = ModuleDefinition.Import(constructorDefinition);
-        var objectEqualsMethodDefiniton = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
-        ObjectEqualsMethod = ModuleDefinition.Import(objectEqualsMethodDefiniton);
+        var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
+        ObjectEqualsMethod = ModuleDefinition.Import(objectEqualsMethodDefinition);
 
 
         var nullableDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Nullable");
@@ -98,8 +98,8 @@ public partial class ModuleWeaver
 
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
         ObjectConstructor = ModuleDefinition.Import(constructorDefinition);
-        var objectEqualsMethodDefiniton = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
-        ObjectEqualsMethod = ModuleDefinition.Import(objectEqualsMethodDefiniton);
+        var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
+        ObjectEqualsMethod = ModuleDefinition.Import(objectEqualsMethodDefinition);
 
 
         var nullableDefinition = systemRuntimeTypes.FirstOrDefault(x => x.Name == "Nullable");
@@ -114,6 +114,10 @@ public partial class ModuleWeaver
 
         var systemObjectModel = assemblyResolver.Resolve("System.ObjectModel");
         var systemObjectModelTypes = systemObjectModel.MainModule.Types;
+
+        var propChangedInterfaceDefinition = systemObjectModelTypes.First(x => x.Name == "INotifyPropertyChanged");
+        PropChangedInterfaceReference = ModuleDefinition.Import(propChangedInterfaceDefinition);
+
         var propChangedHandlerDefinition = systemObjectModelTypes.First(x => x.Name == "PropertyChangedEventHandler");
         PropChangedHandlerReference = ModuleDefinition.Import(propChangedHandlerDefinition);
         ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.Import(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
