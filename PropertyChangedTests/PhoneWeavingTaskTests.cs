@@ -10,6 +10,6 @@ public class PhoneWeavingTaskTests : BaseTaskTests
         : base(@"AssemblyToProcess\AssemblyToProcessPhone.csproj")
     {
     }
-    public override void WithGenericAmdLambda() { }
+    public override void WithGenericAndLambda() { }
 }
 #endif

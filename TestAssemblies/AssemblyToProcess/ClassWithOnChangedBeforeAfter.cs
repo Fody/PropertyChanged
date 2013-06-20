@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-public class ClassWithOnChangedBerforeAfter : INotifyPropertyChanged
+public class ClassWithOnChangedBeforeAfter : INotifyPropertyChanged
 {
     public bool OnProperty1ChangedCalled;
 

@@ -1,11 +1,31 @@
-﻿using PropertyChanged;
+﻿using System;
+using System.Diagnostics;
+using PropertyChanged;
 
 [ImplementPropertyChanged]
-public class ClassWithNotifyInChildByAttribute : ParentClass
+public class ClassExperiment
 {
-    public string Property1 { get; set; }
+    DateTimeOffset? mixDateTimeOffset;
+    public DateTimeOffset MixDateTimeOffset
+    {
+        get { return mixDateTimeOffset.GetValueOrDefault(); }
+        set { mixDateTimeOffset = value; }
+    }
 }
 
-public class ParentClass
+public class ClassExperiment2
 {
+    DateTimeOffset? mixDateTimeOffset;
+    public DateTimeOffset MixDateTimeOffset
+    {
+        get { return mixDateTimeOffset.GetValueOrDefault(); }
+        set
+        {
+            if (!Nullable.Equals(mixDateTimeOffset, value))
+            {
+                Trace.WriteLine(null);
+            }
+
+        }
+    }
 }

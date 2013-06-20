@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace ComplexHierachy
+namespace ComplexHierarchy
 {
     public class ClassParent: INotifyPropertyChanged
     {

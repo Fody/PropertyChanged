@@ -115,9 +115,9 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void AlreadyHasNotifcation()
+    public void AlreadyHasNotification()
     {
-        var instance = assembly.GetInstance("ClassAlreadyHasNotifcation");
+        var instance = assembly.GetInstance("ClassAlreadyHasNotification");
         var property1EventCount = 0;
         var property2EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
@@ -180,9 +180,9 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void AlreadyHasSingleNotifcationDiffSignature()
+    public void AlreadyHasSingleNotificationDiffSignature()
     {
-        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotifcationDiffSignature");
+        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotificationDiffSignature");
         var property1EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
             {
@@ -201,9 +201,9 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void AlreadyHasSingleNotifcationDiffParamLocation()
+    public void AlreadyHasSingleNotificationDiffParamLocation()
     {
-        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotifcationDiffParamLocation");
+        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotificationDiffParamLocation");
         var property1EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
             {
@@ -222,9 +222,9 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void AlreadyHasSingleNotifcation()
+    public void AlreadyHasSingleNotification()
     {
-        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotifcation");
+        var instance = assembly.GetInstance("ClassAlreadyHasSingleNotification");
         var property1EventCount = 0;
         var property2EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
@@ -427,6 +427,11 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, "NullableIntProperty", 2);
         EventTester.TestProperty(instance, "BoolProperty", true);
         EventTester.TestProperty(instance, "NullableBoolProperty", true);
+        EventTester.TestProperty(instance, "DateTime", DateTime.Now);
+        EventTester.TestProperty(instance, "NullableDateTime", DateTime.Now);
+        EventTester.TestProperty(instance, "MixDateTimeOffset", DateTimeOffset.Now,true);
+        EventTester.TestProperty(instance, "DateTimeOffset", DateTimeOffset.Now);
+        EventTester.TestProperty(instance, "NullableDateTimeOffset", DateTimeOffset.Now);
         EventTester.TestProperty(instance, "ObjectProperty", "foo");
         EventTester.TestProperty(instance, "ShortProperty", (short)1);
         EventTester.TestProperty(instance, "UShortProperty", (ushort)1);
@@ -470,7 +475,7 @@ public abstract class BaseTaskTests
             }
         });
 
-        instance.StringProperty = "sfsd";
+        instance.StringProperty = "aString";
         Assert.IsTrue(eventCalled);
     }
 
@@ -489,7 +494,7 @@ public abstract class BaseTaskTests
             }
         });
 
-        instance.StringProperty = "sfsd";
+        instance.StringProperty = "aString";
         Assert.IsTrue(eventCalled);
     }
 
@@ -507,7 +512,7 @@ public abstract class BaseTaskTests
                                                                             }
                                                                         });
 
-        instance.Property1 = "sfsd";
+        instance.Property1 = "aString";
         Assert.IsTrue(eventCalled);
     }
 
@@ -525,9 +530,9 @@ public abstract class BaseTaskTests
             }
         });
 
-        instance[4] = "sdfsdf";
-        Assert.AreEqual("sdfsdf", instance[4]);
-        instance.Property1 = "sfsd";
+        instance[4] = "string1";
+        Assert.AreEqual("string1", instance[4]);
+        instance.Property1 = "string2";
         Assert.IsTrue(eventCalled);
     }
 
@@ -558,14 +563,14 @@ public abstract class BaseTaskTests
             {
                property1EventCalled = true;
             };
-        instance.Property1 = (Nullable<decimal>) 0.0;
+        instance.Property1 = (decimal?) 0.0;
 
         Assert.IsTrue(property1EventCalled);
     }
     [Test]
-    public void WithLdfldaShortCircut()
+    public void WithLdfldaShortCircuit()
     {
-        var instance = assembly.GetInstance("ClassWithLdfldaShortCircut");
+        var instance = assembly.GetInstance("ClassWithLdfldaShortCircuit");
 
         var property1EventCalled = false;
         ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
@@ -794,9 +799,9 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void HierachyBeforeAfterAndSimple()
+    public void HierarchyBeforeAfterAndSimple()
     {
-        var instance = assembly.GetInstance("HierachyBeforeAfterAndSimple.ClassChild");
+        var instance = assembly.GetInstance("HierarchyBeforeAfterAndSimple.ClassChild");
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.BeforeAfterCalled);
     }
@@ -839,20 +844,20 @@ public abstract class BaseTaskTests
     [Test]
     public void Child1()
     {
-        var instance = assembly.GetInstance("ComplexHierachy.ClassChild1");
+        var instance = assembly.GetInstance("ComplexHierarchy.ClassChild1");
         EventTester.TestProperty(instance, false);
     }
     [Test]
     public void Child2()
     {
-        var instance = assembly.GetInstance("ComplexHierachy.ClassChild2");
+        var instance = assembly.GetInstance("ComplexHierarchy.ClassChild2");
         EventTester.TestProperty(instance, false);
     }
 
     [Test]
     public void Child3()
     {
-        var type = assembly.GetType("ComplexHierachy.ClassChild3", true);
+        var type = assembly.GetType("ComplexHierarchy.ClassChild3", true);
         dynamic instance = Activator.CreateInstance(type);
         var property1EventCalled = false;
         var property2EventCalled = false;
@@ -919,17 +924,17 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public virtual void WithGenericAmdLambda()
+    public virtual void WithGenericAndLambda()
     {
-        var instance = assembly.GetInstance("ClassWithGenericAmdLambdaImp");
+        var instance = assembly.GetInstance("ClassWithGenericAndLambdaImp");
         EventTester.TestProperty(instance, false);
     }
 
 
     [Test]
-    public void WithOnChangedBerforeAfter()
+    public void WithOnChangedBeforeAfter()
     {
-        var instance = assembly.GetInstance("ClassWithOnChangedBerforeAfter");
+        var instance = assembly.GetInstance("ClassWithOnChangedBeforeAfter");
         Assert.IsFalse(instance.OnProperty1ChangedCalled);
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.OnProperty1ChangedCalled);

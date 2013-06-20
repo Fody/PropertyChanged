@@ -35,7 +35,7 @@ public partial class ModuleWeaver
     {
         foreach (var node in typeNodes)
         {
-            if (HierachyImplementsINotify(node.TypeDefinition))
+            if (HierarchyImplementsINotify(node.TypeDefinition))
             {
                 NotifyNodes.Add(node);
                 continue;

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-public class ClassAlreadyHasSingleNotifcationDiffSignature : INotifyPropertyChanged
+public class ClassAlreadyHasSingleNotificationDiffSignature : INotifyPropertyChanged
 {
     string property1;
 

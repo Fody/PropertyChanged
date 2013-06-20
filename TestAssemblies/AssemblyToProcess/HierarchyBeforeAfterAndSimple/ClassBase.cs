@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace HierachyBeforeAfterAndSimple
+namespace HierarchyBeforeAfterAndSimple
 {
     public class ClassBase : INotifyPropertyChanged
 	{

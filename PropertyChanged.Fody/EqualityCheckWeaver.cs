@@ -34,7 +34,10 @@ public class EqualityCheckWeaver
     void CheckAgainstField()
     {
         var fieldReference = propertyData.BackingFieldReference.Resolve().GetGeneric();
-        InjectEqualityCheck(Instruction.Create(OpCodes.Ldfld, fieldReference), fieldReference.FieldType);
+        if (propertyData.BackingFieldReference.FieldType.FullName == propertyData.PropertyDefinition.PropertyType.FullName)
+        {
+            InjectEqualityCheck(Instruction.Create(OpCodes.Ldfld, fieldReference), fieldReference.FieldType);   
+        }
     }
 
 

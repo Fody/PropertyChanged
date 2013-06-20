@@ -14,7 +14,7 @@ public class ClassWithGenericAndLambda<T> : INotifyPropertyChanged
         list.First(container => container == data);
     }
 }
-public class ClassWithGenericAmdLambdaImp : ClassWithGenericAndLambda<object>
+public class ClassWithGenericAndLambdaImp : ClassWithGenericAndLambda<object>
 {
     
 }

@@ -52,7 +52,7 @@ public static class EventTester
             Assert.IsFalse(property2EventCalled);
         }
     }
-    internal static void TestProperty<T>(dynamic instance, string propertyName, T propertyValue)
+    internal static void TestProperty<T>(dynamic instance, string propertyName, T propertyValue, bool ignoreEquality = false)
     {
         var eventCalled = false;
         instance.PropertyChanged += new PropertyChangedEventHandler((sender, args) =>
@@ -68,6 +68,10 @@ public static class EventTester
         propertyInfo.SetValue(instance, propertyValue, null);
 
         Assert.IsTrue(eventCalled);
+        if (ignoreEquality)
+        {
+            return;
+        }
         eventCalled = false;
         propertyInfo.SetValue(instance, propertyValue, null);
         Assert.IsFalse(eventCalled);

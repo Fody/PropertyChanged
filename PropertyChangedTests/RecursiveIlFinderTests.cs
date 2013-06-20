@@ -31,7 +31,7 @@ public class RecursiveIlFinderTests
 
         public void Method1()
         {
-            Property = "wssdfsdf";
+            Property = "aString";
             Method2();
         }
 

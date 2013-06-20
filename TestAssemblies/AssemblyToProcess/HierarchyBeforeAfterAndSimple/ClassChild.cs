@@ -1,6 +1,6 @@
 ﻿using PropertyChanged;
 
-namespace HierachyBeforeAfterAndSimple
+namespace HierarchyBeforeAfterAndSimple
 {
     public class ClassChild : ClassBase
     {

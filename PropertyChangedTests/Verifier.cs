@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+
 
 public static class Verifier
 {
@@ -12,7 +12,7 @@ public static class Verifier
         var before = Validate(beforeAssemblyPath);
         var after = Validate(afterAssemblyPath);
         var message = string.Format("Failed processing {0}\r\n{1}", Path.GetFileName(afterAssemblyPath), after);
-        Assert.AreEqual(TrimLineNumbers(before), TrimLineNumbers(after), message);
+        NUnit.Framework.Assert.AreEqual(TrimLineNumbers(before), TrimLineNumbers(after), message);
 #endif
     }
 
