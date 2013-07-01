@@ -41,10 +41,6 @@ public partial class ModuleWeaver
             typeReferencesImplementingINotify[fullName] = false;
             return false;
         }
-        if (baseType.FullName.StartsWith("System.Collections"))
-        {
-            return false;
-        }
         var baseTypeImplementsINotify = HierarchyImplementsINotify(baseType);
         typeReferencesImplementingINotify[fullName] = baseTypeImplementsINotify;
         return baseTypeImplementsINotify;
