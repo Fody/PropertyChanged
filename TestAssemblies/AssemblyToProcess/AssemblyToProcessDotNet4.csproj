@@ -35,10 +35,14 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MediaBrowser.Model">
+      <HintPath>..\..\packages\MediaBrowser.Common.3.0.175\lib\net35\MediaBrowser.Model.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="ClassAlreadyHasNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotificationDiffParamLocation.cs" />
@@ -152,6 +156,9 @@
       <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
       <Name>PropertyChanged_PCL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
