@@ -111,6 +111,7 @@
     <Compile Include="ClassWithNested.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
+    <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithTryCatchInSet.cs" />
     <Compile Include="ExplicitPropertyChangedFromOtherClass\ClassWithForwardedEvent.cs" />
     <Compile Include="ExplicitPropertyChangedFromOtherClass\InnerClass.cs" />

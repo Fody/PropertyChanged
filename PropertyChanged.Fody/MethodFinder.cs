@@ -16,7 +16,7 @@ public partial class ModuleWeaver
                 var methodReference = MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
                 eventInvoker = new EventInvokerMethod
                                    {
-                                       IsBeforeAfter = eventInvoker.IsBeforeAfter,
+                                       InvokerType = eventInvoker.InvokerType,
                                        MethodReference = methodReference,
                                    };
             }
@@ -61,7 +61,7 @@ public partial class ModuleWeaver
         return new EventInvokerMethod
                    {
                        MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
-                       IsBeforeAfter = IsBeforeAfterMethod(methodDefinition),
+                       InvokerType = ClassifyInvokerMethod(methodDefinition),
                    };
     }
 
@@ -75,7 +75,7 @@ public partial class ModuleWeaver
             return new EventInvokerMethod
                        {
                            MethodReference = methodReference.GetGeneric(),
-                           IsBeforeAfter = IsBeforeAfterMethod(methodDefinition),
+                           InvokerType = ClassifyInvokerMethod(methodDefinition),
                        };
         }
         return null;
@@ -86,16 +86,37 @@ public partial class ModuleWeaver
         methodDefinition = type.Methods
             .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
             .OrderByDescending(definition => definition.Parameters.Count)
-            .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x));
+            .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x));
         if (methodDefinition == null)
         {
             //TODO: when injecting calls to this method should check visibility
             methodDefinition = type.Methods
                 .Where(x => EventInvokerNames.Contains(x.Name))
                 .OrderByDescending(definition => definition.Parameters.Count)
-                .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x));
+                .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x));
         }
         return methodDefinition != null;
+    }
+
+    public static InvokerTypes ClassifyInvokerMethod(MethodDefinition method)
+    {
+        if (IsPropertyChangedArgMethod(method))
+        {
+            return InvokerTypes.PropertyChangedArg;
+        }
+        if (IsBeforeAfterMethod(method))
+        {
+            return InvokerTypes.BeforeAfter;
+        }
+
+        return InvokerTypes.String;
+    }
+
+    public static bool IsPropertyChangedArgMethod(MethodDefinition method)
+    {
+        var parameters = method.Parameters;
+        return parameters.Count == 1
+               && parameters[0].ParameterType.FullName == "System.ComponentModel.PropertyChangedEventArgs";
     }
 
     public static bool IsSingleStringMethod(MethodDefinition method)
@@ -125,7 +146,7 @@ public partial class ModuleWeaver
                 eventInvoker = AddOnPropertyChangedMethod(notifyNode.TypeDefinition);
                 if (eventInvoker == null)
                 {
-                    var message = string.Format("\tCould not derive or inject '{0}' into '{1}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to suppress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", EventInvokerNames), notifyNode.TypeDefinition.Name);
+                    var message = string.Format("\tCould not find EventInvoker method on type '{1}'. Possible names are '{0}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to suppress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", EventInvokerNames), notifyNode.TypeDefinition.Name);
                     LogWarning(message);
                     continue;
                 }

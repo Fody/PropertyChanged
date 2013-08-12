@@ -14,7 +14,7 @@ public class IndexerCheckerTest
         var message = checker.CheckForWarning(new PropertyData
                                                               {
                                                                   PropertyDefinition = propertyDefinition,
-                                                              },false);
+                                                              }, InvokerTypes.String);
         Assert.IsNotNull(message);
     }
 
