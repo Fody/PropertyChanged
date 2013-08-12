@@ -95,6 +95,7 @@
     <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
+    <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
     <Compile Include="ClassWithLdflda.cs" />
     <Compile Include="ClassWithTernary.cs" />
@@ -161,4 +162,5 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(ProjectPath)\..\..\..\Tools\Pepita\PepitaGet.targets" />
 </Project>
