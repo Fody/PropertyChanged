@@ -98,6 +98,7 @@
     <Compile Include="ClassWithNotifyPropertyChangedAttributeChildParent.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
     <Compile Include="ClassWithOnChangedBeforeAfter.cs" />
+    <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
     <Compile Include="ClassWithTernary.cs" />

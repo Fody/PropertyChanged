@@ -82,6 +82,7 @@
     <Compile Include="MappingFinder\MappingFinderClassWithSingleBackingFieldsSet.cs" />
     <Compile Include="MappingFinder\MappingFinderWithAutoProperties.cs" />
     <Compile Include="DotNet4AssemblyResolver.cs" />
+    <Compile Include="PropertyInfoCheckers\PropertyChangedArgWithNoGetInfoCheckerTest.cs" />
     <Compile Include="RecursiveIlFinderTests.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithLambda.cs" />
     <Compile Include="IlGeneratedByDependencyReaderTests\WithVirtualAutoProperties.cs" />

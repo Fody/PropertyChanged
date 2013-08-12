@@ -9,7 +9,7 @@ public partial class ModuleWeaver
         {
             foreach (var propertyData in node.PropertyDatas.ToList())
             {
-                var warning = CheckForWarning(propertyData, node.EventInvoker.IsBeforeAfter);
+                var warning = CheckForWarning(propertyData, node.EventInvoker.InvokerType);
                 if (warning != null)
                 {
                     LogInfo(string.Format("\t{0} {1} Property will be ignored.", propertyData.PropertyDefinition.GetName(), warning));
@@ -20,7 +20,7 @@ public partial class ModuleWeaver
         }
     }
 
-    public string CheckForWarning(PropertyData propertyData, bool isBeforeAfter)
+    public string CheckForWarning(PropertyData propertyData, InvokerTypes invokerType)
     {
         var propertyDefinition = propertyData.PropertyDefinition;
         var setMethod = propertyDefinition.SetMethod;
@@ -36,7 +36,7 @@ public partial class ModuleWeaver
         {
             return "Property has no field set logic or it contains multiple sets and the names cannot be mapped to a property.";
         }
-        if (isBeforeAfter && (propertyDefinition.GetMethod == null))
+        if (invokerType == InvokerTypes.BeforeAfter && (propertyDefinition.GetMethod == null))
         {
             return "When using a before/after invoker the property have a 'get'.";
         }

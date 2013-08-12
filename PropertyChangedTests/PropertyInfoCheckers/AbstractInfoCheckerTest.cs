@@ -14,7 +14,7 @@ public class AbstractInfoCheckerTest
         var message = checker.CheckForWarning(new PropertyData
                                                               {
                                                                   PropertyDefinition = propertyDefinition,
-                                                              }, false);
+                                                              }, InvokerTypes.String);
         Assert.IsNotNull(message);
     }
 
@@ -27,7 +27,7 @@ public class AbstractInfoCheckerTest
         var message = checker.CheckForWarning(new PropertyData
                                                               {
                                                                   PropertyDefinition = propertyDefinition,
-                                                              }, false);
+                                                              }, InvokerTypes.String);
         Assert.IsNull(message);
     }
 

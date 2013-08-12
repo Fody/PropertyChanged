@@ -15,7 +15,7 @@ public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
                                                               {
                                                                   PropertyDefinition = propertyDefinition,
                                                                   BackingFieldReference = propertyDefinition.DeclaringType.Fields[0]
-                                                              }, false);
+                                                              }, InvokerTypes.String);
         Assert.IsNull(warning);
     }
 
@@ -30,7 +30,7 @@ public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
                                                               {
                                                                   PropertyDefinition = propertyDefinition,
                                                                   BackingFieldReference = null,
-                                                              }, false);
+                                                              }, InvokerTypes.String);
         Assert.IsNotNull(warning);
     }
 

@@ -807,6 +807,13 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithPropertyChangedArgImplementation()
+    {
+        var instance = assembly.GetInstance("ClassWithPropertyChangedArgImplementation");
+        EventTester.TestProperty(instance, true);
+    }
+
+    [Test]
     public void WithCustomPropertyChanged()
     {
         var instance = assembly.GetInstance("ClassWithCustomPropertyChanged");

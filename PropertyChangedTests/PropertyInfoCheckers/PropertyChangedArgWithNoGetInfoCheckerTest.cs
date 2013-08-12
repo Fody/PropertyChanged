@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 
 [TestFixture]
-public class BeforeAfterWithNoGetInfoCheckerTest
+public class PropertyChangedArgWithNoGetInfoCheckerTest
 {
 
     [Test]
@@ -9,12 +9,12 @@ public class BeforeAfterWithNoGetInfoCheckerTest
     {
         var checker = new ModuleWeaver();
 
-        var propertyDefinition = DefinitionFinder.FindProperty<BeforeAfterWithNoGetInfoCheckerTest>("PropertyWithGet");
+        var propertyDefinition = DefinitionFinder.FindProperty<PropertyChangedArgWithNoGetInfoCheckerTest>("PropertyWithGet");
 
         var message = checker.CheckForWarning(new PropertyData
                                                 {
                                                     PropertyDefinition = propertyDefinition,
-                                                }, InvokerTypes.BeforeAfter);
+                                                }, InvokerTypes.PropertyChangedArg);
         Assert.IsNull(message);
     }
 
@@ -23,12 +23,12 @@ public class BeforeAfterWithNoGetInfoCheckerTest
     {
         var checker = new ModuleWeaver();
 
-        var propertyDefinition = DefinitionFinder.FindProperty<BeforeAfterWithNoGetInfoCheckerTest>("PropertyNoGet");
+        var propertyDefinition = DefinitionFinder.FindProperty<PropertyChangedArgWithNoGetInfoCheckerTest>("PropertyNoGet");
 
         var message = checker.CheckForWarning(new PropertyData
                                                 {
                                                     PropertyDefinition = propertyDefinition,
-                                                }, InvokerTypes.BeforeAfter);
+                                                }, InvokerTypes.PropertyChangedArg);
         Assert.IsNotNull(message);
     }
 
