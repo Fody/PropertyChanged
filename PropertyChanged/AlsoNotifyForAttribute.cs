@@ -4,7 +4,7 @@ using System;
 namespace PropertyChanged
 {
     /// <summary>
-    /// Injects this property to be notified when a dependant property is set.
+    /// Injects this property to be notified when a dependent property is set.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class AlsoNotifyForAttribute : Attribute

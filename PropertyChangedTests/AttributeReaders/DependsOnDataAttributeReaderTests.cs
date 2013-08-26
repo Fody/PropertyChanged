@@ -50,8 +50,8 @@ public class DependsOnDataAttributeReaderTests
                        };
         reader.ProcessDependsOnAttributes(node);
         //TODO: should raise an exception
-        //logger.Received().LogError("Could not find property 'NotAProperty2' for DependsOnAttribute assinged to 'FullName'.");
-        //logger.Received().LogError("Could not find property 'NotAProperty1' for DependsOnAttribute assinged to 'FullName'.");
+        //logger.Received().LogError("Could not find property 'NotAProperty2' for DependsOnAttribute assigned to 'FullName'.");
+        //logger.Received().LogError("Could not find property 'NotAProperty1' for DependsOnAttribute assigned to 'FullName'.");
     }
 
     public class ClassWithInvalidDepends

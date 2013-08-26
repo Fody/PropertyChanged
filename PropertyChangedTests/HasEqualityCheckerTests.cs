@@ -136,13 +136,13 @@ public class HasEqualityCheckerTests
         Assert.IsFalse(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    PropertyDefinition GetInstructions(string equalityshortcut)
+    PropertyDefinition GetInstructions(string equalityShortcut)
     {
-        return properties.First(definition => definition.Name == equalityshortcut);
+        return properties.First(definition => definition.Name == equalityShortcut);
     }
-    FieldDefinition GetField(string equalityshortcut)
+    FieldDefinition GetField(string equalityShortcut)
     {
-        return fields.First(x => x.Name == equalityshortcut);
+        return fields.First(x => x.Name == equalityShortcut);
     }
 
     int intField;

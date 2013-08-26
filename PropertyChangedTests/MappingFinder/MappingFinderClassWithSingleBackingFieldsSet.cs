@@ -8,25 +8,25 @@ public class MappingFinderClassWithSingleBackingFieldsSet
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsSet>()).ToList();
-        Assert.AreEqual("propertya", memberMappings.First(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.AreEqual("propertyb", memberMappings.First(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        Assert.AreEqual("propertyA", memberMappings.First(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
+        Assert.AreEqual("propertyB", memberMappings.First(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }
     public class ClassWithSingleBackingFieldsSet
     {
         // ReSharper disable ConvertToAutoProperty
 // ReSharper disable NotAccessedField.Local
-        string propertya;
+        string propertyA;
         public string Property1
         {
             get { return null; }
-            set { propertya = value; }
+            set { propertyA = value; }
         }
 
-        string propertyb;
+        string propertyB;
         public string Property2
         {
             get { return null; }
-            set { propertyb = value; }
+            set { propertyB = value; }
         }
         // ReSharper restore NotAccessedField.Local
         // ReSharper restore ConvertToAutoProperty

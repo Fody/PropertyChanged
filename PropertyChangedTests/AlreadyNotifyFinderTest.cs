@@ -11,7 +11,7 @@ public class AlreadyNotifyFinderTest
     [Test]
     public void ContainsNotification()
     {
-        var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotifactionProperty);
+        var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
         var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
         Assert.AreEqual(1,propertyNames.Count());
@@ -39,7 +39,7 @@ public class AlreadyNotifyFinderTest
     [Test]
     public void AlreadyContainsNotificationVirtual()
     {
-        var propertyDefinition = DefinitionFinder.FindProperty(() => new Virtual().WithNotifactionProperty);
+        var propertyDefinition = DefinitionFinder.FindProperty(() => new Virtual().WithNotificationProperty);
 
         var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
         Assert.IsNotEmpty(propertyNames);
@@ -48,7 +48,7 @@ public class AlreadyNotifyFinderTest
     [Test]
     public void AlreadyContainsNotificationNonVirtual()
     {
-        var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotifactionProperty);
+        var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
         var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
         Assert.IsNotEmpty(propertyNames);
@@ -58,7 +58,7 @@ public class AlreadyNotifyFinderTest
     {
         public int WithoutNotificationProperty { get; set; }
 
-        public int WithNotifactionProperty
+        public int WithNotificationProperty
         {
             get
             {
@@ -66,7 +66,7 @@ public class AlreadyNotifyFinderTest
             }
             set
             {
-                OnPropertyChanged("WithNotifactionProperty");
+                OnPropertyChanged("WithNotificationProperty");
             }
         }
 
@@ -95,7 +95,7 @@ public class AlreadyNotifyFinderTest
     {
         public int WithoutNotificationProperty { get; set; }
 
-        public int WithNotifactionProperty
+        public int WithNotificationProperty
         {
             get
             {
@@ -103,7 +103,7 @@ public class AlreadyNotifyFinderTest
             }
             set
             {
-                OnPropertyChanged("WithNotifactionProperty");
+                OnPropertyChanged("WithNotificationProperty");
             }
         }
 
