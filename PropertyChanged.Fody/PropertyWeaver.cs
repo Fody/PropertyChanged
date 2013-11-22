@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -143,12 +144,15 @@ public class PropertyWeaver
         var onChangedMethodName = string.Format("On{0}Changed", property.Name);
         var onChangedMethod = typeNode
             .OnChangedMethods
-            .FirstOrDefault(x => x.Name == onChangedMethodName);
+            .FirstOrDefault(x => x.MethodReference.Name == onChangedMethodName);
         if (onChangedMethod != null)
         {
-            return instructions.Insert(index, 
-                Instruction.Create(OpCodes.Ldarg_0), 
-                CreateCall(onChangedMethod));
+            if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
+            {
+                return instructions.Insert(index,
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    CreateCall(onChangedMethod));
+            }
         }
         return index;
     }
@@ -211,5 +215,10 @@ public class PropertyWeaver
     public Instruction CreateCall(MethodReference methodReference)
     {
         return Instruction.Create(OpCodes.Callvirt, methodReference);
+    }
+
+    public Instruction CreateCall(OnChangedMethod onChangedMethod)
+    {
+        throw new NotImplementedException();
     }
 }

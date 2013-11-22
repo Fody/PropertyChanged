@@ -18,13 +18,14 @@ public partial class ModuleWeaver
         }
     }
 
-    IEnumerable<MethodReference> GetOnChangedMethods(TypeNode notifyNode)
+    IEnumerable<OnChangedMethod> GetOnChangedMethods(TypeNode notifyNode)
     {
         var methods = notifyNode.TypeDefinition.Methods;
 
         return methods.Where(x => !x.IsStatic &&
                                   !x.IsAbstract &&
-                                  x.Parameters.Count == 0 &&
+                                  (IsNoArgOnChangedMethod(x) ||
+                                  IsBeforeAfterOnChangedMethod(x)) &&
                                   x.Name.StartsWith("On") &&
                                   x.Name.EndsWith("Changed"))
             .Select(methodDefinition =>
@@ -32,7 +33,34 @@ public partial class ModuleWeaver
                 var typeDefinitions = new Stack<TypeDefinition>();
                 typeDefinitions.Push(notifyNode.TypeDefinition);
 
-                return GetMethodReference(typeDefinitions, methodDefinition);
+                if (IsNoArgOnChangedMethod(methodDefinition))
+                {
+                    return new OnChangedMethod
+                    {
+                        OnChangedType = OnChangedTypes.NoArg,
+                        MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
+                    };
+                }
+                
+                return new OnChangedMethod
+                {
+                    OnChangedType = OnChangedTypes.BeforeAfter,
+                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
+                };
             });
+    }
+
+    public static bool IsNoArgOnChangedMethod(MethodDefinition method)
+    {
+        var parameters = method.Parameters;
+        return parameters.Count == 0;
+    }
+
+    public static bool IsBeforeAfterOnChangedMethod(MethodDefinition method)
+    {
+        var parameters = method.Parameters;
+        return parameters.Count == 2
+               && parameters[0].ParameterType.FullName == "System.Object"
+               && parameters[1].ParameterType.FullName == "System.Object";
     }
 }
