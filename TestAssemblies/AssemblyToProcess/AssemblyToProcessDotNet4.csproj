@@ -42,7 +42,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="ClassAlreadyHasNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotificationDiffParamLocation.cs" />
@@ -151,15 +150,14 @@
     <Compile Include="TransitiveDependencies.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassUsingPublicFieldThroughParameter.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassWithPublicField.cs" />
+    <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementation.cs" />
+    <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementationInherited.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_PCL.csproj">
       <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
       <Name>PropertyChanged_PCL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

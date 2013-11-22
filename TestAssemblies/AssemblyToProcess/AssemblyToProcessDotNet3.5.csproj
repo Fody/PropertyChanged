@@ -147,6 +147,8 @@
     <Compile Include="TransitiveDependencies.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassUsingPublicFieldThroughParameter.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassWithPublicField.cs" />
+    <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementation.cs" />
+    <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementationInherited.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_3.5.csproj">

@@ -85,6 +85,8 @@
     <Compile Include="ClassWithNotifyPropertyChangedAttributeChildParent.cs" />
     <Compile Include="ClassWithOnChangedBeforeAfter.cs" />
     <Compile Include="ClassWithTernary.cs" />
+    <Compile Include="CodeGenAttribute\ClassWithCompilerGeneratedAttribute.cs" />
+    <Compile Include="CodeGenAttribute\ClassWithGeneratedCodeAttribute.cs" />
     <Compile Include="ComplexHierarchy\ClassChild1.cs" />
     <Compile Include="ComplexHierarchy\ClassChild2.cs" />
     <Compile Include="ComplexHierarchy\ClassChild3.cs" />
@@ -156,6 +158,8 @@
     <Compile Include="TransitiveDependencies.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassUsingPublicFieldThroughParameter.cs" />
     <Compile Include="UsingPublicFieldThroughParameter\ClassWithPublicField.cs" />
+    <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementation.cs" />
+    <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementationInherited.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_PCL.csproj">
