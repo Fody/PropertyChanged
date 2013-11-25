@@ -149,9 +149,7 @@ public class PropertyWeaver
         {
             if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
             {
-                return instructions.Insert(index,
-                    Instruction.Create(OpCodes.Ldarg_0),
-                    CreateCall(onChangedMethod));
+                return AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
             }
         }
         return index;
@@ -202,6 +200,13 @@ public class PropertyWeaver
         return index + 4;
     }
 
+    int AddSimpleOnChangedCall(int index, MethodReference methodReference)
+    {
+        return instructions.Insert(index,
+            Instruction.Create(OpCodes.Ldarg_0),
+            CreateCall(methodReference));
+    }
+
     public Instruction CallEventInvoker()
     {
         return Instruction.Create(OpCodes.Callvirt, typeNode.EventInvoker.MethodReference);
@@ -215,10 +220,5 @@ public class PropertyWeaver
     public Instruction CreateCall(MethodReference methodReference)
     {
         return Instruction.Create(OpCodes.Callvirt, methodReference);
-    }
-
-    public Instruction CreateCall(OnChangedMethod onChangedMethod)
-    {
-        throw new NotImplementedException();
     }
 }
