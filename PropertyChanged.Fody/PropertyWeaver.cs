@@ -151,6 +151,11 @@ public class PropertyWeaver
             {
                 return AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
             }
+
+            if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfter)
+            {
+                return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
+            }
         }
         return index;
     }
@@ -205,6 +210,34 @@ public class PropertyWeaver
         return instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
             CreateCall(methodReference));
+    }
+
+    int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
+    {
+        var beforeVariable = new VariableDefinition(typeSystem.Object);
+        setMethodBody.Variables.Add(beforeVariable);
+        var afterVariable = new VariableDefinition(typeSystem.Object);
+        setMethodBody.Variables.Add(afterVariable);
+        var getMethod = property.GetMethod.GetGeneric();
+
+        index = instructions.Insert(index,
+                                    Instruction.Create(OpCodes.Ldarg_0),
+                                    CreateCall(getMethod),
+                                    Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
+                                    //Instruction.Create(OpCodes.Ldarg_1),
+                                    Instruction.Create(OpCodes.Stloc, afterVariable),
+                                    Instruction.Create(OpCodes.Ldarg_0),
+                                    Instruction.Create(OpCodes.Ldloc, beforeVariable),
+                                    Instruction.Create(OpCodes.Ldloc, afterVariable),
+                                    CreateCall(methodReference)
+            );
+
+        instructions.Prepend(
+            Instruction.Create(OpCodes.Ldarg_0),
+            CreateCall(getMethod),
+            Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
+            Instruction.Create(OpCodes.Stloc, beforeVariable));
+        return index + 4;
     }
 
     public Instruction CallEventInvoker()
