@@ -22,32 +22,35 @@ public partial class ModuleWeaver
     {
         var methods = notifyNode.TypeDefinition.Methods;
 
-        return methods.Where(x => !x.IsStatic &&
+        var onChangedMethods = methods.Where(x => !x.IsStatic &&
                                   !x.IsAbstract &&
-                                  (IsNoArgOnChangedMethod(x) ||
-                                  IsBeforeAfterOnChangedMethod(x)) &&
+                                  //(IsNoArgOnChangedMethod(x) ||
+                                  //IsBeforeAfterOnChangedMethod(x)) &&
                                   x.Name.StartsWith("On") &&
-                                  x.Name.EndsWith("Changed"))
-            .Select(methodDefinition =>
-            {
-                var typeDefinitions = new Stack<TypeDefinition>();
-                typeDefinitions.Push(notifyNode.TypeDefinition);
+                                  x.Name.EndsWith("Changed"));
 
-                if (IsNoArgOnChangedMethod(methodDefinition))
+        foreach (var methodDefinition in onChangedMethods)
+        {
+            var typeDefinitions = new Stack<TypeDefinition>();
+            typeDefinitions.Push(notifyNode.TypeDefinition);
+
+            if (IsNoArgOnChangedMethod(methodDefinition))
+            {
+                yield return new OnChangedMethod
                 {
-                    return new OnChangedMethod
-                    {
-                        OnChangedType = OnChangedTypes.NoArg,
-                        MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
-                    };
-                }
-                
-                return new OnChangedMethod
+                    OnChangedType = OnChangedTypes.NoArg,
+                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
+                };
+            }
+            else if (IsBeforeAfterOnChangedMethod(methodDefinition))
+            {
+                yield return new OnChangedMethod
                 {
                     OnChangedType = OnChangedTypes.BeforeAfter,
                     MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
                 };
-            });
+            }            
+        }
     }
 
     public static bool IsNoArgOnChangedMethod(MethodDefinition method)

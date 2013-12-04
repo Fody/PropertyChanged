@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -181,7 +180,7 @@ public class PropertyWeaver
 
     int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)
     {
-        bool beforeVariableAdded = TryAddBeforeVariable();
+        var beforeVariableAdded = TryAddBeforeVariable();
         if (TryAddAfterVariable())
         {
             index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
@@ -212,7 +211,7 @@ public class PropertyWeaver
 
     int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
     {
-        bool beforeVariableAdded = TryAddBeforeVariable();
+        var beforeVariableAdded = TryAddBeforeVariable();
         if (TryAddAfterVariable())
         {
             index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
