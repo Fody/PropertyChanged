@@ -11,6 +11,8 @@ public class PropertyWeaver
     TypeNode typeNode;
     TypeSystem typeSystem;
     MethodBody setMethodBody;
+    VariableDefinition afterVariable;
+    VariableDefinition beforeVariable;
     Collection<Instruction> instructions;
 
     public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem )
@@ -100,7 +102,7 @@ public class PropertyWeaver
                 }
             }
         }
-    }
+    }    
 
     int AddIsChangedSetterCall(int index)
     {
@@ -143,12 +145,18 @@ public class PropertyWeaver
         var onChangedMethodName = string.Format("On{0}Changed", property.Name);
         var onChangedMethod = typeNode
             .OnChangedMethods
-            .FirstOrDefault(x => x.Name == onChangedMethodName);
+            .FirstOrDefault(x => x.MethodReference.Name == onChangedMethodName);
         if (onChangedMethod != null)
         {
-            return instructions.Insert(index, 
-                Instruction.Create(OpCodes.Ldarg_0), 
-                CreateCall(onChangedMethod));
+            if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
+            {
+                return AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
+            }
+
+            if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfter)
+            {
+                return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
+            }
         }
         return index;
     }
@@ -172,17 +180,13 @@ public class PropertyWeaver
 
     int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)
     {
-        var beforeVariable = new VariableDefinition(typeSystem.Object);
-        setMethodBody.Variables.Add(beforeVariable);
-        var afterVariable = new VariableDefinition(typeSystem.Object);
-        setMethodBody.Variables.Add(afterVariable);
-        var getMethod = property.GetMethod.GetGeneric();
+        var beforeVariableAdded = TryAddBeforeVariable();
+        if (TryAddAfterVariable())
+        {
+            index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
+        }        
 
         index = instructions.Insert(index,
-                                    Instruction.Create(OpCodes.Ldarg_0),
-                                    CreateCall(getMethod),
-                                    Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
-                                    Instruction.Create(OpCodes.Stloc, afterVariable),
                                     Instruction.Create(OpCodes.Ldarg_0),
                                     Instruction.Create(OpCodes.Ldstr, property.Name),
                                     Instruction.Create(OpCodes.Ldloc, beforeVariable),
@@ -190,12 +194,91 @@ public class PropertyWeaver
                                     CallEventInvoker()
             );
 
+        if (beforeVariableAdded)
+        {
+            return AddBeforeVariableAssignment(index, property);
+        }
+
+        return index;
+    }
+
+    int AddSimpleOnChangedCall(int index, MethodReference methodReference)
+    {
+        return instructions.Insert(index,
+            Instruction.Create(OpCodes.Ldarg_0),
+            CreateCall(methodReference));
+    }
+
+    int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
+    {
+        var beforeVariableAdded = TryAddBeforeVariable();
+        if (TryAddAfterVariable())
+        {
+            index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
+        }        
+
+        index = instructions.Insert(index,
+                                    Instruction.Create(OpCodes.Ldarg_0),
+                                    Instruction.Create(OpCodes.Ldloc, beforeVariable),
+                                    Instruction.Create(OpCodes.Ldloc, afterVariable),
+                                    CreateCall(methodReference)
+            );
+
+        if (beforeVariableAdded)
+        {
+            return AddBeforeVariableAssignment(index, property);
+        } 
+       
+        return index;
+    }
+
+    bool TryAddBeforeVariable()
+    {
+        if (beforeVariable == null)
+        {
+            beforeVariable = new VariableDefinition(typeSystem.Object);
+            setMethodBody.Variables.Add(beforeVariable);
+            return true;
+        }
+
+        return false;
+    }
+    int AddBeforeVariableAssignment(int index, PropertyDefinition property)
+    {
+        var getMethod = property.GetMethod.GetGeneric();
+
         instructions.Prepend(
             Instruction.Create(OpCodes.Ldarg_0),
             CreateCall(getMethod),
             Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
             Instruction.Create(OpCodes.Stloc, beforeVariable));
+
         return index + 4;
+    }
+
+    int InsertVariableAssignmentFromCurrentValue(int index, PropertyDefinition property, VariableDefinition variable)
+    {
+        var getMethod = property.GetMethod.GetGeneric();
+
+        instructions.Insert(index,
+            Instruction.Create(OpCodes.Ldarg_0),
+            CreateCall(getMethod),
+            Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
+            Instruction.Create(OpCodes.Stloc, variable));
+
+        return index + 4;
+    }
+
+    bool TryAddAfterVariable()
+    {
+        if (afterVariable == null)
+        {
+            afterVariable = new VariableDefinition(typeSystem.Object);
+            setMethodBody.Variables.Add(afterVariable);
+            return true;
+        }
+
+        return false;
     }
 
     public Instruction CallEventInvoker()

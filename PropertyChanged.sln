@@ -1,6 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PropertyChanged", "PropertyChanged", "{8D7F2670-3223-4881-AEE3-18A89818C8EA}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessDotNet4", "TestAssemblies\AssemblyToProcess\AssemblyToProcessDotNet4.csproj", "{7DEC4E2D-F872-434E-A267-0BAD65299950}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged.Fody", "PropertyChanged.Fody\PropertyChanged.Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
@@ -9,13 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChangedTests", "Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessDotNet3.5", "TestAssemblies\AssemblyToProcess\AssemblyToProcessDotNet3.5.csproj", "{9E726D5C-1AB1-4C07-8E8F-6930F35E6835}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessDotNet3.5Client", "TestAssemblies\AssemblyToProcess\AssemblyToProcessDotNet3.5Client.csproj", "{0552C0F4-7EFE-48B5-B4AD-087D6355D6CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessDotNet4Client", "TestAssemblies\AssemblyToProcess\AssemblyToProcessDotNet4Client.csproj", "{B552D750-49FE-4DB2-8C0B-37471EBE1F76}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PropertyChanged", "PropertyChanged", "{8D7F2670-3223-4881-AEE3-18A89818C8EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessPhone", "TestAssemblies\AssemblyToProcess\AssemblyToProcessPhone.csproj", "{F883F209-8D17-4A30-8E6C-796219FBF408}"
 EndProject
@@ -147,8 +149,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9E726D5C-1AB1-4C07-8E8F-6930F35E6835} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{7DEC4E2D-F872-434E-A267-0BAD65299950} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
+		{9E726D5C-1AB1-4C07-8E8F-6930F35E6835} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{0552C0F4-7EFE-48B5-B4AD-087D6355D6CF} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{B552D750-49FE-4DB2-8C0B-37471EBE1F76} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{F883F209-8D17-4A30-8E6C-796219FBF408} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}

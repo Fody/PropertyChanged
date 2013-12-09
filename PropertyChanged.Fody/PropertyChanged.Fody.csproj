@@ -74,6 +74,7 @@
     <Compile Include="InstructionListExtensions.cs" />
     <Compile Include="InterfaceInjector.cs" />
     <Compile Include="MsCoreReferenceFinder.cs" />
+    <Compile Include="OnChangedMethod.cs" />
     <Compile Include="OnChangedWalker.cs" />
     <Compile Include="IsChangedMethodFinder.cs" />
     <Compile Include="MethodGenerifier.cs" />
