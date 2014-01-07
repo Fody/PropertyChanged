@@ -308,6 +308,24 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithBaseAndNotifyPropertyChangedAttribute_MustWeaveNotificationOnlyOnce()
+    {
+        var instance = assembly.GetInstance("ClassWithBaseAndNotifyPropertyChangedAttribute");
+
+        var property1EventCalled = 0;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled++;
+            }
+        };
+        instance.Property1 = "a";
+
+        Assert.AreEqual(1, property1EventCalled);
+    }
+
+    [Test]
     public void ClassWithNotifyPropertyChangedAttributeGeneric_MustWeaveNotification()
     {
         var type = assembly.GetType("ClassWithNotifyPropertyChangedAttributeGeneric`1", true);
