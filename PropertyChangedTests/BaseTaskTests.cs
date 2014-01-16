@@ -825,6 +825,20 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithBeforeAfterValueCheckImplementation()
+    {
+        var instance = assembly.GetInstance("ClassWithBeforeAfterValueCheckImplementation");
+
+        instance.Property1 = "before";
+        instance.Property1 = "after";
+
+        Assert.That(instance.BeforeValue1, Is.EqualTo("before"));
+        Assert.That(instance.Property1, Is.EqualTo("after"));
+        Assert.That(instance.BeforeValue2, Is.EqualTo("before2"));
+        Assert.That(instance.Property2, Is.EqualTo("after2"));
+    }
+
+    [Test]
     public void WithPropertyChangedArgImplementation()
     {
         var instance = assembly.GetInstance("ClassWithPropertyChangedArgImplementation");

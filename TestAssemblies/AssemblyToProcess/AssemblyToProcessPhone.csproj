@@ -66,6 +66,7 @@
     <Compile Include="ClassEqualityWithDouble.cs" />
     <Compile Include="ClassEqualityWithStruct.cs" />
     <Compile Include="ClassEqualityWithStructOverload.cs" />
+    <Compile Include="ClassWithBeforeAfterValueCheckImplementation.cs" />
     <Compile Include="ClassWithBranchingReturnAndNoField.cs" />
     <Compile Include="ClassMissingSetGet.cs" />
     <Compile Include="ClassNoBackingNoEqualityField.cs" />
