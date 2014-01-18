@@ -62,6 +62,7 @@
     <Compile Include="ClassThatIsSealed.cs" />
     <Compile Include="ClassWithBeforeAfterAndSimpleImplementation.cs" />
     <Compile Include="ClassWithBeforeAfterImplementation.cs" />
+    <Compile Include="ClassWithBeforeAfterValueCheckImplementation.cs" />
     <Compile Include="ClassWithBoolPropUsingStringProp.cs" />
     <Compile Include="ClassWithBranchingReturn1.cs" />
     <Compile Include="ClassWithBranchingReturn2.cs" />
