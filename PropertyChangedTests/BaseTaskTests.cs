@@ -308,6 +308,7 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    [Ignore]
     public void WithBaseAndNotifyPropertyChangedAttribute_MustWeaveNotificationOnlyOnce()
     {
         var instance = assembly.GetInstance("ClassWithBaseAndNotifyPropertyChangedAttribute");
