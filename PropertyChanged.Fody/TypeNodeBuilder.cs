@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Mono.Cecil;
 
 
@@ -49,6 +50,10 @@ public partial class ModuleWeaver
         {
             if (HasNotifyPropertyChangedAttribute(node.TypeDefinition))
             {
+                if (HierarchyImplementsINotify(node.TypeDefinition))
+                {
+                    throw new WeavingException(string.Format("The type '{0}' already implements INotifyPropertyChanged so [ImplementPropertyChanged] is redundant.", node.TypeDefinition.FullName));
+                }
                 InjectINotifyPropertyChangedInterface(node.TypeDefinition);
                 NotifyNodes.Add(node);
                 continue;
