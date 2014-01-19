@@ -11,8 +11,6 @@ public class PropertyWeaver
     TypeNode typeNode;
     TypeSystem typeSystem;
     MethodBody setMethodBody;
-    VariableDefinition afterVariable;
-    VariableDefinition beforeVariable;
     Collection<Instruction> instructions;
 
     public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem )
@@ -180,26 +178,22 @@ public class PropertyWeaver
 
     int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)
     {
-        var beforeVariableAdded = TryAddBeforeVariable();
-        if (TryAddAfterVariable())
-        {
-            index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
-        }        
+        var beforeVariable = new VariableDefinition(typeSystem.Object);
+        setMethodBody.Variables.Add(beforeVariable);
+        var afterVariable = new VariableDefinition(typeSystem.Object);
+        setMethodBody.Variables.Add(afterVariable);
+
+        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
 
         index = instructions.Insert(index,
-                                    Instruction.Create(OpCodes.Ldarg_0),
-                                    Instruction.Create(OpCodes.Ldstr, property.Name),
-                                    Instruction.Create(OpCodes.Ldloc, beforeVariable),
-                                    Instruction.Create(OpCodes.Ldloc, afterVariable),
-                                    CallEventInvoker()
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldstr, property.Name),
+            Instruction.Create(OpCodes.Ldloc, beforeVariable),
+            Instruction.Create(OpCodes.Ldloc, afterVariable),
+            CallEventInvoker()
             );
 
-        if (beforeVariableAdded)
-        {
-            return AddBeforeVariableAssignment(index, property);
-        }
-
-        return index;
+        return AddBeforeVariableAssignment(index, property, beforeVariable);
     }
 
     int AddSimpleOnChangedCall(int index, MethodReference methodReference)
@@ -211,39 +205,23 @@ public class PropertyWeaver
 
     int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
     {
-        var beforeVariableAdded = TryAddBeforeVariable();
-        if (TryAddAfterVariable())
-        {
-            index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
-        }        
+        var beforeVariable = new VariableDefinition(typeSystem.Object);
+        setMethodBody.Variables.Add(beforeVariable);
+        var afterVariable = new VariableDefinition(typeSystem.Object);
+        setMethodBody.Variables.Add(afterVariable);
+        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
 
         index = instructions.Insert(index,
-                                    Instruction.Create(OpCodes.Ldarg_0),
-                                    Instruction.Create(OpCodes.Ldloc, beforeVariable),
-                                    Instruction.Create(OpCodes.Ldloc, afterVariable),
-                                    CreateCall(methodReference)
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldloc, beforeVariable),
+            Instruction.Create(OpCodes.Ldloc, afterVariable),
+            CreateCall(methodReference)
             );
 
-        if (beforeVariableAdded)
-        {
-            return AddBeforeVariableAssignment(index, property);
-        } 
-       
-        return index;
+        return AddBeforeVariableAssignment(index, property, beforeVariable);
     }
 
-    bool TryAddBeforeVariable()
-    {
-        if (beforeVariable == null)
-        {
-            beforeVariable = new VariableDefinition(typeSystem.Object);
-            setMethodBody.Variables.Add(beforeVariable);
-            return true;
-        }
-
-        return false;
-    }
-    int AddBeforeVariableAssignment(int index, PropertyDefinition property)
+    int AddBeforeVariableAssignment(int index, PropertyDefinition property, VariableDefinition beforeVariable)
     {
         var getMethod = property.GetMethod.GetGeneric();
 
@@ -269,17 +247,6 @@ public class PropertyWeaver
         return index + 4;
     }
 
-    bool TryAddAfterVariable()
-    {
-        if (afterVariable == null)
-        {
-            afterVariable = new VariableDefinition(typeSystem.Object);
-            setMethodBody.Variables.Add(afterVariable);
-            return true;
-        }
-
-        return false;
-    }
 
     public Instruction CallEventInvoker()
     {

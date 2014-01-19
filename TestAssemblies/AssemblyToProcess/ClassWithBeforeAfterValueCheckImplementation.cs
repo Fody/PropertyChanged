@@ -13,7 +13,7 @@ public class ClassWithBeforeAfterValueCheckImplementation : INotifyPropertyChang
     {
         get
         {
-            return this.Property1 + "2";
+            return Property1 + "2";
         }
     }
 
@@ -26,12 +26,12 @@ public class ClassWithBeforeAfterValueCheckImplementation : INotifyPropertyChang
     {
         if (propertyName.Equals("Property1"))
         {
-            this.BeforeValue1 = (string)before;
+            BeforeValue1 = (string)before;
         }
 
         if (propertyName.Equals("Property2"))
         {
-            this.BeforeValue2 = (string)before;
+            BeforeValue2 = (string)before;
         }
 
         var handler = PropertyChanged;
