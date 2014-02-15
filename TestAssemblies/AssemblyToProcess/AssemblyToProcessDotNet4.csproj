@@ -106,6 +106,7 @@
     <Compile Include="ComplexHierarchy\ClassChild2.cs" />
     <Compile Include="ComplexHierarchy\ClassChild3.cs" />
     <Compile Include="ComplexHierarchy\ClassParent.cs" />
+    <Compile Include="BindableBaseTargets.cs" />
     <Compile Include="ExplicitPropertyChangedFromOtherClass\ClassWithForwardedEvent.cs" />
     <Compile Include="ExplicitPropertyChangedFromOtherClass\InnerClass.cs" />
     <Compile Include="FieldsFromOtherClass\ClassWithFieldFromOtherClass.cs" />

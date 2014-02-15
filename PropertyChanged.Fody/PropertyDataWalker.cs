@@ -57,7 +57,7 @@ public partial class ModuleWeaver
                                            PropertyDefinition = propertyDefinition,
                                            // Compute full dependencies for the current property
                                            AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node),
-                                           AlreadyNotifies = propertyDefinition.GetAlreadyNotifies(node.EventInvoker.MethodReference.Name).ToList()
+                                           AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
                                        });
             return;
         }
@@ -75,7 +75,7 @@ The most likely cause is that you have implemented a custom event accessor for t
                                        PropertyDefinition = propertyDefinition,
                                        // Compute full dependencies for the current property
                                        AlsoNotifyFor = GetFullDependencies(propertyDefinition, notifyPropertyData.AlsoNotifyFor.Union(dependenciesForProperty), node),
-                                       AlreadyNotifies = propertyDefinition.GetAlreadyNotifies(node.EventInvoker.MethodReference.Name).ToList()
+                                       AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
                                    });
     }
 

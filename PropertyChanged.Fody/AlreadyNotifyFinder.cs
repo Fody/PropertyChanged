@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public static class AlreadyNotifyFinder
+public partial class ModuleWeaver
 {
     
-    public static IEnumerable<string> GetAlreadyNotifies(this PropertyDefinition propertyDefinition, string methodName)
+    public IEnumerable<string> GetAlreadyNotifies(PropertyDefinition propertyDefinition)
     {
         if (propertyDefinition.SetMethod.IsAbstract)
         {
@@ -15,13 +15,17 @@ public static class AlreadyNotifyFinder
         for (var index = 0; index < instructions.Count; index++)
         {
             var instruction = instructions[index];
-            int propertyNameIndex;
-            if (instruction.IsCallToMethod(methodName, out  propertyNameIndex))
+            foreach (var methodName in EventInvokerNames)
             {
-                var before = instructions[index - propertyNameIndex];
-                if (before.OpCode == OpCodes.Ldstr)
+
+                int propertyNameIndex;
+                if (instruction.IsCallToMethod(methodName, out propertyNameIndex))
                 {
-                    yield return (string) before.Operand;
+                    var before = instructions[index - propertyNameIndex];
+                    if (before.OpCode == OpCodes.Ldstr)
+                    {
+                        yield return (string) before.Operand;
+                    }
                 }
             }
         }

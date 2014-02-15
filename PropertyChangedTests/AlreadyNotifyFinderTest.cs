@@ -6,14 +6,14 @@ using NUnit.Framework;
 [TestFixture]
 public class AlreadyNotifyFinderTest
 {
-
-
+    
     [Test]
     public void ContainsNotification()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
-        var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
+        var moduleWeaver = new ModuleWeaver();
+        var propertyNames = moduleWeaver .GetAlreadyNotifies(propertyDefinition);
         Assert.AreEqual(1,propertyNames.Count());
     }
     [Test]
@@ -21,7 +21,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Multiple().Property);
 
-        var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged").ToList();
+        var moduleWeaver = new ModuleWeaver();
+        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.Contains("Property1",propertyNames);
         Assert.Contains("Property2",propertyNames);
     }
@@ -31,7 +32,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithoutNotificationProperty);
 
-        var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
+        var moduleWeaver = new ModuleWeaver();
+        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.IsEmpty(propertyNames);
     }
 
@@ -41,7 +43,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Virtual().WithNotificationProperty);
 
-        var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
+        var moduleWeaver = new ModuleWeaver();
+        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.IsNotEmpty(propertyNames);
     }
 
@@ -50,7 +53,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
-        var propertyNames = propertyDefinition.GetAlreadyNotifies("OnPropertyChanged");
+        var moduleWeaver = new ModuleWeaver();
+        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.IsNotEmpty(propertyNames);
     }
 

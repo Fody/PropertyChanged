@@ -120,27 +120,67 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassAlreadyHasNotification");
         var property1EventCount = 0;
         var property2EventCount = 0;
-        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
             {
-                if (args.PropertyName == "Property1")
-                {
-                    property1EventCount++;
-                }
-                if (args.PropertyName == "Property2")
-                {
-                    property2EventCount++;
-                }
-            };
+                property1EventCount++;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCount++;
+            }
+        };
         instance.Property1 = "a";
 
-        Assert.AreEqual(1,property1EventCount);
+        Assert.AreEqual(1, property1EventCount);
         Assert.AreEqual(1, property2EventCount);
         property1EventCount = 0;
         property2EventCount = 0;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
-        Assert.AreEqual(0,property1EventCount);
-        Assert.AreEqual(0,property2EventCount);
+        Assert.AreEqual(0, property1EventCount);
+        Assert.AreEqual(0, property2EventCount);
+    }
+    [Test]
+    public void ClassBindableBaseCallingOnPropertyChanged()
+    {
+        var instance = assembly.GetInstance("ClassBindableBaseCallingOnPropertyChanged");
+        var property1EventCount = 0;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCount++;
+            }
+        };
+        instance.Property1 = "a";
+
+        Assert.AreEqual(1, property1EventCount);
+        property1EventCount = 0;
+        //Property has not changed on re-set so event not fired
+        instance.Property1 = "a";
+        Assert.AreEqual(0, property1EventCount);
+    }
+    [Test]
+    public void ClassBindableBaseCallingSetProperty()
+    {
+        var instance = assembly.GetInstance("ClassBindableBaseCallingSetProperty");
+        var property1EventCount = 0;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCount++;
+            }
+        };
+        instance.Property1 = "a";
+
+        Assert.AreEqual(1, property1EventCount);
+        property1EventCount = 0;
+        //Property has not changed on re-set so event not fired
+        instance.Property1 = "a";
+        Assert.AreEqual(0, property1EventCount);
     }
 
     [Test]

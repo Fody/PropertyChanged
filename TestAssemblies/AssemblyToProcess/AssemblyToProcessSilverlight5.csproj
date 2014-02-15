@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AbstractProperty\ClassWithAbstractProperty.cs" />
     <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
+    <Compile Include="BindableBaseTargets.cs" />
     <Compile Include="ClassAlreadyHasNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotificationDiffParamLocation.cs" />

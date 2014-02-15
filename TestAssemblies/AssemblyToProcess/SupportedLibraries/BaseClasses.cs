@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Reflection;
 using Jounce.Core.Model;
 
 namespace Caliburn.Micro
@@ -110,7 +113,8 @@ namespace Microsoft.Practices.Prism.ViewModel
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        public virtual void RaisePropertyChanged(string propertyName)
+
+        protected virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
             var handler = PropertyChanged;
@@ -119,8 +123,59 @@ namespace Microsoft.Practices.Prism.ViewModel
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        {
+            string propertyName = PropertySupport.ExtractPropertyName<T>(propertyExpression);
+            RaisePropertyChanged(propertyName);
+        }
+
+        protected void RaisePropertyChanged(params string[] propertyNames)
+        {
+            if (propertyNames == null)
+            {
+                throw new ArgumentNullException("propertyNames");
+            }
+            foreach (string str in propertyNames)
+            {
+                RaisePropertyChanged(str);
+            }
+        }
+    }
+
+    public class PropertySupport
+    {
+
+
+
+        public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
+        {
+            if (propertyExpression == null)
+            {
+                throw new ArgumentNullException("propertyExpression");
+            }
+            var body = propertyExpression.Body as MemberExpression;
+            if (body == null)
+            {
+                throw new ArgumentException("propertyExpression");
+            }
+            var member = body.Member as PropertyInfo;
+            if (member == null)
+            {
+                throw new ArgumentException("propertyExpression");
+            }
+            if (member.GetGetMethod(true).IsStatic)
+            {
+                throw new ArgumentException("propertyExpression");
+            }
+            return body.Member.Name;
+        }
+
+
+
     }
 }
+
 namespace GalaSoft.MvvmLight
 {
     public class ViewModelBase : ObservableObject
