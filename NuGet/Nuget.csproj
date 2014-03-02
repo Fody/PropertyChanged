@@ -11,6 +11,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <ConfigurationName>Release</ConfigurationName>
   </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <Target Name="Clean">
     <ItemGroup>
       <FilesToDelete Include="$(SolutionDir)NuGetBuild\**\*.*" />

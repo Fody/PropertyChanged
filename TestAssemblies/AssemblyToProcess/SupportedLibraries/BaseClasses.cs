@@ -1,7 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq.Expressions;
+﻿// ReSharper disable RedundantUsingDirective
 using System.Reflection;
+using System;
+// ReSharper restore RedundantUsingDirective
+using System.ComponentModel;
 using Jounce.Core.Model;
 
 namespace Caliburn.Micro
@@ -106,7 +107,7 @@ namespace Cinch
         }
     }
 }
-
+#if (!WINDOWS_PHONE)
 namespace Microsoft.Practices.Prism.ViewModel
 {
     public class NotificationObject : INotifyPropertyChanged
@@ -124,9 +125,9 @@ namespace Microsoft.Practices.Prism.ViewModel
             }
         }
 
-        protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        protected void RaisePropertyChanged<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
         {
-            string propertyName = PropertySupport.ExtractPropertyName<T>(propertyExpression);
+            var propertyName = PropertySupport.ExtractPropertyName<T>(propertyExpression);
             RaisePropertyChanged(propertyName);
         }
 
@@ -136,7 +137,7 @@ namespace Microsoft.Practices.Prism.ViewModel
             {
                 throw new ArgumentNullException("propertyNames");
             }
-            foreach (string str in propertyNames)
+            foreach (var str in propertyNames)
             {
                 RaisePropertyChanged(str);
             }
@@ -148,13 +149,13 @@ namespace Microsoft.Practices.Prism.ViewModel
 
 
 
-        public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
+        public static string ExtractPropertyName<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
         {
             if (propertyExpression == null)
             {
                 throw new ArgumentNullException("propertyExpression");
             }
-            var body = propertyExpression.Body as MemberExpression;
+            var body = propertyExpression.Body as System.Linq.Expressions.MemberExpression;
             if (body == null)
             {
                 throw new ArgumentException("propertyExpression");
@@ -175,7 +176,7 @@ namespace Microsoft.Practices.Prism.ViewModel
 
     }
 }
-
+#endif
 namespace GalaSoft.MvvmLight
 {
     public class ViewModelBase : ObservableObject
