@@ -1076,7 +1076,7 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void Prism()
+    public virtual void Prism()
     {
         var instance = assembly.GetInstance("ClassPrism");
         EventTester.TestProperty(instance, false);

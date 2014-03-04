@@ -11,5 +11,6 @@ public class PhoneWeavingTaskTests : BaseTaskTests
     {
     }
     public override void WithGenericAndLambda() { }
+    public override void Prism() { }
 }
 #endif

@@ -140,6 +140,10 @@ public class PropertyWeaver
 
     int AddOnChangedMethodCall(int index, PropertyDefinition property)
     {
+        if (!moduleWeaver.InjectOnPropertyNameChanged)
+        {
+            return index;
+        }
         var onChangedMethodName = string.Format("On{0}Changed", property.Name);
         var onChangedMethod = typeNode
             .OnChangedMethods

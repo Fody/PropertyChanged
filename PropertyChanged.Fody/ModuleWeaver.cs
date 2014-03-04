@@ -18,6 +18,7 @@ public partial class ModuleWeaver
 
     public void Execute()
     {
+        ResolveOnPropertyNameChangedConfig();
         ResolveEventInvokerName();
         FindCoreReferences();
         FindInterceptor();
