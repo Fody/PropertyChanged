@@ -8,7 +8,7 @@ public class OnPropertyNameChangedConfigTests
     public void False()
     {
         var xElement = XElement.Parse("<PropertyChanged InjectOnPropertyNameChanged='false'/>");
-        var moduleWeaver = new ModuleWeaver(){Config = xElement};
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
         Assert.IsFalse(moduleWeaver.InjectOnPropertyNameChanged);
     }
@@ -17,7 +17,7 @@ public class OnPropertyNameChangedConfigTests
     public void True()
     {
         var xElement = XElement.Parse("<PropertyChanged InjectOnPropertyNameChanged='true'/>");
-        var moduleWeaver = new ModuleWeaver(){Config = xElement};
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
         Assert.IsTrue(moduleWeaver.InjectOnPropertyNameChanged);
     }

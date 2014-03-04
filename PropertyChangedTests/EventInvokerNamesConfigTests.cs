@@ -8,7 +8,7 @@ public class EventInvokerNamesConfigTests
     public void GetStringComparisonFromXml()
     {
         var xElement = XElement.Parse("<PropertyChanged EventInvokerNames='A,B'/>");
-        var moduleWeaver = new ModuleWeaver(){Config = xElement};
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ResolveEventInvokerName();
         Assert.Contains("A", moduleWeaver.EventInvokerNames);
         Assert.Contains("B", moduleWeaver.EventInvokerNames);
