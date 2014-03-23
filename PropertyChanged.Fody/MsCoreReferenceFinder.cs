@@ -111,6 +111,7 @@ public partial class ModuleWeaver
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
 
+
         var systemObjectModel = assemblyResolver.Resolve("System.ObjectModel");
         var systemObjectModelTypes = systemObjectModel.MainModule.Types;
 
