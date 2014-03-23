@@ -15,8 +15,7 @@ public partial class ModuleWeaver
     // largely copied from http://codingly.com/2008/11/10/introduction-a-monocecil-implementer-inotifypropertychanged/
     void WeaveEvent(TypeDefinition type)
     {
-        var propertyChangedFieldDef = new FieldDefinition("PropertyChanged", FieldAttributes.Private, PropChangedHandlerReference);
-        propertyChangedFieldDef.CustomAttributes.Add(new CustomAttribute(NonSerializedConstructorReference));
+        var propertyChangedFieldDef = new FieldDefinition("PropertyChanged", FieldAttributes.Private | FieldAttributes.NotSerialized, PropChangedHandlerReference);
         type.Fields.Add(propertyChangedFieldDef);
         var propertyChangedField = propertyChangedFieldDef.GetGeneric();
 

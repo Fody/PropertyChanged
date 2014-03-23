@@ -15,7 +15,6 @@ public partial class ModuleWeaver
     public TypeReference PropChangedHandlerReference;
     public MethodReference DelegateCombineMethodRef;
     public MethodReference DelegateRemoveMethodRef;
-    public MethodReference NonSerializedConstructorReference;
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
 
 
@@ -57,9 +56,6 @@ public partial class ModuleWeaver
 
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
-
-        var nonSerializedDefinition = msCoreTypes.First(x => x.Name == "NonSerializedAttribute");
-        NonSerializedConstructorReference = ModuleDefinition.Import(nonSerializedDefinition.Methods.First(x => x.IsConstructor));
 
         var propChangedInterfaceDefinition = systemTypes.First(x => x.Name == "INotifyPropertyChanged");
         PropChangedInterfaceReference = ModuleDefinition.Import(propChangedInterfaceDefinition);
@@ -114,9 +110,6 @@ public partial class ModuleWeaver
         ActionTypeReference = ModuleDefinition.Import(actionDefinition);
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.Import(actionConstructor);
-
-        var nonSerializedDefinition = systemRuntimeTypes.First(x => x.Name == "NonSerializedAttribute");
-        NonSerializedConstructorReference = ModuleDefinition.Import(nonSerializedDefinition.Methods.First(x => x.IsConstructor));
 
         var systemObjectModel = assemblyResolver.Resolve("System.ObjectModel");
         var systemObjectModelTypes = systemObjectModel.MainModule.Types;
