@@ -16,6 +16,7 @@ public partial class ModuleWeaver
     void WeaveEvent(TypeDefinition type)
     {
         var propertyChangedFieldDef = new FieldDefinition("PropertyChanged", FieldAttributes.Private, PropChangedHandlerReference);
+        propertyChangedFieldDef.CustomAttributes.Add(new CustomAttribute(NonSerializedConstructorReference));
         type.Fields.Add(propertyChangedFieldDef);
         var propertyChangedField = propertyChangedFieldDef.GetGeneric();
 
