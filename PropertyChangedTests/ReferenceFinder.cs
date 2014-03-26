@@ -14,17 +14,9 @@ public class TestAssemblyResolver : IAssemblyResolver
     {
         var versionReader = new VersionReader(projectPath);
         directories = new List<string>();
-
-        if (versionReader.IsSilverlight)
+        if (versionReader.IsPhone)
         {
-            if (string.IsNullOrEmpty(versionReader.TargetFrameworkProfile))
-            {
-                directories.Add(string.Format(@"{0}\Reference Assemblies\Microsoft\Framework\Silverlight\{1}\", GetProgramFilesPath(), versionReader.FrameworkVersionAsString));
-            }
-            else
-            {
-                directories.Add(string.Format(@"{0}\Reference Assemblies\Microsoft\Framework\Silverlight\{1}\Profile\{2}", GetProgramFilesPath(), versionReader.FrameworkVersionAsString, versionReader.TargetFrameworkProfile));
-            }
+            directories.Add(string.Format(@"{0}\Reference Assemblies\Microsoft\Framework\WindowsPhone\{1}\", GetProgramFilesPath(), versionReader.FrameworkVersionAsString));
         }
         else
         {
@@ -45,6 +37,12 @@ public class TestAssemblyResolver : IAssemblyResolver
             {
                 directories.Add(string.Format(@"{0}\Reference Assemblies\Microsoft\Framework\.NETFramework\{1}\Profile\{2}", GetProgramFilesPath(), versionReader.FrameworkVersionAsString, versionReader.TargetFrameworkProfile));
             }
+        } 
+        if (versionReader.IsFSharp)
+        {
+            //C:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\.NETFramework\v4.0\4.3.0.0\FSharp.Core.dll
+            var path = string.Format(@"{0}\Reference Assemblies\Microsoft\FSharp\.NETFramework\{1}\{2}\", GetProgramFilesPath(), versionReader.FrameworkVersionAsString, versionReader.TargetFSharpCoreVersion);
+            directories.Add(path);
         }
         directories.Add(Path.GetDirectoryName(targetPath));
 

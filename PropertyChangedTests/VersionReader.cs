@@ -8,7 +8,9 @@ public class VersionReader
     public decimal FrameworkVersionAsNumber;
     public string FrameworkVersionAsString;
     public string TargetFrameworkProfile;
-    public bool IsSilverlight;
+    public bool IsPhone;
+    public string TargetFSharpCoreVersion;
+    public bool IsFSharp;
 
     public VersionReader(string projectPath)
     {
@@ -17,6 +19,7 @@ public class VersionReader
         GetTargetFrameworkIdentifier(xDocument);
         GetFrameworkVersion(xDocument);
         GetTargetFrameworkProfile(xDocument);
+        GetTargetFSharpCoreVersion(xDocument);
     }
 
     void GetFrameworkVersion(XDocument xDocument)
@@ -40,9 +43,21 @@ public class VersionReader
         var targetFrameworkIdentifier = xDocument.Descendants("TargetFrameworkIdentifier")
             .Select(c => c.Value)
             .FirstOrDefault();
-        if (string.Equals(targetFrameworkIdentifier, "Silverlight", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(targetFrameworkIdentifier, "WindowsPhone", StringComparison.OrdinalIgnoreCase))
         {
-            IsSilverlight = true;
+            IsPhone = true;
+        }
+
+    }
+
+    void GetTargetFSharpCoreVersion(XDocument xDocument)
+    {
+        TargetFSharpCoreVersion = xDocument.Descendants("TargetFSharpCoreVersion")
+            .Select(c => c.Value)
+            .FirstOrDefault();
+        if (TargetFSharpCoreVersion != null)
+        {
+            IsFSharp = true;
         }
 
     }

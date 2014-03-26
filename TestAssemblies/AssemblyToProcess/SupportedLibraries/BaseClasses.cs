@@ -127,7 +127,7 @@ namespace Microsoft.Practices.Prism.ViewModel
 
         protected void RaisePropertyChanged<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
         {
-            var propertyName = PropertySupport.ExtractPropertyName<T>(propertyExpression);
+            var propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
             RaisePropertyChanged(propertyName);
         }
 
