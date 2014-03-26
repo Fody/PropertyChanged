@@ -2,6 +2,6 @@
 
 [assembly: AssemblyTitle("PropertyChanged")]
 [assembly: AssemblyProduct("PropertyChanged")]
-[assembly: AssemblyVersion("1.47.0")]
-[assembly: AssemblyFileVersion("1.47.0")]
+[assembly: AssemblyVersion("1.48.0")]
+[assembly: AssemblyFileVersion("1.48.0")]
  
