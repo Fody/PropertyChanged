@@ -35,7 +35,6 @@
     <DocumentationFile>bin\Release_PCL\PropertyChanged.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -43,9 +42,6 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
-    <None Include="FodyWeavers.xml">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlsoNotifyForAttribute.cs" />
@@ -56,11 +52,4 @@
     <Compile Include="ImplementPropertyChangedAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\packages\Fody.1.21.1\build\Fody.targets" Condition="Exists('..\packages\Fody.1.21.1\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.1.21.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.21.1\build\Fody.targets'))" />
-  </Target>
 </Project>
