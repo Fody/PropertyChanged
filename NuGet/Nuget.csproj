@@ -5,6 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{63786CE5-D899-43DF-AD4E-C2CA3BAC3FC2}</ProjectGuid>
     <NuGetPackageImportStamp>3807a5d2</NuGetPackageImportStamp>
+    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <ConfigurationName>Debug</ConfigurationName>
