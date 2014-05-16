@@ -31,9 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MediaBrowser.Model">
       <HintPath>..\..\packages\MediaBrowser.Common.3.0.175\lib\net35\MediaBrowser.Model.dll</HintPath>
