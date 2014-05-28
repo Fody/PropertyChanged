@@ -48,13 +48,13 @@
     <Compile Include="ExperimentClass.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_3.5.csproj">
-      <Project>{9BC15CD4-32A5-4046-ACB5-83EB221047D3}</Project>
-      <Name>PropertyChanged_3.5</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj">
+      <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
+      <Name>PropertyChanged</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
