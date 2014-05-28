@@ -43,9 +43,9 @@
     <Compile Include="Class1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_PCL.csproj">
+    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj">
       <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
-      <Name>PropertyChanged_PCL</Name>
+      <Name>PropertyChanged</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

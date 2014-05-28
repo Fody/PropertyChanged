@@ -110,8 +110,6 @@
     <Compile Include="IlGeneratedByDependencyReaderTests\WithUpperCaseUnderScoreFields.cs" />
     <Compile Include="MappingFinder\MappingFinderClassWithUnderScoreBackingFields.cs" />
     <Compile Include="MethodFinderTest.cs" />
-    <Compile Include="Net35WeavingTaskTests.cs" />
-    <Compile Include="Net35ClientWeavingTaskTests.cs" />
     <Compile Include="Net4ClientWeavingTaskTests.cs" />
     <Compile Include="Net4WeavingTaskTests.cs" />
     <Compile Include="BaseTaskTests.cs" />

@@ -152,11 +152,5 @@
     <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementation.cs" />
     <Compile Include="WithOwnIsChangedImplementation\WithOwnIsChangedImplementationInherited.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged_3.5.csproj">
-      <Project>{9BC15CD4-32A5-4046-ACB5-83EB221047D3}</Project>
-      <Name>PropertyChanged_3.5</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
