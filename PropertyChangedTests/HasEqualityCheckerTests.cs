@@ -254,6 +254,7 @@ public class HasEqualityCheckerTests
         {
             if (EqualsNoField == value)
             {
+// ReSharper disable once RedundantJumpStatement
                 return;
             }
             Debug.WriteLine(value);
