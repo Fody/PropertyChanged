@@ -42,6 +42,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassSetterEndsOnThrowInRelease.cs" />
     <Compile Include="ClassAlreadyHasNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotification.cs" />
     <Compile Include="ClassAlreadyHasSingleNotificationDiffParamLocation.cs" />
