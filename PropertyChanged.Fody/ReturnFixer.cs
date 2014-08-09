@@ -1,25 +1,33 @@
-using System.Linq;
 using Mono.Cecil.Cil;
-
 public static class ReturnFixer
 {
     public static void MakeLastStatementReturn(this MethodBody method)
     {
         var instructions = method.Instructions;
-        var last = instructions.Last();
 
-        var count = method.Instructions.Count;
-        count--;
-        var secondLastInstruction = method.Instructions[count];
+        // Method is just return, do nothing
+        if (instructions.Count == 1)
+            return;
 
-        if (secondLastInstruction.OpCode != OpCodes.Nop)
+        var count = instructions.Count - 1;
+        var last = instructions[count];
+        Instruction secondLastInstruction;
+
+        if (last.OpCode == OpCodes.Ret)
         {
-            secondLastInstruction = Instruction.Create(OpCodes.Nop);
-            instructions.BeforeLast(secondLastInstruction);
+            count--;
+            secondLastInstruction = method.Instructions[count];
+            if (secondLastInstruction.OpCode != OpCodes.Nop)
+            {
+                secondLastInstruction = Instruction.Create(OpCodes.Nop);
+                instructions.BeforeLast(secondLastInstruction);
+            }
         }
         else
         {
-            count--;
+            secondLastInstruction = Instruction.Create(OpCodes.Nop);
+            instructions.Add(secondLastInstruction);
+            instructions.Add(Instruction.Create(OpCodes.Ret));
         }
 
 

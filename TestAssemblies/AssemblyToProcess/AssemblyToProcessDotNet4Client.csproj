@@ -58,6 +58,7 @@
     <Compile Include="ClassMissingSetGet.cs" />
     <Compile Include="ClassNoBackingNoEqualityField.cs" />
     <Compile Include="ClassNoBackingWithEqualityField.cs" />
+    <Compile Include="ClassSetterEndsOnThrowInRelease.cs" />
     <Compile Include="ClassStaticProperties.cs" />
     <Compile Include="ClassThatIsNotSealed.cs" />
     <Compile Include="ClassThatIsSealed.cs" />
