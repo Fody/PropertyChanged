@@ -41,6 +41,9 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AlsoNotifyForAttribute.cs" />
     <Compile Include="DependsOnAttribute.cs" />
     <Compile Include="DoNotNotifyAttribute.cs" />

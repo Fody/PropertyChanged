@@ -1,18 +1,11 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata minClientVersion="2.8">
-    <id>PropertyChanged.Fody</id>
-    <version>$version$</version>
-    <title>PropertyChanged.Fody</title>
-    <authors>Simon Cropp</authors>
     <developmentDependency>true</developmentDependency>
-    <owners>Simon Cropp</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/Fody/PropertyChanged</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png</iconUrl>
-    <description>Fody add-in for injecting INotifyPropertyChanged code into properties.</description>
-    <language>en-AU</language>
     <tags>WPF, Silverlight, MVVM, WP7, WindowsPhone, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
     <dependencies>
       <dependency id="Fody"/>
