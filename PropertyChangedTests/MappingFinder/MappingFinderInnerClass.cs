@@ -2,13 +2,13 @@ using System.Linq;
 using NUnit.Framework;
 
 [TestFixture]
-public class MappingFinderClassWithInnerClass
+public class MappingFinderInnerClass
 {
     [Test]
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<Model>()).ToList();
-        Assert.IsNull(memberMappings.First().FieldDefinition);
+        Assert.IsNull(memberMappings.Single().FieldDefinition);
     }
 
     public class Model

@@ -3,15 +3,15 @@ using NUnit.Framework;
 
 
 [TestFixture]
-public class MappingFinderClassWithUnderScoreBackingFields
+public class MappingFinderUnderScoreBackingFields
 {
 
     [Test]
     public void WithLowerUnderScoreBackingFields()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithUnderScoreBackingFields>()).ToList();
-        Assert.AreEqual("_property1", memberMappings.First(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.AreEqual("_property2", memberMappings.First(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        Assert.AreEqual("_property1", memberMappings.Single(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
+        Assert.AreEqual("_property2", memberMappings.Single(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }
 
   

@@ -90,18 +90,28 @@ public partial class ModuleWeaver
                     return null;
                 }
                 var field = instruction.Operand as FieldReference;
-                if (field != null)
+                if (field == null)
                 {
-                    if (field.DeclaringType != property.DeclaringType)
-                    {
-                        continue;
-                    }
-                    if (field.FieldType != property.PropertyType)
-                    {
-                        continue;
-                    }
-                    fieldReference = field;
+                    continue;
                 }
+                if (field.DeclaringType != property.DeclaringType)
+                {
+                    continue;
+                }
+                if (field.FieldType != property.PropertyType)
+                {
+                    continue;
+                }
+                var fieldDef = instruction.Operand as FieldDefinition;
+                if (fieldDef != null)
+                {
+                    var fieldAttributes = (fieldDef.Attributes & FieldAttributes.InitOnly);
+                    if (fieldAttributes == FieldAttributes.InitOnly)
+                    {
+                        continue;
+                    }
+                }
+                fieldReference = field;
             }
         }
         if (fieldReference != null)

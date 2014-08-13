@@ -2,14 +2,14 @@ using System.Linq;
 using NUnit.Framework;
 
 [TestFixture]
-public class MappingFinderClassWithSingleBackingFieldsGet
+public class MappingFinderSingleBackingFieldsGet
 {
     [Test]
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsGet>()).ToList();
-        Assert.AreEqual("propertyA", memberMappings.First(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.AreEqual("propertyB", memberMappings.First(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        Assert.AreEqual("propertyA", memberMappings.Single(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
+        Assert.AreEqual("propertyB", memberMappings.Single(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }
     public class ClassWithSingleBackingFieldsGet
     {
