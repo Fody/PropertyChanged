@@ -97,6 +97,7 @@
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
+    <Compile Include="ClassWithSetterThatThrows.cs" />
     <Compile Include="ClassWithTernary.cs" />
     <Compile Include="ClassWithTryCatchInSet.cs" />
     <Compile Include="CodeGenAttribute\ClassWithCompilerGeneratedAttribute.cs" />
