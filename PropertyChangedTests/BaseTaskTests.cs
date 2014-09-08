@@ -489,6 +489,15 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void EqualityWithOpenNullableType()
+    {
+        var openType = assembly.GetType("ClassWithGenericStructProp`1", true);
+        Type closedType = openType.MakeGenericType(typeof(int));
+        dynamic instance = Activator.CreateInstance(closedType);
+        EventTester.TestProperty(instance, "Property1", (int?)1);
+    }
+
+    [Test]
     public void WithCompilerGeneratedAttribute()
     {
         var instance = assembly.GetInstance("ClassWithCompilerGeneratedAttribute");
