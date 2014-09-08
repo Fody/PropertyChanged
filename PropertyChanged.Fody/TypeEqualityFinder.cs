@@ -69,17 +69,11 @@ public partial class ModuleWeaver
         {
             if (typeDefinition.FullName.StartsWith("System.Nullable"))
             {
-                var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
                 var genericInstanceMethod = new GenericInstanceMethod(NullableEqualsMethod);
-
-                if (typeWrappedByNullable.IsGenericParameter)
-                {
-                    genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
-                    return ModuleDefinition.Import(genericInstanceMethod, typeWrappedByNullable.DeclaringType);
-                }
-
+                var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
                 genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
-                return ModuleDefinition.Import(genericInstanceMethod);
+
+                return typeWrappedByNullable.IsGenericParameter ? ModuleDefinition.Import(genericInstanceMethod, typeWrappedByNullable.DeclaringType) : ModuleDefinition.Import(genericInstanceMethod);
             }
         }
         var equality = GetStaticEquality(typeDefinition);
