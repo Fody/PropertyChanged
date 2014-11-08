@@ -5,6 +5,7 @@ using Mono.Cecil;
 public partial class ModuleWeaver
 {
     public XElement Config { get; set; }
+    public Action<string> LogDebug { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
@@ -14,6 +15,7 @@ public partial class ModuleWeaver
     {
         LogWarning = s => { };
         LogInfo = s => { };
+        LogDebug = s => { };
     }
 
     public void Execute()

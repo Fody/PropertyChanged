@@ -23,7 +23,7 @@ public class PropertyWeaver
 
     public void Execute()
     {
-        moduleWeaver.LogInfo("\t\t" + propertyData.PropertyDefinition.Name);
+        moduleWeaver.LogDebug("\t\t" + propertyData.PropertyDefinition.Name);
         var property = propertyData.PropertyDefinition;
         setMethodBody = property.SetMethod.Body;
         instructions = property.SetMethod.Body.Instructions;
@@ -108,7 +108,7 @@ public class PropertyWeaver
             !propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotSetChangedAttribute") &&
             propertyData.PropertyDefinition.Name != "IsChanged")
         {
-            moduleWeaver.LogInfo("\t\t\tSet IsChanged");
+            moduleWeaver.LogDebug("\t\t\tSet IsChanged");
             return instructions.Insert(index,
                                        Instruction.Create(OpCodes.Ldarg_0),
                                        Instruction.Create(OpCodes.Ldc_I4, 1),
@@ -122,11 +122,11 @@ public class PropertyWeaver
         index = AddOnChangedMethodCall(index, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
-            moduleWeaver.LogInfo(string.Format("\t\t\t{0} skipped since call already exists", property.Name));
+            moduleWeaver.LogDebug(string.Format("\t\t\t{0} skipped since call already exists", property.Name));
             return index;
         }
 
-        moduleWeaver.LogInfo(string.Format("\t\t\t{0}", property.Name));
+        moduleWeaver.LogDebug(string.Format("\t\t\t{0}", property.Name));
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfter)
         {
             return AddBeforeAfterInvokerCall(index, property);
