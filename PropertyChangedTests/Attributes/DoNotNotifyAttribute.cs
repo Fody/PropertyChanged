@@ -3,7 +3,7 @@
 namespace PropertyChanged
 {
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class DoNotNotifyAttribute : Attribute
     {
     }
