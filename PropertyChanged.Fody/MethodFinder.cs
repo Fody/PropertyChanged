@@ -86,20 +86,24 @@ public partial class ModuleWeaver
         methodDefinition = type.Methods
             .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
             .OrderByDescending(definition => definition.Parameters.Count)
-            .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x));
+            .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         if (methodDefinition == null)
         {
             //TODO: when injecting calls to this method should check visibility
             methodDefinition = type.Methods
                 .Where(x => EventInvokerNames.Contains(x.Name))
                 .OrderByDescending(definition => definition.Parameters.Count)
-                .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x));
+                .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         }
         return methodDefinition != null;
     }
 
     public static InvokerTypes ClassifyInvokerMethod(MethodDefinition method)
     {
+        if (IsSenderPropertyChangedArgMethod(method))
+        {
+            return InvokerTypes.SenderPropertyChangedArg;
+        }
         if (IsPropertyChangedArgMethod(method))
         {
             return InvokerTypes.PropertyChangedArg;
@@ -110,6 +114,14 @@ public partial class ModuleWeaver
         }
 
         return InvokerTypes.String;
+    }
+
+    public static bool IsSenderPropertyChangedArgMethod(MethodDefinition method)
+    {
+        var parameters = method.Parameters;
+        return parameters.Count == 2
+               && parameters[0].ParameterType.FullName == "System.Object"
+               && parameters[1].ParameterType.FullName == "System.ComponentModel.PropertyChangedEventArgs";
     }
 
     public static bool IsPropertyChangedArgMethod(MethodDefinition method)

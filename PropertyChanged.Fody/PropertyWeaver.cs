@@ -135,6 +135,10 @@ public class PropertyWeaver
         {
             return AddPropertyChangedArgInvokerCall(index, property);
         }
+        if (typeNode.EventInvoker.InvokerType == InvokerTypes.SenderPropertyChangedArg)
+        {
+            return AddSenderPropertyChangedArgInvokerCall(index, property);
+        }
         return AddSimpleInvokerCall(index, property);
     }
 
@@ -174,6 +178,16 @@ public class PropertyWeaver
     int AddPropertyChangedArgInvokerCall(int index, PropertyDefinition property)
     {
         return instructions.Insert(index,
+                                   Instruction.Create(OpCodes.Ldarg_0),
+                                   Instruction.Create(OpCodes.Ldstr, property.Name),
+                                   Instruction.Create(OpCodes.Newobj, moduleWeaver.ComponentModelPropertyChangedEventConstructorReference),
+                                   CallEventInvoker());
+    }
+
+    int AddSenderPropertyChangedArgInvokerCall(int index, PropertyDefinition property)
+    {
+        return instructions.Insert(index,
+                                   Instruction.Create(OpCodes.Ldarg_0),
                                    Instruction.Create(OpCodes.Ldarg_0),
                                    Instruction.Create(OpCodes.Ldstr, property.Name),
                                    Instruction.Create(OpCodes.Newobj, moduleWeaver.ComponentModelPropertyChangedEventConstructorReference),
