@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using Mono.Cecil;
 using NUnit.Framework;
-
 
 [TestFixture]
 public class MethodFinderTest
@@ -14,7 +12,6 @@ public class MethodFinderTest
 
     public MethodFinderTest()
     {
-
         var codeBase = typeof(MethodFinderTest).Assembly.CodeBase.Replace("file:///", string.Empty);
         var module = ModuleDefinition.ReadModule(codeBase);
         methodFinder = new ModuleWeaver
@@ -122,7 +119,6 @@ public class MethodFinderTest
     [Test]
     public void WrongParamsTest()
     {
-
         var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WrongParams");
         Assert.IsNull(methodFinder.RecursiveFindEventInvoker(definitionToProcess));
     }
