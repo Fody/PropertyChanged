@@ -2,5 +2,6 @@
 {
     String,
     BeforeAfter,
-    PropertyChangedArg
+    PropertyChangedArg,
+    SenderPropertyChangedArg
 }

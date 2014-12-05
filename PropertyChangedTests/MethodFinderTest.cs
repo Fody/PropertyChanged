@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Configuration;
+using System.Linq;
 using Mono.Cecil;
 using NUnit.Framework;
 
@@ -31,6 +33,7 @@ public class MethodFinderTest
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
         Assert.IsNotNull(methodReference);
         Assert.AreEqual("OnPropertyChanged", methodReference.MethodReference.Name);
+        Assert.AreEqual(InvokerTypes.String, methodReference.InvokerType);
     }
 
     public class WithStringParam
@@ -58,6 +61,39 @@ public class MethodFinderTest
         }
     }
 
+    [Test]
+    public void WithPropertyChangedArgTest()
+    {
+        var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WithPropertyChangedArg");
+        var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
+        Assert.IsNotNull(methodReference);
+        Assert.AreEqual("OnPropertyChanged", methodReference.MethodReference.Name);
+        Assert.AreEqual(InvokerTypes.PropertyChangedArg, methodReference.InvokerType);
+    }
+
+    public class WithPropertyChangedArg
+    {
+        public void OnPropertyChanged(PropertyChangedEventArgs arg)
+        {
+        }
+    }
+
+    [Test]
+    public void WithSenderPropertyChangedArgTest()
+    {
+        var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WithSenderPropertyChangedArg");
+        var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
+        Assert.IsNotNull(methodReference);
+        Assert.AreEqual("OnPropertyChanged", methodReference.MethodReference.Name);
+        Assert.AreEqual(InvokerTypes.SenderPropertyChangedArg, methodReference.InvokerType);
+    }
+
+    public class WithSenderPropertyChangedArg
+    {
+        public void OnPropertyChanged(object sender, PropertyChangedEventArgs arg)
+        {
+        }
+    }
 
     [Test]
     public void NoMethodTest()

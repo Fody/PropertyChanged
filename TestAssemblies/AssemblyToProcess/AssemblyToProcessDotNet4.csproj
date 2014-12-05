@@ -99,6 +99,7 @@
     <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithPropertySetInCatch.cs" />
     <Compile Include="ClassWithLdflda.cs" />
+    <Compile Include="ClassWithSenderPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithSetterThatThrows.cs" />
     <Compile Include="ClassWithTernary.cs" />
     <Compile Include="ClassWithTryCatchInSet.cs" />
