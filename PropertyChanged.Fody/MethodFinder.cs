@@ -102,7 +102,6 @@ public partial class ModuleWeaver
             .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         if (methodDefinition == null)
         {
-            //TODO: when injecting calls to this method should check visibility
             methodDefinition = type.Methods
                 .Where(x => EventInvokerNames.Contains(x.Name))
                 .OrderByDescending(definition => definition.Parameters.Count)
