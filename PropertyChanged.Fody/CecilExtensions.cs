@@ -40,10 +40,6 @@ public static class CecilExtensions
         return (opCode.Code == Code.Call) || (opCode.Code == Code.Callvirt);
     }
 
-    public static string GetName(this MethodDefinition methodDefinition)
-    {
-        return string.Format("{0}.{1}", methodDefinition.DeclaringType.FullName, methodDefinition.Name);
-    }
 
     public static MethodDefinition Constructor(this TypeDefinition typeDefinition)
     {

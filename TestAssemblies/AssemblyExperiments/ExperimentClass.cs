@@ -1,31 +1,20 @@
-﻿using System;
-using System.Diagnostics;
-using PropertyChanged;
+﻿using System.ComponentModel;
 
-[ImplementPropertyChanged]
-public class ClassExperiment
+public class ClassExperiment:Base
 {
-    DateTimeOffset? mixDateTimeOffset;
-    public DateTimeOffset MixDateTimeOffset
-    {
-        get { return mixDateTimeOffset.GetValueOrDefault(); }
-        set { mixDateTimeOffset = value; }
-    }
+    public bool MyProperty { get; set; }
 }
 
-public class ClassExperiment2
+public class Base:INotifyPropertyChanged
 {
-    DateTimeOffset? mixDateTimeOffset;
-    public DateTimeOffset MixDateTimeOffset
+    public event PropertyChangedEventHandler PropertyChanged;
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        get { return mixDateTimeOffset.GetValueOrDefault(); }
-        set
+        var eventHandler = PropertyChanged;
+        if (eventHandler != null)
         {
-            if (!Nullable.Equals(mixDateTimeOffset, value))
-            {
-                Trace.WriteLine(null);
-            }
-
+            eventHandler(sender, e);
         }
     }
 }
+

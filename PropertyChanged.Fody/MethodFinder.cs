@@ -18,6 +18,7 @@ public partial class ModuleWeaver
                                    {
                                        InvokerType = eventInvoker.InvokerType,
                                        MethodReference = methodReference,
+                                       IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren 
                                    };
             }
         }
@@ -26,6 +27,11 @@ public partial class ModuleWeaver
             eventInvoker = childEventInvoker;
         }
 
+        if (!eventInvoker.IsVisibleFromChildren)
+        {
+            var error = string.Format("Cannot use '{0}' in '{1}' since that method is not visible from the child class.", eventInvoker.MethodReference.FullName, node.TypeDefinition.FullName);
+            throw new WeavingException(error);
+        }
         node.EventInvoker = eventInvoker;
 
         foreach (var childNode in node.Nodes)
@@ -61,8 +67,14 @@ public partial class ModuleWeaver
         return new EventInvokerMethod
                    {
                        MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
+                       IsVisibleFromChildren = IsVisibleFromChildren(methodDefinition),
                        InvokerType = ClassifyInvokerMethod(methodDefinition),
                    };
+    }
+
+    static bool IsVisibleFromChildren(MethodDefinition methodDefinition)
+    {
+        return methodDefinition.IsFamilyOrAssembly || methodDefinition.IsFamily || methodDefinition.IsFamilyAndAssembly || methodDefinition.IsPublic;
     }
 
 
@@ -75,6 +87,7 @@ public partial class ModuleWeaver
             return new EventInvokerMethod
                        {
                            MethodReference = methodReference.GetGeneric(),
+                           IsVisibleFromChildren = IsVisibleFromChildren(methodDefinition),
                            InvokerType = ClassifyInvokerMethod(methodDefinition),
                        };
         }
