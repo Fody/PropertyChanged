@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged", "Property
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithNonVoidOnPropertyNameChanged", "TestAssemblies\AssemblyWithNonVoidOnPropertyNameChanged\AssemblyWithNonVoidOnPropertyNameChanged.csproj", "{DA025360-790C-46E8-8143-2D2DEADCFE8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChangedIssues", "PropertyChangedIssues\PropertyChangedIssues.csproj", "{955329E1-2615-45E1-B39B-2998CE518292}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,14 @@ Global
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A}.Release|ARM.ActiveCfg = Release|Any CPU
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A}.Release|x86.ActiveCfg = Release|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Release|ARM.ActiveCfg = Release|Any CPU
+		{955329E1-2615-45E1-B39B-2998CE518292}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
