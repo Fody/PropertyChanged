@@ -1010,6 +1010,15 @@ public abstract class BaseTaskTests
     }
 
     [Test]
+    public void WithOnChangedAndNoPropertyChanged()
+    {
+        var instance = assembly.GetInstance("ClassWithOnChangedAndNoPropertyChanged");
+        Assert.AreEqual(0,instance.OnProperty1ChangedCalled);
+        EventTester.TestProperty(instance, false);
+        Assert.AreEqual(1, instance.OnProperty1ChangedCalled);
+    }
+
+    [Test]
     public virtual void WithGenericAndLambda()
     {
         var instance = assembly.GetInstance("ClassWithGenericAndLambdaImp");
