@@ -9,7 +9,7 @@ public class ExperimentTests
     {
         var weaverHelper = new WeaverHelper(@"AssemblyExperiments\AssemblyExperiments.csproj");
 
-        var instance = weaverHelper.Assembly.GetInstance("ClassExperiment");
-        instance.MyProperty = true;
+        var instance = weaverHelper.Assembly.GetInstance("ClassWithExistingOnChanged");
+        instance.Property1 = "dsfsdf";
     }
 }

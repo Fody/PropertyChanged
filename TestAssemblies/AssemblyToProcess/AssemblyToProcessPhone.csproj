@@ -86,6 +86,7 @@
     <Compile Include="ClassEqualityWithDouble.cs" />
     <Compile Include="ClassEqualityWithStruct.cs" />
     <Compile Include="ClassEqualityWithStructOverload.cs" />
+    <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithSetterThatThrows.cs" />
     <Compile Include="ClassSetterEndsOnThrowInRelease.cs" />
     <Compile Include="ClassWithBeforeAfterValueCheckImplementation.cs" />

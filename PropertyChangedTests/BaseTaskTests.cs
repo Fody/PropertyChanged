@@ -1000,6 +1000,14 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.OnProperty1ChangedCalled);
     }
+    [Test]
+    public void WithOnChangedAndOnPropertyChanged()
+    {
+        var instance = assembly.GetInstance("ClassWithOnChangedAndOnPropertyChanged");
+        Assert.AreEqual(0,instance.OnProperty1ChangedCalled);
+        EventTester.TestProperty(instance, false);
+        Assert.AreEqual(1, instance.OnProperty1ChangedCalled);
+    }
 
     [Test]
     public virtual void WithGenericAndLambda()

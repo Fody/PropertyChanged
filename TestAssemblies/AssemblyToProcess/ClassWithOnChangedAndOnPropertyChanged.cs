@@ -1,7 +1,8 @@
-﻿using System.ComponentModel;
-public class ClassWithExistingOnChanged : INotifyPropertyChanged
+using System.ComponentModel;
+
+public class ClassWithOnChangedAndOnPropertyChanged : INotifyPropertyChanged
 {
-    public bool OnProperty1ChangedCalled;
+    public int OnProperty1ChangedCalled;
     string property1;
 
     public string Property1
@@ -15,9 +16,9 @@ public class ClassWithExistingOnChanged : INotifyPropertyChanged
         }
     }
 
-    public void OnProperty1Changed()
+    public void OnProperty1Changed ()
     {
-        OnProperty1ChangedCalled = true;
+        OnProperty1ChangedCalled++;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

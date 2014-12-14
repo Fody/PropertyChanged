@@ -119,7 +119,6 @@ public class PropertyWeaver
 
     int AddEventInvokeCall(int index, PropertyDefinition property)
     {
-        index = AddOnChangedMethodCall(index, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
             moduleWeaver.LogDebug(string.Format("\t\t\t{0} skipped since call already exists", property.Name));
@@ -127,6 +126,7 @@ public class PropertyWeaver
         }
 
         moduleWeaver.LogDebug(string.Format("\t\t\t{0}", property.Name));
+        index = AddOnChangedMethodCall(index, property);
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfter)
         {
             return AddBeforeAfterInvokerCall(index, property);
