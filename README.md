@@ -101,7 +101,6 @@ Icon courtesy of [The Noun Project](http://thenounproject.com)
  * [Cameron MacFarland](https://github.com/distantcam)
  * [Geert van Horrik](https://github.com/GeertvanHorrik)
  * [Simon Cropp](https://github.com/simoncropp)
- * [Bruno Juchli]
 
 ## More Info
 
