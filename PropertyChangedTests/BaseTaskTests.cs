@@ -497,6 +497,20 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, "Property1", (int?)1);
     }
 
+
+    [Test]
+    public void DoNotCheckEquality() 
+    {
+        var instance = assembly.GetInstance("ClassDoNotCheckEquality");
+        EventTester.TestProperty(instance, "Property1", "aString");
+        instance.Property1 = "aString";
+        Assert.AreEqual(1, instance.timesProperty1Changed);
+        
+        EventTester.TestProperty(instance, "Property2", "aString", true);
+        instance.Property2 = "aString";
+        Assert.AreEqual(2, instance.timesProperty2Changed);
+    }
+
     [Test]
     public void WithCompilerGeneratedAttribute()
     {

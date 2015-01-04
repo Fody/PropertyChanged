@@ -50,7 +50,8 @@ public class EqualityCheckWeaver
 
     void InjectEqualityCheck(Instruction targetInstruction, TypeReference targetType)
     {
-
+        if (ShouldSkipEqualityCheck())
+            return;
         var nopInstruction = instructions.First();
         if (nopInstruction.OpCode != OpCodes.Nop)
         {
@@ -105,6 +106,12 @@ public class EqualityCheckWeaver
                 Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                 Instruction.Create(OpCodes.Ret));
         }
+    }
+
+    private bool ShouldSkipEqualityCheck()
+    {
+        return propertyData.PropertyDefinition.CustomAttributes
+            .ContainsAttribute("PropertyChanged.DoNotCheckEqualityAttribute");
     }
 
 }
