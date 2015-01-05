@@ -47,6 +47,7 @@
     <Compile Include="AlsoNotifyForAttribute.cs" />
     <Compile Include="DependsOnAttribute.cs" />
     <Compile Include="DoNotNotifyAttribute.cs" />
+    <Compile Include="DoNotCheckEqualityAttribute.cs" />
     <Compile Include="DoNotSetChangedAttribute.cs" />
     <Compile Include="ImplementPropertyChangedAttribute.cs" />
   </ItemGroup>
