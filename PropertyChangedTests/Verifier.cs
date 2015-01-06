@@ -32,6 +32,7 @@ public static class Verifier
         {
             return;
         }
+        Debug.WriteLine(afterAssemblyPath);
         var before = Validate(beforeAssemblyPath);
         var after = Validate(afterAssemblyPath);
         var message = string.Format("Failed processing {0}\r\n{1}", Path.GetFileName(afterAssemblyPath), after);
@@ -51,6 +52,7 @@ public static class Verifier
         process.WaitForExit(10000);
         return process.StandardOutput.ReadToEnd().Trim().Replace(assemblyPath2, "");
     }
+
     static string TrimLineNumbers(string foo)
     {
         return Regex.Replace(foo, @"0x.*]", "");

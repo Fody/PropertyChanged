@@ -5,7 +5,7 @@ public class ClassSetterEndsOnThrowInRelease : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
-    private string item;
+    string item;
     public string Item
     {
         get { return item; }
