@@ -89,6 +89,7 @@
     <Compile Include="ClassEqualityWithStructOverload.cs" />
     <Compile Include="ClassWithOnChangedAndNoPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
+    <Compile Include="ClassWithSenderPropertyChangedArgImplementation.cs" />
     <Compile Include="ClassWithSetterThatThrows.cs" />
     <Compile Include="ClassSetterEndsOnThrowInRelease.cs" />
     <Compile Include="ClassWithBeforeAfterValueCheckImplementation.cs" />
