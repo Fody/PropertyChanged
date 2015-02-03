@@ -10,14 +10,12 @@ Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.
 
 Users of the NotifyPropertyWeaver extension who are migrating to [Fody](https://github.com/Fody/fody) will want to use NuGet to Install the PropertyChanged.Fody package along with Fody itself to get the same functionality as before. This is because Fody is a general purpose weaver with plugins while NotifyPropertyWeaver was specific to one scenario. That scenario now lives in the [PropertyChanged addin](https://github.com/Fody/PropertyChanged). See [Converting from NotifyPropertyWeaver](https://github.com/Fody/PropertyChanged/wiki/ConvertingFromNotifyPropertyWeaver) for more information 
 
-## Nuget 
+## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/PropertyChanged.Fody.svg?style=flat)](https://www.nuget.org/packages/PropertyChanged.Fody/)
 
-Nuget package http://nuget.org/packages/PropertyChanged.Fody 
+https://nuget.org/packages/PropertyChanged.Fody/
 
-To Install from the Nuget Package Manager Console 
-    
     PM> Install-Package PropertyChanged.Fody
-
+    
 ### Your Code
 
     [ImplementPropertyChanged]
