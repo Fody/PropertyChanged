@@ -1015,6 +1015,14 @@ public abstract class BaseTaskTests
         Assert.IsTrue(instance.OnProperty1ChangedCalled);
     }
     [Test]
+    public void WithOnChangedAbstract()
+    {
+        var instance = assembly.GetInstance("ClassWithOnChangedConcrete");
+        Assert.IsFalse(instance.OnProperty1ChangedCalled);
+        EventTester.TestProperty(instance, false);
+        Assert.IsTrue(instance.OnProperty1ChangedCalled);
+    }
+    [Test]
     public void WithOnChangedAndOnPropertyChanged()
     {
         var instance = assembly.GetInstance("ClassWithOnChangedAndOnPropertyChanged");
