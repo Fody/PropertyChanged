@@ -23,7 +23,6 @@ public partial class ModuleWeaver
         var methods = notifyNode.TypeDefinition.Methods;
 
         var onChangedMethods = methods.Where(x => !x.IsStatic &&
-                                  !x.IsAbstract &&
                                   x.Name.StartsWith("On") &&
                                   x.Name.EndsWith("Changed"));
 
