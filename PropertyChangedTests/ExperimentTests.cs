@@ -8,8 +8,7 @@ public class ExperimentTests
     public void Foo()
     {
         var weaverHelper = new WeaverHelper(@"AssemblyExperiments\AssemblyExperiments.csproj");
-
-        var instance = weaverHelper.Assembly.GetInstance("ClassWithExistingOnChanged");
-        instance.Property1 = "dsfsdf";
+        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
+        weaverHelper.Assembly.GetInstance("Experiment");
     }
 }

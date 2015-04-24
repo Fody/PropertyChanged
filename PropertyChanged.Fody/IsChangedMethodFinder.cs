@@ -90,6 +90,10 @@ public partial class ModuleWeaver
                 LogWarning(string.Format("Found '{0}' but is was of type '{1}' instead of '{2}' so it will not be used.", propertyDefinition.GetName(), propertyDefinition.PropertyType.Name, ModuleDefinition.TypeSystem.Boolean.Name));
                 return false;
             }
+            if (propertyDefinition.SetMethod.IsStatic)
+            {
+                throw new WeavingException(string.Format("Found '{0}' but is was static. Change it to non static.", propertyDefinition.GetName()));
+            }
             methodDefinition = propertyDefinition.SetMethod;
         }
         return methodDefinition != null;

@@ -1,27 +1,29 @@
 ﻿using System.ComponentModel;
-public class ClassWithExistingOnChanged : INotifyPropertyChanged
-{
-    public bool OnProperty1ChangedCalled;
-    string property1;
+using PropertyChanged;
 
-    public string Property1
+public class Experiment :INotifyPropertyChanged
+{
+    string statusMessage;
+
+    public Experiment()
     {
-        get { return property1; }
+        StatusMessage = "...";
+    }
+
+    public string StatusMessage
+    {
+        get { return statusMessage; }
         set
         {
-            property1 = value;
-            OnPropertyChanged("Property1");
-            OnProperty1Changed();
+            statusMessage = value;
+            OnPropertyChanged("StatusMessage"); 
         }
     }
 
-    public void OnProperty1Changed()
-    {
-        OnProperty1ChangedCalled = true;
-    }
-
+    public static bool IsChanged { get; set; }
     public event PropertyChangedEventHandler PropertyChanged;
-    public virtual void OnPropertyChanged(string propertyName)
+
+    protected virtual void OnPropertyChanged(string propertyName)
     {
         var handler = PropertyChanged;
         if (handler != null)
