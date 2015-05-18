@@ -16,13 +16,11 @@ public partial class ModuleWeaver
             {
                 continue;
             }
+
             LogDebug("\t" + node.TypeDefinition.FullName);
 
             foreach (var propertyData in node.PropertyDatas)
             {
-              
-
-
                 var body = propertyData.PropertyDefinition.SetMethod.Body;
 
                 var alreadyHasEquality = HasEqualityChecker.AlreadyHasEquality(propertyData.PropertyDefinition, propertyData.BackingFieldReference);
@@ -31,21 +29,20 @@ public partial class ModuleWeaver
              
                 body.MakeLastStatementReturn();
 
-                var propertyWeaver = new PropertyWeaver(this, propertyData, node,ModuleDefinition.TypeSystem);
+                var propertyWeaver = new PropertyWeaver(this, propertyData, node, ModuleDefinition.TypeSystem);
                 propertyWeaver.Execute();
 
                 if (!alreadyHasEquality)
                 {
-                    var equalityCheckWeaver = new EqualityCheckWeaver(propertyData, this);
+                    var equalityCheckWeaver = new EqualityCheckWeaver(propertyData, node.TypeDefinition, this);
                     equalityCheckWeaver.Execute();
                 }
 
                 body.InitLocals = true;
                 body.OptimizeMacros();
             }
+
             ProcessTypes(node.Nodes);
         }
     }
-
-
 }

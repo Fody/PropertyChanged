@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="AssemblyWithBadNamedInvokerTests.cs" />
     <Compile Include="AssemblyWithInterceptorTests.cs" />
+    <Compile Include="Attributes\DoNotCheckEqualityAttribute.cs" />
     <Compile Include="Attributes\NotifyPropertyChangedAttribute.cs" />
     <Compile Include="EventInvokerNamesConfigTests.cs" />
     <Compile Include="MappingFinder\MappingFinderSingleBackingReadonlyFieldGet.cs" />

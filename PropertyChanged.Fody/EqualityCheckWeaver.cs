@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
@@ -6,12 +7,14 @@ using Mono.Collections.Generic;
 public class EqualityCheckWeaver
 {
     PropertyData propertyData;
+    TypeDefinition typeDefinition;
     ModuleWeaver typeEqualityFinder;
     Collection<Instruction> instructions;
 
-    public EqualityCheckWeaver(PropertyData propertyData, ModuleWeaver typeEqualityFinder)
+    public EqualityCheckWeaver(PropertyData propertyData, TypeDefinition typeDefinition, ModuleWeaver typeEqualityFinder)
     {
         this.propertyData = propertyData;
+        this.typeDefinition = typeDefinition;
         this.typeEqualityFinder = typeEqualityFinder;
     }
 
@@ -112,8 +115,10 @@ public class EqualityCheckWeaver
 
     bool ShouldSkipEqualityCheck()
     {
-        return propertyData.PropertyDefinition.CustomAttributes
-            .ContainsAttribute("PropertyChanged.DoNotCheckEqualityAttribute");
+        string attribute = "PropertyChanged.DoNotCheckEqualityAttribute";
+
+        return typeDefinition.CustomAttributes.ContainsAttribute(attribute)
+               || propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute(attribute);
     }
 
 }

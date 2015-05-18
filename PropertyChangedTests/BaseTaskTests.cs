@@ -497,7 +497,6 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, "Property1", (int?)1);
     }
 
-
     [Test]
     public void DoNotCheckEquality() 
     {
@@ -506,6 +505,19 @@ public abstract class BaseTaskTests
         instance.Property1 = "aString";
         Assert.AreEqual(1, instance.timesProperty1Changed);
         
+        EventTester.TestProperty(instance, "Property2", "aString", true);
+        instance.Property2 = "aString";
+        Assert.AreEqual(2, instance.timesProperty2Changed);
+    }
+
+    [Test]
+    public void DoNotCheckEqualityAppliesToWholeClass()
+    {
+        dynamic instance = assembly.GetInstance("ClassDoNotCheckEqualityWholeClass");
+        EventTester.TestProperty(instance, "Property1", "aString", true);
+        instance.Property1 = "aString";
+        Assert.AreEqual(2, instance.timesProperty1Changed);
+
         EventTester.TestProperty(instance, "Property2", "aString", true);
         instance.Property2 = "aString";
         Assert.AreEqual(2, instance.timesProperty2Changed);
