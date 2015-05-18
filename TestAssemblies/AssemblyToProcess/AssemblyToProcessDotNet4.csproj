@@ -48,6 +48,7 @@
     <Compile Include="ClassCircularProperties.cs" />
     <Compile Include="ClassDependsOn.cs" />
     <Compile Include="ClassDoNotCheckEquality.cs" />
+    <Compile Include="ClassDoNotCheckEqualityWholeClass.cs" />
     <Compile Include="ClassEquality.cs" />
     <Compile Include="ClassEqualityWithDouble.cs" />
     <Compile Include="ClassEqualityWithStruct.cs" />
