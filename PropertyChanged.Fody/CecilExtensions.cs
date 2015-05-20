@@ -82,6 +82,23 @@ public static class CecilExtensions
         return reference;
     }
 
+    public static IEnumerable<CustomAttribute> GetAllCustomAttributes(this TypeDefinition typeDefinition)
+    {
+        foreach (var attribute in typeDefinition.CustomAttributes)
+        {
+            yield return attribute;
+        }
+
+        var baseDefinition = typeDefinition.BaseType as TypeDefinition;
+
+        if (baseDefinition != null)
+        {
+            foreach (var attribute in baseDefinition.GetAllCustomAttributes())
+            {
+                yield return attribute;
+            }
+        }
+    }
 
     public static CustomAttribute GetAttribute(this IEnumerable<CustomAttribute> attributes, string attributeName)
     {
