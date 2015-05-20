@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
@@ -115,7 +114,7 @@ public class EqualityCheckWeaver
 
     bool ShouldSkipEqualityCheck()
     {
-        string attribute = "PropertyChanged.DoNotCheckEqualityAttribute";
+        var attribute = "PropertyChanged.DoNotCheckEqualityAttribute";
 
         return typeDefinition.CustomAttributes.ContainsAttribute(attribute)
                || propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute(attribute);

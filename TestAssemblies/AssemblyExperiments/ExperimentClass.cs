@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using PropertyChanged;
 
 public class Experiment :INotifyPropertyChanged
 {

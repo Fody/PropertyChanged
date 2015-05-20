@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 
 public abstract class ClassWithOnChangedAbstract : INotifyPropertyChanged

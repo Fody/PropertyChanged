@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 public static class Verifier
 {
     static string exePath;
-    static bool peverifyFound = true;
+    static bool peverifyFound;
 
     static Verifier()
     {
