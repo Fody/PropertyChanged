@@ -116,7 +116,7 @@ public class EqualityCheckWeaver
     {
         var attribute = "PropertyChanged.DoNotCheckEqualityAttribute";
 
-        return typeDefinition.CustomAttributes.ContainsAttribute(attribute)
+        return typeDefinition.GetAllCustomAttributes().ContainsAttribute(attribute)
                || propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute(attribute);
     }
 

@@ -7,7 +7,7 @@ public class ClassDoNotCheckEqualityWholeClass : INotifyPropertyChanged
     public int TimesProperty2Changed = 0;
 
     public string Property1 { get; set; }
-    
+
     public string Property2 { get; set; }
 
     public void OnProperty1Changed()
@@ -21,4 +21,9 @@ public class ClassDoNotCheckEqualityWholeClass : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+}
+
+public class ClassDoNotCheckEqualityWholeClassInherited : ClassDoNotCheckEqualityWholeClass
+{
+
 }
