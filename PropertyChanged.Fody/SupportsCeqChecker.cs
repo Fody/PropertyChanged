@@ -39,7 +39,8 @@ public static class SupportsCeqChecker
         var typeDefinition = typeReference.Resolve();
         if (typeDefinition == null)
         {
-            throw new Exception(string.Format("Could not resolve '{0}'.", typeReference.FullName));
+            //throw new Exception(string.Format("Could not resolve '{0}'.", typeReference.FullName));
+            return false; // obfuscated reference
         }
         if (typeDefinition.IsEnum)
         {

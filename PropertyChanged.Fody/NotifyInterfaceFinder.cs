@@ -25,6 +25,12 @@ public partial class ModuleWeaver
             typeDefinition = Resolve(typeReference);
         }
 
+        if (typeDefinition == null)
+        {
+            typeReferencesImplementingINotify[fullName] = false;
+            return false;
+        }
+
         if (HasPropertyChangedEvent(typeDefinition))
         {
             typeReferencesImplementingINotify[fullName] = true;
@@ -35,7 +41,7 @@ public partial class ModuleWeaver
             typeReferencesImplementingINotify[fullName] = true;
             return true;
         }
-        var baseType = typeDefinition != null ? typeDefinition.BaseType : null;
+        var baseType = typeDefinition.BaseType;
         if (baseType == null)
         {
             typeReferencesImplementingINotify[fullName] = false;
