@@ -114,6 +114,11 @@ public class EqualityCheckWeaver
 
     bool ShouldSkipEqualityCheck()
     {
+        if (!typeEqualityFinder.CheckForEquality)
+        {
+            return true;
+        }
+
         var attribute = "PropertyChanged.DoNotCheckEqualityAttribute";
 
         return typeDefinition.GetAllCustomAttributes().ContainsAttribute(attribute)
