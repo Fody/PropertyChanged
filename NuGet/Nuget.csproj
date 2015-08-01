@@ -32,11 +32,11 @@
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(ProjectDir)install.ps" DestinationFolder="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
+    <Copy SourceFiles="$(ProjectDir)install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)FodyWeavers.xml.install.xdt" DestinationFolder="$(SolutionDir)NuGetBuild\Content" />
     <Copy SourceFiles="$(ProjectDir)FodyWeavers.xml.uninstall.xdt" DestinationFolder="$(SolutionDir)NuGetBuild\Content" />
-    <Copy SourceFiles="$(ProjectDir)Addin.targets" DestinationFolder="$(SolutionDir)NuGetBuild\build\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\PropertyChanged.Fody.targets" />
-    <Copy SourceFiles="$(ProjectDir)Addin.targets" DestinationFolder="$(SolutionDir)NuGetBuild\build\dotnet\PropertyChanged.Fody.targets" />
+    <Copy SourceFiles="$(ProjectDir)Addin.targets" DestinationFiles="$(SolutionDir)NuGetBuild\build\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\PropertyChanged.Fody.targets" />
+    <Copy SourceFiles="$(ProjectDir)Addin.targets" DestinationFiles="$(SolutionDir)NuGetBuild\build\dotnet\PropertyChanged.Fody.targets" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.dll" />
