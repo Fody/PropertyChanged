@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata minClientVersion="2.8">
-    <version>$version$-beta2</version>
+    <version>$version$</version>
     <developmentDependency>true</developmentDependency>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/Fody/PropertyChanged</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png</iconUrl>
-    <tags>WPF, Silverlight, MVVM, WP7, WindowsPhone, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
+    <tags>Xaml, MVVM, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
     <dependencies>
-      <dependency id="Fody"/>
+      <dependency id="Fody" version="1.29.2"/>
     </dependencies>
   </metadata>
 </package>
