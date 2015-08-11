@@ -87,7 +87,7 @@ https://nuget.org/packages/PropertyChanged.Fody/
     
 ## Icon
 
-Icon courtesy of [The Noun Project](http://thenounproject.com)
+Icon courtesy of [The Noun Project](https://thenounproject.com)
 
 
 ## Contributors
@@ -103,7 +103,7 @@ Icon courtesy of [The Noun Project](http://thenounproject.com)
 * [EqualityChecking](https://github.com/Fody/PropertyChanged/wiki/EqualityChecking)
 * [EventInvokerSelectionInjection](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection)
 * [ExampleUsage](https://github.com/Fody/PropertyChanged/wiki/ExampleUsage)
-* [ImplementingAnIsChangedFlag](https://github.com/Fody/PropertyChanged/wiki/ImplementingAnIsChangedFlag)
+* [ImplementingAnIsChangedFlag](https://github.com/Fody/PropertyChanged/wiki/Implementing-An-IsChanged-Flag)
 * [MVVMLightBroadcast](https://github.com/Fody/PropertyChanged/wiki/MVVMLightBroadcast)
 * [NotificationInterception](https://github.com/Fody/PropertyChanged/wiki/NotificationInterception)
 * [On_PropertyName_Changed](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed)
