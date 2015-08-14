@@ -25,6 +25,12 @@ public partial class ModuleWeaver
             typeDefinition = Resolve(typeReference);
         }
 
+        if (typeDefinition == null)
+        {
+            typeReferencesImplementingINotify[fullName] = false;
+            return false;
+        }
+
         if (HasPropertyChangedEvent(typeDefinition))
         {
             typeReferencesImplementingINotify[fullName] = true;
@@ -49,7 +55,7 @@ public partial class ModuleWeaver
 
     public static bool HasPropertyChangedEvent(TypeDefinition typeDefinition)
     {
-        return typeDefinition.Events.Any(IsPropertyChangedEvent);
+        return typeDefinition != null && typeDefinition.Events.Any(IsPropertyChangedEvent);
     }
 
     public static bool IsPropertyChangedEvent(EventDefinition eventDefinition)
@@ -73,15 +79,18 @@ public partial class ModuleWeaver
 
     static bool HasPropertyChangedField(TypeDefinition typeDefinition)
     {
-        foreach (var fieldType in typeDefinition.Fields.Select(x => x.FieldType))
+        if (typeDefinition != null)
         {
-            if (fieldType.FullName == "Microsoft.FSharp.Control.FSharpEvent`2<System.ComponentModel.PropertyChangedEventHandler,System.ComponentModel.PropertyChangedEventArgs>")
+            foreach (var fieldType in typeDefinition.Fields.Select(x => x.FieldType))
             {
-                return true;
-            }
-            if (fieldType.FullName == "Microsoft.FSharp.Control.FSharpEvent`2<Windows.UI.Xaml.Data.PropertyChangedEventHandler,Windows.UI.Xaml.Data.PropertyChangedEventArgs>")
-            {
-                return true;
+                 if (fieldType.FullName == "Microsoft.FSharp.Control.FSharpEvent`2<System.ComponentModel.PropertyChangedEventHandler,System.ComponentModel.PropertyChangedEventArgs>")
+                 {
+                     return true;
+                 }
+                 if (fieldType.FullName == "Microsoft.FSharp.Control.FSharpEvent`2<Windows.UI.Xaml.Data.PropertyChangedEventHandler,Windows.UI.Xaml.Data.PropertyChangedEventArgs>")
+                 {
+                     return true;
+                 }
             }
         }
         return false;

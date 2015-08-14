@@ -87,7 +87,7 @@ public partial class ModuleWeaver
     MethodReference GetStaticEquality(TypeReference typeReference)
     {
         var typeDefinition = Resolve(typeReference);
-        if (typeDefinition.IsInterface)
+        if (typeDefinition == null || typeDefinition.IsInterface)
         {
             return null;
         }
@@ -97,6 +97,10 @@ public partial class ModuleWeaver
 
     public static MethodReference FindNamedMethod(TypeDefinition typeDefinition)
     {
+        if (typeDefinition == null)
+        {
+          return null;        
+        }
         var equalsMethod = FindNamedMethod(typeDefinition, "Equals");
         if (equalsMethod == null)
         {
