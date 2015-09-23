@@ -105,6 +105,11 @@ public static class CecilExtensions
         return attributes.FirstOrDefault(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);
     }
 
+    public static IEnumerable<CustomAttribute> GetAttributes(this IEnumerable<CustomAttribute> attributes, string attributeName)
+    {
+        return attributes.Where(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);
+    }
+
     public static bool ContainsAttribute(this IEnumerable<CustomAttribute> attributes, string attributeName)
     {
         return attributes.Any(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);

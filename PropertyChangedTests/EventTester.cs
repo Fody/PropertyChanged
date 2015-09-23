@@ -78,7 +78,7 @@ public static class EventTester
     }
 
     public static dynamic GetInstance(this Assembly assembly, string className)
-    {
+    {   
         var type = assembly.GetType(className, true);
         //dynamic instance = FormatterServices.GetUninitializedObject(type);
         return Activator.CreateInstance(type);
