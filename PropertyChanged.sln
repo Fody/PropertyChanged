@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged", "PropertyChanged\PropertyChanged.csproj", "{40235741-D750-45B1-8DC5-49576025ABA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithNonVoidOnPropertyNameChanged", "TestAssemblies\AssemblyWithNonVoidOnPropertyNameChanged\AssemblyWithNonVoidOnPropertyNameChanged.csproj", "{DA025360-790C-46E8-8143-2D2DEADCFE8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithTypeFilter", "TestAssemblies\AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj", "{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -207,6 +209,18 @@ Global
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A}.Release|ARM.ActiveCfg = Release|Any CPU
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Debug|x86.Build.0 = Debug|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Release|ARM.Build.0 = Release|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,5 +240,6 @@ Global
 		{4E375B19-D418-4FCC-8433-9CD740537450} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{A3BC44F0-27B3-4498-8DA3-337ABC41B441} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
+		{BF9EE7FE-C91D-4D8F-98D1-CC2A5E04AF2C} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-
+using System;
+using System.Text.RegularExpressions;
 
 public partial class ModuleWeaver
 {
@@ -11,9 +12,14 @@ public partial class ModuleWeaver
 
     public void BuildTypeNodes()
     {
+        // setup a filter delegate to apply the namespace filters
+        Func<TypeDefinition, bool> extraFilter =
+            t => !NamespaceFilters.Any() || NamespaceFilters.Any(filter => Regex.IsMatch(t.FullName, filter));
+        
         allClasses= ModuleDefinition
             .GetTypes()
             .Where(x => x.IsClass && x.BaseType != null)
+            .Where(extraFilter)
             .ToList();
         Nodes = new List<TypeNode>();
         NotifyNodes = new List<TypeNode>();
