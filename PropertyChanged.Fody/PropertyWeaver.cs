@@ -120,6 +120,7 @@ public class PropertyWeaver
     int AddEventInvokeCall(int index, PropertyDefinition property)
     {
         index = AddOnChangedMethodCall(index, property);
+        index = AddExplicitOnChangedMethodCalls(index, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
             moduleWeaver.LogDebug(string.Format("\t\t\t{0} skipped since call already exists", property.Name));
@@ -148,6 +149,10 @@ public class PropertyWeaver
         {
             return index;
         }
+        if (!moduleWeaver.SearchOnPropertyNameChangedMethodsByNamingConvention)
+        {
+            return index;
+        }
         var onChangedMethodName = string.Format("On{0}Changed", property.Name);
         if (ContainsCallToMethod(onChangedMethodName))
         {
@@ -171,6 +176,49 @@ public class PropertyWeaver
             return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
         }
         return index;
+    }
+
+    int AddExplicitOnChangedMethodCalls(int index, PropertyDefinition property)
+    {
+        if (!moduleWeaver.InjectOnPropertyNameChanged)
+        {
+            return index;
+        }
+        
+        foreach (var onChangedMethod in typeNode.ExplicitOnChangedMethods)
+        {
+            var onPropertyChangedAttribute = onChangedMethod.CustomAttributes.GetAttribute("PropertyChanged.OnPropertyChangedAttribute");
+            var propertyNames = GetPropertyNames(onPropertyChangedAttribute);
+            if (propertyNames.Contains(property.Name))
+            {
+                if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
+                {
+                    index = AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
+                }
+
+                if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfter)
+                {
+                    index = AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
+                }
+            }
+        }
+        
+        return index;
+    }
+
+    IEnumerable<string> GetPropertyNames(CustomAttribute onPropertyChangedAttribute)
+    {
+        var customAttributeArguments = onPropertyChangedAttribute.ConstructorArguments.ToList();
+        var value = (string)customAttributeArguments[0].Value;
+        yield return value;
+        if (customAttributeArguments.Count > 1)
+        {
+            var paramsArguments = (CustomAttributeArgument[])customAttributeArguments[1].Value;
+            foreach (string argument in paramsArguments.Select(x => x.Value))
+            {
+                yield return argument;
+            }
+        }
     }
 
     bool ContainsCallToMethod(string onChangingMethodName)
