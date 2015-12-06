@@ -66,6 +66,7 @@
     <Compile Include="ClassThatIsSealed.cs" />
     <Compile Include="ClassWithExplicitAndImplicitOnChanged.cs" />
     <Compile Include="ClassWithExplicitOnChanged.cs" />
+    <Compile Include="ClassWithOnChangedAbstractAndExplicitAttributeInConcrete.cs" />
     <Compile Include="ClassWithExplicitOnChangedAbstract.cs" />
     <Compile Include="ClassWithOnChangedAbstract.cs" />
     <Compile Include="ClassWithBeforeAfterAndSimpleImplementation.cs" />

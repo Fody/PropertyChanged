@@ -94,6 +94,7 @@
     <Compile Include="ClassWithExplicitOnChangedAndNoPropertyChanged.cs" />
     <Compile Include="ClassWithExplicitOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithExplicitOnChangedBeforeAfter.cs" />
+    <Compile Include="ClassWithOnChangedAbstractAndExplicitAttributeInConcrete.cs" />
     <Compile Include="ClassWithOnChangedAndNoPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithSenderPropertyChangedArgImplementation.cs" />
