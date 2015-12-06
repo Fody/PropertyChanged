@@ -64,6 +64,7 @@
     <Compile Include="ClassStaticProperties.cs" />
     <Compile Include="ClassThatIsNotSealed.cs" />
     <Compile Include="ClassThatIsSealed.cs" />
+    <Compile Include="ClassWithExplicitAndImplicitOnChanged.cs" />
     <Compile Include="ClassWithExplicitOnChanged.cs" />
     <Compile Include="ClassWithExplicitOnChangedAbstract.cs" />
     <Compile Include="ClassWithOnChangedAbstract.cs" />
