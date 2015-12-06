@@ -191,6 +191,10 @@ public class PropertyWeaver
             var propertyNames = GetPropertyNames(onPropertyChangedAttribute);
             if (propertyNames.Contains(property.Name))
             {
+                if (ContainsCallToMethod(onChangedMethod.MethodReference))
+                {
+                    continue;
+                }
                 if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
                 {
                     index = AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
@@ -226,6 +230,13 @@ public class PropertyWeaver
         return instructions.Select(x => x.Operand)
             .OfType<MethodReference>()
             .Any(x => x.Name == onChangingMethodName);
+    }
+
+    bool ContainsCallToMethod(MethodReference onChangedMethodReference)
+    {
+        return instructions.Select(x => x.Operand)
+            .OfType<MethodReference>()
+            .Any(x => x == onChangedMethodReference);
     }
 
     int AddSimpleInvokerCall(int index, PropertyDefinition property)
