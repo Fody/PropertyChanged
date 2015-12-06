@@ -98,6 +98,7 @@
     <Compile Include="IlGeneratedByDependencyReaderTests\WithVirtualAutoProperties.cs" />
     <Compile Include="PropertyInfoCheckers\BeforeAfterWithNoGetInfoCheckerTest.cs" />
     <Compile Include="ReferenceFinder.cs" />
+    <Compile Include="ResolveSearchOnPropertyNameChangedMethodsByNamingConventionConfigTests.cs" />
     <Compile Include="StackOverflowCheckerTests.cs" />
     <Compile Include="AssemblyWithBlockingClassTests.cs" />
     <Compile Include="PropertyInfoCheckers\IndexerCheckerTest.cs" />
