@@ -88,6 +88,7 @@
     <Compile Include="ClassEqualityWithDouble.cs" />
     <Compile Include="ClassEqualityWithStruct.cs" />
     <Compile Include="ClassEqualityWithStructOverload.cs" />
+    <Compile Include="ClassWithExplicitOnChanged.cs" />
     <Compile Include="ClassWithOnChangedAndNoPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithSenderPropertyChangedArgImplementation.cs" />
