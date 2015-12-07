@@ -1121,7 +1121,25 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.OnProperty1ChangedCalled);
     }
-    
+
+    [Test]
+    public void WithExplicitOnChangedBeforeAfter()
+    {
+        var instance = assembly.GetInstance("ClassWithExplicitOnChangedBeforeAfter");
+        Assert.IsFalse(instance.OnProperty1ChangedCalled);
+        EventTester.TestProperty(instance, false);
+        Assert.IsTrue(instance.OnProperty1ChangedCalled);
+    }
+
+    [Test]
+    public void WithExplicitOnChangedForMultipleProperties()
+    {
+        var instance = assembly.GetInstance("ClassWithExplicitOnChangedForMultipleProperties");
+        Assert.AreEqual(0, instance.OnChangedCalled);
+        EventTester.TestProperty<string>(instance, "Property1", "a");
+        EventTester.TestProperty<string>(instance, "Property2", "b");
+        Assert.AreEqual(2, instance.OnChangedCalled);
+    }
 
     [Test]
     public virtual void WithGenericAndLambda()
