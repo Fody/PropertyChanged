@@ -64,6 +64,8 @@
     <Compile Include="AttributeCleaner.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="CodeGenTypeCleaner.cs" />
+    <Compile Include="InjectExplicitOnPropertyNameChangedConfig.cs" />
+    <Compile Include="InjectImplicitOnPropertyNameChangedConfig.cs" />
     <Compile Include="InjectOnPropertyNameChangedConfig.cs" />
     <Compile Include="EqualityCheckWeaver.cs" />
     <Compile Include="EventInvokerNameResolver.cs" />
@@ -81,7 +83,6 @@
     <Compile Include="RecursiveIlFinder.cs" />
     <Compile Include="ReferenceCleaner.cs" />
     <Compile Include="ReturnFixer.cs" />
-    <Compile Include="SearchOnPropertyNameChangedMethodsByNamingConventionConfig.cs" />
     <Compile Include="StackOverflowChecker.cs" />
     <Compile Include="SupportsCeqChecker.cs" />
     <Compile Include="TypeEqualityFinder.cs" />

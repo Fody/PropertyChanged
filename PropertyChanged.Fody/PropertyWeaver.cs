@@ -149,7 +149,7 @@ public class PropertyWeaver
         {
             return index;
         }
-        if (!moduleWeaver.SearchOnPropertyNameChangedMethodsByNamingConvention)
+        if (!moduleWeaver.InjectImplicitOnPropertyNameChanged)
         {
             return index;
         }
@@ -181,6 +181,10 @@ public class PropertyWeaver
     int AddExplicitOnChangedMethodCalls(int index, PropertyDefinition property)
     {
         if (!moduleWeaver.InjectOnPropertyNameChanged)
+        {
+            return index;
+        }
+        if (!moduleWeaver.InjectExplicitOnPropertyNameChanged)
         {
             return index;
         }
