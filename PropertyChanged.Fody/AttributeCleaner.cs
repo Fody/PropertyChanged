@@ -13,7 +13,8 @@ public partial class ModuleWeaver
         "PropertyChanged.DoNotSetChangedAttribute", 
         "PropertyChanged.AlsoNotifyForAttribute",
         "PropertyChanged.DependsOnAttribute",
-        "PropertyChanged.ImplementPropertyChangedAttribute"
+        "PropertyChanged.ImplementPropertyChangedAttribute",
+        "PropertyChanged.OnPropertyChangedAttribute"
     };
 
     void ProcessType(TypeDefinition type)
@@ -24,6 +25,10 @@ public partial class ModuleWeaver
             RemoveAttributes(property.CustomAttributes);
         }
         foreach (var field in type.Fields)
+        {
+            RemoveAttributes(field.CustomAttributes);
+        }
+        foreach (var field in type.Methods)
         {
             RemoveAttributes(field.CustomAttributes);
         }
