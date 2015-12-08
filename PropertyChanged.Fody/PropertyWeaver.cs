@@ -145,11 +145,8 @@ public class PropertyWeaver
 
     int AddOnChangedMethodCall(int index, PropertyDefinition property)
     {
-        if (!moduleWeaver.InjectOnPropertyNameChanged)
-        {
-            return index;
-        }
-        if (!moduleWeaver.InjectImplicitOnPropertyNameChanged)
+        if (!moduleWeaver.InjectOnPropertyNameChanged
+            || !moduleWeaver.InjectImplicitOnPropertyNameChanged)
         {
             return index;
         }
@@ -180,11 +177,8 @@ public class PropertyWeaver
 
     int AddExplicitOnChangedMethodCalls(int index, PropertyDefinition property)
     {
-        if (!moduleWeaver.InjectOnPropertyNameChanged)
-        {
-            return index;
-        }
-        if (!moduleWeaver.InjectExplicitOnPropertyNameChanged)
+        if (!moduleWeaver.InjectOnPropertyNameChanged
+            || !moduleWeaver.InjectExplicitOnPropertyNameChanged)
         {
             return index;
         }

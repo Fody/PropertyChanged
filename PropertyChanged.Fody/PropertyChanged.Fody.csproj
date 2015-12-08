@@ -64,6 +64,7 @@
     <Compile Include="AttributeCleaner.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="CodeGenTypeCleaner.cs" />
+    <Compile Include="ExplicitOnPropertyChangedWalker.cs" />
     <Compile Include="ExplicitOnPropertyChangedMethodDependency.cs" />
     <Compile Include="InjectExplicitOnPropertyNameChangedConfig.cs" />
     <Compile Include="InjectImplicitOnPropertyNameChangedConfig.cs" />
