@@ -76,7 +76,7 @@ public partial class ModuleWeaver
             
             var propertyDefinitions = GetOnPropertyChangedAttributeProperties(onPropertyChangedAttribute, method, properties);
 
-            OnChangedTypes? onChangedType = null;
+            OnChangedTypes onChangedType;
             if (IsNoArgOnChangedMethod(method))
             {
                 onChangedType = OnChangedTypes.NoArg;
@@ -85,20 +85,22 @@ public partial class ModuleWeaver
             {
                 onChangedType = OnChangedTypes.BeforeAfter;
             }
-            if (onChangedType != null)
+            else
             {
-                foreach (var propertyDefinition in propertyDefinitions)
-                {
-                    var typeDefinitions = new Stack<TypeDefinition>();
-                    typeDefinitions.Push(notifyNode.TypeDefinition);
+                var message = string.Format("The type {0} has a method with an OnPropertyChanged attribute ({1}) that has invalid parameter types. Only parameterless methods and methods with two System.Object parameters are supported.", notifyNode.TypeDefinition.FullName, method.Name);
+                throw new WeavingException(message);
+            }
+            foreach (var propertyDefinition in propertyDefinitions)
+            {
+                var typeDefinitions = new Stack<TypeDefinition>();
+                typeDefinitions.Push(notifyNode.TypeDefinition);
 
-                    yield return new ExplicitOnPropertyChangedMethodDependency
-                    {
-                        OnChangedType = onChangedType.Value,
-                        WhenPropertyIsSet = propertyDefinition,
-                        ShouldCallMethod = GetMethodReference(typeDefinitions, method),
-                    };
-                }
+                yield return new ExplicitOnPropertyChangedMethodDependency
+                {
+                    OnChangedType = onChangedType,
+                    WhenPropertyIsSet = propertyDefinition,
+                    ShouldCallMethod = GetMethodReference(typeDefinitions, method),
+                };
             }
         }
     }
