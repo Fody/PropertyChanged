@@ -1114,15 +1114,6 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void WithOnChangedAbstractAndExplicitAttributeInConcrete()
-    {
-        var instance = assembly.GetInstance("ClassWithOnChangedAbstractAndExplicitAttributeInConcreteConcrete");
-        Assert.IsFalse(instance.OnProperty1ChangedCalled);
-        EventTester.TestProperty(instance, false);
-        Assert.Inconclusive("Not sure what is the correct behavior");
-    }
-
-    [Test]
     public void WithExplicitOnChangedBeforeAfter()
     {
         var instance = assembly.GetInstance("ClassWithExplicitOnChangedBeforeAfter");

@@ -188,45 +188,25 @@ public class PropertyWeaver
         {
             return index;
         }
-        
-        foreach (var onChangedMethod in typeNode.ExplicitOnChangedMethods)
-        {
-            var onPropertyChangedAttribute = onChangedMethod.CustomAttributes.GetAttribute("PropertyChanged.OnPropertyChangedAttribute");
-            var propertyNames = GetPropertyNames(onPropertyChangedAttribute);
-            if (propertyNames.Contains(property.Name))
-            {
-                if (ContainsCallToMethod(onChangedMethod.MethodReference))
-                {
-                    continue;
-                }
-                if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
-                {
-                    index = AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
-                }
 
-                if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfter)
-                {
-                    index = AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
-                }
+        var methodDependencies = typeNode.ExplicitOnPropertyChangedMethodDependencies.Where(x => x.WhenPropertyIsSet == property);
+        foreach (var methodDependency in methodDependencies)
+        {
+            if (ContainsCallToMethod(methodDependency.ShouldCallMethod))
+            {
+                continue;
+            }
+            if (methodDependency.OnChangedType == OnChangedTypes.NoArg)
+            {
+                index = AddSimpleOnChangedCall(index, methodDependency.ShouldCallMethod);
+            }
+            else if (methodDependency.OnChangedType == OnChangedTypes.BeforeAfter)
+            {
+                index = AddBeforeAfterOnChangedCall(index, property, methodDependency.ShouldCallMethod);
             }
         }
         
         return index;
-    }
-
-    IEnumerable<string> GetPropertyNames(CustomAttribute onPropertyChangedAttribute)
-    {
-        var customAttributeArguments = onPropertyChangedAttribute.ConstructorArguments.ToList();
-        var value = (string)customAttributeArguments[0].Value;
-        yield return value;
-        if (customAttributeArguments.Count > 1)
-        {
-            var paramsArguments = (CustomAttributeArgument[])customAttributeArguments[1].Value;
-            foreach (string argument in paramsArguments.Select(x => x.Value))
-            {
-                yield return argument;
-            }
-        }
     }
 
     bool ContainsCallToMethod(string onChangingMethodName)

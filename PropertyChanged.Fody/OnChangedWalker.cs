@@ -14,7 +14,7 @@ public partial class ModuleWeaver
         foreach (var notifyNode in notifyNodes)
         {
             notifyNode.OnChangedMethods = GetOnChangedMethods(notifyNode).ToList();
-            notifyNode.ExplicitOnChangedMethods = GetExplicitOnChangedMethods(notifyNode).ToList();
+            notifyNode.ExplicitOnPropertyChangedMethodDependencies = GetExplicitOnPropertyChangedMethodDependencies(notifyNode).ToList();
             ProcessOnChangedMethods(notifyNode.Nodes);
         }
     }
@@ -56,40 +56,49 @@ public partial class ModuleWeaver
         }
     }
 
-    IEnumerable<ExplicitOnChangedMethod> GetExplicitOnChangedMethods(TypeNode notifyNode)
+    IEnumerable<ExplicitOnPropertyChangedMethodDependency> GetExplicitOnPropertyChangedMethodDependencies(TypeNode notifyNode)
     {
+        var properties = notifyNode.TypeDefinition.Properties.ToList();
         var methods = notifyNode.TypeDefinition.Methods;
 
-        var onChangedMethods = methods.Where(x => !x.IsStatic &&
-                                  x.CustomAttributes.GetAttribute("PropertyChanged.OnPropertyChangedAttribute") != null);
-
-        foreach (var methodDefinition in onChangedMethods)
+        foreach (var method in methods.Where(x => !x.IsStatic))
         {
-            if (methodDefinition.ReturnType.FullName != "System.Void")
+            var onPropertyChangedAttribute =
+                method.CustomAttributes.GetAttribute("PropertyChanged.OnPropertyChangedAttribute");
+            if (onPropertyChangedAttribute == null)
+                continue;
+            
+            if (method.ReturnType.FullName != "System.Void")
             {
-                var message = string.Format("The type {0} has a On_PropertyName_Changed method ({1}) that has a non void return value. Please make the return type void.", notifyNode.TypeDefinition.FullName, methodDefinition.Name);
+                var message = string.Format("The type {0} has a method with an OnPropertyChanged attribute ({1}) that has a non void return value. Please make the return type void.", notifyNode.TypeDefinition.FullName, method.Name);
                 throw new WeavingException(message);
             }
-            var typeDefinitions = new Stack<TypeDefinition>();
-            typeDefinitions.Push(notifyNode.TypeDefinition);
+            
+            var propertyDefinitions = GetOnPropertyChangedAttributeProperties(onPropertyChangedAttribute, method, properties);
 
-            if (IsNoArgOnChangedMethod(methodDefinition))
+            OnChangedTypes? onChangedType = null;
+            if (IsNoArgOnChangedMethod(method))
             {
-                yield return new ExplicitOnChangedMethod
-                {
-                    OnChangedType = OnChangedTypes.NoArg,
-                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
-                    CustomAttributes = methodDefinition.CustomAttributes
-                };
+                onChangedType = OnChangedTypes.NoArg;
             }
-            else if (IsBeforeAfterOnChangedMethod(methodDefinition))
+            else if (IsBeforeAfterOnChangedMethod(method))
             {
-                yield return new ExplicitOnChangedMethod
+                onChangedType = OnChangedTypes.BeforeAfter;
+            }
+            if (onChangedType != null)
+            {
+                foreach (var propertyDefinition in propertyDefinitions)
                 {
-                    OnChangedType = OnChangedTypes.BeforeAfter,
-                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
-                    CustomAttributes = methodDefinition.CustomAttributes
-                };
+                    var typeDefinitions = new Stack<TypeDefinition>();
+                    typeDefinitions.Push(notifyNode.TypeDefinition);
+
+                    yield return new ExplicitOnPropertyChangedMethodDependency
+                    {
+                        OnChangedType = onChangedType.Value,
+                        WhenPropertyIsSet = propertyDefinition,
+                        ShouldCallMethod = GetMethodReference(typeDefinitions, method),
+                    };
+                }
             }
         }
     }
