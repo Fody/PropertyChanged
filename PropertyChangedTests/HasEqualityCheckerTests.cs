@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
 using NUnit.Framework;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 
 
 [TestFixture]

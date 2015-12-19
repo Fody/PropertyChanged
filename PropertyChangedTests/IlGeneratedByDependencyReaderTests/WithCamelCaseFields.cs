@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 
 [TestFixture]
 public class WithCamelCaseFields

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+// ReSharper disable UnusedMember.Global
 
 [TestFixture]
 public class BeforeAfterWithNoGetInfoCheckerTest
@@ -33,18 +34,9 @@ public class BeforeAfterWithNoGetInfoCheckerTest
     }
 
 
-
-
-    string property;
-
     public string PropertyNoGet
     {
-        set { property = value; }
+        set { PropertyWithGet = value; }
     }
-    public string PropertyWithGet
-    {
-        set { property = value; }
-        get { return property; }
-    }
-
+    public string PropertyWithGet { set; get; }
 }

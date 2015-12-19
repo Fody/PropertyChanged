@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 
 [TestFixture]
 public class WithUnderScoreFields
@@ -24,18 +27,14 @@ public class WithUnderScoreFields
 
     public class Person
     {
-        // ReSharper disable InconsistentNaming
         string _givenNames;
-        // ReSharper restore InconsistentNaming
         public string GivenNames
         {
             get { return _givenNames; }
             set { _givenNames = value; }
         }
 
-        // ReSharper disable InconsistentNaming
         string _familyName;
-        // ReSharper restore InconsistentNaming
         public string FamilyName
         {
             get { return _familyName; }

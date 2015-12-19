@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+// ReSharper disable UnusedMember.Global
 
 [TestFixture]
 public class WithGenericFields
@@ -23,20 +24,10 @@ public class WithGenericFields
 
     public class Person<T>
     {
-        string givenNames;
-        public string GivenNames
-        {
-            get { return givenNames; }
-            set { givenNames = value; }
-        }
+        public string GivenNames { get; set; }
 
-        string familyName;
-        public string FamilyName
-        {
-            get { return familyName; }
-            set { familyName = value; }
-        }
+        public string FamilyName { get; set; }
 
-        public string FullName => $"{givenNames} {familyName}";
+        public string FullName => $"{GivenNames} {FamilyName}";
     }
 }
