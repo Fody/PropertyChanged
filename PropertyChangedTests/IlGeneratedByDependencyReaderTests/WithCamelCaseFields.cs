@@ -37,12 +37,6 @@ public class WithCamelCaseFields
             set { familyName = value; }
         }
 
-        public string FullName
-        {
-            get
-            {
-                return $"{givenNames} {familyName}";
-            }
-        }
+        public string FullName => $"{givenNames} {familyName}";
     }
 }

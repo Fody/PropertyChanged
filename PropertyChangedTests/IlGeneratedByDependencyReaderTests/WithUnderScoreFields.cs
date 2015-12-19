@@ -42,12 +42,6 @@ public class WithUnderScoreFields
             set { _familyName = value; }
         }
 
-        public string FullName
-        {
-            get
-            {
-                return $"{_givenNames} {_familyName}";
-            }
-        }
+        public string FullName => $"{_givenNames} {_familyName}";
     }
 }

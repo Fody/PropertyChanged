@@ -13,7 +13,7 @@ public class ClassAlreadyHasSingleNotification : INotifyPropertyChanged
             OnPropertyChanged("Property1");
         }
     }
-    public string Property2 { get { return Property1; } }
+    public string Property2 => Property1;
 
     public virtual void OnPropertyChanged(string propertyName)
     {

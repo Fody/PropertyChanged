@@ -25,12 +25,6 @@ public class WithVirtualAutoProperties
     public class Person
     {
         public virtual string GivenNames { get; set; }
-        public virtual string FullName
-        {
-            get
-            {
-                return GivenNames;
-            }
-        }
+        public virtual string FullName => GivenNames;
     }
 }

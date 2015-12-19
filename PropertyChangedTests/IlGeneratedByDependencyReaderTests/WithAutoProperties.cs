@@ -30,12 +30,6 @@ public class WithAutoProperties
     {
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
-        public string FullName
-        {
-            get
-            {
-                return $"{GivenNames} {FamilyName}";
-            }
-        }
+        public string FullName => $"{GivenNames} {FamilyName}";
     }
 }

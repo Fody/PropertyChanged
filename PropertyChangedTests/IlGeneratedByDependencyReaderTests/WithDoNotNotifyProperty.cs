@@ -23,12 +23,6 @@ public class WithDoNotNotifyProperty
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
         [DoNotNotify]
-        public string FullName
-        {
-            get
-            {
-                return $"{GivenNames} {FamilyName}";
-            }
-        }
+        public string FullName => $"{GivenNames} {FamilyName}";
     }
 }

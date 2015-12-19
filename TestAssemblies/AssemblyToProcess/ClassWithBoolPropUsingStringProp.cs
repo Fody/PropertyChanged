@@ -2,13 +2,7 @@ using System.ComponentModel;
 
 public class ClassWithBoolPropUsingStringProp: INotifyPropertyChanged
 {
-    public bool StringCompareProperty
-    {
-        get
-        {
-            return StringProperty == "magicString";
-        }
-    }
+    public bool StringCompareProperty => StringProperty == "magicString";
 
     public bool BoolProperty { get; set; }
 

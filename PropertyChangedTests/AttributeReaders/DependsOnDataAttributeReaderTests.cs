@@ -30,13 +30,7 @@ public class DependsOnDataAttributeReaderTests
         public string FamilyName { get; set; }
 
         [DependsOn("GivenNames", "FamilyName")]
-        public string FullName
-        {
-            get
-            {
-                return $"{GivenNames} {FamilyName}";
-            }
-        }
+        public string FullName => $"{GivenNames} {FamilyName}";
     }
 
     [Test]
@@ -61,13 +55,7 @@ public class DependsOnDataAttributeReaderTests
         public string FamilyName { get; set; }
 
         [DependsOn("NotAProperty1", "NotAProperty2")]
-        public string FullName
-        {
-            get
-            {
-                return $"{GivenNames} {FamilyName}";
-            }
-        }
+        public string FullName => $"{GivenNames} {FamilyName}";
     }
 
 }

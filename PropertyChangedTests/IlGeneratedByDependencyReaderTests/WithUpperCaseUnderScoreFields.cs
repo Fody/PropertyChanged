@@ -42,12 +42,6 @@ public class WithUpperCaseUnderScoreFields
             set { _FamilyName = value; }
         }
 
-        public string FullName
-        {
-            get
-            {
-                return $"{_GivenNames} {_FamilyName}";
-            }
-        }
+        public string FullName => $"{_GivenNames} {_FamilyName}";
     }
 }

@@ -13,7 +13,7 @@ public class ClassAlreadyHasSingleNotificationDiffParamLocation : INotifyPropert
             OnPropertyChanged(7, "Property1");
         }
     }
-    public string Property2 { get { return Property1; } }
+    public string Property2 => Property1;
 
     public virtual void OnPropertyChanged(int fake, string propertyName)
     {

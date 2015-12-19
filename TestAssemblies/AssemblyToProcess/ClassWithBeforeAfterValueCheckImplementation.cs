@@ -9,13 +9,7 @@ public class ClassWithBeforeAfterValueCheckImplementation : INotifyPropertyChang
     public string BeforeValue1 { get; set; }
 
     [DependsOn("Property1")]
-    public string Property2 
-    {
-        get
-        {
-            return Property1 + "2";
-        }
-    }
+    public string Property2 => Property1 + "2";
 
     [DoNotNotify]
     public string BeforeValue2 { get; set; }
