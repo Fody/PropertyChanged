@@ -46,7 +46,7 @@ public class WithUpperCaseUnderScoreFields
         {
             get
             {
-                return string.Format("{0} {1}", _GivenNames, _FamilyName);
+                return $"{_GivenNames} {_FamilyName}";
             }
         }
     }

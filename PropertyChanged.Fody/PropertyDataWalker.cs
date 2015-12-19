@@ -64,10 +64,9 @@ public partial class ModuleWeaver
 
         if (node.EventInvoker == null)
         {
-            throw new WeavingException(string.Format(
-                @"Could not find field for PropertyChanged event on type '{0}'.
+            throw new WeavingException($@"Could not find field for PropertyChanged event on type '{node.TypeDefinition.FullName}'.
 Looked for 'PropertyChanged', 'propertyChanged', '_PropertyChanged' and '_propertyChanged'.
-The most likely cause is that you have implemented a custom event accessor for the PropertyChanged event and have called the PropertyChangedEventHandler something stupid.", node.TypeDefinition.FullName));
+The most likely cause is that you have implemented a custom event accessor for the PropertyChanged event and have called the PropertyChangedEventHandler something stupid.");
         }
         node.PropertyDatas.Add(new PropertyData
                                    {

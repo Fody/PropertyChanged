@@ -35,7 +35,7 @@ public static class Verifier
         Debug.WriteLine(afterAssemblyPath);
         var before = Validate(beforeAssemblyPath);
         var after = Validate(afterAssemblyPath);
-        var message = string.Format("Failed processing {0}\r\n{1}", Path.GetFileName(afterAssemblyPath), after);
+        var message = $"Failed processing {Path.GetFileName(afterAssemblyPath)}\r\n{after}";
         NUnit.Framework.Assert.AreEqual(TrimLineNumbers(before), TrimLineNumbers(after), message);
     }
 

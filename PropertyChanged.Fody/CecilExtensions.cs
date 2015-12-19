@@ -7,7 +7,7 @@ public static class CecilExtensions
 {
     public static string GetName(this PropertyDefinition propertyDefinition)
     {
-        return string.Format("{0}.{1}", propertyDefinition.DeclaringType.FullName, propertyDefinition.Name);
+        return $"{propertyDefinition.DeclaringType.FullName}.{propertyDefinition.Name}";
     }
 
     public static bool IsCallToMethod(this Instruction instruction, string methodName, out int propertyNameIndex)

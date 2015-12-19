@@ -39,7 +39,7 @@ public static class SupportsCeqChecker
         var typeDefinition = typeReference.Resolve();
         if (typeDefinition == null)
         {
-            throw new Exception(string.Format("Could not resolve '{0}'.", typeReference.FullName));
+            throw new Exception($"Could not resolve '{typeReference.FullName}'.");
         }
         if (typeDefinition.IsEnum)
         {

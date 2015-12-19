@@ -16,7 +16,7 @@ public partial class ModuleWeaver
         {
             if (targetType.HasGenericParameters)
             {
-                var message = string.Format("Error processing '{0}'. Interception is not supported on generic types. To manually work around this problem add a [DoNotNotify] to the class and then manually implement INotifyPropertyChanged for that class and all child classes. If you would like this feature handled automatically please feel free to submit a pull request.", targetType.Name);
+                var message = $"Error processing '{targetType.Name}'. Interception is not supported on generic types. To manually work around this problem add a [DoNotNotify] to the class and then manually implement INotifyPropertyChanged for that class and all child classes. If you would like this feature handled automatically please feel free to submit a pull request.";
                 throw new WeavingException(message);
             }
             var methodDefinition = GetMethodDefinition(targetType, propertyChangedField);

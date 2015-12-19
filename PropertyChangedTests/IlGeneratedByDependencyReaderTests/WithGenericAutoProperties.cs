@@ -32,7 +32,7 @@ public class WithGenericAutoProperties
         {
             get
             {
-                return string.Format("{0} {1}", GivenNames, FamilyName);
+                return $"{GivenNames} {FamilyName}";
             }
         }
     }

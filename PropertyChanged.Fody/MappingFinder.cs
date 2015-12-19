@@ -35,7 +35,7 @@ public partial class ModuleWeaver
         foreach (var field in fieldsWithSameType)
         {
             //AutoProp
-            if (field.Name == string.Format("<{0}>k__BackingField", propertyName))
+            if (field.Name == $"<{propertyName}>k__BackingField")
             {
                 return field;
             }

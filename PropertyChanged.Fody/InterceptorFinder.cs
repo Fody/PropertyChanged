@@ -12,15 +12,15 @@ public partial class ModuleWeaver
         var methodDefinition = typeDefinition.Methods.FirstOrDefault(x => x.Name == "Intercept");
         if (methodDefinition == null)
         {
-            throw new WeavingException(string.Format("Found Type '{0}' but could not find a method named 'Intercept'.", typeDefinition.FullName));
+            throw new WeavingException($"Found Type '{typeDefinition.FullName}' but could not find a method named 'Intercept'.");
         }
         if (!methodDefinition.IsStatic)
         {
-            throw new WeavingException(string.Format("Found Type '{0}.Intercept' but it is not static.", typeDefinition.FullName));
+            throw new WeavingException($"Found Type '{typeDefinition.FullName}.Intercept' but it is not static.");
         }
         if (!methodDefinition.IsPublic)
         {
-            throw new WeavingException(string.Format("Found Type '{0}.Intercept' but it is not public.", typeDefinition.FullName));
+            throw new WeavingException($"Found Type '{typeDefinition.FullName}.Intercept' but it is not public.");
         }
 
         if (IsSingleStringInterceptionMethod(methodDefinition))
@@ -37,11 +37,10 @@ public partial class ModuleWeaver
             InterceptorType = InvokerTypes.BeforeAfter;
             return;
         }
-        var message = string.Format(
-            @"Found '{0}.Intercept' But the signature is not correct. It needs to be either.
+        var message = $@"Found '{typeDefinition.FullName}.Intercept' But the signature is not correct. It needs to be either.
 Intercept(object target, Action firePropertyChanged, string propertyName)
 or
-Intercept(object target, Action firePropertyChanged, string propertyName, object before, object after)", typeDefinition.FullName);
+Intercept(object target, Action firePropertyChanged, string propertyName, object before, object after)";
         throw new WeavingException(message);
     }
 

@@ -30,7 +30,7 @@ public partial class ModuleWeaver
         {
             if (methodDefinition.ReturnType.FullName != "System.Void")
             {
-                var message = string.Format("The type {0} has a On_PropertyName_Changed method ({1}) that has a non void return value. Please make the return type void.", notifyNode.TypeDefinition.FullName, methodDefinition.Name);
+                var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Please make the return type void.";
                 throw new WeavingException(message);
             }
             var typeDefinitions = new Stack<TypeDefinition>();

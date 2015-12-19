@@ -157,7 +157,7 @@ public partial class ModuleWeaver
         }
         catch (Exception exception)
         {
-            var message = string.Format(@"Could not resolve System.Core. Please ensure you are using .net 3.5 or higher.{0}Inner message:{1}.", Environment.NewLine, exception.Message);
+            var message = $@"Could not resolve System.Core. Please ensure you are using .net 3.5 or higher.{Environment.NewLine}Inner message:{exception.Message}.";
             throw new WeavingException(message);
         }
     }

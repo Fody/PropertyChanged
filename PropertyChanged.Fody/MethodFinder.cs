@@ -29,7 +29,7 @@ public partial class ModuleWeaver
 
         if (!eventInvoker.IsVisibleFromChildren)
         {
-            var error = string.Format("Cannot use '{0}' in '{1}' since that method is not visible from the child class.", eventInvoker.MethodReference.FullName, node.TypeDefinition.FullName);
+            var error = $"Cannot use '{eventInvoker.MethodReference.FullName}' in '{node.TypeDefinition.FullName}' since that method is not visible from the child class.";
             throw new WeavingException(error);
         }
         node.EventInvoker = eventInvoker;

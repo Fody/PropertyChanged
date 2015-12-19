@@ -41,7 +41,7 @@ public class WithCamelCaseFields
         {
             get
             {
-                return string.Format("{0} {1}", givenNames, familyName);
+                return $"{givenNames} {familyName}";
             }
         }
     }

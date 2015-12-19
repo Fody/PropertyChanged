@@ -17,12 +17,12 @@ public partial class ModuleWeaver
                 {
                     if (CheckIfGetterCallsSetter(propertyData.PropertyDefinition))
                     {
-                        throw new WeavingException(string.Format("{0} Getter calls setter which will cause a stack overflow as the setter uses the getter for obtaining the before and after values.", propertyData.PropertyDefinition.GetName()));
+                        throw new WeavingException($"{propertyData.PropertyDefinition.GetName()} Getter calls setter which will cause a stack overflow as the setter uses the getter for obtaining the before and after values.");
                     }
 
                     if (CheckIfGetterCallsVirtualBaseSetter(propertyData.PropertyDefinition))
                     {
-                        throw new WeavingException(string.Format("{0} Getter of calls virtual setter of base class which will cause a stack overflow as the setter uses the getter for obtaining the before and after values.", propertyData.PropertyDefinition.GetName()));
+                        throw new WeavingException($"{propertyData.PropertyDefinition.GetName()} Getter of calls virtual setter of base class which will cause a stack overflow as the setter uses the getter for obtaining the before and after values.");
                     }
                 }
             }

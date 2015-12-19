@@ -40,7 +40,7 @@ public partial class ModuleWeaver
         var propertyDefinition = allProperties.FirstOrDefault(x => x.Name == argument);
         if (propertyDefinition == null)
         {
-            throw new WeavingException(string.Format("Could not find property '{0}' for AlsoNotifyFor attribute assigned to '{1}'.", argument, property.Name));
+            throw new WeavingException($"Could not find property '{argument}' for AlsoNotifyFor attribute assigned to '{property.Name}'.");
         }
         return propertyDefinition;
     }

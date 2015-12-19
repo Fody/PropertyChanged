@@ -46,7 +46,7 @@ public class WithUnderScoreFields
         {
             get
             {
-                return string.Format("{0} {1}", _givenNames, _familyName);
+                return $"{_givenNames} {_familyName}";
             }
         }
     }

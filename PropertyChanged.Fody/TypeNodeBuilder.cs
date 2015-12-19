@@ -51,7 +51,7 @@ public partial class ModuleWeaver
             {
                 if (HierarchyImplementsINotify(node.TypeDefinition))
                 {
-                    throw new WeavingException(string.Format("The type '{0}' already implements INotifyPropertyChanged so [ImplementPropertyChanged] is redundant.", node.TypeDefinition.FullName));
+                    throw new WeavingException($"The type '{node.TypeDefinition.FullName}' already implements INotifyPropertyChanged so [ImplementPropertyChanged] is redundant.");
                 }
                 InjectINotifyPropertyChangedInterface(node.TypeDefinition);
                 NotifyNodes.Add(node);
