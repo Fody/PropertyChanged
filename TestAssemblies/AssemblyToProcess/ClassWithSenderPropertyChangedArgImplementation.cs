@@ -12,10 +12,6 @@ public class ClassWithSenderPropertyChangedArgImplementation : INotifyPropertyCh
 
     public void OnPropertyChanged(object sender, PropertyChangedEventArgs arg)
     {
-        var handler = PropertyChanged;
-        if (handler != null)
-        {
-            handler(sender, arg);
-        }
+        PropertyChanged?.Invoke(sender, arg);
     }
 }

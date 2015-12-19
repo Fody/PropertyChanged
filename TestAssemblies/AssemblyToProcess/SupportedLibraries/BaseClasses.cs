@@ -14,11 +14,7 @@ namespace Caliburn.Micro
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
@@ -33,11 +29,7 @@ namespace Catel.Data
         protected void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
@@ -51,11 +43,7 @@ namespace Telerik.Windows.Controls
         void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -75,11 +63,7 @@ namespace Magellan.Framework
         protected void NotifyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         protected void NotifyChanged(string propertyName, params string[] otherProperties)
         {
@@ -99,11 +83,7 @@ namespace Cinch
         public virtual void NotifyPropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
@@ -118,11 +98,7 @@ namespace Microsoft.Practices.Prism.ViewModel
         protected virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected void RaisePropertyChanged<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
@@ -189,11 +165,7 @@ namespace GalaSoft.MvvmLight
         public virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
@@ -207,11 +179,7 @@ namespace Caliburn.PresentationFramework
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }
@@ -228,11 +196,7 @@ namespace Jounce.Core.Model
         protected virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }
@@ -254,11 +218,7 @@ namespace ReactiveUI
         public virtual void raisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

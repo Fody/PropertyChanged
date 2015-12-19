@@ -9,11 +9,7 @@ namespace HierarchyBeforeAfterAndSimple
 
 		public void OnPropertyChanged(string propertyName)
 		{
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 	}

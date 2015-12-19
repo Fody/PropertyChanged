@@ -10,11 +10,7 @@
 
         public virtual void OnPropertyChanged(string text1)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(text1));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(text1));
         }
     }
 }

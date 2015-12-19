@@ -16,11 +16,7 @@ public class ClassWithBeforeAfterImplementation : INotifyPropertyChanged
         ValidateIsString(after);
         ValidateIsString(before);
 
-        var handler = PropertyChanged;
-        if (handler != null)
-        {
-            handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     void ValidateIsString(object value)

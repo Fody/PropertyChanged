@@ -71,11 +71,7 @@ public partial class ModuleWeaver
 
     static FieldDefinition GetSingleField(PropertyDefinition property, Code code, MethodDefinition methodDefinition)
     {
-        if (methodDefinition == null)
-        {
-            return null;
-        }
-        if (methodDefinition.Body == null)
+        if (methodDefinition?.Body == null)
         {
             return null;
         }
@@ -103,22 +99,15 @@ public partial class ModuleWeaver
                     continue;
                 }
                 var fieldDef = instruction.Operand as FieldDefinition;
-                if (fieldDef != null)
+                var fieldAttributes = fieldDef?.Attributes & FieldAttributes.InitOnly;
+                if (fieldAttributes == FieldAttributes.InitOnly)
                 {
-                    var fieldAttributes = (fieldDef.Attributes & FieldAttributes.InitOnly);
-                    if (fieldAttributes == FieldAttributes.InitOnly)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
                 fieldReference = field;
             }
         }
-        if (fieldReference != null)
-        {
-            return fieldReference.Resolve();
-        }
-        return null;
+        return fieldReference?.Resolve();
     }
 
     public void FindMappings()

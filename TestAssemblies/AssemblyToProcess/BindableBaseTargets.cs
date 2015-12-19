@@ -43,10 +43,6 @@ public abstract class BindableBase : INotifyPropertyChanged
 
     protected void OnPropertyChanged(string propertyName)
     {
-        var eventHandler = PropertyChanged;
-        if (eventHandler != null)
-        {
-            eventHandler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

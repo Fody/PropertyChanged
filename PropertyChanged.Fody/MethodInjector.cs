@@ -40,12 +40,9 @@ public partial class ModuleWeaver
     {
         var eventInvokerName = "Inner" + EventInvokerNames.First();
         var methodDefinition = targetType.Methods.FirstOrDefault(x => x.Name == eventInvokerName);
-        if (methodDefinition != null)
+        if (methodDefinition?.Parameters.Count == 1 && methodDefinition.Parameters[0].ParameterType.FullName == "System.String")
         {
-            if (methodDefinition.Parameters.Count == 1 && methodDefinition.Parameters[0].ParameterType.FullName == "System.String")
-            {
-                return methodDefinition;
-            }
+            return methodDefinition;
         }
         return InjectMethod(targetType, eventInvokerName, propertyChangedField);
     }
@@ -96,11 +93,7 @@ public partial class ModuleWeaver
     public static FieldReference FindPropertyChangedField(TypeDefinition targetType)
     {
         var findPropertyChangedField = targetType.Fields.FirstOrDefault(x => IsPropertyChangedEventHandler(x.FieldType));
-        if (findPropertyChangedField == null)
-        {
-            return null;
-        }
-        return findPropertyChangedField.GetGeneric();
+        return findPropertyChangedField?.GetGeneric();
     }
 
     MethodDefinition InjectInterceptedMethod(TypeDefinition targetType, MethodDefinition innerOnPropertyChanged)

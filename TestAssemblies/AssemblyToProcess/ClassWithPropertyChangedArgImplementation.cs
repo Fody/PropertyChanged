@@ -12,11 +12,7 @@ public class ClassWithPropertyChangedArgImplementation : INotifyPropertyChanged
 
     public void OnPropertyChanged(PropertyChangedEventArgs arg)
     {
-        var handler = PropertyChanged;
-        if (handler != null)
-        {
-            handler(this, arg);
-        }
+        PropertyChanged?.Invoke(this, arg);
     }
 
 }
