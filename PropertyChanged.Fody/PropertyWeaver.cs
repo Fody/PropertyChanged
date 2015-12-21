@@ -120,6 +120,7 @@ public class PropertyWeaver
     int AddEventInvokeCall(int index, PropertyDefinition property)
     {
         index = AddOnChangedMethodCall(index, property);
+        index = AddExplicitOnChangedMethodCalls(index, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
             moduleWeaver.LogDebug($"\t\t\t{property.Name} skipped since call already exists");
@@ -144,7 +145,8 @@ public class PropertyWeaver
 
     int AddOnChangedMethodCall(int index, PropertyDefinition property)
     {
-        if (!moduleWeaver.InjectOnPropertyNameChanged)
+        if (!moduleWeaver.InjectOnPropertyNameChanged
+            || !moduleWeaver.InjectImplicitOnPropertyNameChanged)
         {
             return index;
         }
@@ -173,11 +175,46 @@ public class PropertyWeaver
         return index;
     }
 
+    int AddExplicitOnChangedMethodCalls(int index, PropertyDefinition property)
+    {
+        if (!moduleWeaver.InjectOnPropertyNameChanged
+            || !moduleWeaver.InjectExplicitOnPropertyNameChanged)
+        {
+            return index;
+        }
+
+        var methodDependencies = typeNode.ExplicitOnPropertyChangedMethodDependencies.Where(x => x.WhenPropertyIsSet == property);
+        foreach (var methodDependency in methodDependencies)
+        {
+            if (ContainsCallToMethod(methodDependency.ShouldCallMethod))
+            {
+                continue;
+            }
+            if (methodDependency.OnChangedType == OnChangedTypes.NoArg)
+            {
+                index = AddSimpleOnChangedCall(index, methodDependency.ShouldCallMethod);
+            }
+            else if (methodDependency.OnChangedType == OnChangedTypes.BeforeAfter)
+            {
+                index = AddBeforeAfterOnChangedCall(index, property, methodDependency.ShouldCallMethod);
+            }
+        }
+        
+        return index;
+    }
+
     bool ContainsCallToMethod(string onChangingMethodName)
     {
         return instructions.Select(x => x.Operand)
             .OfType<MethodReference>()
             .Any(x => x.Name == onChangingMethodName);
+    }
+
+    bool ContainsCallToMethod(MethodReference onChangedMethodReference)
+    {
+        return instructions.Select(x => x.Operand)
+            .OfType<MethodReference>()
+            .Any(x => x == onChangedMethodReference);
     }
 
     int AddSimpleInvokerCall(int index, PropertyDefinition property)

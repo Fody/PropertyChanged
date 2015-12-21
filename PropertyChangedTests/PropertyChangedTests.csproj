@@ -80,6 +80,8 @@
     <Compile Include="EventInvokerNamesConfigTests.cs" />
     <Compile Include="MappingFinder\MappingFinderSingleBackingReadonlyFieldGet.cs" />
     <Compile Include="MappingFinder\MappingFinderSingleBackingConstantFieldGet.cs" />
+    <Compile Include="ExplicitOnPropertyNameChangedConfigTests.cs" />
+    <Compile Include="ImplicitOnPropertyNameChangedConfigTests.cs" />
     <Compile Include="OnPropertyNameChangedConfigTests.cs" />
     <Compile Include="FSharpTest.cs" />
     <Compile Include="HasEqualityCheckerTests.cs" />

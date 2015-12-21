@@ -64,6 +64,10 @@
     <Compile Include="ClassStaticProperties.cs" />
     <Compile Include="ClassThatIsNotSealed.cs" />
     <Compile Include="ClassThatIsSealed.cs" />
+    <Compile Include="ClassWithExplicitAndImplicitOnChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedForMultipleProperties.cs" />
+    <Compile Include="ClassWithExplicitOnChangedAbstract.cs" />
     <Compile Include="ClassWithOnChangedAbstract.cs" />
     <Compile Include="ClassWithBeforeAfterAndSimpleImplementation.cs" />
     <Compile Include="ClassWithBeforeAfterImplementation.cs" />
@@ -96,8 +100,11 @@
     <Compile Include="ClassWithNotifyPropertyChangedAttributeChild.cs" />
     <Compile Include="ClassWithNotifyPropertyChangedAttributeChildParent.cs" />
     <Compile Include="ClassWithOnChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedAndNoPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedAndNoPropertyChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedBeforeAfter.cs" />
     <Compile Include="ClassWithOnChangedBeforeAfter.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />

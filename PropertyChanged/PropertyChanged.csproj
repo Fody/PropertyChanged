@@ -51,6 +51,7 @@
     <Compile Include="DoNotCheckEqualityAttribute.cs" />
     <Compile Include="DoNotSetChangedAttribute.cs" />
     <Compile Include="ImplementPropertyChangedAttribute.cs" />
+    <Compile Include="OnPropertyChangedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

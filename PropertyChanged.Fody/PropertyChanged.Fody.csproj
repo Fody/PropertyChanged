@@ -64,6 +64,10 @@
     <Compile Include="AttributeCleaner.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="CodeGenTypeCleaner.cs" />
+    <Compile Include="ExplicitOnPropertyChangedWalker.cs" />
+    <Compile Include="ExplicitOnPropertyChangedMethodDependency.cs" />
+    <Compile Include="InjectExplicitOnPropertyNameChangedConfig.cs" />
+    <Compile Include="InjectImplicitOnPropertyNameChangedConfig.cs" />
     <Compile Include="InjectOnPropertyNameChangedConfig.cs" />
     <Compile Include="EqualityCheckWeaver.cs" />
     <Compile Include="EventInvokerNameResolver.cs" />
@@ -74,10 +78,12 @@
     <Compile Include="InvokerTypes.cs" />
     <Compile Include="MsCoreReferenceFinder.cs" />
     <Compile Include="OnChangedMethod.cs" />
+    <Compile Include="OnChangedTypes.cs" />
     <Compile Include="OnChangedWalker.cs" />
     <Compile Include="IsChangedMethodFinder.cs" />
     <Compile Include="MethodGenerifier.cs" />
     <Compile Include="NotifyInterfaceFinder.cs" />
+    <Compile Include="OnPropertyChangedDataAttributeReader.cs" />
     <Compile Include="RecursiveIlFinder.cs" />
     <Compile Include="ReferenceCleaner.cs" />
     <Compile Include="ReturnFixer.cs" />

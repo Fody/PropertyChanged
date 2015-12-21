@@ -88,6 +88,13 @@
     <Compile Include="ClassEqualityWithDouble.cs" />
     <Compile Include="ClassEqualityWithStruct.cs" />
     <Compile Include="ClassEqualityWithStructOverload.cs" />
+    <Compile Include="ClassWithExplicitAndImplicitOnChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedAbstract.cs" />
+    <Compile Include="ClassWithExplicitOnChangedAndNoPropertyChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedAndOnPropertyChanged.cs" />
+    <Compile Include="ClassWithExplicitOnChangedBeforeAfter.cs" />
+    <Compile Include="ClassWithExplicitOnChangedForMultipleProperties.cs" />
     <Compile Include="ClassWithOnChangedAndNoPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithSenderPropertyChangedArgImplementation.cs" />

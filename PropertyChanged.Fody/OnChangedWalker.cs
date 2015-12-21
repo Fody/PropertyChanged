@@ -14,12 +14,15 @@ public partial class ModuleWeaver
         foreach (var notifyNode in notifyNodes)
         {
             notifyNode.OnChangedMethods = GetOnChangedMethods(notifyNode).ToList();
+            notifyNode.ExplicitOnPropertyChangedMethodDependencies = GetExplicitOnPropertyChangedMethodDependencies(notifyNode).ToList();
             ProcessOnChangedMethods(notifyNode.Nodes);
         }
     }
-
+    
     IEnumerable<OnChangedMethod> GetOnChangedMethods(TypeNode notifyNode)
     {
+        if (!InjectOnPropertyNameChanged || !InjectImplicitOnPropertyNameChanged)
+            yield break;
         var methods = notifyNode.TypeDefinition.Methods;
 
         var onChangedMethods = methods.Where(x => !x.IsStatic &&

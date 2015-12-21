@@ -19,5 +19,6 @@ public class TypeNode
     public MethodReference IsChangedInvoker;
     public List<PropertyData> PropertyDatas;
     public List<OnChangedMethod> OnChangedMethods;
+    public List<ExplicitOnPropertyChangedMethodDependency> ExplicitOnPropertyChangedMethodDependencies;
     public List<PropertyDefinition> AllProperties;
 }
