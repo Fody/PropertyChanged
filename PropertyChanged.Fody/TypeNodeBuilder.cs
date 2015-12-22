@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Mono.Cecil;
 
 
@@ -11,9 +13,14 @@ public partial class ModuleWeaver
 
     public void BuildTypeNodes()
     {
-        allClasses= ModuleDefinition
+        // setup a filter delegate to apply the namespace filters
+        Func<TypeDefinition, bool> extraFilter =
+            t => !NamespaceFilters.Any() || NamespaceFilters.Any(filter => Regex.IsMatch(t.FullName, filter));
+
+        allClasses = ModuleDefinition
             .GetTypes()
             .Where(x => x.IsClass && x.BaseType != null)
+            .Where(extraFilter)
             .ToList();
         Nodes = new List<TypeNode>();
         NotifyNodes = new List<TypeNode>();
@@ -43,6 +50,7 @@ public partial class ModuleWeaver
             PopulateINotifyNodes(node.Nodes);
         }
     }
+
     void PopulateInjectedINotifyNodes(List<TypeNode> typeNodes)
     {
         foreach (var node in typeNodes)
@@ -70,9 +78,9 @@ public partial class ModuleWeaver
     {
         allClasses.Remove(typeDefinition);
         var typeNode = new TypeNode
-                           {
-                               TypeDefinition = typeDefinition
-                           };
+        {
+            TypeDefinition = typeDefinition
+        };
         if (typeDefinition.BaseType.Scope.Name != ModuleDefinition.Name)
         {
             Nodes.Add(typeNode);

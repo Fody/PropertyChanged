@@ -25,6 +25,7 @@ public partial class ModuleWeaver
         ResolveEventInvokerName();
         FindCoreReferences();
         FindInterceptor();
+        ProcessFilterTypeAttributes();
         BuildTypeNodes();
         CleanDoNotNotifyTypes();
         CleanCodeGenedTypes();

@@ -41,10 +41,6 @@ public static class CecilExtensions
     }
 
 
-    public static MethodDefinition Constructor(this TypeDefinition typeDefinition)
-    {
-        return typeDefinition.Methods.First(x => x.IsConstructor);
-    }
 
     public static FieldReference GetGeneric(this FieldDefinition definition)
     {
@@ -100,6 +96,11 @@ public static class CecilExtensions
         }
     }
 
+    public static IEnumerable<CustomAttribute> GetAttributes(this IEnumerable<CustomAttribute> attributes, string attributeName)
+    {
+        return attributes.Where(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);
+    }
+
     public static CustomAttribute GetAttribute(this IEnumerable<CustomAttribute> attributes, string attributeName)
     {
         return attributes.FirstOrDefault(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);
@@ -109,6 +110,4 @@ public static class CecilExtensions
     {
         return attributes.Any(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);
     }
-
-
 }

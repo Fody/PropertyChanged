@@ -6,13 +6,10 @@ public partial class ModuleWeaver
 
     public void ResolveCheckForEqualityConfig()
     {
-        if (Config != null)
+        var value = Config?.Attributes("CheckForEquality").FirstOrDefault();
+        if (value != null)
         {
-            var value = Config.Attributes("CheckForEquality").FirstOrDefault();
-            if (value != null)
-            {
-                CheckForEquality = bool.Parse((string)value);
-            }
+            CheckForEquality = bool.Parse((string)value);
         }
     }
 }
