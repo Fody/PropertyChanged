@@ -29,5 +29,4 @@ public class OnPropertyNameChangedConfigTests
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
         Assert.IsTrue(moduleWeaver.InjectOnPropertyNameChanged);
     }
-
 }
