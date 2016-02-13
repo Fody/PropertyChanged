@@ -1144,8 +1144,8 @@ public abstract class BaseTaskTests
         Assert.Contains("MyA", propertyNames);
         Assert.Contains("MyAB", propertyNames);
         Assert.Contains("MyABC", propertyNames);
-
     }
+
     [Test]
     public void CircularProperties()
     {
@@ -1155,7 +1155,6 @@ public abstract class BaseTaskTests
         instance.PropertyA2 = "s";
         instance.PropertyB1 = "s";
         instance.PropertyB2 = "s";
-
     }
 
     [Test]

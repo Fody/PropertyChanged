@@ -34,15 +34,11 @@
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\uninstall.ps1" />
-    <Copy SourceFiles="$(ProjectDir)dotnet.targets" DestinationFiles="$(SolutionDir)NuGetBuild\build\dotnet\PropertyChanged.Fody.targets" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\PropertyChanged.Fody.dll" />
   </Target>
   <ItemGroup>
-    <None Include="dotnet.targets">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="PropertyChanged.Fody.nuspec">
       <SubType>Designer</SubType>
