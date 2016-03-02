@@ -46,6 +46,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AlsoNotifyForAttribute.cs" />
+    <Compile Include="BeforeAfterValueCheckFieldAttribute.cs" />
     <Compile Include="FilterTypeAttribute.cs" />
     <Compile Include="DependsOnAttribute.cs" />
     <Compile Include="DoNotNotifyAttribute.cs" />

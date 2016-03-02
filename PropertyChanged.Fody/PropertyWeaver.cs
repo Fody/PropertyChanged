@@ -260,7 +260,7 @@ public class PropertyWeaver
         Instruction instruction;
         TypeReference typeReference;
 
-        if (fieldReference == null || !moduleWeaver.BeforeAfterCheckField)
+        if (fieldReference == null || !CheckField())
         {
             var getMethod = property.GetMethod.GetGeneric();
             instruction = CreateCall(getMethod);
@@ -286,7 +286,7 @@ public class PropertyWeaver
         Instruction instruction;
         TypeReference typeReference;
 
-        if (fieldReference == null || !moduleWeaver.BeforeAfterCheckField)
+        if (fieldReference == null || !CheckField())
         {
             var getMethod = property.GetMethod.GetGeneric();
             instruction = CreateCall(getMethod);
@@ -321,5 +321,17 @@ public class PropertyWeaver
     public Instruction CreateCall(MethodReference methodReference)
     {
         return Instruction.Create(OpCodes.Callvirt, methodReference);
+    }
+
+    bool CheckField()
+    {
+        if (moduleWeaver.BeforeAfterCheckField)
+        {
+            return true;
+        }
+
+        var attribute = "PropertyChanged.BeforeAfterValueCheckFieldAttribute";
+
+        return typeNode.TypeDefinition.GetAllCustomAttributes().ContainsAttribute(attribute) || propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute(attribute);
     }
 }
