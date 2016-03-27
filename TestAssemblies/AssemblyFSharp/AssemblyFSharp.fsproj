@@ -9,17 +9,17 @@
     <OutputType>Library</OutputType>
     <RootNamespace>AssemblyFSharp</RootNamespace>
     <AssemblyName>AssemblyFSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>AssemblyFSharp</Name>
     <FullDeploy>true</FullDeploy>
-    <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
+    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <Tailcalls>false</Tailcalls>
+    <Tailcalls>true</Tailcalls>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
@@ -43,7 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Module1.fs" />
-    <None Include="Script.fsx" />
+    <Compile Include="Module2.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj">
+      <Name>PropertyChanged</Name>
+      <Project>{40235741-d750-45b1-8dc5-49576025aba9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '11.0'">

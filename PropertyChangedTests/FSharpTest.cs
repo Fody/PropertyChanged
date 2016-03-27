@@ -13,5 +13,13 @@ public class FSharpTest
         EventTester.TestProperty(instance, false);
     }
 
+    [Test]
+    public void Verify()
+    {
+        var weaverHelper = new WeaverHelper(@"AssemblyFSharp\AssemblyFSharp.fsproj");
+        var instance = weaverHelper.Assembly.GetInstance("Namespace.ClassWithProperties");
+        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
+    }
+
 }
 #endif

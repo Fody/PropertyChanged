@@ -1,6 +1,4 @@
-﻿// Learn more about F# at http://fsharp.net
-
-namespace Namespace
+﻿namespace Namespace
 
 open System.ComponentModel
  
