@@ -1,4 +1,7 @@
+using System.Linq;
 using Mono.Cecil.Cil;
+using Mono.Collections.Generic;
+
 public static class ReturnFixer
 {
     public static void MakeLastStatementReturn(this MethodBody method)
@@ -7,29 +10,19 @@ public static class ReturnFixer
 
         // Method is just return, do nothing
         if (instructions.Count == 1)
-            return;
-
-        var count = instructions.Count - 1;
-        var last = instructions[count];
-        Instruction secondLastInstruction;
-
-        if (last.OpCode == OpCodes.Ret)
         {
-            count--;
-            secondLastInstruction = method.Instructions[count];
-            if (secondLastInstruction.OpCode != OpCodes.Nop)
-            {
-                secondLastInstruction = Instruction.Create(OpCodes.Nop);
-                instructions.BeforeLast(secondLastInstruction);
-            }
+            return;
         }
-        else
+
+        var last = GetLast(instructions);
+
+        var secondLastInstruction = last.Previous;
+        if (secondLastInstruction.OpCode != OpCodes.Nop)
         {
             secondLastInstruction = Instruction.Create(OpCodes.Nop);
-            instructions.Add(secondLastInstruction);
-            instructions.Add(Instruction.Create(OpCodes.Ret));
+            var indexOf = instructions.IndexOf(last);
+            instructions.Insert(indexOf, secondLastInstruction);
         }
-
 
         foreach (var exceptionHandler in method.ExceptionHandlers)
         {
@@ -38,9 +31,12 @@ public static class ReturnFixer
                 exceptionHandler.HandlerEnd = secondLastInstruction;
             }
         }
-        for (var index = 0; index < count; index++)
+        foreach (var instruction in instructions)
         {
-            var instruction = instructions[index];
+            if (instruction == secondLastInstruction)
+            {
+                break;
+            }
             if (instruction.OpCode == OpCodes.Ret)
             {
                 instruction.OpCode = OpCodes.Br;
@@ -52,5 +48,22 @@ public static class ReturnFixer
                 instruction.Operand = secondLastInstruction;
             }
         }
+    }
+
+    static Instruction GetLast(Collection<Instruction> instructions)
+    {
+        var tail = instructions.LastOrDefault(x => x.OpCode == OpCodes.Tail);
+        if (tail != null)
+        {
+            return tail;
+        }
+        var last = instructions.Last();
+        if (last.OpCode == OpCodes.Ret)
+        {
+            return last;
+        }
+        last = Instruction.Create(OpCodes.Ret);
+        instructions.Add(last);
+        return last;
     }
 }
