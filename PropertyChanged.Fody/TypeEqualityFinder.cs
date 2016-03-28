@@ -95,7 +95,7 @@ public partial class ModuleWeaver
         return FindNamedMethod(typeDefinition);
     }
 
-    public static MethodReference FindNamedMethod(TypeDefinition typeDefinition)
+    public MethodReference FindNamedMethod(TypeDefinition typeDefinition)
     {
         var equalsMethod = FindNamedMethod(typeDefinition, "Equals");
         if (equalsMethod == null)
@@ -105,14 +105,26 @@ public partial class ModuleWeaver
         return equalsMethod;
     }
 
-    static MethodReference FindNamedMethod(TypeDefinition typeDefinition, string methodName)
+    MethodReference FindNamedMethod(TypeDefinition typeDefinition, string methodName)
     {
-        return typeDefinition.Methods.FirstOrDefault(x => x.Name == methodName &&
-                                                          x.IsStatic &&
-                                                          x.ReturnType.Name == "Boolean" &&
-                                                          x.HasParameters &&
-                                                          x.Parameters.Count == 2 &&
-                                                          x.Parameters[0].ParameterType == typeDefinition &&
-                                                          x.Parameters[1].ParameterType == typeDefinition);
+        return typeDefinition.Methods.FirstOrDefault(x => Check(x, typeDefinition, methodName));
+    }
+
+    bool Check(MethodDefinition x, TypeDefinition typeDefinition, string methodName)
+    {
+
+        bool isMatch = x.Name == methodName &&
+                        x.IsStatic &&
+                        x.ReturnType.Name == "Boolean" &&
+                        x.HasParameters &&
+                        x.Parameters.Count == 2;
+        if (isMatch)
+        {
+            // compare generic parameter types properly
+            var td1 = Resolve(x.Parameters[0].ParameterType);
+            var td2 = Resolve(x.Parameters[1].ParameterType);
+            isMatch = td1 == typeDefinition && td2 == typeDefinition;
+        }
+        return isMatch;
     }
 }
