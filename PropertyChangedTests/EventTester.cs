@@ -83,4 +83,11 @@ public static class EventTester
         //dynamic instance = FormatterServices.GetUninitializedObject(type);
         return Activator.CreateInstance(type);
     }
+
+    public static dynamic GetGenericInstance(this Assembly assembly, string className, Type[] typeArguments)
+    {
+        var type = assembly.GetType(className, true);
+        Type constructedType = type.MakeGenericType(typeArguments);
+        return Activator.CreateInstance(constructedType);
+    }
 }
