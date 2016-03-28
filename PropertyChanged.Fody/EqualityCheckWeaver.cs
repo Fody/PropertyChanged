@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
+using Mono.Cecil.Rocks;
 
 public class EqualityCheckWeaver
 {
@@ -102,14 +103,57 @@ public class EqualityCheckWeaver
         }
         else
         {
-            instructions.Prepend(
-                Instruction.Create(OpCodes.Ldarg_0),
-                targetInstruction,
-                Instruction.Create(OpCodes.Ldarg_1),
-                Instruction.Create(OpCodes.Call, typeEqualityMethod),
-                Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                Instruction.Create(OpCodes.Ret));
+            var propertyType = propertyData.PropertyDefinition.PropertyType;
+            if (propertyType.IsGenericInstance && !propertyType.FullName.StartsWith("System.Nullable"))
+            {
+                // according to https://groups.google.com/forum/#!topic/mono-cecil/mCat5UuR47I
+                // Resolve() looses generic arguments and MakeHostInstanceGeneric regenerates those
+                // also no check for whether TypeReference is really GenericInstanceType (can't be otherwise, can be?)
+                var git = (GenericInstanceType)propertyData.PropertyDefinition.PropertyType;
+                instructions.Prepend(
+                   Instruction.Create(OpCodes.Ldarg_0),
+                   targetInstruction,
+                   Instruction.Create(OpCodes.Ldarg_1),
+                   Instruction.Create(OpCodes.Call, MakeHostInstanceGeneric(typeEqualityMethod, git.GenericArguments.ToArray())),
+                   Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+                   Instruction.Create(OpCodes.Ret));
+            }
+            else
+            {
+                instructions.Prepend(
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    targetInstruction,
+                    Instruction.Create(OpCodes.Ldarg_1),
+                    Instruction.Create(OpCodes.Call, typeEqualityMethod),
+                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+                    Instruction.Create(OpCodes.Ret));
+            }
         }
+    }
+
+    /// <summary>
+    /// Recreates generic arguments.
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="arguments"></param>
+    /// <returns></returns>
+    /// <remarks>Taken from https://groups.google.com/forum/#!topic/mono-cecil/mCat5UuR47I</remarks>
+    public static MethodReference MakeHostInstanceGeneric(MethodReference self, params TypeReference[] arguments)
+    {
+        var reference = new MethodReference(self.Name, self.ReturnType, self.DeclaringType.MakeGenericInstanceType(arguments))
+        {
+            HasThis = self.HasThis,
+            ExplicitThis = self.ExplicitThis,
+            CallingConvention = self.CallingConvention
+        };
+
+        foreach (var parameter in self.Parameters)
+            reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
+
+        foreach (var generic_parameter in self.GenericParameters)
+            reference.GenericParameters.Add(new GenericParameter(generic_parameter.Name, reference));
+
+        return reference;
     }
 
     bool ShouldSkipEqualityCheck()
