@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
-
+using Microsoft.Build.Utilities;
 
 public static class Verifier
 {
@@ -11,18 +12,14 @@ public static class Verifier
 
     static Verifier()
     {
-        
-        exePath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools\PEVerify.exe");
+        var sdkPath = Path.GetFullPath(Path.Combine(ToolLocationHelper.GetPathToDotNetFrameworkSdk(TargetDotNetFrameworkVersion.VersionLatest), "..\\.."));
+        exePath = Directory.GetFiles(sdkPath, "peverify.exe", SearchOption.AllDirectories).LastOrDefault();
 
-        if (!File.Exists(exePath))
-        {
-            exePath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Microsoft SDKs\Windows\v8.0A\Bin\NETFX 4.0 Tools\PEVerify.exe");
-        }
         peverifyFound = File.Exists(exePath);
         if (!peverifyFound)
         {
 #if(!DEBUG)
-            throw new Exception("Could not fund PEVerify");
+            throw new Exception("Could not find PEVerify");
 #endif
         }
     }

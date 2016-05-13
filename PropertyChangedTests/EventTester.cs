@@ -77,11 +77,11 @@ public static class EventTester
         Assert.IsFalse(eventCalled);
     }
 
-    public static dynamic GetInstance(this Assembly assembly, string className)
+    public static dynamic GetInstance(this Assembly assembly, string className, params object[] args)
     {
         var type = assembly.GetType(className, true);
         //dynamic instance = FormatterServices.GetUninitializedObject(type);
-        return Activator.CreateInstance(type);
+        return Activator.CreateInstance(type, args);
     }
 
     public static dynamic GetGenericInstance(this Assembly assembly, string className, Type[] typeArguments)

@@ -1252,10 +1252,15 @@ public abstract class BaseTaskTests
                 property1EventCalled = true;
             }
         };
-        var property1 = assembly.GetInstance("ClassEqualityWithStruct+SimpleStruct");
+        var property1 = assembly.GetInstance("ClassEqualityWithStruct+SimpleStruct", 1);
         instance.Property1 = property1;
         Assert.IsTrue(property1EventCalled);
+        property1EventCalled = false;
+        property1 = assembly.GetInstance("ClassEqualityWithStruct+SimpleStruct", 1);
+        instance.Property1 = property1;
+        Assert.IsFalse(property1EventCalled);
     }
+
     [Test]
     public void EqualityWithStructOverload()
     {

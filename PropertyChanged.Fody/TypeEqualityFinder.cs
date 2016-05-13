@@ -92,27 +92,43 @@ public partial class ModuleWeaver
             return null;
         }
 
-        return FindNamedMethod(typeDefinition);
+        return FindNamedMethod(typeReference);
     }
 
-    public static MethodReference FindNamedMethod(TypeDefinition typeDefinition)
+    public static MethodReference FindNamedMethod(TypeReference typeReference)
     {
-        var equalsMethod = FindNamedMethod(typeDefinition, "Equals");
+        var typeDefinition = typeReference.Resolve();
+        var equalsMethod = FindNamedMethod(typeDefinition, "Equals", typeReference);
         if (equalsMethod == null)
         {
-            return FindNamedMethod(typeDefinition, "op_Equality");
+            equalsMethod = FindNamedMethod(typeDefinition, "op_Equality", typeReference);
+        }
+        if (equalsMethod != null && typeReference.IsGenericInstance)
+        {
+            equalsMethod = MakeGeneric(typeReference, equalsMethod);
         }
         return equalsMethod;
     }
 
-    static MethodReference FindNamedMethod(TypeDefinition typeDefinition, string methodName)
+    static MethodReference FindNamedMethod(TypeDefinition typeDefinition, string methodName, TypeReference parameterType)
     {
         return typeDefinition.Methods.FirstOrDefault(x => x.Name == methodName &&
                                                           x.IsStatic &&
                                                           x.ReturnType.Name == "Boolean" &&
                                                           x.HasParameters &&
                                                           x.Parameters.Count == 2 &&
-                                                          x.Parameters[0].ParameterType == typeDefinition &&
-                                                          x.Parameters[1].ParameterType == typeDefinition);
+                                                          MatchParameter(x.Parameters[0], parameterType) &&
+                                                          MatchParameter(x.Parameters[1], parameterType));
+    }
+
+    static bool MatchParameter(ParameterDefinition parameter, TypeReference typeMatch)
+    {
+        if (parameter.ParameterType == typeMatch)
+            return true;
+
+        if (parameter.ParameterType.IsGenericInstance && typeMatch.IsGenericInstance)
+            return parameter.ParameterType.Resolve() == typeMatch.Resolve();
+
+        return false;
     }
 }
