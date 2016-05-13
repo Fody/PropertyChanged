@@ -89,6 +89,16 @@ public class EqualityCheckWeaver
                     Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                     Instruction.Create(OpCodes.Ret));
             }
+            else if (targetType.IsGenericInstance)
+            {
+                instructions.Prepend(
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    targetInstruction,
+                    Instruction.Create(OpCodes.Ldarg_1),
+                    Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
+                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+                    Instruction.Create(OpCodes.Ret));
+            }
             else if (targetType.SupportsCeq())
             {
                 instructions.Prepend(
