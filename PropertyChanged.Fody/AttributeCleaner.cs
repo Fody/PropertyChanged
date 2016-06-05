@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Collections.Generic;
@@ -6,7 +7,7 @@ using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
-    List<string> propertyAttributeNames = new List<string>
+    List<string> typeLevelAttributeNames = new List<string>
     {
         "PropertyChanged.DoNotCheckEqualityAttribute",
         "PropertyChanged.DoNotNotifyAttribute",
@@ -16,23 +17,34 @@ public partial class ModuleWeaver
         "PropertyChanged.ImplementPropertyChangedAttribute"
     };
 
+    List<string> assemblyLevelAttributeNames = new List<string>
+    {
+        "PropertyChanged.FilterTypeAttribute"
+    };
+
+    private void ProcessAssembly()
+    {
+        var assembly = ModuleDefinition.Assembly;
+        RemoveAttributes(assembly.CustomAttributes, assemblyLevelAttributeNames);
+    }
+
     void ProcessType(TypeDefinition type)
     {
-        RemoveAttributes(type.CustomAttributes);
+        RemoveAttributes(type.CustomAttributes, typeLevelAttributeNames);
         foreach (var property in type.Properties)
         {
-            RemoveAttributes(property.CustomAttributes);
+            RemoveAttributes(property.CustomAttributes, typeLevelAttributeNames);
         }
         foreach (var field in type.Fields)
         {
-            RemoveAttributes(field.CustomAttributes);
+            RemoveAttributes(field.CustomAttributes, typeLevelAttributeNames);
         }
     }
 
-    void RemoveAttributes(Collection<CustomAttribute> customAttributes)
+    void RemoveAttributes(Collection<CustomAttribute> customAttributes, IEnumerable<string> attributeNames)
     {
         var attributes = customAttributes
-            .Where(attribute => propertyAttributeNames.Contains(attribute.Constructor.DeclaringType.FullName));
+            .Where(attribute => attributeNames.Contains(attribute.Constructor.DeclaringType.FullName));
 
         foreach (var customAttribute in attributes.ToList())
         {
@@ -46,5 +58,7 @@ public partial class ModuleWeaver
         {
             ProcessType(type);
         }
+        
+        ProcessAssembly();
     }
 }
