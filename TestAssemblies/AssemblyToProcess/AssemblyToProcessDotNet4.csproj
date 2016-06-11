@@ -52,6 +52,8 @@
     <Compile Include="ClassEquality.cs" />
     <Compile Include="ClassEqualityWithDouble.cs" />
     <Compile Include="ClassEqualityWithStruct.cs" />
+    <Compile Include="ClassEqualityWithGenericClassOverload.cs" />
+    <Compile Include="ClassEqualityWithGenericStructOverload.cs" />
     <Compile Include="ClassEqualityWithStructOverload.cs" />
     <Compile Include="ClassMissingSetGet.cs" />
     <Compile Include="ClassNoBackingNoEqualityField.cs" />

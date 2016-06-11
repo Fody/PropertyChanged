@@ -1252,10 +1252,15 @@ public abstract class BaseTaskTests
                 property1EventCalled = true;
             }
         };
-        var property1 = assembly.GetInstance("ClassEqualityWithStruct+SimpleStruct");
+        var property1 = assembly.GetInstance("ClassEqualityWithStruct+SimpleStruct", 1);
         instance.Property1 = property1;
         Assert.IsTrue(property1EventCalled);
+        property1EventCalled = false;
+        property1 = assembly.GetInstance("ClassEqualityWithStruct+SimpleStruct", 1);
+        instance.Property1 = property1;
+        Assert.IsFalse(property1EventCalled);
     }
+
     [Test]
     public void EqualityWithStructOverload()
     {
@@ -1276,6 +1281,56 @@ public abstract class BaseTaskTests
         property1EventCalled = false;
         //Property has not changed on re-set so event not fired
         instance.Property1 = property1;
+        Assert.IsFalse(property1EventCalled);
+    }
+
+    [Test]
+    public void EqualityWithGenericClassOverload()
+    {
+        var instance = assembly.GetInstance("ClassEqualityWithGenericClassOverload");
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        };
+        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] { typeof(int) });
+        property1.X = 5;
+        instance.Property1 = property1;
+
+        Assert.IsTrue(property1EventCalled);
+        property1EventCalled = false;
+        //Property Equals has not changed on re-set so event not fired
+        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] { typeof(int) });
+        property2.X = 5;
+        instance.Property1 = property2;
+        Assert.IsFalse(property1EventCalled);
+    }
+
+    [Test]
+    public void EqualityWithGenericStructOverload()
+    {
+        var instance = assembly.GetInstance("ClassEqualityWithGenericStructOverload");
+        var property1EventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        };
+        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] { typeof(int) });
+        property1.X = 5;
+        instance.Property1 = property1;
+
+        Assert.IsTrue(property1EventCalled);
+        property1EventCalled = false;
+        //Property Equals has not changed on re-set so event not fired
+        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] { typeof(int) });
+        property2.X = 5;
+        instance.Property1 = property2;
         Assert.IsFalse(property1EventCalled);
     }
 

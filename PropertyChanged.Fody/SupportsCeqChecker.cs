@@ -36,6 +36,10 @@ public static class SupportsCeqChecker
         {
             return false;
         }
+        if (typeReference.ContainsGenericParameter)
+        {
+            return false;
+        }
         var typeDefinition = typeReference.Resolve();
         if (typeDefinition == null)
         {

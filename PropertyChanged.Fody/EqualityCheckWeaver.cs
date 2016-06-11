@@ -77,7 +77,7 @@ public class EqualityCheckWeaver
         var typeEqualityMethod = typeEqualityFinder.FindTypeEquality(targetType);
         if (typeEqualityMethod == null)
         {
-            if (targetType.IsGenericParameter)
+            if (targetType.IsGenericParameter || targetType.IsValueType)
             {
                 instructions.Prepend(
                     Instruction.Create(OpCodes.Ldarg_0),
@@ -96,6 +96,16 @@ public class EqualityCheckWeaver
                     targetInstruction,
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Ceq),
+                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+                    Instruction.Create(OpCodes.Ret));
+            }
+            else
+            {
+                instructions.Prepend(
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    targetInstruction,
+                    Instruction.Create(OpCodes.Ldarg_1),
+                    Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
                     Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                     Instruction.Create(OpCodes.Ret));
             }
