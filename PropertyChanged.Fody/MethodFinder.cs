@@ -83,7 +83,7 @@ public partial class ModuleWeaver
         MethodDefinition methodDefinition;
         if (FindEventInvokerMethodDefinition(type, out methodDefinition))
         {
-            var methodReference = ModuleDefinition.Import(methodDefinition);
+            var methodReference = ModuleDefinition.ImportReference(methodDefinition);
             return new EventInvokerMethod
                        {
                            MethodReference = methodReference.GetGeneric(),

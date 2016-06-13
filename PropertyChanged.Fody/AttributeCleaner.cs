@@ -21,7 +21,7 @@ public partial class ModuleWeaver
         "PropertyChanged.FilterTypeAttribute"
     };
 
-    private void ProcessAssembly()
+    void ProcessAssembly()
     {
         var assembly = ModuleDefinition.Assembly;
         RemoveAttributes(assembly.CustomAttributes, assemblyLevelAttributeNames);

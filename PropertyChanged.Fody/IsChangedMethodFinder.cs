@@ -63,12 +63,12 @@ public partial class ModuleWeaver
     MethodReference FindEventInvokerMethodRef(TypeDefinition type)
     {
         MethodDefinition methodDefinition;
-        if (FindIsChangedEventInvokerMethodDefinition(type, out methodDefinition))
+        if (!FindIsChangedEventInvokerMethodDefinition(type, out methodDefinition))
         {
-            var methodReference = ModuleDefinition.Import(methodDefinition);
-            return methodReference.GetGeneric();
+            return null;
         }
-        return null;
+        var methodReference = ModuleDefinition.ImportReference(methodDefinition);
+        return methodReference.GetGeneric();
     }
 
     bool FindIsChangedEventInvokerMethodDefinition(TypeDefinition type, out MethodDefinition methodDefinition)

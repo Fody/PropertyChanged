@@ -13,7 +13,7 @@ public partial class ModuleWeaver
         foreach (var node in notifyNodes)
         {
             var ilGeneratedByDependencyReader = new IlGeneratedByDependencyReader(node);
-            ilGeneratedByDependencyReader.Process(); 
+            ilGeneratedByDependencyReader.Process();
             DetectIlGeneratedByDependency(node.Nodes);
         }
     }

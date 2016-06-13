@@ -5,7 +5,7 @@ public partial class ModuleWeaver
 {
     public MethodReference GetMethodReference(Stack<TypeDefinition> typeDefinitions, MethodDefinition methodDefinition)
     {
-        var methodReference = ModuleDefinition.Import(methodDefinition).GetGeneric();
+        var methodReference = ModuleDefinition.ImportReference(methodDefinition).GetGeneric();
         typeDefinitions.Pop();
         while (typeDefinitions.Count > 0)
         {

@@ -46,6 +46,7 @@ public abstract class BaseTaskTests
         Assert.AreEqual(1, moduleDefinition.AssemblyReferences.Count(x => x.Name == "mscorlib"));
     }
 #endif
+
     [Test]
     public void AlsoNotifyFor()
     {
@@ -53,7 +54,7 @@ public abstract class BaseTaskTests
 
         var property1EventCalled = false;
         var property2EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -67,13 +68,13 @@ public abstract class BaseTaskTests
         instance.Property1 = "a";
 
         Assert.IsTrue(property1EventCalled);
-            Assert.IsTrue(property2EventCalled);
+        Assert.IsTrue(property2EventCalled);
         property1EventCalled = false;
         property2EventCalled = false;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
         Assert.IsFalse(property1EventCalled);
-            Assert.IsFalse(property2EventCalled);
+        Assert.IsFalse(property2EventCalled);
     }
 
     [Test]
@@ -85,20 +86,20 @@ public abstract class BaseTaskTests
         var property2EventCalled = false;
         var property3EventCalled = false;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
             {
-                if (args.PropertyName == "Property1")
-                {
-                    property1EventCalled = true;
-                }
-                if (args.PropertyName == "Property2")
-                {
-                    property2EventCalled = true;
-                }
-                if (args.PropertyName == "Property3")
-                {
-                    property3EventCalled = true;
-                }
-            };
+                property1EventCalled = true;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCalled = true;
+            }
+            if (args.PropertyName == "Property3")
+            {
+                property3EventCalled = true;
+            }
+        };
         instance.Property1 = "a";
 
         Assert.IsTrue(property1EventCalled);
@@ -120,7 +121,7 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassAlreadyHasNotification");
         var property1EventCount = 0;
         var property2EventCount = 0;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -142,12 +143,13 @@ public abstract class BaseTaskTests
         Assert.AreEqual(0, property1EventCount);
         Assert.AreEqual(0, property2EventCount);
     }
+
     [Test]
     public void ClassBindableBaseCallingOnPropertyChanged()
     {
         var instance = assembly.GetInstance("ClassBindableBaseCallingOnPropertyChanged");
         var property1EventCount = 0;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -162,12 +164,13 @@ public abstract class BaseTaskTests
         instance.Property1 = "a";
         Assert.AreEqual(0, property1EventCount);
     }
+
     [Test]
     public void ClassBindableBaseCallingSetProperty()
     {
         var instance = assembly.GetInstance("ClassBindableBaseCallingSetProperty");
         var property1EventCount = 0;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -189,9 +192,9 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassWithNotifyInChildByInterface");
         var propertyEventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
-            {
-                propertyEventCount++;
-            };
+        {
+            propertyEventCount++;
+        };
         instance.Property = "a";
 
         Assert.AreEqual(1, propertyEventCount);
@@ -207,9 +210,9 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassWithNotifyInChildByAttribute");
         var propertyEventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
-            {
-                propertyEventCount++;
-            };
+        {
+            propertyEventCount++;
+        };
         instance.Property = "a";
 
         Assert.AreEqual(1, propertyEventCount);
@@ -225,19 +228,19 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassAlreadyHasSingleNotificationDiffSignature");
         var property1EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
             {
-                if (args.PropertyName == "Property1")
-                {
-                    property1EventCount++;
-                }
-            };
+                property1EventCount++;
+            }
+        };
         instance.Property1 = "a";
 
-        Assert.AreEqual(1,property1EventCount);
+        Assert.AreEqual(1, property1EventCount);
         property1EventCount = 0;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
-        Assert.AreEqual(0,property1EventCount);
+        Assert.AreEqual(0, property1EventCount);
     }
 
     [Test]
@@ -246,19 +249,19 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassAlreadyHasSingleNotificationDiffParamLocation");
         var property1EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
             {
-                if (args.PropertyName == "Property1")
-                {
-                    property1EventCount++;
-                }
-            };
+                property1EventCount++;
+            }
+        };
         instance.Property1 = "a";
 
-        Assert.AreEqual(1,property1EventCount);
+        Assert.AreEqual(1, property1EventCount);
         property1EventCount = 0;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
-        Assert.AreEqual(0,property1EventCount);
+        Assert.AreEqual(0, property1EventCount);
     }
 
     [Test]
@@ -268,26 +271,26 @@ public abstract class BaseTaskTests
         var property1EventCount = 0;
         var property2EventCount = 0;
         ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
             {
-                if (args.PropertyName == "Property1")
-                {
-                    property1EventCount++;
-                }
-                if (args.PropertyName == "Property2")
-                {
-                    property2EventCount++;
-                }
-            };
+                property1EventCount++;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCount++;
+            }
+        };
         instance.Property1 = "a";
 
-        Assert.AreEqual(1,property1EventCount);
+        Assert.AreEqual(1, property1EventCount);
         Assert.AreEqual(1, property2EventCount);
         property1EventCount = 0;
         property2EventCount = 0;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
-        Assert.AreEqual(0,property1EventCount);
-        Assert.AreEqual(0,property2EventCount);
+        Assert.AreEqual(0, property1EventCount);
+        Assert.AreEqual(0, property2EventCount);
     }
 
     [Test]
@@ -303,7 +306,7 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassWithGenericStructPropImpl");
 
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -335,7 +338,7 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassWithNotifyPropertyChangedAttribute");
 
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -354,9 +357,9 @@ public abstract class BaseTaskTests
         var type = assembly.GetType("ClassWithNotifyPropertyChangedAttributeGeneric`1", true);
         var makeGenericType = type.MakeGenericType(typeof(string));
 
-        var instance = (dynamic)Activator.CreateInstance(makeGenericType);
+        var instance = (dynamic) Activator.CreateInstance(makeGenericType);
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -375,18 +378,18 @@ public abstract class BaseTaskTests
 
         var property1EventCalled = false;
         var property2EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
-                                                                   {
-                                                                       if (args.PropertyName == "Property1")
-                                                                       {
-                                                                           property1EventCalled = true;
-                                                                       }
-                                                                       if (args.PropertyName == "Property2")
-                                                                       {
-                                                                           property2EventCalled = true;
-                                                                           Assert.AreEqual("a", instance.Property2);
-                                                                       }
-                                                                   };
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCalled = true;
+                Assert.AreEqual("a", instance.Property2);
+            }
+        };
         instance.Property1 = "a";
         instance.Property2 = "a";
 
@@ -401,18 +404,18 @@ public abstract class BaseTaskTests
 
         var property1EventCalled = false;
         var property2EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
-                                                                   {
-                                                                       if (args.PropertyName == "Property1")
-                                                                       {
-                                                                           property1EventCalled = true;
-                                                                       }
-                                                                       if (args.PropertyName == "Property2")
-                                                                       {
-                                                                           property2EventCalled = true;
-                                                                           Assert.AreEqual("a", instance.Property2);
-                                                                       }
-                                                                   };
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCalled = true;
+                Assert.AreEqual("a", instance.Property2);
+            }
+        };
         instance.Property1 = "a";
 
         Assert.IsTrue(property1EventCalled);
@@ -470,14 +473,14 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, "NullableBoolProperty", true);
         EventTester.TestProperty(instance, "DateTime", DateTime.Now);
         EventTester.TestProperty(instance, "NullableDateTime", DateTime.Now);
-        EventTester.TestProperty(instance, "MixDateTimeOffset", DateTimeOffset.Now,true);
+        EventTester.TestProperty(instance, "MixDateTimeOffset", DateTimeOffset.Now, true);
         EventTester.TestProperty(instance, "DateTimeOffset", DateTimeOffset.Now);
         EventTester.TestProperty(instance, "NullableDateTimeOffset", DateTimeOffset.Now);
         EventTester.TestProperty(instance, "ObjectProperty", "foo");
-        EventTester.TestProperty(instance, "ShortProperty", (short)1);
-        EventTester.TestProperty(instance, "UShortProperty", (ushort)1);
-        EventTester.TestProperty(instance, "ByteProperty", (byte)1);
-        EventTester.TestProperty(instance, "SByteProperty", (sbyte)1);
+        EventTester.TestProperty(instance, "ShortProperty", (short) 1);
+        EventTester.TestProperty(instance, "UShortProperty", (ushort) 1);
+        EventTester.TestProperty(instance, "ByteProperty", (byte) 1);
+        EventTester.TestProperty(instance, "SByteProperty", (sbyte) 1);
         EventTester.TestProperty(instance, "CharProperty", 'd');
     }
 
@@ -494,7 +497,7 @@ public abstract class BaseTaskTests
         var openType = assembly.GetType("ClassWithGenericStructProp`1", true);
         var closedType = openType.MakeGenericType(typeof(int));
         dynamic instance = Activator.CreateInstance(closedType);
-        EventTester.TestProperty(instance, "Property1", (int?)1);
+        EventTester.TestProperty(instance, "Property1", (int?) 1);
     }
 
     [Test]
@@ -597,12 +600,12 @@ public abstract class BaseTaskTests
 
         var eventCalled = false;
         instance.PropertyChanged += new PropertyChangedEventHandler((sender, args) =>
-                                                                        {
-                                                                            if (args.PropertyName == "Property1")
-                                                                            {
-                                                                                eventCalled = true;
-                                                                            }
-                                                                        });
+        {
+            if (args.PropertyName == "Property1")
+            {
+                eventCalled = true;
+            }
+        });
 
         instance.Property1 = "aString";
         Assert.IsTrue(eventCalled);
@@ -634,7 +637,7 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassWithTernary");
 
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -645,30 +648,32 @@ public abstract class BaseTaskTests
 
         Assert.IsTrue(property1EventCalled);
     }
+
     [Test]
     public void WithLdflda()
     {
         var instance = assembly.GetInstance("ClassWithLdflda");
 
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
-            {
-               property1EventCalled = true;
-            };
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            property1EventCalled = true;
+        };
         instance.Property1 = (decimal?) 0.0;
 
         Assert.IsTrue(property1EventCalled);
     }
+
     [Test]
     public void WithLdfldaShortCircuit()
     {
         var instance = assembly.GetInstance("ClassWithLdfldaShortCircuit");
 
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
-            {
-                property1EventCalled = true;
-            };
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            property1EventCalled = true;
+        };
         instance.Property1 = (Nullable<decimal>) 0.0;
 
         Assert.IsFalse(property1EventCalled);
@@ -697,7 +702,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturnAndNoField");
         var property1EventCalled = false;
-        var propertyChanged = (INotifyPropertyChanged)instance;
+        var propertyChanged = (INotifyPropertyChanged) instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -717,7 +722,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturnAndNoField");
         var property1EventCalled = false;
-        var propertyChanged = (INotifyPropertyChanged)instance;
+        var propertyChanged = (INotifyPropertyChanged) instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -732,12 +737,13 @@ public abstract class BaseTaskTests
         instance.Property1 = "a";
         Assert.IsTrue(property1EventCalled);
     }
+
     [Test]
     public void WithBranchingReturn2True()
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturn2");
         var property1EventCalled = false;
-        var propertyChanged = (INotifyPropertyChanged)instance;
+        var propertyChanged = (INotifyPropertyChanged) instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -751,12 +757,13 @@ public abstract class BaseTaskTests
         instance.Property1 = "a";
         Assert.IsTrue(property1EventCalled);
     }
+
     [Test]
     public void WithBranchingReturn2False()
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturn2");
         var property1EventCalled = false;
-        var propertyChanged = (INotifyPropertyChanged)instance;
+        var propertyChanged = (INotifyPropertyChanged) instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -845,6 +852,7 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ClassWithBeforeAfterImplementation");
         EventTester.TestProperty(instance, true);
     }
+
     [Test]
     public void WithBoolPropUsingStringProp()
     {
@@ -852,21 +860,21 @@ public abstract class BaseTaskTests
         var boolPropertyCalled = false;
         var stringPropertyCalled = false;
         var stringComparePropertyCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
-                                                                              {
-                                                                                  if (args.PropertyName == "BoolProperty")
-                                                                                  {
-                                                                                      boolPropertyCalled = true;
-                                                                                  }
-                                                                                  if (args.PropertyName == "StringProperty")
-                                                                                  {
-                                                                                      stringPropertyCalled = true;
-                                                                                  }
-                                                                                  if (args.PropertyName == "StringCompareProperty")
-                                                                                  {
-                                                                                      stringComparePropertyCalled = true;
-                                                                                  }
-                                                                              };
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "BoolProperty")
+            {
+                boolPropertyCalled = true;
+            }
+            if (args.PropertyName == "StringProperty")
+            {
+                stringPropertyCalled = true;
+            }
+            if (args.PropertyName == "StringCompareProperty")
+            {
+                stringComparePropertyCalled = true;
+            }
+        };
         instance.StringProperty = "magicString";
 
         Assert.IsTrue(boolPropertyCalled);
@@ -967,6 +975,7 @@ public abstract class BaseTaskTests
         var instance = assembly.GetInstance("ComplexHierarchy.ClassChild1");
         EventTester.TestProperty(instance, false);
     }
+
     [Test]
     public void Child2()
     {
@@ -982,16 +991,16 @@ public abstract class BaseTaskTests
         var property1EventCalled = false;
         var property2EventCalled = false;
         instance.PropertyChanged += new PropertyChangedEventHandler((sender, args) =>
-                                                                        {
-                                                                            if (args.PropertyName == "Property1")
-                                                                            {
-                                                                                property1EventCalled = true;
-                                                                            }
-                                                                            if (args.PropertyName == "Property2")
-                                                                            {
-                                                                                property2EventCalled = true;
-                                                                            }
-                                                                        });
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+            if (args.PropertyName == "Property2")
+            {
+                property2EventCalled = true;
+            }
+        });
         instance.Property1 = "a";
         instance.Property2 = "a";
 
@@ -1042,6 +1051,7 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.OnProperty1ChangedCalled);
     }
+
     [Test]
     public void WithOnChangedAbstract()
     {
@@ -1050,11 +1060,12 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.OnProperty1ChangedCalled);
     }
+
     [Test]
     public void WithOnChangedAndOnPropertyChanged()
     {
         var instance = assembly.GetInstance("ClassWithOnChangedAndOnPropertyChanged");
-        Assert.AreEqual(0,instance.OnProperty1ChangedCalled);
+        Assert.AreEqual(0, instance.OnProperty1ChangedCalled);
         EventTester.TestProperty(instance, false);
         Assert.AreEqual(1, instance.OnProperty1ChangedCalled);
     }
@@ -1063,7 +1074,7 @@ public abstract class BaseTaskTests
     public void WithOnChangedAndNoPropertyChanged()
     {
         var instance = assembly.GetInstance("ClassWithOnChangedAndNoPropertyChanged");
-        Assert.AreEqual(0,instance.OnProperty1ChangedCalled);
+        Assert.AreEqual(0, instance.OnProperty1ChangedCalled);
         EventTester.TestProperty(instance, false);
         Assert.AreEqual(1, instance.OnProperty1ChangedCalled);
     }
@@ -1093,6 +1104,7 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.BaseNotifyCalled);
     }
+
     [Test]
     public void JounceBaseNotify()
     {
@@ -1100,6 +1112,7 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.BaseNotifyCalled);
     }
+
     [Test]
     public void JounceBaseViewModel()
     {
@@ -1133,6 +1146,7 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance, false);
         Assert.IsTrue(instance.BaseNotifyCalled);
     }
+
     [Test]
     public void TransitiveDependencies()
     {
@@ -1225,7 +1239,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassEqualityWithDouble");
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -1240,12 +1254,13 @@ public abstract class BaseTaskTests
         instance.Property1 = 2d;
         Assert.IsFalse(property1EventCalled);
     }
+
     [Test]
     public void EqualityWithStruct()
     {
         var instance = assembly.GetInstance("ClassEqualityWithStruct");
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -1266,7 +1281,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassEqualityWithStructOverload");
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
@@ -1289,21 +1304,21 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassEqualityWithGenericClassOverload");
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
                 property1EventCalled = true;
             }
         };
-        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] { typeof(int) });
+        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] {typeof(int)});
         property1.X = 5;
         instance.Property1 = property1;
 
         Assert.IsTrue(property1EventCalled);
         property1EventCalled = false;
         //Property Equals has not changed on re-set so event not fired
-        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] { typeof(int) });
+        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] {typeof(int)});
         property2.X = 5;
         instance.Property1 = property2;
         Assert.IsFalse(property1EventCalled);
@@ -1314,21 +1329,21 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassEqualityWithGenericStructOverload");
         var property1EventCalled = false;
-        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
             {
                 property1EventCalled = true;
             }
         };
-        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] { typeof(int) });
+        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] {typeof(int)});
         property1.X = 5;
         instance.Property1 = property1;
 
         Assert.IsTrue(property1EventCalled);
         property1EventCalled = false;
         //Property Equals has not changed on re-set so event not fired
-        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] { typeof(int) });
+        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] {typeof(int)});
         property2.X = 5;
         instance.Property1 = property2;
         Assert.IsFalse(property1EventCalled);

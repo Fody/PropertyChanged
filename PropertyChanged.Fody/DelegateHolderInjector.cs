@@ -6,6 +6,7 @@ public class DelegateHolderInjector
     public TypeDefinition TargetTypeDefinition;
     public MethodReference OnPropertyChangedMethodReference;
     public ModuleWeaver ModuleWeaver;
+
     public void InjectDelegateHolder()
     {
         TypeDefinition = new TypeDefinition(null, "<>PropertyNotificationDelegateHolder", TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.Sealed | TypeAttributes.NestedPrivate | TypeAttributes.BeforeFieldInit, ModuleWeaver.ModuleDefinition.TypeSystem.Object);

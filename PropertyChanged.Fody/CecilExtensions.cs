@@ -40,8 +40,6 @@ public static class CecilExtensions
         return (opCode.Code == Code.Call) || (opCode.Code == Code.Callvirt);
     }
 
-
-
     public static FieldReference GetGeneric(this FieldDefinition definition)
     {
         if (definition.DeclaringType.HasGenericParameters)

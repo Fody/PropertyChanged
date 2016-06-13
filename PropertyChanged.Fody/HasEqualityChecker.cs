@@ -40,10 +40,10 @@ public static class HasEqualityChecker
     static bool IsEquality(this Instruction instruction)
     {
         var opCode = instruction.OpCode;
-        if (opCode == OpCodes.Ceq || 
-            opCode == OpCodes.Beq_S || 
+        if (opCode == OpCodes.Ceq ||
+            opCode == OpCodes.Beq_S ||
             opCode == OpCodes.Bne_Un ||
-            opCode == OpCodes.Bne_Un_S || 
+            opCode == OpCodes.Bne_Un_S ||
             opCode == OpCodes.Beq)
         {
             return true;

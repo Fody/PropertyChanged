@@ -21,16 +21,6 @@ public static class InstructionListExtensions
         }
     }
 
-    public static void BeforeLast(this Collection<Instruction> collection, params Instruction[] instructions)
-    {
-        var index = collection.Count - 1;
-        foreach (var instruction in instructions)
-        {
-            collection.Insert(index, instruction);
-            index++;
-        }
-    }
-
     public static int Insert(this Collection<Instruction> collection, int index, params Instruction[] instructions)
     {
         foreach (var instruction in instructions.Reverse())

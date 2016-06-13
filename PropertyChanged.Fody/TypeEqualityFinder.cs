@@ -24,7 +24,7 @@ public partial class ModuleWeaver
                 x.Parameters[0].ParameterType.Name == "String" && 
                 x.Parameters[1].ParameterType.Name == "String" && 
                 x.Parameters[2].ParameterType.Name == "StringComparison");
-        StringEquals = ModuleDefinition.Import(stringEquals);
+        StringEquals = ModuleDefinition.ImportReference(stringEquals);
         OrdinalStringComparison = (int) StringEquals
                                             .Parameters[2]
                                             .ParameterType
@@ -73,13 +73,17 @@ public partial class ModuleWeaver
                 var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
                 genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
 
-                return typeWrappedByNullable.IsGenericParameter ? ModuleDefinition.Import(genericInstanceMethod, typeWrappedByNullable.DeclaringType) : ModuleDefinition.Import(genericInstanceMethod);
+                if (typeWrappedByNullable.IsGenericParameter)
+                {
+                    return ModuleDefinition.ImportReference(genericInstanceMethod, typeWrappedByNullable.DeclaringType);
+                }
+                return ModuleDefinition.ImportReference(genericInstanceMethod);
             }
         }
         var equality = GetStaticEquality(typeDefinition);
         if (equality != null)
         {
-            return ModuleDefinition.Import(equality);
+            return ModuleDefinition.ImportReference(equality);
         }
         return null;
     }

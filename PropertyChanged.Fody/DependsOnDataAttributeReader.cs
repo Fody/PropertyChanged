@@ -51,11 +51,12 @@ public partial class ModuleWeaver
             LogInfo($"Could not find property '{isGeneratedUsingPropertyName}' for DependsOnAttribute assigned to '{targetProperty.Name}'.");
             return;
         }
-        node.PropertyDependencies.Add(new PropertyDependency
-                                          {
-                                              WhenPropertyIsSet = propertyDefinition,
-                                              ShouldAlsoNotifyFor = targetProperty
-                                          });
+        var dependency = new PropertyDependency
+        {
+            WhenPropertyIsSet = propertyDefinition,
+            ShouldAlsoNotifyFor = targetProperty
+        };
+        node.PropertyDependencies.Add(dependency);
     }
 
 
