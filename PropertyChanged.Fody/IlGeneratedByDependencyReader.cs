@@ -118,7 +118,7 @@ public class IlGeneratedByDependencyReader
 
     public bool IsFieldGetInstruction(Instruction instruction, out PropertyDefinition propertyDefinition)
     {
-        if ((instruction.OpCode.Code == Code.Ldfld))
+        if (instruction.OpCode.Code == Code.Ldfld)
         {
             var fieldReference = instruction.Operand as FieldReference;
             if (fieldReference != null)

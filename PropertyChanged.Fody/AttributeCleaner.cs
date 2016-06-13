@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Collections.Generic;
@@ -11,7 +10,7 @@ public partial class ModuleWeaver
     {
         "PropertyChanged.DoNotCheckEqualityAttribute",
         "PropertyChanged.DoNotNotifyAttribute",
-        "PropertyChanged.DoNotSetChangedAttribute", 
+        "PropertyChanged.DoNotSetChangedAttribute",
         "PropertyChanged.AlsoNotifyForAttribute",
         "PropertyChanged.DependsOnAttribute",
         "PropertyChanged.ImplementPropertyChangedAttribute"
@@ -58,7 +57,7 @@ public partial class ModuleWeaver
         {
             ProcessType(type);
         }
-        
+
         ProcessAssembly();
     }
 }

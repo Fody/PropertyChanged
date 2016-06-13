@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,7 +18,7 @@ public static class Verifier
         if (!peverifyFound)
         {
 #if(!DEBUG)
-            throw new Exception("Could not find PEVerify");
+            throw new System.Exception("Could not find PEVerify");
 #endif
         }
     }

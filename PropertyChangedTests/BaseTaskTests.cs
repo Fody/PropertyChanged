@@ -498,13 +498,13 @@ public abstract class BaseTaskTests
     }
 
     [Test]
-    public void DoNotCheckEquality() 
+    public void DoNotCheckEquality()
     {
         var instance = assembly.GetInstance("ClassDoNotCheckEquality");
         EventTester.TestProperty(instance, "Property1", "aString");
         instance.Property1 = "aString";
         Assert.AreEqual(1, instance.TimesProperty1Changed);
-        
+
         EventTester.TestProperty(instance, "Property2", "aString", true);
         instance.Property2 = "aString";
         Assert.AreEqual(2, instance.TimesProperty2Changed);
@@ -673,7 +673,7 @@ public abstract class BaseTaskTests
 
         Assert.IsFalse(property1EventCalled);
     }
-    
+
 
 
 
@@ -697,7 +697,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturnAndNoField");
         var property1EventCalled = false;
-        var propertyChanged = ((INotifyPropertyChanged)instance);
+        var propertyChanged = (INotifyPropertyChanged)instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -707,7 +707,7 @@ public abstract class BaseTaskTests
         };
 
         instance.HasValue = true;
-        
+
         instance.Property1 = "a";
         Assert.IsTrue(property1EventCalled);
     }
@@ -717,7 +717,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturnAndNoField");
         var property1EventCalled = false;
-        var propertyChanged = ((INotifyPropertyChanged)instance);
+        var propertyChanged = (INotifyPropertyChanged)instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -725,7 +725,7 @@ public abstract class BaseTaskTests
                 property1EventCalled = true;
             }
         };
-        
+
         instance.HasValue = false;
         property1EventCalled = false;
 
@@ -737,7 +737,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturn2");
         var property1EventCalled = false;
-        var propertyChanged = ((INotifyPropertyChanged)instance);
+        var propertyChanged = (INotifyPropertyChanged)instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -747,7 +747,7 @@ public abstract class BaseTaskTests
         };
 
         instance.HasValue = true;
-        
+
         instance.Property1 = "a";
         Assert.IsTrue(property1EventCalled);
     }
@@ -756,7 +756,7 @@ public abstract class BaseTaskTests
     {
         var instance = assembly.GetInstance("ClassWithBranchingReturn2");
         var property1EventCalled = false;
-        var propertyChanged = ((INotifyPropertyChanged)instance);
+        var propertyChanged = (INotifyPropertyChanged)instance;
         propertyChanged.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == "Property1")
@@ -764,7 +764,7 @@ public abstract class BaseTaskTests
                 property1EventCalled = true;
             }
         };
-        
+
         instance.HasValue = false;
         property1EventCalled = false;
 
@@ -837,7 +837,7 @@ public abstract class BaseTaskTests
         EventTester.TestProperty(instance2, false);
     }
 
-    
+
 
     [Test]
     public void WithBeforeAfterImplementation()

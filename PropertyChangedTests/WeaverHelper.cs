@@ -62,7 +62,7 @@ public class WeaverHelper
         xDocument.StripNamespace();
 
         var outputPathValue = (from propertyGroup in xDocument.Descendants("PropertyGroup")
-                               let condition = ((string)propertyGroup.Attribute("Condition"))
+                               let condition = (string)propertyGroup.Attribute("Condition")
                                where (condition != null) &&
                                      (condition.Trim() == "'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'")
                                from outputPath in propertyGroup.Descendants("OutputPath")

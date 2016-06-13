@@ -12,9 +12,13 @@ public class ClassSetterEndsOnThrowInRelease : INotifyPropertyChanged
         set
         {
             if (value == "Foo")
+            {
                 item = "Bar";
+            }
             else
-                throw new ArgumentOutOfRangeException("Item");
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
         }
     }
 }

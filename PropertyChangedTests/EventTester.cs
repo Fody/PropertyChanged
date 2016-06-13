@@ -87,7 +87,7 @@ public static class EventTester
     public static dynamic GetGenericInstance(this Assembly assembly, string className, Type[] typeArguments)
     {
         var type = assembly.GetType(className, true);
-        Type constructedType = type.MakeGenericType(typeArguments);
+        var constructedType = type.MakeGenericType(typeArguments);
         return Activator.CreateInstance(constructedType);
     }
 }
