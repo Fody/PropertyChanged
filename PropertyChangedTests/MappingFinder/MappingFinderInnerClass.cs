@@ -1,5 +1,6 @@
 using System.Linq;
 using NUnit.Framework;
+#pragma warning disable 649
 
 [TestFixture]
 public class MappingFinderInnerClass
