@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ApprovalTests;
 using NUnit.Framework;
 
 [TestFixture]
@@ -9,13 +10,16 @@ public class IndexerCheckerTest
     public void IsIndexer()
     {
         var checker = new ModuleWeaver();
-        var propertyDefinition = DefinitionFinder.FindType<IndexerClass>().Properties.First();
+        var propertyDefinition = DefinitionFinder.FindType<IndexerClass>()
+            .Properties
+            .First();
 
-        var message = checker.CheckForWarning(new PropertyData
-                                                              {
-                                                                  PropertyDefinition = propertyDefinition,
-                                                              }, InvokerTypes.String);
-        Assert.IsNotNull(message);
+        var propertyData = new PropertyData
+        {
+            PropertyDefinition = propertyDefinition,
+        };
+        var message = checker.CheckForWarning(propertyData, InvokerTypes.String);
+        Approvals.Verify(message);
     }
 
 

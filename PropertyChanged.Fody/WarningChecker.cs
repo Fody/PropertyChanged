@@ -24,9 +24,14 @@ public partial class ModuleWeaver
     {
         var propertyDefinition = propertyData.PropertyDefinition;
         var setMethod = propertyDefinition.SetMethod;
+
         if (setMethod.Name == "set_Item" && setMethod.Parameters.Count == 2 && setMethod.Parameters[1].Name == "value")
         {
             return "Property is an indexer.";
+        }
+        if (setMethod.Parameters.Count > 1)
+        {
+            return "Property takes more than one parameter.";
         }
         if (setMethod.IsAbstract)
         {
