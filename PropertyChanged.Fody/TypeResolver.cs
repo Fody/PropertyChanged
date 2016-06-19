@@ -18,13 +18,22 @@ public partial class ModuleWeaver
 
     static TypeDefinition InnerResolve(TypeReference reference)
     {
+        TypeDefinition result = null;
+
         try
         {
-            return reference.Resolve();
+            result = reference.Resolve();
         }
         catch (Exception exception)
         {
             throw new Exception($"Could not resolve '{reference.FullName}'.", exception);
         }
+
+        if(result == null)
+        {
+            throw new Exception($"Could not resolve '{reference.FullName}'.");
+        }
+
+        return result;
     }
 }
