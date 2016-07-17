@@ -12,7 +12,7 @@ public class TestAssemblyResolver : IAssemblyResolver
 
     public TestAssemblyResolver(string targetPath, string projectPath)
     {
-            directories = new List<string>();
+        directories = new List<string>();
         if (projectPath != null)
         {
             var versionReader = new VersionReader(projectPath);
@@ -126,6 +126,7 @@ public class TestAssemblyResolver : IAssemblyResolver
     {
         return AssemblyDefinition.ReadAssembly(Find(fullName));
     }
+
     public string Find(string assemblyName)
     {
         var file = SearchDirectory(assemblyName);
@@ -147,8 +148,8 @@ public class TestAssemblyResolver : IAssemblyResolver
 
     string GetAssemblyInNetGac(AssemblyNameReference reference)
     {
-        var gacs = new[] { "GAC_MSIL", "GAC_32", "GAC" };
-        var prefixes = new[] { string.Empty, "v4.0_" };
+        var gacs = new[] {"GAC_MSIL", "GAC_32", "GAC"};
+        var prefixes = new[] {string.Empty, "v4.0_"};
 
         for (var i = 0; i < 2; i++)
         {
@@ -179,7 +180,5 @@ public class TestAssemblyResolver : IAssemblyResolver
         }
         return Path.Combine(Path.Combine(Path.Combine(gac, reference.Name), builder.ToString()), reference.Name + ".dll");
     }
-
-
 
 }
