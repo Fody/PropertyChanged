@@ -24,7 +24,7 @@ public abstract class BaseTaskTests
         this.projectPath = projectPath;
     }
 
-    [TestFixtureSetUp]
+    [OneTimeSetUp]
     public void Setup()
     {
         weaverHelper = new WeaverHelper(projectPath);
@@ -32,10 +32,9 @@ public abstract class BaseTaskTests
     }
 
 
-
 #if (DEBUG)
     [Test]
-    [Ignore]
+    [Explicit]
     public void EnsureOnly1RefToMscorLib()
     {
         var moduleDefinition = ModuleDefinition.ReadModule(assembly.CodeBase.Remove(0, 8));
@@ -1311,14 +1310,14 @@ public abstract class BaseTaskTests
                 property1EventCalled = true;
             }
         };
-        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] {typeof(int)});
+        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new[] {typeof(int)});
         property1.X = 5;
         instance.Property1 = property1;
 
         Assert.IsTrue(property1EventCalled);
         property1EventCalled = false;
         //Property Equals has not changed on re-set so event not fired
-        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new Type[] {typeof(int)});
+        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericClassOverload+SimpleClass`1", new[] {typeof(int)});
         property2.X = 5;
         instance.Property1 = property2;
         Assert.IsFalse(property1EventCalled);
@@ -1336,14 +1335,14 @@ public abstract class BaseTaskTests
                 property1EventCalled = true;
             }
         };
-        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] {typeof(int)});
+        var property1 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new[] {typeof(int)});
         property1.X = 5;
         instance.Property1 = property1;
 
         Assert.IsTrue(property1EventCalled);
         property1EventCalled = false;
         //Property Equals has not changed on re-set so event not fired
-        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new Type[] {typeof(int)});
+        var property2 = assembly.GetGenericInstance("ClassEqualityWithGenericStructOverload+SimpleStruct`1", new[] {typeof(int)});
         property2.X = 5;
         instance.Property1 = property2;
         Assert.IsFalse(property1EventCalled);

@@ -44,10 +44,15 @@ public static class DefinitionFinder
 
     static TypeDefinition FindType(Type typeToFind)
     {
-        var moduleDefinition = ModuleDefinition.ReadModule(typeToFind.Assembly.Location);
+        var targetPath = typeToFind.Assembly.CodeBase.Replace("file:///","");
+        var assemblyResolver = new TestAssemblyResolver(targetPath, null);
+        var readerParameters = new ReaderParameters
+        {
+            AssemblyResolver = assemblyResolver
+        };
+        var moduleDefinition = ModuleDefinition.ReadModule(targetPath, readerParameters);
         foreach (var type in moduleDefinition.Types)
         {
-
             if (type.Name == typeToFind.Name)
             {
                 return type;

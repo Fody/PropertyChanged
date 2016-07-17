@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>AssemblyFSharp</RootNamespace>
     <AssemblyName>AssemblyFSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <Name>AssemblyFSharp</Name>
     <FullDeploy>true</FullDeploy>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>

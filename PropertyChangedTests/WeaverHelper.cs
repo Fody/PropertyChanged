@@ -1,20 +1,20 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil;
+using NUnit.Framework;
 
 public class WeaverHelper
 {
     string projectPath;
     public string BeforeAssemblyPath;
     public string AfterAssemblyPath;
-    public Assembly Assembly { get; set; }
+    public Assembly Assembly;
 
     public WeaverHelper(string projectPath)
     {
-        this.projectPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\TestAssemblies", projectPath));
+        this.projectPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\TestAssemblies", projectPath));
 
         GetAssemblyPath();
 
@@ -24,10 +24,11 @@ public class WeaverHelper
 
 
         var assemblyResolver = new TestAssemblyResolver(BeforeAssemblyPath, this.projectPath);
-        var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, new ReaderParameters
-                                                                            {
-                                                                                AssemblyResolver = assemblyResolver
-                                                                            });
+        var readerParameters = new ReaderParameters
+        {
+            AssemblyResolver = assemblyResolver
+        };
+        var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, readerParameters);
         var weavingTask = new ModuleWeaver
                               {
                                   ModuleDefinition = moduleDefinition,

@@ -1,11 +1,10 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
 public class VersionReader
 {
-    public decimal FrameworkVersionAsNumber;
+    public Version FrameworkVersionAsNumber;
     public string FrameworkVersionAsString;
     public string TargetFrameworkProfile;
     public bool IsPhone;
@@ -27,7 +26,7 @@ public class VersionReader
         FrameworkVersionAsString = xDocument.Descendants("TargetFrameworkVersion")
             .Select(c => c.Value)
             .First();
-        FrameworkVersionAsNumber = decimal.Parse(FrameworkVersionAsString.Remove(0, 1), CultureInfo.InvariantCulture);
+        FrameworkVersionAsNumber = Version.Parse(FrameworkVersionAsString.Remove(0, 1));
     }
 
 

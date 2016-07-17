@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChangedTests", "Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessDotNet4Client", "TestAssemblies\AssemblyToProcess\AssemblyToProcessDotNet4Client.csproj", "{B552D750-49FE-4DB2-8C0B-37471EBE1F76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessPhone", "TestAssemblies\AssemblyToProcess\AssemblyToProcessPhone.csproj", "{F883F209-8D17-4A30-8E6C-796219FBF408}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyExperiments", "TestAssemblies\AssemblyExperiments\AssemblyExperiments.csproj", "{754AB80A-6783-4484-9D6E-8A907113E11C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithBaseInDifferentModule", "TestAssemblies\AssemblyWithBaseInDifferentModule\AssemblyWithBaseInDifferentModule.csproj", "{2D0BB2E1-3F4D-4C27-9F58-5070CB3F568A}"

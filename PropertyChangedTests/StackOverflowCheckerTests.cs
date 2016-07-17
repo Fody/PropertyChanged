@@ -13,10 +13,9 @@ public class StackOverflowCheckerTests
     }
 
     [Test]
-    [ExpectedException]
     public void CanDetectStackOverflow()
     {
-        new WeaverHelper(@"AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj");
+        var exception = Assert.Throws<WeavingException>(() => new WeaverHelper(@"AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj"));
     }
 
     [TestCase("Name", true)]

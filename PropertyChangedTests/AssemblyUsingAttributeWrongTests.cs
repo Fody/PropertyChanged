@@ -4,7 +4,7 @@
 public class AssemblyUsingAttributeWrongTests
 {
     [Test]
-    [Ignore]
+    [Explicit]
     public void Foo()
     {
         var assemblyPath = @"..\..\..\AssemblyUsingAttributeWrong\bin\Debug\AssemblyUsingAttributeWrong.dll";

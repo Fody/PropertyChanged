@@ -4,7 +4,7 @@
 public class ExperimentTests
 {
     [Test]
-    [Ignore]
+    [Explicit]
     public void Foo()
     {
         var weaverHelper = new WeaverHelper(@"AssemblyExperiments\AssemblyExperiments.csproj");
