@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
@@ -32,7 +33,6 @@ public class EqualityCheckWeaver
         }
     }
 
-
     void CheckAgainstField()
     {
         var fieldReference = propertyData.BackingFieldReference.Resolve().GetGeneric();
@@ -62,64 +62,18 @@ public class EqualityCheckWeaver
             nopInstruction = Instruction.Create(OpCodes.Nop);
             instructions.Insert(0, nopInstruction);
         }
-        if (targetType.Name == "String")
-        {
-            instructions.Prepend(
-                Instruction.Create(OpCodes.Ldarg_0),
-                targetInstruction,
-                Instruction.Create(OpCodes.Ldarg_1),
-                Instruction.Create(OpCodes.Ldc_I4, typeEqualityFinder.OrdinalStringComparison),
-                Instruction.Create(OpCodes.Call, typeEqualityFinder.StringEquals),
-                Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                Instruction.Create(OpCodes.Ret));
-            return;
-        }
-        var typeEqualityMethod = typeEqualityFinder.FindTypeEquality(targetType);
-        if (typeEqualityMethod == null)
-        {
-            if (targetType.IsGenericParameter || targetType.IsValueType)
-            {
-                instructions.Prepend(
-                    Instruction.Create(OpCodes.Ldarg_0),
-                    targetInstruction,
-                    Instruction.Create(OpCodes.Box, targetType),
-                    Instruction.Create(OpCodes.Ldarg_1),
-                    Instruction.Create(OpCodes.Box, targetType),
-                    Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
-            }
-            else if (targetType.SupportsCeq())
-            {
-                instructions.Prepend(
-                    Instruction.Create(OpCodes.Ldarg_0),
-                    targetInstruction,
-                    Instruction.Create(OpCodes.Ldarg_1),
-                    Instruction.Create(OpCodes.Ceq),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
-            }
-            else
-            {
-                instructions.Prepend(
-                    Instruction.Create(OpCodes.Ldarg_0),
-                    targetInstruction,
-                    Instruction.Create(OpCodes.Ldarg_1),
-                    Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
-            }
-        }
-        else
-        {
-            instructions.Prepend(
-                Instruction.Create(OpCodes.Ldarg_0),
-                targetInstruction,
-                Instruction.Create(OpCodes.Ldarg_1),
-                Instruction.Create(OpCodes.Call, typeEqualityMethod),
-                Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                Instruction.Create(OpCodes.Ret));
-        }
+
+        var comparerRef = typeEqualityFinder.GetEqualityComparer(targetType);
+
+        instructions.Prepend(
+            Instruction.Create(OpCodes.Call, comparerRef.DefaultRef),
+            Instruction.Create(OpCodes.Ldarg_0),
+            targetInstruction,
+            Instruction.Create(OpCodes.Ldarg_1),
+            Instruction.Create(OpCodes.Callvirt, comparerRef.EqualsRef),
+            Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+            Instruction.Create(OpCodes.Ret)
+        );
     }
 
     bool ShouldSkipEqualityCheck()

@@ -69,6 +69,7 @@
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="CheckForEqualityConfig.cs" />
     <Compile Include="CodeGenTypeCleaner.cs" />
+    <Compile Include="EqualityComparerRef.cs" />
     <Compile Include="FilterTypeDataAttributeReader.cs" />
     <Compile Include="InjectOnPropertyNameChangedConfig.cs" />
     <Compile Include="EqualityCheckWeaver.cs" />
