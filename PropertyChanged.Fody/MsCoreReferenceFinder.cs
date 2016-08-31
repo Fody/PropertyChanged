@@ -9,6 +9,7 @@ public partial class ModuleWeaver
     public MethodReference ActionConstructorReference;
     public MethodReference ObjectConstructor;
     public MethodReference ObjectEqualsMethod;
+    public TypeReference EqualityComparerTypeReference;
     public TypeReference ActionTypeReference;
     public MethodDefinition NullableEqualsMethod;
     public TypeReference PropChangedInterfaceReference;
@@ -16,7 +17,6 @@ public partial class ModuleWeaver
     public MethodReference DelegateCombineMethodRef;
     public MethodReference DelegateRemoveMethodRef;
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
-
 
     public void FindCoreReferences()
     {
@@ -35,9 +35,10 @@ public partial class ModuleWeaver
         var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
         ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
 
-
         var nullableDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Nullable");
         NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
+
+        EqualityComparerTypeReference = msCoreTypes.FirstOrDefault(x => x.Name == "EqualityComparer`1");
 
         var systemDefinition = assemblyResolver.Resolve("System");
         var systemTypes = systemDefinition.MainModule.Types;
@@ -101,16 +102,15 @@ public partial class ModuleWeaver
         var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
         ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
 
-
         var nullableDefinition = systemRuntimeTypes.FirstOrDefault(x => x.Name == "Nullable");
         NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
 
+        EqualityComparerTypeReference = systemRuntimeTypes.FirstOrDefault(x => x.Name == "EqualityComparer`1");
 
         var actionDefinition = systemRuntimeTypes.First(x => x.Name == "Action");
         ActionTypeReference = ModuleDefinition.ImportReference(actionDefinition);
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
-
 
         var systemObjectModel = assemblyResolver.Resolve("System.ObjectModel");
         var systemObjectModelTypes = systemObjectModel.MainModule.Types;
@@ -147,7 +147,6 @@ public partial class ModuleWeaver
         InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
     }
-
 
     AssemblyDefinition GetSystemCoreDefinition()
     {
