@@ -7,7 +7,7 @@ public static class HasEqualityChecker
     public static bool AlreadyHasEquality(PropertyDefinition propertyDefinition, FieldReference backingFieldReference)
     {
         var instructions = propertyDefinition.SetMethod.Body.Instructions;
-        var list = instructions.Where(IsNotNop).ToList();
+        var list = instructions.Where(IsNotNopNorBox).ToList();
         if (list.Count < 4)
         {
             return false;
@@ -57,8 +57,8 @@ public static class HasEqualityChecker
         return false;
     }
 
-    static bool IsNotNop(this Instruction instruction)
+    static bool IsNotNopNorBox(this Instruction instruction)
     {
-        return instruction.OpCode != OpCodes.Nop;
+        return instruction.OpCode != OpCodes.Nop && instruction.OpCode != OpCodes.Box;
     }
 }

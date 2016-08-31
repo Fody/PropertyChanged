@@ -66,6 +66,13 @@ public class HasEqualityCheckerTests
     }
 
     [Test]
+    public void EqualsWithBoxingShortCutTest() {
+        var instructions = GetInstructions("EqualsWithBoxing");
+        var field = GetField("intField");
+        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+    }
+
+    [Test]
     public void EqualsShortCutTest()
     {
         var instructions = GetInstructions("EqualsShortCut");
@@ -196,6 +203,17 @@ public class HasEqualityCheckerTests
             {
                 intField = value;
             }
+        }
+    }
+    public int EqualsWithBoxing {
+        get { return intField; }
+        set
+        {
+            if (Equals(value, intField))
+            {
+                return;
+            }
+            intField = value;
         }
     }
     public string EqualsShortCut

@@ -39,7 +39,6 @@ public partial class ModuleWeaver
         CheckForWarnings();
         ProcessOnChangedMethods();
         CheckForStackOverflow();
-        FindComparisonMethods();
         ProcessTypes();
         CleanAttributes();
         CleanReferences();

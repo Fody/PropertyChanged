@@ -139,7 +139,6 @@
     <Compile Include="DefinitionFinder.cs" />
     <Compile Include="Attributes\DoNotNotifyAttribute.cs" />
     <Compile Include="PropertyInfoCheckers\AbstractInfoCheckerTest.cs" />
-    <Compile Include="TypeEqualityFinderTests.cs" />
     <Compile Include="AlreadyNotifyFinderTest.cs" />
     <Compile Include="PropertyInfoCheckers\CheckForEqualityWithNoBackingFieldSetInfoCheckerTest.cs" />
     <Compile Include="Verifier.cs" />
