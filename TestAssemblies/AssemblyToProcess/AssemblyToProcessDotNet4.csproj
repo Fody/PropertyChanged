@@ -101,6 +101,7 @@
     <Compile Include="ClassWithOnChangedAndOnPropertyChanged.cs" />
     <Compile Include="ClassWithOnChangedBeforeAfter.cs" />
     <Compile Include="ClassWithNotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ClassWithOnChangedBeforeAfterGeneric.cs" />
     <Compile Include="ClassWithOwnImplementation.cs" />
     <Compile Include="AbstractProperty\ClassWithPropertyImp.cs" />
     <Compile Include="ClassWithPropertyChangedArgImplementation.cs" />

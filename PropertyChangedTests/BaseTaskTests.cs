@@ -1095,6 +1095,14 @@ public abstract class BaseTaskTests
         Assert.IsTrue(instance.OnProperty1ChangedCalled);
     }
 
+    [Test]
+    public void WithOnChangedBeforeAfterGeneric()
+    {
+        var instance = assembly.GetInstance("ClassWithOnChangedBeforeAfterGeneric");
+        Assert.IsFalse(instance.GenericOnPropertyChangedCalled);
+        EventTester.TestProperty(instance, false);
+        Assert.IsTrue(instance.GenericOnPropertyChangedCalled);
+    }
 
     [Test]
     public void Caliburn()
