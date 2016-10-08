@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 using Mono.Collections.Generic;
 
 public class EqualityCheckWeaver
@@ -32,16 +33,14 @@ public class EqualityCheckWeaver
         }
     }
 
-
     void CheckAgainstField()
     {
         var fieldReference = propertyData.BackingFieldReference.Resolve().GetGeneric();
         if (propertyData.BackingFieldReference.FieldType.FullName == propertyData.PropertyDefinition.PropertyType.FullName)
         {
-            InjectEqualityCheck(Instruction.Create(OpCodes.Ldfld, fieldReference), fieldReference.FieldType);   
+            InjectEqualityCheck(Instruction.Create(OpCodes.Ldfld, fieldReference), fieldReference.FieldType);
         }
     }
-
 
     void CheckAgainstProperty()
     {
@@ -77,7 +76,38 @@ public class EqualityCheckWeaver
         var typeEqualityMethod = typeEqualityFinder.FindTypeEquality(targetType);
         if (typeEqualityMethod == null)
         {
-            if (targetType.IsGenericParameter || targetType.IsValueType)
+            if (targetType.SupportsCeq() && targetType.IsValueType)
+            {
+                instructions.Prepend(
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    targetInstruction,
+                    Instruction.Create(OpCodes.Ldarg_1),
+                    Instruction.Create(OpCodes.Ceq),
+                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+                    Instruction.Create(OpCodes.Ret));
+            }
+            else if (targetType.IsValueType)
+            {
+                var module = typeEqualityFinder.ModuleDefinition;
+                var ec = typeEqualityFinder.EqualityComparerTypeReference.Resolve();
+
+                var specificEqualityComparerType = module.ImportReference(ec.MakeGenericInstanceType(targetType));
+                var defaultProperty = module.ImportReference(ec.Properties.Single(p => p.Name == "Default").GetMethod);
+                var equalsMethod = module.ImportReference(ec.Methods.Single(p => p.Name == "Equals" && p.Parameters.Count == 2));
+
+                defaultProperty.DeclaringType = specificEqualityComparerType;
+                equalsMethod.DeclaringType = specificEqualityComparerType;
+
+                instructions.Prepend(
+                    Instruction.Create(OpCodes.Call, defaultProperty),
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    targetInstruction,
+                    Instruction.Create(OpCodes.Ldarg_1),
+                    Instruction.Create(OpCodes.Callvirt, equalsMethod),
+                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
+                    Instruction.Create(OpCodes.Ret));
+            }
+            else if (targetType.IsGenericParameter)
             {
                 instructions.Prepend(
                     Instruction.Create(OpCodes.Ldarg_0),
@@ -86,16 +116,6 @@ public class EqualityCheckWeaver
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Box, targetType),
                     Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
-            }
-            else if (targetType.SupportsCeq())
-            {
-                instructions.Prepend(
-                    Instruction.Create(OpCodes.Ldarg_0),
-                    targetInstruction,
-                    Instruction.Create(OpCodes.Ldarg_1),
-                    Instruction.Create(OpCodes.Ceq),
                     Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                     Instruction.Create(OpCodes.Ret));
             }
@@ -134,5 +154,4 @@ public class EqualityCheckWeaver
         return typeDefinition.GetAllCustomAttributes().ContainsAttribute(attribute)
                || propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute(attribute);
     }
-
 }
