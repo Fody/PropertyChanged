@@ -2,6 +2,7 @@
 {
     String,
     BeforeAfter,
+    BeforeAfterGeneric,
     PropertyChangedArg,
     SenderPropertyChangedArg
 }

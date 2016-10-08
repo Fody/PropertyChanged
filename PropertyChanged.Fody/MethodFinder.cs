@@ -99,13 +99,13 @@ public partial class ModuleWeaver
         methodDefinition = type.Methods
             .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
             .OrderByDescending(definition => definition.Parameters.Count)
-            .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
+            .FirstOrDefault(x => IsBeforeAfterGenericMethod(x) || IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         if (methodDefinition == null)
         {
             methodDefinition = type.Methods
                 .Where(x => EventInvokerNames.Contains(x.Name))
                 .OrderByDescending(definition => definition.Parameters.Count)
-                .FirstOrDefault(x => IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
+                .FirstOrDefault(x => IsBeforeAfterGenericMethod(x) || IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         }
         return methodDefinition != null;
     }
@@ -123,6 +123,10 @@ public partial class ModuleWeaver
         if (IsBeforeAfterMethod(method))
         {
             return InvokerTypes.BeforeAfter;
+        }
+        if (IsBeforeAfterGenericMethod(method))
+        {
+            return InvokerTypes.BeforeAfterGeneric;
         }
 
         return InvokerTypes.String;
@@ -159,6 +163,16 @@ public partial class ModuleWeaver
                && parameters[2].ParameterType.FullName == "System.Object";
     }
 
+    public static bool IsBeforeAfterGenericMethod(MethodDefinition method)
+    {
+        var parameters = method.Parameters;
+        return parameters.Count == 3
+               && method.HasGenericParameters
+               && method.GenericParameters.Count == 1
+               && parameters[0].ParameterType.FullName == "System.String"
+               && parameters[1].ParameterType.FullName == method.GenericParameters[0].FullName
+               && parameters[2].ParameterType.FullName == method.GenericParameters[0].FullName;
+    }
 
     public void FindMethodsForNodes()
     {
