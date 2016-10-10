@@ -31,6 +31,8 @@
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
