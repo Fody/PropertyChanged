@@ -2,8 +2,8 @@
 
 public class ClassDoNotCheckEquality : INotifyPropertyChanged
 {
-    public int TimesProperty1Changed = 0;
-    public int TimesProperty2Changed = 0;
+    public int TimesProperty1Changed;
+    public int TimesProperty2Changed;
 
     public string Property1 { get; set; }
 

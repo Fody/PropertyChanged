@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
 using PropertyChanged;
+// ReSharper disable UnusedVariable
 
 
 [TestFixture]
@@ -17,10 +18,11 @@ public class DependsOnDataAttributeReaderTests
                        };
         reader.ProcessDependsOnAttributes(node);
 
-        Assert.AreEqual("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
-        Assert.AreEqual("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
+        var dependencies = node.PropertyDependencies;
+        Assert.AreEqual("FullName", dependencies[0].ShouldAlsoNotifyFor.Name);
+        Assert.AreEqual("GivenNames", dependencies[0].WhenPropertyIsSet.Name);
+        Assert.AreEqual("FullName", dependencies[1].ShouldAlsoNotifyFor.Name);
+        Assert.AreEqual("FamilyName", dependencies[1].WhenPropertyIsSet.Name);
     }
 
     public class Person
