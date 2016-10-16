@@ -86,7 +86,7 @@ public class EqualityCheckWeaver
                     Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                     Instruction.Create(OpCodes.Ret));
             }
-            else if (targetType.IsValueType)
+            else if (targetType.IsValueType && typeEqualityFinder.EqualityComparerTypeReference != null)
             {
                 var module = typeEqualityFinder.ModuleDefinition;
                 var ec = typeEqualityFinder.EqualityComparerTypeReference.Resolve();
@@ -107,7 +107,7 @@ public class EqualityCheckWeaver
                     Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
                     Instruction.Create(OpCodes.Ret));
             }
-            else if (targetType.IsGenericParameter)
+            else if (targetType.IsValueType || targetType.IsGenericParameter)
             {
                 instructions.Prepend(
                     Instruction.Create(OpCodes.Ldarg_0),
