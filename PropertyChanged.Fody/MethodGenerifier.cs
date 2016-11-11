@@ -25,6 +25,13 @@ public partial class ModuleWeaver
                                 CallingConvention = self.CallingConvention,
                             };
 
+        if (self.HasGenericParameters)
+            foreach (var p in self.GenericParameters)
+            {
+                var gp = new GenericParameter(p.Name, self);
+                reference.GenericParameters.Add(gp);
+            }
+
         foreach (var parameter in self.Parameters)
         {
             reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));

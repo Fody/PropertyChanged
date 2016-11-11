@@ -65,6 +65,14 @@ public static class CecilExtensions
                 declaringType.GenericArguments.Add(parameter);
             }
             var methodReference = new MethodReference(reference.Name, reference.MethodReturnType.ReturnType, declaringType);
+            if (reference.HasGenericParameters)
+            {
+                foreach (var p in reference.GenericParameters)
+                {
+                    var gp=new GenericParameter(p.Name,reference);
+                    methodReference.GenericParameters.Add(gp);
+                }
+            }
             foreach (var parameterDefinition in reference.Parameters)
             {
                 methodReference.Parameters.Add(parameterDefinition);
