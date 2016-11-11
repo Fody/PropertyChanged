@@ -26,11 +26,9 @@ public partial class ModuleWeaver
                             };
 
         if (self.HasGenericParameters)
-            foreach (var p in self.GenericParameters)
-            {
-                var gp = new GenericParameter(p.Name, self);
-                reference.GenericParameters.Add(gp);
-            }
+        {
+            ImportGenericParameters(reference, self);
+        }
 
         foreach (var parameter in self.Parameters)
         {
@@ -40,4 +38,12 @@ public partial class ModuleWeaver
         return reference;
     }
 
+    internal static void ImportGenericParameters(IGenericParameterProvider imported, IGenericParameterProvider original)
+    {
+        var parameters = original.GenericParameters;
+        var importedParameters = imported.GenericParameters;
+
+        foreach (var t in parameters)
+            importedParameters.Add(new GenericParameter(t.Name, imported));
+    }
 }
