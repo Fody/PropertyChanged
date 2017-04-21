@@ -66,7 +66,7 @@ public partial class ModuleWeaver
             Instruction.Create(OpCodes.Stloc, handlerVariable0),
             Instruction.Create(OpCodes.Ldloc, handlerVariable0),
             Instruction.Create(OpCodes.Ldloc, handlerVariable1),
-            Instruction.Create(OpCodes.Bne_Un_S, loopBegin), // goto begin of loop
+            Instruction.Create(OpCodes.Bne_Un_S, loopBegin), // go to begin of loop
             Instruction.Create(OpCodes.Ret));
         method.Body.InitLocals = true;
         method.Body.OptimizeMacros();
