@@ -28,16 +28,18 @@ public class WeaverHelper
         {
             AssemblyResolver = assemblyResolver
         };
-        var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, readerParameters);
-        var weavingTask = new ModuleWeaver
-                              {
-                                  ModuleDefinition = moduleDefinition,
-                                  AssemblyResolver = assemblyResolver
-                              };
+        using (var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath, readerParameters))
+        {
+            var weavingTask = new ModuleWeaver
+            {
+                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver
+            };
 
-        weavingTask.Execute();
+            weavingTask.Execute();
 
-        moduleDefinition.Write(AfterAssemblyPath);
+            moduleDefinition.Write(AfterAssemblyPath);
+        }
 
         Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
@@ -64,8 +66,8 @@ public class WeaverHelper
 
         var outputPathValue = (from propertyGroup in xDocument.Descendants("PropertyGroup")
                                let condition = (string)propertyGroup.Attribute("Condition")
-                               where (condition != null) &&
-                                     (condition.Trim() == "'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'")
+                               where condition != null &&
+                                     condition.Trim() == "'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'"
                                from outputPath in propertyGroup.Descendants("OutputPath")
                                select outputPath.Value).First();
 #if (!DEBUG)

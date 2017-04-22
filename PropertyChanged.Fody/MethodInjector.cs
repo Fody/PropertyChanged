@@ -117,10 +117,10 @@ public partial class ModuleWeaver
             method.Parameters.Add(after);
         }
 
-        var action = new VariableDefinition("firePropertyChanged", ActionTypeReference);
+        var action = new VariableDefinition(ActionTypeReference);
         method.Body.Variables.Add(action);
 
-        var variableDefinition = new VariableDefinition("delegateHolder", delegateHolderInjector.TypeDefinition);
+        var variableDefinition = new VariableDefinition(delegateHolderInjector.TypeDefinition);
         method.Body.Variables.Add(variableDefinition);
 
 

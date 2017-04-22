@@ -37,7 +37,7 @@ public static class CecilExtensions
 
     public static bool IsCall(this OpCode opCode)
     {
-        return (opCode.Code == Code.Call) || (opCode.Code == Code.Callvirt);
+        return opCode.Code == Code.Call || opCode.Code == Code.Callvirt;
     }
 
     public static FieldReference GetGeneric(this FieldDefinition definition)

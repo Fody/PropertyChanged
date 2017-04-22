@@ -9,7 +9,7 @@
     <iconUrl>https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png</iconUrl>
     <tags>Xaml, MVVM, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
     <dependencies>
-      <dependency id="Fody" version="[1.29.2, 2)"/>
+      <dependency id="Fody" version="[2.0.0, 3.0.0)"/>
     </dependencies>
   </metadata>
 </package>

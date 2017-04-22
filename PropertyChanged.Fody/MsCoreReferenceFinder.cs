@@ -21,7 +21,7 @@ public partial class ModuleWeaver
     public void FindCoreReferences()
     {
         var assemblyResolver = ModuleDefinition.AssemblyResolver;
-        var msCoreLibDefinition = assemblyResolver.Resolve("mscorlib");
+        var msCoreLibDefinition = assemblyResolver.Resolve(new AssemblyNameReference("mscorlib", null));
         var msCoreTypes = msCoreLibDefinition.MainModule.Types;
 
         var objectDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Object");
@@ -40,7 +40,7 @@ public partial class ModuleWeaver
 
         EqualityComparerTypeReference = msCoreTypes.FirstOrDefault(x => x.Name == "EqualityComparer`1");
 
-        var systemDefinition = assemblyResolver.Resolve("System");
+        var systemDefinition = assemblyResolver.Resolve(new AssemblyNameReference("System", null));
         var systemTypes = systemDefinition.MainModule.Types;
 
         var actionDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Action");
@@ -92,7 +92,7 @@ public partial class ModuleWeaver
     public void ExecuteWinRT()
     {
         var assemblyResolver = ModuleDefinition.AssemblyResolver;
-        var systemRuntime = assemblyResolver.Resolve("System.Runtime");
+        var systemRuntime = assemblyResolver.Resolve(new AssemblyNameReference("System.Runtime", null));
         var systemRuntimeTypes = systemRuntime.MainModule.Types;
 
         var objectDefinition = systemRuntimeTypes.First(x => x.Name == "Object");
@@ -112,7 +112,7 @@ public partial class ModuleWeaver
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
 
-        var systemObjectModel = assemblyResolver.Resolve("System.ObjectModel");
+        var systemObjectModel = assemblyResolver.Resolve(new AssemblyNameReference("System.ObjectModel", null));
         var systemObjectModelTypes = systemObjectModel.MainModule.Types;
 
         var propChangedInterfaceDefinition = systemObjectModelTypes.First(x => x.Name == "INotifyPropertyChanged");
@@ -134,7 +134,7 @@ public partial class ModuleWeaver
         var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
         DelegateRemoveMethodRef = ModuleDefinition.ImportReference(removeMethodDefinition);
 
-        var systemThreading = assemblyResolver.Resolve("System.Threading");
+        var systemThreading = assemblyResolver.Resolve(new AssemblyNameReference("System.Threading", null));
         var interlockedDefinition = systemThreading.MainModule.Types.First(x => x.FullName == "System.Threading.Interlocked");
         var genericCompareExchangeMethodDefinition = interlockedDefinition
             .Methods.First(x =>
@@ -152,7 +152,7 @@ public partial class ModuleWeaver
     {
         try
         {
-            return ModuleDefinition.AssemblyResolver.Resolve("System.Core");
+            return ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference("System.Core", null));
         }
         catch (Exception exception)
         {
