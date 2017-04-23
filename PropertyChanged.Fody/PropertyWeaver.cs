@@ -56,8 +56,11 @@ public class PropertyWeaver
         index = AddIsChangedSetterCall(index);
         var propertyDefinitions = propertyData.AlsoNotifyFor.Distinct();
 
-        index = propertyDefinitions.Aggregate(index, AddEventInvokeCall);
-        AddEventInvokeCall(index, propertyData.PropertyDefinition);
+        foreach (PropertyDefinition propertyDefinition in propertyDefinitions)
+        {
+            index	= AddEventInvokeCall(index, propertyDefinition, null);
+        }
+        AddEventInvokeCall(index, propertyData.PropertyDefinition, propertyData.BackingFieldReference);
     }
 
     IEnumerable<int> FindSetFieldInstructions()
@@ -117,7 +120,7 @@ public class PropertyWeaver
         return index;
     }
 
-    int AddEventInvokeCall(int index, PropertyDefinition property)
+    int AddEventInvokeCall(int index, PropertyDefinition property, FieldReference fieldReference)
     {
         index = AddOnChangedMethodCall(index, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
@@ -133,7 +136,7 @@ public class PropertyWeaver
         }
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfter)
         {
-            return AddBeforeAfterInvokerCall(index, property);
+            return AddBeforeAfterInvokerCall(index, property, fieldReference);
         }
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.PropertyChangedArg)
         {
@@ -231,14 +234,14 @@ public class PropertyWeaver
         return AddBeforeVariableAssignment(index, property, beforeVariable);
     }
 
-    int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)
+    int AddBeforeAfterInvokerCall(int index, PropertyDefinition property, FieldReference fieldReference)
     {
         var beforeVariable = new VariableDefinition(typeSystem.Object);
         setMethodBody.Variables.Add(beforeVariable);
         var afterVariable = new VariableDefinition(typeSystem.Object);
         setMethodBody.Variables.Add(afterVariable);
 
-        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
+        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable, fieldReference);
 
         index = instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
@@ -248,7 +251,7 @@ public class PropertyWeaver
             CallEventInvoker(property)
             );
 
-        return AddBeforeVariableAssignment(index, property, beforeVariable);
+        return AddBeforeVariableAssignment(index, property, beforeVariable, fieldReference);
     }
 
     int AddSimpleOnChangedCall(int index, MethodReference methodReference)
@@ -264,7 +267,7 @@ public class PropertyWeaver
         setMethodBody.Variables.Add(beforeVariable);
         var afterVariable = new VariableDefinition(typeSystem.Object);
         setMethodBody.Variables.Add(afterVariable);
-        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
+        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable, null);
 
         index = instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
@@ -273,30 +276,56 @@ public class PropertyWeaver
             CreateCall(methodReference)
             );
 
-        return AddBeforeVariableAssignment(index, property, beforeVariable);
+        return AddBeforeVariableAssignment(index, property, beforeVariable, null);
     }
 
-    int AddBeforeVariableAssignment(int index, PropertyDefinition property, VariableDefinition beforeVariable)
+    int AddBeforeVariableAssignment(int index, PropertyDefinition property, VariableDefinition beforeVariable, FieldReference fieldReference)
     {
-        var getMethod = property.GetMethod.GetGeneric();
+        Instruction instruction;
+        TypeReference typeReference;
+
+        if (fieldReference == null || !CheckField())
+        {
+            var getMethod = property.GetMethod.GetGeneric();
+            instruction = CreateCall(getMethod);
+            typeReference = property.GetMethod.ReturnType;
+        }
+        else
+        {
+            instruction = Instruction.Create(OpCodes.Ldfld, fieldReference);
+            typeReference = fieldReference.FieldType;
+        }
 
         instructions.Prepend(
             Instruction.Create(OpCodes.Ldarg_0),
-            CreateCall(getMethod),
-            Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
+            instruction,
+            Instruction.Create(OpCodes.Box, typeReference),
             Instruction.Create(OpCodes.Stloc, beforeVariable));
 
         return index + 4;
     }
 
-    int InsertVariableAssignmentFromCurrentValue(int index, PropertyDefinition property, VariableDefinition variable)
+    int InsertVariableAssignmentFromCurrentValue(int index, PropertyDefinition property, VariableDefinition variable, FieldReference fieldReference)
     {
-        var getMethod = property.GetMethod.GetGeneric();
+        Instruction instruction;
+        TypeReference typeReference;
+
+        if (fieldReference == null || !CheckField())
+        {
+            var getMethod = property.GetMethod.GetGeneric();
+            instruction = CreateCall(getMethod);
+            typeReference = property.GetMethod.ReturnType;
+        }
+        else
+        {
+            instruction = Instruction.Create(OpCodes.Ldfld, fieldReference);
+            typeReference = fieldReference.FieldType;
+        }
 
         instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
-            CreateCall(getMethod),
-            Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
+            instruction,
+            Instruction.Create(OpCodes.Box, typeReference),
             Instruction.Create(OpCodes.Stloc, variable));
 
         return index + 4;
@@ -324,5 +353,17 @@ public class PropertyWeaver
     public Instruction CreateCall(MethodReference methodReference)
     {
         return Instruction.Create(OpCodes.Callvirt, methodReference);
+    }
+
+    bool CheckField()
+    {
+        if (moduleWeaver.BeforeAfterCheckField)
+        {
+            return true;
+        }
+
+        var attribute = "PropertyChanged.BeforeAfterValueCheckFieldAttribute";
+
+        return typeNode.TypeDefinition.GetAllCustomAttributes().ContainsAttribute(attribute) || propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute(attribute);
     }
 }

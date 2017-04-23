@@ -93,6 +93,7 @@
     <Compile Include="AssemblyWithBadNamedInvokerTests.cs" />
     <Compile Include="AssemblyWithInterceptorTests.cs" />
     <Compile Include="Attributes\NotifyPropertyChangedAttribute.cs" />
+    <Compile Include="BeforeAfterCheckFieldTests.cs" />
     <Compile Include="CheckForEqualityConfigTests.cs" />
     <Compile Include="TypeFilterTests.cs" />
     <Compile Include="EventInvokerNamesConfigTests.cs" />

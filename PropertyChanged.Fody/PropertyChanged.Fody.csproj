@@ -66,6 +66,7 @@
     <Compile Include="AllPropertiesFinder.cs" />
     <Compile Include="AlreadyNotifyFinder.cs" />
     <Compile Include="AttributeCleaner.cs" />
+    <Compile Include="BeforeAfterCheckFieldConfig.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="CheckForEqualityConfig.cs" />
     <Compile Include="CodeGenTypeCleaner.cs" />
