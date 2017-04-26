@@ -41,8 +41,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithNonVoidOnProper
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithTypeFilter", "TestAssemblies\AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj", "{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcessNetStandard", "TestAssemblies\AssemblyToProcess\AssemblyToProcessNetStandard.csproj", "{F8BB019B-E19E-41B2-9631-64618538036E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -200,18 +198,6 @@ Global
 		{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252}.Release|ARM.Build.0 = Release|Any CPU
 		{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252}.Release|x86.ActiveCfg = Release|Any CPU
 		{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252}.Release|x86.Build.0 = Release|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Debug|ARM.Build.0 = Debug|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Debug|x86.Build.0 = Debug|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Release|ARM.ActiveCfg = Release|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Release|ARM.Build.0 = Release|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Release|x86.ActiveCfg = Release|Any CPU
-		{F8BB019B-E19E-41B2-9631-64618538036E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,6 +216,5 @@ Global
 		{A3BC44F0-27B3-4498-8DA3-337ABC41B441} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{DA025360-790C-46E8-8143-2D2DEADCFE8A} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
-		{F8BB019B-E19E-41B2-9631-64618538036E} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 	EndGlobalSection
 EndGlobal
