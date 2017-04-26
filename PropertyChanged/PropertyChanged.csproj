@@ -16,5 +16,8 @@
     <AssemblyVersion>1.53.1</AssemblyVersion>
     <FileVersion>1.53.1</FileVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.0\PropertyChanged.xml</DocumentationFile>
+  </PropertyGroup>
 
 </Project>
