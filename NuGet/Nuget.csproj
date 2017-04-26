@@ -29,12 +29,10 @@
   <Target Name="ReBuild" DependsOnTargets="NuGetBuild" />
   <Target Name="NuGetBuild" DependsOnTargets="Clean">
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\uninstall.ps1" />

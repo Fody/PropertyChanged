@@ -133,7 +133,6 @@
     <Compile Include="IlGeneratedByDependencyReaderTests\WithUpperCaseUnderScoreFields.cs" />
     <Compile Include="MappingFinder\MappingFinderUnderScoreBackingFields.cs" />
     <Compile Include="MethodFinderTest.cs" />
-    <Compile Include="Net4ClientWeavingTaskTests.cs" />
     <Compile Include="Net4WeavingTaskTests.cs" />
     <Compile Include="BaseTaskTests.cs" />
     <Compile Include="DefinitionFinder.cs" />
@@ -169,6 +168,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

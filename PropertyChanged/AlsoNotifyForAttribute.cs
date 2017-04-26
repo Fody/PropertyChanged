@@ -9,7 +9,7 @@ namespace PropertyChanged
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class AlsoNotifyForAttribute : Attribute
     {
-        
+
         ///<summary>
         /// Initializes a new instance of <see cref="DependsOnAttribute"/>.
         ///</summary>

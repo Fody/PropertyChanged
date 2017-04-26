@@ -141,10 +141,17 @@ namespace Microsoft.Practices.Prism.ViewModel
             {
                 throw new ArgumentException("propertyExpression");
             }
+#if NETSTANDARD1_4
+            if (member.GetMethod.IsStatic)
+            {
+                throw new ArgumentException("propertyExpression");
+            }
+#else
             if (member.GetGetMethod(true).IsStatic)
             {
                 throw new ArgumentException("propertyExpression");
             }
+#endif
             return body.Member.Name;
         }
 

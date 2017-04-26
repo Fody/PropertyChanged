@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
@@ -69,7 +70,7 @@ public class WeaverHelper
                                where condition != null &&
                                      condition.Trim() == "'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'"
                                from outputPath in propertyGroup.Descendants("OutputPath")
-                               select outputPath.Value).First();
+                               select outputPath.Value).FirstOrDefault();
 #if (!DEBUG)
             outputPathValue = outputPathValue.Replace("Debug", "Release");
 #endif
