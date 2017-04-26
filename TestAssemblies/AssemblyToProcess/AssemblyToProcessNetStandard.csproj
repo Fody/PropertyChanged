@@ -8,4 +8,8 @@
     <PackageReference Include="Fody" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj" />
+  </ItemGroup>
+
 </Project>
