@@ -22,9 +22,9 @@ public partial class ModuleWeaver
     {
         var assemblyResolver = ModuleDefinition.AssemblyResolver;
         var msCoreLibDefinition = assemblyResolver.Resolve(new AssemblyNameReference("mscorlib", null));
-        var msCoreTypes = msCoreLibDefinition.MainModule.Types;
+        var msCoreTypes = msCoreLibDefinition?.MainModule?.Types;
 
-        var objectDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Object");
+        var objectDefinition = msCoreTypes?.FirstOrDefault(x => x.Name == "Object");
         if (objectDefinition == null)
         {
             ExecuteWinRT();
