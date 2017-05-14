@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 
 [TestFixture]
+[Explicit]
 public class AssemblyWithBadNamedInvokerTests
 {
     [Test]
