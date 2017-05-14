@@ -6,7 +6,7 @@ public class AssemblyWithBadNamedInvokerTests
     [Test]
     public void WithOnNotify()
     {
-        var weaverHelper = new WeaverHelper(@"AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj");
+        var weaverHelper = new WeaverHelper("AssemblyInheritingBadNamedInvoker");
          weaverHelper.Assembly.GetInstance("ChildClass");
         //TODO: validate that a log message is written
         //TODO: move ClassWithForwardedEvent.cs into own project and do the same kind of test

@@ -11,23 +11,19 @@ using NUnit.Framework;
 
 public abstract class BaseTaskTests
 {
-    string projectPath;
+    string assemblyName;
     Assembly assembly;
     WeaverHelper weaverHelper;
 
-    protected BaseTaskTests(string projectPath)
+    protected BaseTaskTests(string assemblyName)
     {
-
-#if (RELEASE)
-            projectPath = projectPath.Replace("Debug", "Release");
-#endif
-        this.projectPath = projectPath;
+        this.assemblyName = assemblyName;
     }
 
     [OneTimeSetUp]
     public void Setup()
     {
-        weaverHelper = new WeaverHelper(projectPath);
+        weaverHelper = new WeaverHelper(assemblyName);
         assembly = weaverHelper.Assembly;
     }
 

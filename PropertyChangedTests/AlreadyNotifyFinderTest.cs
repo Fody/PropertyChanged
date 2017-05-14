@@ -6,7 +6,7 @@ using NUnit.Framework;
 [TestFixture]
 public class AlreadyNotifyFinderTest
 {
-    
+
     [Test]
     public void ContainsNotification()
     {

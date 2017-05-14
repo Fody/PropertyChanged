@@ -4,17 +4,9 @@
     <TargetFrameworks>net462</TargetFrameworks>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>0067</NoWarn>
+    <NoWarn>0067;0649</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj" />
   </ItemGroup>
 </Project>
