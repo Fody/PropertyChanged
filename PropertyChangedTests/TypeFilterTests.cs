@@ -6,7 +6,7 @@ public class TypeFilterTests
     [Test]
     public void CheckIfFilterTypeExcludeRightTypes()
     {
-        var weaverHelper = new WeaverHelper(@"AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj");
+        var weaverHelper = new WeaverHelper("AssemblyWithTypeFilter");
 
         var assembly = weaverHelper.Assembly;
         var instance = assembly.GetInstance("TestClassExclude");

@@ -34,6 +34,8 @@
 .builds
 *.dotCover
 
+TestAssemblyBin
+
 *.DotSettings
 
 ##  If you have NuGet Package Restore enabled, uncomment this

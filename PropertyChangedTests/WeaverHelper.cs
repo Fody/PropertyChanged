@@ -13,7 +13,7 @@ public class WeaverHelper
 
     public WeaverHelper(string assemblyName)
     {
-        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\TestAssemblies", assemblyName,@"bin\Debug\net462", assemblyName+".dll"));
+        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\TestAssemblyBin\net462", assemblyName+".dll"));
 
 #if (RELEASE)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
@@ -21,11 +21,17 @@ public class WeaverHelper
         AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
         File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
 
-        using (var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath))
+        var assemblyResolver = new TestAssemblyResolver();
+        var readerParameters = new ReaderParameters
+        {
+            AssemblyResolver = assemblyResolver
+        };
+        using (var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath,readerParameters))
         {
             var weavingTask = new ModuleWeaver
             {
                 ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver
             };
 
             weavingTask.Execute();

@@ -5,6 +5,9 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>0067;0649</NoWarn>
+    <OutputPath>$(SolutionDir)TestAssemblyBin</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj" />

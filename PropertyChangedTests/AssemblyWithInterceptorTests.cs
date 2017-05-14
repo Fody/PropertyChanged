@@ -8,7 +8,7 @@ public class AssemblyWithInterceptorTests
     [Test]
     public void Simple()
     {
-        var weaverHelper = new WeaverHelper(@"AssemblyWithInterceptor\AssemblyWithInterceptor.csproj");
+        var weaverHelper = new WeaverHelper("AssemblyWithInterceptor");
 
         var assembly = weaverHelper.Assembly;
         var instance = assembly.GetInstance("ClassToTest");
@@ -23,7 +23,7 @@ public class AssemblyWithInterceptorTests
     [Test]
     public void BeforeAfter()
     {
-        var weaverHelper = new WeaverHelper(@"AssemblyWithBeforeAfterInterceptor\AssemblyWithBeforeAfterInterceptor.csproj");
+        var weaverHelper = new WeaverHelper("AssemblyWithBeforeAfterInterceptor");
         var assembly = weaverHelper.Assembly;
         var instance = assembly.GetInstance("ClassToTest");
         EventTester.TestProperty(instance, false);

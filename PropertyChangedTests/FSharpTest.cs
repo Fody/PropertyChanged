@@ -9,7 +9,7 @@ public class FSharpTest
 
     public FSharpTest()
     {
-        weaverHelper = new WeaverHelper(@"AssemblyFSharp\AssemblyFSharp.fsproj");
+        weaverHelper = new WeaverHelper("AssemblyFSharp");
     }
 
     [Test]
