@@ -6,15 +6,11 @@
   <ItemGroup>
     <PackageReference Include="PepitaPackage" Version="1.21.4" />
   </ItemGroup>
-  <Target Name="Clean">
+  <Target Name="NuGetBuild" AfterTargets="AfterBuild">
     <ItemGroup>
       <FilesToDelete Include="$(SolutionDir)NuGetBuild\**\*.*" />
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
-  </Target>
-  <Target Name="Build" DependsOnTargets="NuGetBuild" />
-  <Target Name="ReBuild" DependsOnTargets="NuGetBuild" />
-  <Target Name="NuGetBuild" DependsOnTargets="Clean">
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.3\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.3\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
@@ -26,7 +22,7 @@
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(Configuration)\net452\PropertyChanged.Fody.dll" />
   </Target>
   <ItemGroup>
-    <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj"/>
-    <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj"/>
+    <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
+    <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
   </ItemGroup>
 </Project>
