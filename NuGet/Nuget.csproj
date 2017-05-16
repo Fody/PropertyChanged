@@ -1,23 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{63786CE5-D899-43DF-AD4E-C2CA3BAC3FC2}</ProjectGuid>
-    <NuGetPackageImportStamp>ce4de58f</NuGetPackageImportStamp>
-    <OutputPath>bin\</OutputPath>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <ConfigurationName>Debug</ConfigurationName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <ConfigurationName>Release</ConfigurationName>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <StartupObject />
+    <TargetFrameworks>net462</TargetFrameworks>
   </PropertyGroup>
   <Target Name="Clean">
     <ItemGroup>
@@ -29,23 +13,15 @@
   <Target Name="ReBuild" DependsOnTargets="NuGetBuild" />
   <Target Name="NuGetBuild" DependsOnTargets="Clean">
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.3\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.3\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.3\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.3\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\tools\uninstall.ps1" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\net452\PropertyChanged.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\net452\PropertyChanged.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(ConfigurationName)\net452\PropertyChanged.Fody.dll" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(Configuration)\net452\PropertyChanged.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged.Fody\bin\$(Configuration)\net452\PropertyChanged.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(Configuration)\net452\PropertyChanged.Fody.dll" />
   </Target>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="PropertyChanged.Fody.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="install.ps" />
-    <None Include="uninstall.ps" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
