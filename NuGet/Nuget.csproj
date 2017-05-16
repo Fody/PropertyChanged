@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>net462</TargetFrameworks>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PepitaPackage" Version="1.21.4" />
+  </ItemGroup>
   <Target Name="Clean">
     <ItemGroup>
       <FilesToDelete Include="$(SolutionDir)NuGetBuild\**\*.*" />
@@ -23,22 +26,7 @@
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)PropertyChanged.Fody\bin\$(Configuration)\net452\PropertyChanged.Fody.dll" />
   </Target>
   <ItemGroup>
-    <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Project>{C3578A7B-09A6-4444-9383-0DEAFA4958BD}</Project>
-      <Name>PropertyChanged.Fody</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
-      <Name>PropertyChanged</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj"/>
+    <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj"/>
   </ItemGroup>
-  <Import Project="..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets" Condition="Exists('..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets'))" />
-  </Target>
 </Project>
