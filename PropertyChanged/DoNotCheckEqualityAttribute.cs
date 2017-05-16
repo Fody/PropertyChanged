@@ -8,6 +8,5 @@ namespace PropertyChanged
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field)]
     public class DoNotCheckEqualityAttribute : Attribute
     {
-
     }
 }

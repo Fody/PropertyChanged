@@ -3,7 +3,6 @@ using System.ComponentModel;
 
 namespace PropertyChanged
 {
-
     /// <summary>
     /// Specifies that PropertyChanged Notification will be added to a class.
     /// <para>

@@ -9,24 +9,22 @@ namespace PropertyChanged
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class DependsOnAttribute : Attribute
     {
-        
-        ///<summary>
+        /// <summary>
         /// Initializes a new instance of <see cref="DependsOnAttribute"/>.
-        ///</summary>
-        ///<param name="dependency">A property that the assigned property depends on.</param>
+        /// </summary>
+        /// <param name="dependency">A property that the assigned property depends on.</param>
         public DependsOnAttribute(string dependency)
         {
         }
 
-        ///<summary>
+        /// <summary>
         /// Initializes a new instance of <see cref="DependsOnAttribute"/>.
-        ///</summary>
-        ///<param name="dependency">A property that the assigned property depends on.</param>
-        ///<param name="otherDependencies">The properties that the assigned property depends on.</param>
+        /// </summary>
+        /// <param name="dependency">A property that the assigned property depends on.</param>
+        /// <param name="otherDependencies">The properties that the assigned property depends on.</param>
         public DependsOnAttribute(string dependency, params string[] otherDependencies)
         {
         }
-
     }
 }
 // ReSharper restore UnusedParameter.Local
