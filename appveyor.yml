@@ -1,0 +1,6 @@
+image: Visual Studio 2017
+before_build:
+- ps: nuget restore
+test: off
+artifacts:
+- path: NuGetBuild\**\*.nupkg

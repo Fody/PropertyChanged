@@ -8,7 +8,7 @@ public class AssemblyWithBaseInDifferentModuleTests
     WeaverHelper weaverHelper;
     public AssemblyWithBaseInDifferentModuleTests()
     {
-        weaverHelper = new WeaverHelper(@"AssemblyWithBaseInDifferentModule\AssemblyWithBaseInDifferentModule.csproj");
+        weaverHelper = new WeaverHelper("AssemblyWithBaseInDifferentModule");
     }
 
     [Test]

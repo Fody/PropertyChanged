@@ -8,6 +8,5 @@ namespace PropertyChanged
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class DoNotSetChangedAttribute : Attribute
     {
-
     }
 }
