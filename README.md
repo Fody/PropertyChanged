@@ -1,3 +1,13 @@
+# Fork Notes
+
+This fork/branch was created to revert a change that broke Fody PropertyChanged when used with NHibernate for us. With the change Fody no longer used our custom equality check, which broke equality comparison on objects where we only had the Id (proxies).
+
+Attempts will be made to keep this fork up to date with the actual PropertyChanged repository, but there is no gaurantee that will actually happen. 
+
+USE AT YOUR OWN RISK.
+
+To future maintainers of this fork: In order to keep this fork as simple as possible keep rebasing it onto the base fork. Follow the instructions on this page if you need help: https://robots.thoughtbot.com/keeping-a-github-fork-updated, adapting as needed to your Git UI interface of choice.
+
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
 ![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
