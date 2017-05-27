@@ -2,89 +2,97 @@
 
 ![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
 
-Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx)  code into properties at compile time.
+Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx) code into properties at compile time.
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage) 
 
-## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/PropertyChanged.Fody.svg?style=flat)](https://www.nuget.org/packages/PropertyChanged.Fody/)
+
+## The NuGet package  [![NuGet Status](http://img.shields.io/nuget/v/PropertyChanged.Fody.svg?style=flat)](https://www.nuget.org/packages/PropertyChanged.Fody/)
 
 https://nuget.org/packages/PropertyChanged.Fody/
 
     PM> Install-Package PropertyChanged.Fody
-    
+
+
 ### Your Code
 
-**NOTE: All classes that do not have `[ImplementPropertyChanged]` but still have `INotifyPropertyChanged` will have notification code injected into property sets.**
+**NOTE: All classes that have `INotifyPropertyChanged` will have notification code injected into property sets.**
 
-    [ImplementPropertyChanged]
-    public class Person 
-    {        
-        public string GivenNames { get; set; }
-        public string FamilyName { get; set; }
+```
+public class Person :INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+    public string GivenNames { get; set; }
+    public string FamilyName { get; set; }
 
-        public string FullName
+    public string FullName
+    {
+        get
         {
-            get
-            {
-                return string.Format("{0} {1}", GivenNames, FamilyName);
-            }
+            return string.Format("{0} {1}", GivenNames, FamilyName);
         }
     }
+}
+```
+
 
 ### What gets compiled
 
-    public class Person : INotifyPropertyChanged
+```
+public class Person : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    string givenNames;
+    public string GivenNames
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        string givenNames;
-        public string GivenNames
+        get { return givenNames; }
+        set
         {
-            get { return givenNames; }
-            set
+            if (value != givenNames)
             {
-                if (value != givenNames)
-                {
-                    givenNames = value;
-                    OnPropertyChanged("GivenNames");
-                    OnPropertyChanged("FullName");
-                }
-            }
-        }
-
-        string familyName;
-        public string FamilyName
-        {
-            get { return familyName; }
-            set 
-            {
-                if (value != familyName)
-                {
-                    familyName = value;
-                    OnPropertyChanged("FamilyName");
-                    OnPropertyChanged("FullName");
-                }
-            }
-        }
-
-        public string FullName
-        {
-            get
-            {
-                return string.Format("{0} {1}", GivenNames, FamilyName);
-            }
-        }
-
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            var propertyChanged = PropertyChanged;
-            if (propertyChanged != null)
-            {
-                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                givenNames = value;
+                OnPropertyChanged("GivenNames");
+                OnPropertyChanged("FullName");
             }
         }
     }
-    
+
+    string familyName;
+    public string FamilyName
+    {
+        get { return familyName; }
+        set 
+        {
+            if (value != familyName)
+            {
+                familyName = value;
+                OnPropertyChanged("FamilyName");
+                OnPropertyChanged("FullName");
+            }
+        }
+    }
+
+    public string FullName
+    {
+        get
+        {
+            return string.Format("{0} {1}", GivenNames, FamilyName);
+        }
+    }
+
+    public virtual void OnPropertyChanged(string propertyName)
+    {
+        var propertyChanged = PropertyChanged;
+        if (propertyChanged != null)
+        {
+            propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+```
+
+
 ## Icon
 
 Icon courtesy of [The Noun Project](https://thenounproject.com)
@@ -95,6 +103,7 @@ Icon courtesy of [The Noun Project](https://thenounproject.com)
  * [Cameron MacFarland](https://github.com/distantcam)
  * [Geert van Horrik](https://github.com/GeertvanHorrik)
  * [Simon Cropp](https://github.com/simoncropp)
+
 
 ## More Info
 

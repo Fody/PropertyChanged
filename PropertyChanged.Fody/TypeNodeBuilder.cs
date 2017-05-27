@@ -55,23 +55,8 @@ public partial class ModuleWeaver
     {
         foreach (var node in typeNodes)
         {
-            if (HasNotifyPropertyChangedAttribute(node.TypeDefinition))
-            {
-                if (HierarchyImplementsINotify(node.TypeDefinition))
-                {
-                    throw new WeavingException($"The type '{node.TypeDefinition.FullName}' already implements INotifyPropertyChanged so [ImplementPropertyChanged] is redundant.");
-                }
-                InjectINotifyPropertyChangedInterface(node.TypeDefinition);
-                NotifyNodes.Add(node);
-                continue;
-            }
             PopulateInjectedINotifyNodes(node.Nodes);
         }
-    }
-
-    static bool HasNotifyPropertyChangedAttribute(TypeDefinition typeDefinition)
-    {
-        return typeDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.ImplementPropertyChangedAttribute");
     }
 
     TypeNode AddClass(TypeDefinition typeDefinition)

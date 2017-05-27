@@ -199,23 +199,6 @@ public abstract class BaseTaskTests
         Assert.AreEqual(0, propertyEventCount);
     }
 
-    [Test]
-    public void WithNotifyInChildByAttribute()
-    {
-        var instance = assembly.GetInstance("ClassWithNotifyInChildByAttribute");
-        var propertyEventCount = 0;
-        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
-        {
-            propertyEventCount++;
-        };
-        instance.Property = "a";
-
-        Assert.AreEqual(1, propertyEventCount);
-        propertyEventCount = 0;
-        //Property has not changed on re-set so event not fired
-        instance.Property = "a";
-        Assert.AreEqual(0, propertyEventCount);
-    }
 
     [Test]
     public void AlreadyHasSingleNotificationDiffSignature()
@@ -318,78 +301,6 @@ public abstract class BaseTaskTests
     {
         var type = assembly.GetType("ClassWithDoNotNotify", true);
         Assert.IsEmpty(type.GetCustomAttributes(false));
-    }
-
-    [Test]
-    public void WithNotifyPropertyChangedAttribute_MustCleanAttribute()
-    {
-        var type = assembly.GetType("ClassWithNotifyPropertyChangedAttribute", true);
-        Assert.IsEmpty(type.GetCustomAttributes(false));
-    }
-
-    [Test]
-    public void WithNotifyPropertyChangedAttribute_MustWeaveNotification()
-    {
-        var instance = assembly.GetInstance("ClassWithNotifyPropertyChangedAttribute");
-
-        var property1EventCalled = false;
-        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
-        {
-            if (args.PropertyName == "Property1")
-            {
-                property1EventCalled = true;
-            }
-        };
-        instance.Property1 = "a";
-
-        Assert.IsTrue(property1EventCalled);
-    }
-
-
-    [Test]
-    public void ClassWithNotifyPropertyChangedAttributeGeneric_MustWeaveNotification()
-    {
-        var type = assembly.GetType("ClassWithNotifyPropertyChangedAttributeGeneric`1", true);
-        var makeGenericType = type.MakeGenericType(typeof(string));
-
-        var instance = (dynamic) Activator.CreateInstance(makeGenericType);
-        var property1EventCalled = false;
-        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
-        {
-            if (args.PropertyName == "Property1")
-            {
-                property1EventCalled = true;
-            }
-        };
-        instance.Property1 = "a";
-
-        Assert.IsTrue(property1EventCalled);
-    }
-
-    [Test]
-    public void WithNotifyPropertyChangedAttributeOnParentAndChild()
-    {
-        var instance = assembly.GetInstance("ClassWithNotifyPropertyChangedAttributeChild");
-
-        var property1EventCalled = false;
-        var property2EventCalled = false;
-        ((INotifyPropertyChanged) instance).PropertyChanged += (sender, args) =>
-        {
-            if (args.PropertyName == "Property1")
-            {
-                property1EventCalled = true;
-            }
-            if (args.PropertyName == "Property2")
-            {
-                property2EventCalled = true;
-                Assert.AreEqual("a", instance.Property2);
-            }
-        };
-        instance.Property1 = "a";
-        instance.Property2 = "a";
-
-        Assert.IsTrue(property1EventCalled);
-        Assert.IsTrue(property2EventCalled);
     }
 
     [Test]
