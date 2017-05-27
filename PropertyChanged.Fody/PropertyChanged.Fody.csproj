@@ -10,13 +10,7 @@
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <PackageReference Include="FodyCecil" Version="2.0.8" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
 </Project>

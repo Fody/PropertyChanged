@@ -30,11 +30,7 @@ public class RecursiveIlFinder
                 continue;
             }
             var methodDefinition = instruction.Operand as MethodDefinition;
-            if (methodDefinition == null)
-            {
-                continue;
-            }
-            if (methodDefinition.IsGetter || methodDefinition.IsSetter)
+            if (methodDefinition?.IsGetter != true || methodDefinition.IsSetter)
             {
                 continue;
             }

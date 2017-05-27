@@ -22,13 +22,6 @@
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithBase\AssemblyWithBase.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj" />
