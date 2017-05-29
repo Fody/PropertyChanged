@@ -6,6 +6,8 @@ Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage) 
 
+[![NuGet Status](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
+
 
 ## The NuGet package  [![NuGet Status](http://img.shields.io/nuget/v/PropertyChanged.Fody.svg?style=flat)](https://www.nuget.org/packages/PropertyChanged.Fody/)
 
