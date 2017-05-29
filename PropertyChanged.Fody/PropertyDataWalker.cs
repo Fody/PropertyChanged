@@ -16,11 +16,16 @@ public partial class ModuleWeaver
                     continue;
                 }
 
-                if (property.SetMethod?.IsStatic != true)
+                if (property.SetMethod == null)
                 {
                     continue;
                 }
 
+                if (property.SetMethod.IsStatic)
+                {
+                    continue;
+                }
+                
                 GetPropertyData(property, node);
             }
             WalkPropertyData(node.Nodes);
@@ -94,7 +99,9 @@ The most likely cause is that you have implemented a custom event accessor for t
         return fullDependencies.ToList();
     }
 
-    // Computes dependencies recursively
+    /// <summary>
+    /// Computes dependencies recursively
+    /// </summary>
     void ComputeDependenciesRec(PropertyDefinition propertyDefinition, HashSet<PropertyDefinition> fullDependencies, TypeNode node)
     {
         // TODO: An optimization could be done to avoid the multiple computation of one property for each property of the type

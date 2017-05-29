@@ -57,8 +57,12 @@ public class IlGeneratedByDependencyReader
         var getMethod = property.GetMethod;
 
         //Exclude when no get
+        if (getMethod == null)
+        {
+            return;
+        }
         //Exclude when abstract
-        if (getMethod?.IsAbstract != true)
+        if (getMethod.IsAbstract)
         {
             return;
         }
