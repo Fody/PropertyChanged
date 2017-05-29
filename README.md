@@ -78,7 +78,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 
 * **Dependent properties** -- In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.
 
-  This behavior can be set explicitly using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).
+  This behavior can be configured manually using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).
 * **Intercepting the notification call**
     * [**Global interception**](https://github.com/Fody/PropertyChanged/wiki/NotificationInterception)
     * **Class-level interception** --The `OnPropertyChanged` method will only be injected if there is no such existing method on the class; if there is such a method, then calls to that method will be injected into the setters -- see [here](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection).
