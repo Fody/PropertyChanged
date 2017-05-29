@@ -88,7 +88,7 @@ public class Person : INotifyPropertyChanged
 
       public void OnPropertyChanged(string propertyName, object before, object after)
 * To prevent a specific class from having the notification call injection, use the [`DoNotNotify` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#donotnotifyattribute).
-* The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`ImplementsPropertyChanged` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#implementpropertychangedattribute). **NOTE: This attribute has been deprecated as of version 2.**
+* The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`ImplementsPropertyChanged` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#implementpropertychangedattribute). **NOTE: This attribute has been deprecated.**
 * Behvaior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
 
 For more information, see the [wiki pages](https://github.com/Fody/PropertyChanged/wiki).
