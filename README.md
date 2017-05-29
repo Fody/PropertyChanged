@@ -16,63 +16,63 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 **NOTE: All classes that implement `INotifyPropertyChanged` will have notification code injected into property setters.**
 
 Your code:
-
-    public class Person : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public string GivenNames { get; set; }
-        public string FamilyName { get; set; }
-        public string FullName => $"{GivenNames} {FamilyName}";
-    }
-
+```
+public class Person : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+    public string GivenNames { get; set; }
+    public string FamilyName { get; set; }
+    public string FullName => $"{GivenNames} {FamilyName}";
+}
+```
 What gets compiled:
+```
+public class Person : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
 
-    public class Person : INotifyPropertyChanged
+    string givenNames;
+    public string GivenNames
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        string givenNames;
-        public string GivenNames
+        get => givenNames;
+        set
         {
-            get => givenNames;
-            set
+            if (value != givenNames)
             {
-                if (value != givenNames)
-                {
-                    givenNames = value;
-                    OnPropertyChanged("GivenNames");
-                    OnPropertyChanged("FullName");
-                }
-            }
-        }
-
-        string familyName;
-        public string FamilyName
-        {
-            get => familyName;
-            set 
-            {
-                if (value != familyName)
-                {
-                    familyName = value;
-                    OnPropertyChanged("FamilyName");
-                    OnPropertyChanged("FullName");
-                }
-            }
-        }
-
-        public string FullName => $"{GivenNames} {FamilyName}";
-
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            var propertyChanged = PropertyChanged;
-            if (propertyChanged != null)
-            {
-                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                givenNames = value;
+                OnPropertyChanged("GivenNames");
+                OnPropertyChanged("FullName");
             }
         }
     }
 
+    string familyName;
+    public string FamilyName
+    {
+        get => familyName;
+        set 
+        {
+            if (value != familyName)
+            {
+                familyName = value;
+                OnPropertyChanged("FamilyName");
+                OnPropertyChanged("FullName");
+            }
+        }
+    }
+
+    public string FullName => $"{GivenNames} {FamilyName}";
+
+    public virtual void OnPropertyChanged(string propertyName)
+    {
+        var propertyChanged = PropertyChanged;
+        if (propertyChanged != null)
+        {
+            propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+```
 ---
 
 # Notes
