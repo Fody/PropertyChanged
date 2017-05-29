@@ -20,11 +20,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
         public event PropertyChangedEventHandler PropertyChanged;
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
-
-        public string FullName 
-        {
-            get => $"{GivenNames} {FamilyName}";
-        }
+        public string FullName => $"{GivenNames} {FamilyName}";
     }
 
 
@@ -64,10 +60,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
             }
         }
 
-        public string FullName 
-        {
-            get => $"{GivenNames} {FamilyName}";
-        }
+        public string FullName => $"{GivenNames} {FamilyName}";
 
         public virtual void OnPropertyChanged(string propertyName)
         {
