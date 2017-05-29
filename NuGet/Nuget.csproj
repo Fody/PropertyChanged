@@ -12,8 +12,8 @@
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.3\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.3\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.3" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.0\PropertyChanged.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.0" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(Configuration)\netstandard1.0\PropertyChanged.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.0" />
     <Copy SourceFiles="$(SolutionDir)NuGet\PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\tools\uninstall.ps1" />
