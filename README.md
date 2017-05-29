@@ -1,106 +1,102 @@
+![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
+
+Injects code into property setters of classes implementing [INotifyPropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged(v=vs.110).aspx), to raise the [PropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.propertychanged(v=vs.110).aspx) event.
+
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
 [![NuGet Status](http://img.shields.io/nuget/v/PropertyChanged.Fody.svg?style=flat)](https://www.nuget.org/packages/PropertyChanged.Fody/)
 
-
-## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
-
-![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
-
-Injects [INotifyPropertyChanged](http://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx) code into properties at compile time.
-
-[Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage) 
-
-
-## The NuGet package  
-
-https://nuget.org/packages/PropertyChanged.Fody/
+This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via [NuGet](https://nuget.org/packages/PropertyChanged.Fody/):
 
     PM> Install-Package PropertyChanged.Fody
 
+---
 
-### Your Code
+**NOTE: All classes that implement `INotifyPropertyChanged` will have notification code injected into property setters.**
 
-**NOTE: All classes that have `INotifyPropertyChanged` will have notification code injected into property sets.**
+### Your Code:
 
-```
-public class Person :INotifyPropertyChanged
-{
-    public event PropertyChangedEventHandler PropertyChanged;
-    public string GivenNames { get; set; }
-    public string FamilyName { get; set; }
-
-    public string FullName
+    public class Person : INotifyPropertyChanged
     {
-        get
+        public event PropertyChangedEventHandler PropertyChanged;
+        public string GivenNames { get; set; }
+        public string FamilyName { get; set; }
+
+        public string FullName 
         {
-            return string.Format("{0} {1}", GivenNames, FamilyName);
+            get => $"{GivenNames} {FamilyName}";
         }
     }
-}
-```
 
 
-### What gets compiled
+### What gets compiled:
 
-```
-public class Person : INotifyPropertyChanged
-{
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    string givenNames;
-    public string GivenNames
+    public class Person : INotifyPropertyChanged
     {
-        get { return givenNames; }
-        set
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        string givenNames;
+        public string GivenNames
         {
-            if (value != givenNames)
+            get => givenNames;
+            set
             {
-                givenNames = value;
-                OnPropertyChanged("GivenNames");
-                OnPropertyChanged("FullName");
+                if (value != givenNames)
+                {
+                    givenNames = value;
+                    OnPropertyChanged("GivenNames");
+                    OnPropertyChanged("FullName");
+                }
+            }
+        }
+
+        string familyName;
+        public string FamilyName
+        {
+            get => familyName;
+            set 
+            {
+                if (value != familyName)
+                {
+                    familyName = value;
+                    OnPropertyChanged("FamilyName");
+                    OnPropertyChanged("FullName");
+                }
+            }
+        }
+
+        public string FullName 
+        {
+            get => $"{GivenNames} {FamilyName}";
+        }
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged != null)
+            {
+                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
 
-    string familyName;
-    public string FamilyName
-    {
-        get { return familyName; }
-        set 
-        {
-            if (value != familyName)
-            {
-                familyName = value;
-                OnPropertyChanged("FamilyName");
-                OnPropertyChanged("FullName");
-            }
-        }
-    }
+---
 
-    public string FullName
-    {
-        get
-        {
-            return string.Format("{0} {1}", GivenNames, FamilyName);
-        }
-    }
+## Notes
 
-    public virtual void OnPropertyChanged(string propertyName)
-    {
-        var propertyChanged = PropertyChanged;
-        if (propertyChanged != null)
-        {
-            propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-}
-```
+* **Dependent properties** -- In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.
 
+  This behavior can be set explicitly using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).
+* **Intercepting the notification call**
+    * [**Global interception**](https://github.com/Fody/PropertyChanged/wiki/NotificationInterception)
+    * **Class-level interception** --The `OnPropertyChanged` method will only be injected if there is no such existing method on the class; if there is such a method, then calls to that method will be injected into the setters -- see [here](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection).
+    * **Property-level interception** -- For a given property, if there is a method of the form `On<PropertyName>Changed`, then that method will be called -- see [here](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed).
+* To get the [**before / after values**](https://github.com/Fody/PropertyChanged/wiki/BeforeAfter), use the following signature for `OnPropertyChanged` / `On<PropertyName>Changed`:
 
-## Icon
+      public void OnPropertyChanged(string propertyName, object before, object after)
+* The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`ImplementsPropertyChanged` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#implementpropertychangedattribute). **NOTE: This attribute has been deprecated as of version 2.**
+* Behvaior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
 
-Icon courtesy of [The Noun Project](https://thenounproject.com)
-
+For more information, see the [wiki pages](https://github.com/Fody/PropertyChanged/wiki).
 
 ## Contributors
 
@@ -108,19 +104,4 @@ Icon courtesy of [The Noun Project](https://thenounproject.com)
  * [Geert van Horrik](https://github.com/GeertvanHorrik)
  * [Simon Cropp](https://github.com/simoncropp)
 
-
-## More Info
-
-* [Attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes)
-* [BeforeAfter](https://github.com/Fody/PropertyChanged/wiki/BeforeAfter)
-* [EqualityChecking](https://github.com/Fody/PropertyChanged/wiki/EqualityChecking)
-* [EventInvokerSelectionInjection](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection)
-* [ExampleUsage](https://github.com/Fody/PropertyChanged/wiki/ExampleUsage)
-* [ImplementingAnIsChangedFlag](https://github.com/Fody/PropertyChanged/wiki/Implementing-An-IsChanged-Flag)
-* [MVVMLightBroadcast](https://github.com/Fody/PropertyChanged/wiki/MVVMLightBroadcast)
-* [NotificationInterception](https://github.com/Fody/PropertyChanged/wiki/NotificationInterception)
-* [On_PropertyName_Changed](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed)
-* [PropertyDependencies](https://github.com/Fody/PropertyChanged/wiki/PropertyDependencies)
-* [SupportedToolkits](https://github.com/Fody/PropertyChanged/wiki/SupportedToolkits)
-* [Options](https://github.com/Fody/PropertyChanged/wiki/Options)
-* [WeavingWithoutAddingAReference](https://github.com/Fody/PropertyChanged/wiki/WeavingWithoutAddingAReference)
+Icon courtesy of [The Noun Project](https://thenounproject.com)
