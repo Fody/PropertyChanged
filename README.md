@@ -11,9 +11,11 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 
 ---
 
+# Overview
+
 **NOTE: All classes that implement `INotifyPropertyChanged` will have notification code injected into property setters.**
 
-### Your Code:
+Your code:
 
     public class Person : INotifyPropertyChanged
     {
@@ -23,8 +25,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
         public string FullName => $"{GivenNames} {FamilyName}";
     }
 
-
-### What gets compiled:
+What gets compiled:
 
     public class Person : INotifyPropertyChanged
     {
@@ -74,7 +75,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 
 ---
 
-## Notes
+# Notes
 
 * **Dependent properties** -- In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.
 
@@ -92,7 +93,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 
 For more information, see the [wiki pages](https://github.com/Fody/PropertyChanged/wiki).
 
-## Contributors
+# Contributors
 
  * [Cameron MacFarland](https://github.com/distantcam)
  * [Geert van Horrik](https://github.com/GeertvanHorrik)
