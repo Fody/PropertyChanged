@@ -1,6 +1,6 @@
 ![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
 
-Injects code into property setters of classes implementing [INotifyPropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged(v=vs.110).aspx), to raise the [PropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.propertychanged(v=vs.110).aspx) event.
+Injects code which raises the [`PropertyChanged` event](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.propertychanged(v=vs.110).aspx), into property setters of classes implementing [INotifyPropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged(v=vs.110).aspx).
 
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
 [![NuGet Status](http://img.shields.io/nuget/v/PropertyChanged.Fody.svg?style=flat)](https://www.nuget.org/packages/PropertyChanged.Fody/)
@@ -93,6 +93,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 * To get the [**before / after values**](https://github.com/Fody/PropertyChanged/wiki/BeforeAfter), use the following signature for `OnPropertyChanged` / `On<PropertyName>Changed`:
 
       public void OnPropertyChanged(string propertyName, object before, object after)
+* To prevent a specific class from having the notification call injection, use the [`DoNotNotify` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#donotnotifyattribute).
 * The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`ImplementsPropertyChanged` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#implementpropertychangedattribute). **NOTE: This attribute has been deprecated as of version 2.**
 * Behvaior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
 
