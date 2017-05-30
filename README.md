@@ -16,7 +16,7 @@ This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via
 **NOTE: All classes that implement `INotifyPropertyChanged` will have notification code injected into property setters.**
 
 Your code:
-```
+```csharp
 public class Person : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
@@ -26,7 +26,7 @@ public class Person : INotifyPropertyChanged
 }
 ```
 What gets compiled:
-```
+```csharp
 public class Person : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
