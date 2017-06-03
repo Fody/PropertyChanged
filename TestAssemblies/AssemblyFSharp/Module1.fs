@@ -1,7 +1,7 @@
 ﻿namespace Namespace
 
 open System.ComponentModel
-
+ 
 type ClassWithProperties() =
     let mutable propval =""
 
@@ -9,7 +9,7 @@ type ClassWithProperties() =
     interface INotifyPropertyChanged with
         [<CLIEvent>]
         member x.PropertyChanged = event.Publish
-
+ 
     member x.OnPropertyChanged(name)=
          event.Trigger(x, new PropertyChangedEventArgs(name))
 
