@@ -9,7 +9,7 @@ using Mono.Cecil;
 using System.Reflection;
 using NUnit.Framework;
 
-public abstract class BaseTaskTests
+public abstract partial class BaseTaskTests
 {
     string assemblyName;
     Assembly assembly;
