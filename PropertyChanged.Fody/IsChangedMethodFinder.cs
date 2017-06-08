@@ -79,7 +79,7 @@ public partial class ModuleWeaver
             .FirstOrDefault(x =>
                             x.Name == isChangedPropertyName &&
                             x.SetMethod != null &&
-                            x.SetMethod.IsPublic
+                            (x.SetMethod.IsPublic || x.SetMethod.IsFamily || x.SetMethod.IsFamilyOrAssembly)
             );
 
 
