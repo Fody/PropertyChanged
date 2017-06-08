@@ -25,6 +25,11 @@ public partial class ModuleWeaver
                                 CallingConvention = self.CallingConvention,
                             };
 
+        if (self.HasGenericParameters)
+        {
+            ImportGenericParameters(reference, self);
+        }
+
         foreach (var parameter in self.Parameters)
         {
             reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
@@ -33,4 +38,12 @@ public partial class ModuleWeaver
         return reference;
     }
 
+    internal static void ImportGenericParameters(IGenericParameterProvider imported, IGenericParameterProvider original)
+    {
+        var parameters = original.GenericParameters;
+        var importedParameters = imported.GenericParameters;
+
+        foreach (var t in parameters)
+            importedParameters.Add(new GenericParameter(t.Name, imported));
+    }
 }
