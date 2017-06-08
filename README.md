@@ -92,7 +92,7 @@ public class Person : INotifyPropertyChanged
       public void OnPropertyChanged(string propertyName, object before, object after)
 * To prevent a specific class from having the notification call injection, use the [`DoNotNotify` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#donotnotifyattribute).
 * The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`AddINotifyPropertyChangedInterfaceAttribute` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#addinotifypropertychangedinterfaceattribute). **Raising an issue about "this attribute does not behave as expected" will result in a RTFM and the issue being closed.**
-* Behvaior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
+* Behavior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
 
 For more information, see the [wiki pages](https://github.com/Fody/PropertyChanged/wiki).
 
