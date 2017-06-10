@@ -24,9 +24,9 @@ public partial class ModuleWeaver
                 var body = propertyData.PropertyDefinition.SetMethod.Body;
 
                 var alreadyHasEquality = HasEqualityChecker.AlreadyHasEquality(propertyData.PropertyDefinition, propertyData.BackingFieldReference);
-               
+
                 body.SimplifyMacros();
-             
+
                 body.MakeLastStatementReturn();
 
                 var propertyWeaver = new PropertyWeaver(this, propertyData, node, ModuleDefinition.TypeSystem);
@@ -41,6 +41,8 @@ public partial class ModuleWeaver
                 body.InitLocals = true;
                 body.OptimizeMacros();
             }
+
+            FixupConstructorAutoPropertyInitializers(node);
 
             ProcessTypes(node.Nodes);
         }
