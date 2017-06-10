@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <PackageReference Include="FodyCecil" Version="2.0.8" />
+    <PackageReference Include="FodyCecil" Version="2.1.0" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Compile Include="..\CommonAssemblyInfo.cs" />

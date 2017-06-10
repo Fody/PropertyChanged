@@ -13,10 +13,10 @@
   <ItemGroup>
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
     <PackageReference Include="ApprovalUtilities" Version="3.0.13" />
-    <PackageReference Include="FSharp.Core" Version="4.1.17" />
-    <PackageReference Include="FodyCecil" Version="2.0.8" />
+    <PackageReference Include="FSharp.Core" Version="4.2.1" />
+    <PackageReference Include="FodyCecil" Version="2.1.0" />
     <PackageReference Include="NSubstitute" Version="2.0.3" />
-    <PackageReference Include="NUnit" Version="3.6.1" />
+    <PackageReference Include="NUnit" Version="3.7.1" />
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
