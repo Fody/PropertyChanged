@@ -1,6 +1,14 @@
+version: 1.0.{build}
 image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
 before_build:
 - ps: nuget restore
-test: off
+build:
+  verbosity: minimal
+test:
+  assemblies:
+    only:
+    - PropertyChangedTests\bin\Release\net462\PropertyChangedTests.dll
 artifacts:
 - path: NuGetBuild\**\*.nupkg
