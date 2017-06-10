@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -9,7 +8,7 @@ public partial class ModuleWeaver
     static void FixupConstructorAutoPropertyInitializers(TypeNode node)
     {
         /*
-         * Initializing auto-properties in the constructor(s) will implicityl generate
+         * Initializing auto-properties in the constructor(s) will implicitly generate
          * a call to the virtual "OnPropertyChanged" methdod after the class is weaved,
          * which will generate a CA2214:DoNotCallOverridableMethodsInConstructors:
          *
