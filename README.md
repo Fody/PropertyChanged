@@ -87,6 +87,14 @@ public class Person : INotifyPropertyChanged
     * [**Global interception**](https://github.com/Fody/PropertyChanged/wiki/NotificationInterception)
     * **Class-level interception** --The `OnPropertyChanged` method will only be injected if there is no such existing method on the class; if there is such a method, then calls to that method will be injected into the setters -- see [here](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection).
     * **Property-level interception** -- For a given property, if there is a method of the form `On<PropertyName>Changed`, then that method will be called -- see [here](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed).
+* **Auto-properties assignment in the constructor** -- calling `OnPropertyChanged` from within the constructor is risky, because event handlers will see a partially initialized object in an undetermined state. Even worse if OnPropertyChanged is virtual, derived classes will see calls to OnPropertyChanged even before their own constructor has been called.
+Therefore [CA2214](https://docs.microsoft.com/en-us/visualstudio/code-quality/ca2214-do-not-call-overridable-methods-in-constructors) warns you that such code might be critical and should be redesigned.
+With 'normal' properties you can easily avoid this by initializing the backing field instead of the property, but with auto-properties you have no chance to do so, because the backing field is compiler generated and invisible.
+To help you favoring a robust design, setting an auto-property in a constructor is replaced by setting the corresponding backing field when the assembly is weaved. 
+This way `OnPropertyChanged` will not be called and `IsChanged` is still false after the constructor.
+However if your code needs property changed events even from within the constructor, you can opt-in for events by adding the attribute `[NotifyAutoPropertiesInConstructor(true)]` either on assembly, class or constructor level.
+
+
 * To get the [**before / after values**](https://github.com/Fody/PropertyChanged/wiki/BeforeAfter), use the following signature for `OnPropertyChanged` / `On<PropertyName>Changed`:
 
       public void OnPropertyChanged(string propertyName, object before, object after)
@@ -102,5 +110,6 @@ For more information, see the [wiki pages](https://github.com/Fody/PropertyChang
  * [Cameron MacFarland](https://github.com/distantcam)
  * [Geert van Horrik](https://github.com/GeertvanHorrik)
  * [Simon Cropp](https://github.com/simoncropp)
+ * [Tom Englert](https://github.com/tom-englert)
 
 Icon courtesy of [The Noun Project](https://thenounproject.com)
