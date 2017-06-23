@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Mono.Cecil.Rocks;
 
 public partial class ModuleWeaver
@@ -42,7 +43,7 @@ public partial class ModuleWeaver
                 body.OptimizeMacros();
             }
 
-            FixupConstructorAutoPropertyInitializers(node);
+            FixupConstructorAutoPropertyInitializers(node, ModuleDefinition.ShouldNotifyAutoPropertiesInConstructor());
 
             ProcessTypes(node.Nodes);
         }

@@ -7,6 +7,7 @@ public abstract partial class BaseTaskTests
     [Test]
     [TestCase("WithInlineInitializedAutoProperties")]
     [TestCase("WithExplicitConstructorInitializedAutoProperties")]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndClassLevelOptOutAndMethodLevelOptIn")]
     public void WithInitializedAutoPropertiesTest(string className)
     {
         var instance = assembly.GetInstance(className);
@@ -33,6 +34,39 @@ public abstract partial class BaseTaskTests
         instance.Property2 = "b";
         Assert.AreEqual(5, propertyEventCount);
         Assert.IsTrue(instance.IsChanged);
+    }
+
+    [Test]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndClassLevelOptOut")]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptOut")]
+    public void WithInitializedAutoPropertiesTestOptOut(string className)
+    {
+        var instance = assembly.GetInstance(className);
+
+        var propertyEventCount = 0;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            propertyEventCount++;
+        };
+
+        // setting any property inplicitly sets "IsChanged", so the first time we get 2 events!
+
+        Assert.IsTrue(instance.IsChanged);
+        Assert.AreEqual(3, instance.PropertyChangedCalls);
+        Assert.AreEqual("Test", instance.Property1);
+        Assert.AreEqual("Test2", instance.Property2);
+
+        instance.Property1 = "a";
+        Assert.AreEqual(1, propertyEventCount);
+        Assert.IsTrue(instance.IsChanged);
+
+        instance.IsChanged = false;
+        Assert.AreEqual(2, propertyEventCount);
+
+        instance.Property2 = "b";
+        Assert.AreEqual(4, propertyEventCount);
+        Assert.IsTrue(instance.IsChanged);
+        Assert.AreEqual(7, instance.PropertyChangedCalls);
     }
 
     [Test]
@@ -136,12 +170,13 @@ public abstract partial class BaseTaskTests
         Assert.AreEqual(0, instance.VirtualMethodCalls);
 
         instance.Property1 = "a";
-        Assert.IsTrue(instance.BaseNotifyCalled); // has changed indirectly => 2 VM calls.
-        Assert.AreEqual(2, instance.VirtualMethodCalls);
+        Assert.IsTrue(instance.BaseNotifyCalled);
+        Assert.AreEqual(1, instance.VirtualMethodCalls);
 
         instance.Property2 = "b";
-        Assert.AreEqual(3, instance.VirtualMethodCalls);
+        Assert.AreEqual(2, instance.VirtualMethodCalls);
     }
+
     [Test]
     public void WithInitializedBackingFieldPropertiesAndINPCImplementationFromBaseClassTest()
     {
@@ -149,13 +184,13 @@ public abstract partial class BaseTaskTests
 
         Assert.AreEqual("Test", instance.Property1);
         Assert.AreEqual("Test2", instance.Property2);
-        Assert.IsTrue(instance.BaseNotifyCalled); // has changed indirectly => 3 VM calls.
-        Assert.AreEqual(3, instance.VirtualMethodCalls);
+        Assert.IsTrue(instance.BaseNotifyCalled);
+        Assert.AreEqual(2, instance.VirtualMethodCalls);
 
         instance.Property1 = "a";
-        Assert.AreEqual(4, instance.VirtualMethodCalls);
+        Assert.AreEqual(3, instance.VirtualMethodCalls);
 
         instance.Property2 = "b";
-        Assert.AreEqual(5, instance.VirtualMethodCalls);
+        Assert.AreEqual(4, instance.VirtualMethodCalls);
     }
 }
