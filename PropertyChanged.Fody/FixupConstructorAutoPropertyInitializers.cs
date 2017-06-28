@@ -5,7 +5,7 @@ using Mono.Cecil.Cil;
 
 public partial class ModuleWeaver
 {
-    static void FixupConstructorAutoPropertyInitializers(TypeNode node)
+    static void FixupConstructorAutoPropertyInitializers(TypeNode node, bool? moduleLevelOptOut)
     {
         /*
          * Initializing auto-properties in the constructor(s) will implicitly generate
@@ -37,8 +37,12 @@ public partial class ModuleWeaver
          * This will however not catch initializing auto-properties from methods called by the constructor.
          */
 
+        var typeLevelOptOut = node.TypeDefinition.ShouldNotifyAutoPropertiesInConstructor();
+
         foreach (var ctor in node.TypeDefinition.Methods.Where(method => method.IsConstructor && method.HasBody))
         {
+            var methodLevelOptOut = ctor.ShouldNotifyAutoPropertiesInConstructor();
+
             var instructions = ctor.Body.Instructions;
 
             for (var index = 0; index < instructions.Count; index++)
@@ -56,7 +60,17 @@ public partial class ModuleWeaver
 
                 var customAttributes = backingField?.Resolve()?.CustomAttributes;
 
+                // if the backing field has the CompilerGeneratedAttribute, its the backing field of an auto-property.
                 if (true != customAttributes?.Any(item => item.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute"))
+                {
+                    continue;
+                }
+
+                var propertyLevelOptOut = property.PropertyDefinition.ShouldNotifyAutoPropertiesInConstructor();
+
+                var shouldNotify = propertyLevelOptOut ?? methodLevelOptOut ?? typeLevelOptOut ?? moduleLevelOptOut ?? true;
+
+                if (shouldNotify)
                 {
                     continue;
                 }

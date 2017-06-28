@@ -13,7 +13,9 @@ public partial class ModuleWeaver
         "PropertyChanged.DoNotSetChangedAttribute",
         "PropertyChanged.AlsoNotifyForAttribute",
         "PropertyChanged.DependsOnAttribute",
-        "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute"
+        "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute",
+        "PropertyChanged.NotifyAutoPropertiesInConstructorAttribute"
+
     };
 
     List<string> assemblyLevelAttributeNames = new List<string>

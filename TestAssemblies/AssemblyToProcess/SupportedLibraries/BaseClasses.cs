@@ -4,11 +4,13 @@ using System;
 // ReSharper restore RedundantUsingDirective
 using System.ComponentModel;
 using Jounce.Core.Model;
+using PropertyChanged;
 
 namespace Caliburn.Micro
 {
     public class PropertyChangedBase : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void NotifyOfPropertyChange(string propertyName)
@@ -23,6 +25,7 @@ namespace Catel.Data
 {
     public class ObservableObject : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -37,6 +40,7 @@ namespace Telerik.Windows.Controls
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -58,6 +62,7 @@ namespace Magellan.Framework
 {
     public abstract class PresentationObject : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
 
         protected void NotifyChanged(string propertyName)
@@ -78,6 +83,7 @@ namespace Cinch
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void NotifyPropertyChanged(string propertyName)
@@ -92,6 +98,7 @@ namespace Microsoft.Practices.Prism.ViewModel
 {
     public class NotificationObject : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -160,7 +167,9 @@ namespace GalaSoft.MvvmLight
     }
     public class ObservableObject : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void RaisePropertyChanged(string propertyName)
         {
@@ -174,6 +183,7 @@ namespace Caliburn.PresentationFramework
 {
     public class PropertyChangedBase : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void NotifyOfPropertyChange(string propertyName)
@@ -191,6 +201,7 @@ namespace Jounce.Core.Model
     public abstract class BaseNotify : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
 
         protected virtual void RaisePropertyChanged(string propertyName)
@@ -213,6 +224,7 @@ namespace ReactiveUI
 {
     public abstract class ReactiveObject : INotifyPropertyChanged
     {
+        [DoNotNotify]
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void raisePropertyChanged(string propertyName)
