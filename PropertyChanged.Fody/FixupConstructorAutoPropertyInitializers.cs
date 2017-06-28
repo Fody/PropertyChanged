@@ -68,7 +68,7 @@ public partial class ModuleWeaver
 
                 var propertyLevelOptOut = property.PropertyDefinition.ShouldNotifyAutoPropertiesInConstructor();
 
-                var shouldNotify = propertyLevelOptOut ?? methodLevelOptOut ?? typeLevelOptOut ?? moduleLevelOptOut ?? false;
+                var shouldNotify = propertyLevelOptOut ?? methodLevelOptOut ?? typeLevelOptOut ?? moduleLevelOptOut ?? true;
 
                 if (shouldNotify)
                 {

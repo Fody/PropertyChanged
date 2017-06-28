@@ -7,8 +7,8 @@ public abstract partial class BaseTaskTests
     [Test]
     [TestCase("WithInlineInitializedAutoProperties")]
     [TestCase("WithExplicitConstructorInitializedAutoProperties")]
-    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndClassLevelOptOutAndMethodLevelOptIn")]
-    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptOutAndPropertyLevelOptIn")]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptIn")]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptIn")]
     public void WithInitializedAutoPropertiesTest(string className)
     {
         var instance = assembly.GetInstance(className);
@@ -38,10 +38,8 @@ public abstract partial class BaseTaskTests
     }
 
     [Test]
-    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndClassLevelOptOut")]
-    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptOut")]
-    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptOut")]
-    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptOut2")]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesNoOptOut")]
+    [TestCase("WithExplicitConstructorInitializedAutoPropertiesAndPartialPropertyLevelOptOut")]
     public void WithInitializedAutoPropertiesTestOptOut(string className)
     {
         var instance = assembly.GetInstance(className);
