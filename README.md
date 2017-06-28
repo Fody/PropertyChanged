@@ -92,7 +92,7 @@ Therefore [CA2214](https://docs.microsoft.com/en-us/visualstudio/code-quality/ca
 With 'normal' properties you can easily avoid this by initializing the backing field instead of the property, but with auto-properties you have no chance to do so, because the backing field is compiler generated and invisible.
 To help you favoring a robust design, setting an auto-property in a constructor is replaced by setting the corresponding backing field when the assembly is weaved. 
 This way `OnPropertyChanged` will not be called and `IsChanged` is still false after the constructor.
-However if your code needs property changed events even from within the constructor, you can opt-in for events by adding the attribute `[NotifyAutoPropertiesInConstructor(true)]` either on assembly, class or constructor level.
+However if your code needs property changed events even from within the constructor, you can opt-in for events by adding the attribute `[NotifyAutoPropertiesInConstructor(true)]` either on assembly, class, constructor or property level.
 
 
 * To get the [**before / after values**](https://github.com/Fody/PropertyChanged/wiki/BeforeAfter), use the following signature for `OnPropertyChanged` / `On<PropertyName>Changed`:

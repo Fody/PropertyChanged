@@ -43,12 +43,6 @@ public partial class ModuleWeaver
         {
             var methodLevelOptOut = ctor.ShouldNotifyAutoPropertiesInConstructor();
 
-            if (ShouldNotify(moduleLevelOptOut, typeLevelOptOut, methodLevelOptOut))
-            {
-                // this constructor is opted out, don't touch...
-                continue;
-            }
-
             var instructions = ctor.Body.Instructions;
 
             for (var index = 0; index < instructions.Count; index++)
@@ -68,6 +62,15 @@ public partial class ModuleWeaver
 
                 // if the backing field has the CompilerGeneratedAttribute, its the backing field of an auto-property.
                 if (true != customAttributes?.Any(item => item.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute"))
+                {
+                    continue;
+                }
+
+                var propertyLevelOptOut = property.PropertyDefinition.ShouldNotifyAutoPropertiesInConstructor();
+
+                var shouldNotify = propertyLevelOptOut ?? methodLevelOptOut ?? typeLevelOptOut ?? moduleLevelOptOut ?? false;
+
+                if (shouldNotify)
                 {
                     continue;
                 }
@@ -105,10 +108,5 @@ public partial class ModuleWeaver
 
         propertyName = operandName.Substring(4);
         return true;
-    }
-
-    static bool ShouldNotify(bool? moduleLevelOptOut, bool? typeLevelOptOut, bool? methodLevelOptOut)
-    {
-        return methodLevelOptOut ?? typeLevelOptOut ?? moduleLevelOptOut ?? false;
     }
 }

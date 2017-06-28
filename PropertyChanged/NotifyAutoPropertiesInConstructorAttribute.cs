@@ -10,7 +10,7 @@ namespace PropertyChanged
     /// event handlers will work on an only partialy initialized object!
     /// Also when the OnPropertyChanged method is virtual (the default), you get a <see href="https://msdn.microsoft.com/en-us/library/ms182331.aspx">CA2214</see> warning when this feature is enabled. 
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Class | AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Class | AttributeTargets.Assembly)]
     public class NotifyAutoPropertiesInConstructorAttribute : Attribute
     {
         /// <summary>

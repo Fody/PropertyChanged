@@ -86,6 +86,60 @@ public class WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptOu
     }
 }
 
+public class WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptOut : ObservableObject
+{
+    public WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptOut()
+    {
+        Property1 = "Test";
+        Property2 = "Test2";
+    }
+
+    [NotifyAutoPropertiesInConstructor(true)]
+    public string Property1 { get; set; }
+
+    [NotifyAutoPropertiesInConstructor(true)]
+    public string Property2 { get; set; }
+
+    public bool IsChanged { get; set; }
+
+    [DoNotNotify]
+    public int PropertyChangedCalls { get; private set; }
+
+    public override void RaisePropertyChanged(string propertyName)
+    {
+        base.RaisePropertyChanged(propertyName);
+
+        PropertyChangedCalls += 1;
+    }
+}
+
+public class WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptOut2 : ObservableObject
+{
+    public WithExplicitConstructorInitializedAutoPropertiesAndPropertyLevelOptOut2()
+    {
+        Property1 = "Test";
+        Property2 = "Test2";
+    }
+
+    [NotifyAutoPropertiesInConstructor(true)]
+    public string Property1 { get; set; }
+
+    [NotifyAutoPropertiesInConstructor(false)]
+    public string Property2 { get; set; }
+
+    public bool IsChanged { get; set; }
+
+    [DoNotNotify]
+    public int PropertyChangedCalls { get; private set; } = 1; // we get one call less if only one property does opt-out. start at 1 so we can use the same test as with both properties.
+
+    public override void RaisePropertyChanged(string propertyName)
+    {
+        base.RaisePropertyChanged(propertyName);
+
+        PropertyChangedCalls += 1;
+    }
+}
+
 [AddINotifyPropertyChangedInterface]
 [NotifyAutoPropertiesInConstructor(true)]
 public class WithExplicitConstructorInitializedAutoPropertiesAndClassLevelOptOutAndMethodLevelOptIn
@@ -103,6 +157,26 @@ public class WithExplicitConstructorInitializedAutoPropertiesAndClassLevelOptOut
 
     public bool IsChanged { get; set; }
 }
+
+[AddINotifyPropertyChangedInterface]
+public class WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptOutAndPropertyLevelOptIn
+{
+    [NotifyAutoPropertiesInConstructor(true)]
+    public WithExplicitConstructorInitializedAutoPropertiesAndMethodLevelOptOutAndPropertyLevelOptIn()
+    {
+        Property1 = "Test";
+        Property2 = "Test2";
+    }
+
+    [NotifyAutoPropertiesInConstructor(false)]
+    public string Property1 { get; set; }
+
+    [NotifyAutoPropertiesInConstructor(false)]
+    public string Property2 { get; set; }
+
+    public bool IsChanged { get; set; }
+}
+
 
 public class WithExplicitConstructorInitializedAutoPropertiesDerivedWeakDesign : WithExplicitConstructorInitializedAutoProperties
 {
