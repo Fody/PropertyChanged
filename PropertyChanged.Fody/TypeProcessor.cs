@@ -42,8 +42,6 @@ public partial class ModuleWeaver
                 body.OptimizeMacros();
             }
 
-            FixupConstructorAutoPropertyInitializers(node);
-
             ProcessTypes(node.Nodes);
         }
     }
