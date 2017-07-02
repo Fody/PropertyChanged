@@ -1,3 +1,5 @@
+using PropertyChanged;
+
 public class ClassWithInlineInitializedAutoProperties : ObservableTestObject
 {
     public string Property1 { get; set; } = "Test";
@@ -6,3 +8,14 @@ public class ClassWithInlineInitializedAutoProperties : ObservableTestObject
 
     public bool IsChanged { get; set; }
 }
+
+[NotifyAutoPropertiesInConstructor(false)]
+public class ClassWithInlineInitializedAutoPropertiesAndNotifyAutoPropertyOptOut : ObservableTestObject
+{
+    public string Property1 { get; set; } = "Test";
+
+    public string Property2 { get; set; } = "Test2";
+
+    public bool IsChanged { get; set; }
+}
+

@@ -12,6 +12,7 @@ public class TypesWithInitializedPropertiesTests
     readonly Assembly assembly = new WeaverHelper(assemblyName).Assembly;
 
     [Test]
+    // default behavior (baseline)
     [TestCase("ClassWithInlineInitializedAutoProperties", 
         "Test", "Test2", false, new string[0])]
     [TestCase("ClassWithExplicitInitializedAutoProperties", 
@@ -24,7 +25,26 @@ public class TypesWithInitializedPropertiesTests
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
     [TestCase("ClassWithExplicitInitializedBackingFieldProperties", 
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
-    public void TypesWithInitializedPropertiesTest(string className, string property1Value, string property2Value, bool isChangedStateAfterConstructor, string[] propertyChangedCallsInConstructor)
+    // with class level [NotifyAutoPropertiesInConstructor(false)]
+    [TestCase("ClassWithInlineInitializedAutoPropertiesAndNotifyAutoPropertyOptOut", 
+        "Test", "Test2", false, new string[0])]
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesAndNotifyAutoPropertyOptOut", 
+        "Test", "Test2", false, new string[0])]
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedWeakDesignAndNotifyAutoPropertyOptOut", 
+        "test", "test2", true, new[] { "IsChanged", "Property1", "Property2" })]
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedProperDesignAndNotifyAutoPropertyOptOut", 
+        "test", "test2", false, new string[0])]
+    [TestCase("ClassWithAutoPropertiesInitializedInSeparateMethodAndNotifyAutoPropertyOptOut", 
+        "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
+    [TestCase("ClassWithExplicitInitializedBackingFieldPropertiesAndNotifyAutoPropertyOptOut", 
+        "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
+    // with mixed [NotifyAutoPropertiesInConstructor(true/false)]
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesAndNotifyAutoPropertyOptOutInConstructor",
+        "Test", "Test2", false, new string[0])]
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesAndNotifyAutoPropertyOptOutAndOptInForProperty1",
+        "Test", "Test2", true, new[] { "IsChanged", "Property1" })]
+
+    public void TypesWithInitializedPropertiesTest(string className, string property1Value, string property2Value, bool isChangedStateAfterConstructor, string[] expectedPropertyChangedCallsInConstructor)
     {
         var instance = assembly.GetInstance(className);
 
@@ -40,7 +60,7 @@ public class TypesWithInitializedPropertiesTests
         var actualPropertyChangedCalls = (IList<string>)instance.PropertyChangedCalls;
         Debug.WriteLine("PropertyChanged calls: " + string.Join(", ", actualPropertyChangedCalls));
 
-        Assert.IsTrue(propertyChangedCallsInConstructor.SequenceEqual(actualPropertyChangedCalls));
+        Assert.IsTrue(expectedPropertyChangedCallsInConstructor.SequenceEqual(actualPropertyChangedCalls));
         Assert.AreEqual(isChangedStateAfterConstructor, instance.IsChanged);
 
         var initial = isChangedStateAfterConstructor ? 1 : 2;
