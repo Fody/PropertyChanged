@@ -1,7 +1,7 @@
 public class ClassWithExplicitInitializedBackingFieldProperties : ObservableTestObject
 {
-    private string _property1;
-    private string _property2;
+    string property1;
+    string property2;
 
     public ClassWithExplicitInitializedBackingFieldProperties()
     {
@@ -13,11 +13,11 @@ public class ClassWithExplicitInitializedBackingFieldProperties : ObservableTest
     {
         get
         {
-            return _property1;
+            return property1;
         }
         set
         {
-            _property1 = value;
+            property1 = value;
         }
     }
 
@@ -25,11 +25,11 @@ public class ClassWithExplicitInitializedBackingFieldProperties : ObservableTest
     {
         get
         {
-            return _property2;
+            return property2;
         }
         set
         {
-            _property2 = value;
+            property2 = value;
         }
     }
 

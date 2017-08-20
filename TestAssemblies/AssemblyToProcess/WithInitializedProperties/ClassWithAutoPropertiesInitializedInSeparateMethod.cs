@@ -5,7 +5,7 @@ public class ClassWithAutoPropertiesInitializedInSeparateMethod : ObservableTest
         Init();
     }
 
-    private void Init()
+    void Init()
     {
         Property1 = "Test";
         Property2 = "Test2";
