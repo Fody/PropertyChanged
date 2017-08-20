@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
@@ -18,146 +18,82 @@ public partial class ModuleWeaver
     public MethodReference DelegateRemoveMethodRef;
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
 
-    public void FindCoreReferences()
-    {
-        var assemblyResolver = ModuleDefinition.AssemblyResolver;
-        var msCoreLibDefinition = assemblyResolver.Resolve(new AssemblyNameReference("mscorlib", null));
-        var msCoreTypes = msCoreLibDefinition?.MainModule?.Types;
-
-        var objectDefinition = msCoreTypes?.FirstOrDefault(x => x.Name == "Object");
-        if (objectDefinition == null)
-        {
-            ExecuteWinRT();
-            return;
-        }
-        var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
-        ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
-        var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
-        ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
-
-        var nullableDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Nullable");
-        NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
-
-        EqualityComparerTypeReference = msCoreTypes.FirstOrDefault(x => x.Name == "EqualityComparer`1");
-
-        var systemDefinition = assemblyResolver.Resolve(new AssemblyNameReference("System", null));
-        var systemTypes = systemDefinition.MainModule.Types;
-
-        var actionDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Action");
-        if (actionDefinition == null)
-        {
-            actionDefinition = systemTypes.FirstOrDefault(x => x.Name == "Action");
-        }
-        var systemCoreDefinition = GetSystemCoreDefinition();
-        if (actionDefinition == null)
-        {
-            actionDefinition = systemCoreDefinition.MainModule.Types.First(x => x.Name == "Action");
-        }
-        ActionTypeReference = ModuleDefinition.ImportReference(actionDefinition);
-
-        var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
-        ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
-
-        var propChangedInterfaceDefinition = systemTypes.First(x => x.Name == "INotifyPropertyChanged");
-        PropChangedInterfaceReference = ModuleDefinition.ImportReference(propChangedInterfaceDefinition);
-        var propChangedHandlerDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventHandler");
-        PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
-        ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
-        var propChangedArgsDefinition = systemTypes.First(x => x.Name == "PropertyChangedEventArgs");
-        ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
-
-        var delegateDefinition = msCoreTypes.First(x => x.Name == "Delegate");
-        var combineMethodDefinition = delegateDefinition.Methods
-            .Single(x =>
-                x.Name == "Combine" &&
-                x.Parameters.Count == 2 &&
-                x.Parameters.All(p => p.ParameterType == delegateDefinition));
-        DelegateCombineMethodRef = ModuleDefinition.ImportReference(combineMethodDefinition);
-        var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
-        DelegateRemoveMethodRef = ModuleDefinition.ImportReference(removeMethodDefinition);
-
-        var interlockedDefinition = msCoreTypes.First(x => x.FullName == "System.Threading.Interlocked");
-        var genericCompareExchangeMethodDefinition = interlockedDefinition
-            .Methods.First(x =>
-                x.IsStatic &&
-                x.Name == "CompareExchange" &&
-                x.GenericParameters.Count == 1 &&
-                x.Parameters.Count == 3);
-        var genericCompareExchangeMethod = ModuleDefinition.ImportReference(genericCompareExchangeMethodDefinition);
-
-        InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
-        InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
-    }
-
-    public void ExecuteWinRT()
-    {
-        var assemblyResolver = ModuleDefinition.AssemblyResolver;
-        var systemRuntime = assemblyResolver.Resolve(new AssemblyNameReference("System.Runtime", null));
-        var systemRuntimeTypes = systemRuntime.MainModule.Types;
-
-        var objectDefinition = systemRuntimeTypes.First(x => x.Name == "Object");
-
-        var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
-        ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
-        var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
-        ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
-
-        var nullableDefinition = systemRuntimeTypes.FirstOrDefault(x => x.Name == "Nullable");
-        NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
-
-        EqualityComparerTypeReference = systemRuntimeTypes.FirstOrDefault(x => x.Name == "EqualityComparer`1");
-
-        var actionDefinition = systemRuntimeTypes.First(x => x.Name == "Action");
-        ActionTypeReference = ModuleDefinition.ImportReference(actionDefinition);
-        var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
-        ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
-
-        var systemObjectModel = assemblyResolver.Resolve(new AssemblyNameReference("System.ObjectModel", null));
-        var systemObjectModelTypes = systemObjectModel.MainModule.Types;
-
-        var propChangedInterfaceDefinition = systemObjectModelTypes.First(x => x.Name == "INotifyPropertyChanged");
-        PropChangedInterfaceReference = ModuleDefinition.ImportReference(propChangedInterfaceDefinition);
-
-        var propChangedHandlerDefinition = systemObjectModelTypes.First(x => x.Name == "PropertyChangedEventHandler");
-        PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
-        ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
-        var propChangedArgsDefinition = systemObjectModelTypes.First(x => x.Name == "PropertyChangedEventArgs");
-        ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
-
-        var delegateDefinition = systemRuntimeTypes.First(x => x.Name == "Delegate");
-        var combineMethodDefinition = delegateDefinition.Methods
-            .Single(x =>
-                x.Name == "Combine" &&
-                x.Parameters.Count == 2 &&
-                x.Parameters.All(p => p.ParameterType == delegateDefinition));
-        DelegateCombineMethodRef = ModuleDefinition.ImportReference(combineMethodDefinition);
-        var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
-        DelegateRemoveMethodRef = ModuleDefinition.ImportReference(removeMethodDefinition);
-
-        var systemThreading = assemblyResolver.Resolve(new AssemblyNameReference("System.Threading", null));
-        var interlockedDefinition = systemThreading.MainModule.Types.First(x => x.FullName == "System.Threading.Interlocked");
-        var genericCompareExchangeMethodDefinition = interlockedDefinition
-            .Methods.First(x =>
-                x.IsStatic &&
-                x.Name == "CompareExchange" &&
-                x.GenericParameters.Count == 1 &&
-                x.Parameters.Count == 3);
-        var genericCompareExchangeMethod = ModuleDefinition.ImportReference(genericCompareExchangeMethodDefinition);
-
-        InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
-        InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
-    }
-
-    AssemblyDefinition GetSystemCoreDefinition()
+    void AddAssemblyIfExists(string name, List<TypeDefinition> types)
     {
         try
         {
-            return ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference("System.Core", null));
+            var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+
+            if (msCoreLibDefinition != null)
+            {
+                types.AddRange(msCoreLibDefinition.MainModule.Types);
+            }
         }
-        catch (Exception exception)
+        catch (AssemblyResolutionException)
         {
-            var message = $@"Could not resolve System.Core. Please ensure you are using .net 3.5 or higher.{Environment.NewLine}Inner message:{exception.Message}.";
-            throw new WeavingException(message);
+            LogInfo($"Failed to resolve '{name}'. So skipping its types.");
         }
     }
+
+    public void FindCoreReferences()
+    {
+
+        var types = new List<TypeDefinition>();
+
+        AddAssemblyIfExists("mscorlib", types);
+        AddAssemblyIfExists("System", types);
+        AddAssemblyIfExists("System.Runtime", types);
+        AddAssemblyIfExists("System.Core", types);
+        AddAssemblyIfExists("netstandard", types);
+        AddAssemblyIfExists("System.ObjectModel", types);
+        AddAssemblyIfExists("System.Threading", types);
+
+        var objectDefinition = types.First(x => x.Name == "Object");
+        var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
+        ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
+        var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
+        ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
+
+        var nullableDefinition = types.FirstOrDefault(x => x.Name == "Nullable");
+        NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
+
+        EqualityComparerTypeReference = types.FirstOrDefault(x => x.Name == "EqualityComparer`1");
+
+        var actionDefinition = types.First(x => x.Name == "Action");
+        ActionTypeReference = ModuleDefinition.ImportReference(actionDefinition);
+
+        var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
+        ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
+
+        var propChangedInterfaceDefinition = types.First(x => x.Name == "INotifyPropertyChanged");
+        PropChangedInterfaceReference = ModuleDefinition.ImportReference(propChangedInterfaceDefinition);
+        var propChangedHandlerDefinition = types.First(x => x.Name == "PropertyChangedEventHandler");
+        PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
+        ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
+        var propChangedArgsDefinition = types.First(x => x.Name == "PropertyChangedEventArgs");
+        ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
+
+        var delegateDefinition = types.First(x => x.Name == "Delegate");
+        var combineMethodDefinition = delegateDefinition.Methods
+            .Single(x =>
+                x.Name == "Combine" &&
+                x.Parameters.Count == 2 &&
+                x.Parameters.All(p => p.ParameterType == delegateDefinition));
+        DelegateCombineMethodRef = ModuleDefinition.ImportReference(combineMethodDefinition);
+        var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
+        DelegateRemoveMethodRef = ModuleDefinition.ImportReference(removeMethodDefinition);
+
+        var interlockedDefinition = types.First(x => x.FullName == "System.Threading.Interlocked");
+        var genericCompareExchangeMethodDefinition = interlockedDefinition
+            .Methods.First(x =>
+                x.IsStatic &&
+                x.Name == "CompareExchange" &&
+                x.GenericParameters.Count == 1 &&
+                x.Parameters.Count == 3);
+        var genericCompareExchangeMethod = ModuleDefinition.ImportReference(genericCompareExchangeMethodDefinition);
+
+        InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
+        InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
+    }
+
 }
