@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 14.0.22823.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
 EndProject
@@ -40,7 +40,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyInheritingBadNamedI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithBlockingClass", "TestAssemblies\AssemblyWithBlockingClass\AssemblyWithBlockingClass.csproj", "{4E375B19-D418-4FCC-8433-9CD740537450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nuget", "NuGet\Nuget.csproj", "{63786CE5-D899-43DF-AD4E-C2CA3BAC3FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nuget", "NuGet\Nuget.csproj", "{63786CE5-D899-43DF-AD4E-C2CA3BAC3FC2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959} = {59ACF1B9-0CB8-4673-9E00-E742E2616959}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithStackOverflow", "TestAssemblies\AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj", "{A3BC44F0-27B3-4498-8DA3-337ABC41B441}"
 EndProject
@@ -51,6 +54,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithTypeFilter", "TestAssemblies\AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj", "{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AssemblyFSharp", "TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj", "{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged.portable", "PropertyChanged\PropertyChanged.portable.csproj", "{59ACF1B9-0CB8-4673-9E00-E742E2616959}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -208,6 +213,18 @@ Global
 		{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}.Release|ARM.Build.0 = Release|Any CPU
 		{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}.Release|x86.ActiveCfg = Release|Any CPU
 		{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}.Release|x86.Build.0 = Release|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Debug|ARM.Build.0 = Debug|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Debug|x86.Build.0 = Debug|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Release|ARM.ActiveCfg = Release|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Release|ARM.Build.0 = Release|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Release|x86.ActiveCfg = Release|Any CPU
+		{59ACF1B9-0CB8-4673-9E00-E742E2616959}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
