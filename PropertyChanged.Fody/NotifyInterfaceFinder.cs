@@ -8,9 +8,8 @@ public partial class ModuleWeaver
 
     public bool HierarchyImplementsINotify(TypeReference typeReference)
     {
-        bool implementsINotify;
         var fullName = typeReference.FullName;
-        if (typeReferencesImplementingINotify.TryGetValue(fullName, out implementsINotify))
+        if (typeReferencesImplementingINotify.TryGetValue(fullName, out var implementsINotify))
         {
             return implementsINotify;
         }

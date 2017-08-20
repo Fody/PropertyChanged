@@ -18,13 +18,12 @@ public partial class ModuleWeaver
             foreach (var methodName in EventInvokerNames)
             {
 
-                int propertyNameIndex;
-                if (instruction.IsCallToMethod(methodName, out propertyNameIndex))
+                if (instruction.IsCallToMethod(methodName, out var propertyNameIndex))
                 {
                     var before = instructions[index - propertyNameIndex];
                     if (before.OpCode == OpCodes.Ldstr)
                     {
-                        yield return (string) before.Operand;
+                        yield return (string)before.Operand;
                     }
                 }
             }

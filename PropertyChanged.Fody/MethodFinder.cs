@@ -80,18 +80,17 @@ public partial class ModuleWeaver
 
     EventInvokerMethod FindEventInvokerMethod(TypeDefinition type)
     {
-        MethodDefinition methodDefinition;
-        if (FindEventInvokerMethodDefinition(type, out methodDefinition))
+        if (!FindEventInvokerMethodDefinition(type, out var methodDefinition))
         {
-            var methodReference = ModuleDefinition.ImportReference(methodDefinition);
-            return new EventInvokerMethod
-                       {
-                           MethodReference = methodReference.GetGeneric(),
-                           IsVisibleFromChildren = IsVisibleFromChildren(methodDefinition),
-                           InvokerType = ClassifyInvokerMethod(methodDefinition),
-                       };
+            return null;
         }
-        return null;
+        var methodReference = ModuleDefinition.ImportReference(methodDefinition);
+        return new EventInvokerMethod
+        {
+            MethodReference = methodReference.GetGeneric(),
+            IsVisibleFromChildren = IsVisibleFromChildren(methodDefinition),
+            InvokerType = ClassifyInvokerMethod(methodDefinition),
+        };
     }
 
     bool FindEventInvokerMethodDefinition(TypeDefinition type, out MethodDefinition methodDefinition)

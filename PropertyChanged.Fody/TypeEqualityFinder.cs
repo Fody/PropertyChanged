@@ -38,9 +38,8 @@ public partial class ModuleWeaver
 
     public MethodReference FindTypeEquality(TypeReference typeDefinition)
     {
-        MethodReference methodReference;
         var fullName = typeDefinition.FullName;
-        if (methodCache.TryGetValue(fullName, out methodReference))
+        if (methodCache.TryGetValue(fullName, out var methodReference))
         {
             return methodReference;
         }

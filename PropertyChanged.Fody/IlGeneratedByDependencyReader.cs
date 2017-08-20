@@ -77,8 +77,7 @@ public class IlGeneratedByDependencyReader
 
     void ProcessInstructionForGet(PropertyDefinition property, Instruction instruction)
     {
-        PropertyDefinition usedProperty;
-        if (IsPropertyGetInstruction(instruction, out usedProperty) || IsFieldGetInstruction(instruction, out usedProperty))
+        if (IsPropertyGetInstruction(instruction, out var usedProperty) || IsFieldGetInstruction(instruction, out usedProperty))
         {
             if (usedProperty == property)
             {
@@ -86,10 +85,10 @@ public class IlGeneratedByDependencyReader
                 return;
             }
             var dependency = new PropertyDependency
-                                 {
-                                     ShouldAlsoNotifyFor = property,
-                                     WhenPropertyIsSet = usedProperty
-                                 };
+            {
+                ShouldAlsoNotifyFor = property,
+                WhenPropertyIsSet = usedProperty
+            };
             node.PropertyDependencies.Add(dependency);
         }
     }

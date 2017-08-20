@@ -62,8 +62,7 @@ public partial class ModuleWeaver
 
     MethodReference FindEventInvokerMethodRef(TypeDefinition type)
     {
-        MethodDefinition methodDefinition;
-        if (!FindIsChangedEventInvokerMethodDefinition(type, out methodDefinition))
+        if (!FindIsChangedEventInvokerMethodDefinition(type, out var methodDefinition))
         {
             return null;
         }
