@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using AssemblyWithBase.BaseWithEquals;
+using NUnit.Framework;
 
 
 [TestFixture]
@@ -41,6 +42,14 @@ public class AssemblyWithBaseInDifferentModuleTests
     {
         var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.MultiTypes.ChildClass");
         EventTester.TestProperty(instance, false);
+    }
+
+    [Test]
+    public void GenericEquals()
+    {
+        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.BaseWithGenericProperty.Class");
+        EventTester.TestProperty(instance, true);
+        Assert.IsTrue(BaseClass1<int>.EqualsCalled);
     }
 
     [Test]
