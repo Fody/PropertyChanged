@@ -108,7 +108,12 @@ public partial class ModuleWeaver
         }
         if (equalsMethod != null && typeReference.IsGenericInstance)
         {
-            equalsMethod = MakeGeneric(typeReference, equalsMethod);
+            var genericType = new GenericInstanceType(equalsMethod.DeclaringType);
+            foreach (var argument in ((GenericInstanceType)typeReference).GenericArguments)
+            {
+                genericType.GenericArguments.Add(argument);
+            }
+            equalsMethod = MakeGeneric(genericType, equalsMethod);
         }
         return equalsMethod;
     }
