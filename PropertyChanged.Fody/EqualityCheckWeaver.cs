@@ -77,7 +77,7 @@ public class EqualityCheckWeaver
         var typeEqualityMethod = typeEqualityFinder.FindTypeEquality(targetType);
         if (typeEqualityMethod == null)
         {
-            if (targetType.SupportsCeq() && targetType.IsValueType)
+            if (targetType.SupportsCeq() && (targetType.IsValueType || !typeEqualityFinder.CheckForEqualityUsingBaseEquals))
             {
                 instructions.Prepend(
                     Instruction.Create(OpCodes.Ldarg_0),
