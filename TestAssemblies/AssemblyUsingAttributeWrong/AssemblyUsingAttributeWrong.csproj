@@ -3,7 +3,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>net462</TargetFrameworks>
-    <WarningLevel>4</WarningLevel>
     <OutputPath>$(SolutionDir)TestAssemblyBin</OutputPath>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>

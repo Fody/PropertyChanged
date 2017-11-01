@@ -2,8 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFrameworks>net462</TargetFrameworks>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <OutputPath>$(SolutionDir)TestAssemblyBin</OutputPath>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
