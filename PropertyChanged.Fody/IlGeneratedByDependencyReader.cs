@@ -99,8 +99,7 @@ public class IlGeneratedByDependencyReader
     {
         if (instruction.OpCode.IsCall())
         {
-            var methodReference = instruction.Operand as MethodReference;
-            if (methodReference != null)
+            if (instruction.Operand is MethodReference methodReference)
             {
                 var mapping = node.Mappings.FirstOrDefault(x => methodComparer(methodReference, x.PropertyDefinition.GetMethod));
                 if (mapping != null)
@@ -119,8 +118,7 @@ public class IlGeneratedByDependencyReader
     {
         if (instruction.OpCode.Code == Code.Ldfld)
         {
-            var fieldReference = instruction.Operand as FieldReference;
-            if (fieldReference != null)
+            if (instruction.Operand is FieldReference fieldReference)
             {
                 var mapping = node.Mappings.FirstOrDefault(x => fieldComparer(fieldReference, x.FieldDefinition));
                 if (mapping != null)

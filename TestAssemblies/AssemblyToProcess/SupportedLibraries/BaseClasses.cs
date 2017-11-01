@@ -3,6 +3,7 @@ using System.Reflection;
 using System;
 // ReSharper restore RedundantUsingDirective
 using System.ComponentModel;
+using System.Linq.Expressions;
 using Jounce.Core.Model;
 
 namespace Caliburn.Micro
@@ -33,6 +34,7 @@ namespace Catel.Data
         }
     }
 }
+
 namespace Telerik.Windows.Controls
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
@@ -50,7 +52,6 @@ namespace Telerik.Windows.Controls
         {
             RaisePropertyChanged(propertyName);
         }
-
     }
 }
 
@@ -73,7 +74,6 @@ namespace Magellan.Framework
     }
 }
 
-
 namespace Cinch
 {
     public class ViewModelBase : INotifyPropertyChanged
@@ -87,6 +87,7 @@ namespace Cinch
         }
     }
 }
+
 #if (!WINDOWS_PHONE)
 namespace Microsoft.Practices.Prism.ViewModel
 {
@@ -122,17 +123,13 @@ namespace Microsoft.Practices.Prism.ViewModel
 
     public class PropertySupport
     {
-
-
-
         public static string ExtractPropertyName<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
         {
             if (propertyExpression == null)
             {
                 throw new ArgumentNullException("propertyExpression");
             }
-            var body = propertyExpression.Body as System.Linq.Expressions.MemberExpression;
-            if (body == null)
+            if (!(propertyExpression.Body is MemberExpression body))
             {
                 throw new ArgumentException("propertyExpression");
             }
@@ -181,10 +178,8 @@ namespace Caliburn.PresentationFramework
             BaseNotifyCalled = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
-
 
 namespace Jounce.Core.Model
 {
@@ -198,7 +193,6 @@ namespace Jounce.Core.Model
             BaseNotifyCalled = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
 

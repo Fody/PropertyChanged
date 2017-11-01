@@ -17,8 +17,7 @@ public static class CecilExtensions
         {
             return false;
         }
-        var methodReference = instruction.Operand as MethodReference;
-        if (methodReference == null)
+        if (!(instruction.Operand is MethodReference methodReference))
         {
             return false;
         }
@@ -83,14 +82,13 @@ public static class CecilExtensions
             yield return attribute;
         }
 
-        var baseDefinition = typeDefinition.BaseType as TypeDefinition;
-
-        if (baseDefinition != null)
+        if (!(typeDefinition.BaseType is TypeDefinition baseDefinition))
         {
-            foreach (var attribute in baseDefinition.GetAllCustomAttributes())
-            {
-                yield return attribute;
-            }
+            yield break;
+        }
+        foreach (var attribute in baseDefinition.GetAllCustomAttributes())
+        {
+            yield return attribute;
         }
     }
 

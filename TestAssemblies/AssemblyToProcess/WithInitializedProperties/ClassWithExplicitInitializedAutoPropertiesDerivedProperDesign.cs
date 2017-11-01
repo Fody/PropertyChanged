@@ -1,7 +1,7 @@
 public class ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign : ClassWithExplicitInitializedAutoProperties
 {
     public ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign()
-        : base((string) "test", (string) "test2")
+        : base("test", "test2")
     {
         Property3 = "test3";
     }
