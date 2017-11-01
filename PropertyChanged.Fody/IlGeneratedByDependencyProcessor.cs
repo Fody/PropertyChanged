@@ -7,7 +7,6 @@ public partial class ModuleWeaver
         DetectIlGeneratedByDependency(NotifyNodes);
     }
 
-
     void DetectIlGeneratedByDependency(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
@@ -17,6 +16,4 @@ public partial class ModuleWeaver
             DetectIlGeneratedByDependency(node.Nodes);
         }
     }
-
-
 }

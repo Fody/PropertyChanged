@@ -33,8 +33,6 @@ public partial class ModuleWeaver
         }
     }
 
-
-
     public MethodReference RecursiveFindMethod(TypeDefinition typeDefinition)
     {
         var typeDefinitions = new Stack<TypeDefinition>();
@@ -59,7 +57,6 @@ public partial class ModuleWeaver
         return GetMethodReference(typeDefinitions, methodDefinition);
     }
 
-
     MethodReference FindEventInvokerMethodRef(TypeDefinition type)
     {
         if (!FindIsChangedEventInvokerMethodDefinition(type, out var methodDefinition))
@@ -80,7 +77,6 @@ public partial class ModuleWeaver
                             x.SetMethod != null &&
                             x.SetMethod.IsPublic
             );
-
 
         if (propertyDefinition != null)
         {

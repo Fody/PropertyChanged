@@ -18,12 +18,12 @@ public partial class ModuleWeaver
     public static MethodReference MakeGeneric(TypeReference declaringType, MethodReference self)
     {
         var reference = new MethodReference(self.Name, self.ReturnType)
-                            {
-                                DeclaringType = declaringType,
-                                HasThis = self.HasThis,
-                                ExplicitThis = self.ExplicitThis,
-                                CallingConvention = self.CallingConvention,
-                            };
+        {
+            DeclaringType = declaringType,
+            HasThis = self.HasThis,
+            ExplicitThis = self.ExplicitThis,
+            CallingConvention = self.CallingConvention,
+        };
 
         foreach (var parameter in self.Parameters)
         {
@@ -32,5 +32,4 @@ public partial class ModuleWeaver
 
         return reference;
     }
-
 }

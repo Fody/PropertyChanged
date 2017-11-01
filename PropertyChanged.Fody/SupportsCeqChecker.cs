@@ -4,7 +4,6 @@ using Mono.Cecil;
 
 public static class SupportsCeqChecker
 {
-
     static List<string> ceqStructNames;
 
     static SupportsCeqChecker()

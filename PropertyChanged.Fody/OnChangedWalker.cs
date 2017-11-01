@@ -51,7 +51,7 @@ public partial class ModuleWeaver
                     OnChangedType = OnChangedTypes.BeforeAfter,
                     MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
                 };
-            }            
+            }
         }
     }
 

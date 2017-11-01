@@ -6,6 +6,7 @@
     <OutputPath>$(SolutionDir)TestAssemblyBin</OutputPath>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
+    <NoWarn>CS0067</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

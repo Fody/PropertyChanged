@@ -18,23 +18,21 @@ public partial class ModuleWeaver
             .String
             .Resolve()
             .Methods
-            .First(x => x.IsStatic && 
-                x.Name == "Equals" && 
-                x.Parameters.Count == 3 &&
-                x.Parameters[0].ParameterType.Name == "String" && 
-                x.Parameters[1].ParameterType.Name == "String" && 
-                x.Parameters[2].ParameterType.Name == "StringComparison");
+            .First(x => x.IsStatic &&
+                        x.Name == "Equals" &&
+                        x.Parameters.Count == 3 &&
+                        x.Parameters[0].ParameterType.Name == "String" &&
+                        x.Parameters[1].ParameterType.Name == "String" &&
+                        x.Parameters[2].ParameterType.Name == "StringComparison");
         StringEquals = ModuleDefinition.ImportReference(stringEquals);
         OrdinalStringComparison = (int) StringEquals
-                                            .Parameters[2]
-                                            .ParameterType
-                                            .Resolve()
-                                            .Fields
-                                            .First(x => x.Name == "Ordinal")
-                                            .Constant;
+            .Parameters[2]
+            .ParameterType
+            .Resolve()
+            .Fields
+            .First(x => x.Name == "Ordinal")
+            .Constant;
     }
-
-
 
     public MethodReference FindTypeEquality(TypeReference typeDefinition)
     {
@@ -80,11 +78,11 @@ public partial class ModuleWeaver
             }
         }
         var equality = GetStaticEquality(typeDefinition);
-        if (equality != null)
+        if (equality == null)
         {
-            return ModuleDefinition.ImportReference(equality);
+            return null;
         }
-        return null;
+        return ModuleDefinition.ImportReference(equality);
     }
 
     MethodReference GetStaticEquality(TypeReference typeReference)
@@ -109,7 +107,7 @@ public partial class ModuleWeaver
         if (equalsMethod != null && typeReference.IsGenericInstance)
         {
             var genericType = new GenericInstanceType(equalsMethod.DeclaringType);
-            foreach (var argument in ((GenericInstanceType)typeReference).GenericArguments)
+            foreach (var argument in ((GenericInstanceType) typeReference).GenericArguments)
             {
                 genericType.GenericArguments.Add(argument);
             }

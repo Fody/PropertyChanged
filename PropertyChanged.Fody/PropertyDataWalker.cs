@@ -4,7 +4,6 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-
     void WalkPropertyData(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
@@ -25,18 +24,18 @@ public partial class ModuleWeaver
                 {
                     continue;
                 }
-                
+
                 GetPropertyData(property, node);
             }
             WalkPropertyData(node.Nodes);
         }
     }
 
-      //if (AlreadyContainsNotification(propertyData.PropertyDefinition, node.EventInvoker.MethodReference.Name))
-      //          {
-      //              moduleWeaver.LogInfo(string.Format("\t{0} Already has notification functionality. Property will be ignored.", propertyData.PropertyDefinition.GetName()));
-      //              continue;
-      //          }
+    //if (AlreadyContainsNotification(propertyData.PropertyDefinition, node.EventInvoker.MethodReference.Name))
+    //          {
+    //              moduleWeaver.LogInfo(string.Format("\t{0} Already has notification functionality. Property will be ignored.", propertyData.PropertyDefinition.GetName()));
+    //              continue;
+    //          }
     void GetPropertyData(PropertyDefinition propertyDefinition, TypeNode node)
     {
         var notifyPropertyData = ReadAlsoNotifyForData(propertyDefinition, node.AllProperties);
@@ -52,13 +51,13 @@ public partial class ModuleWeaver
                 return;
             }
             node.PropertyDatas.Add(new PropertyData
-                                       {
-                                           BackingFieldReference = backingFieldReference,
-                                           PropertyDefinition = propertyDefinition,
-                                           // Compute full dependencies for the current property
-                                           AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node),
-                                           AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
-                                       });
+            {
+                BackingFieldReference = backingFieldReference,
+                PropertyDefinition = propertyDefinition,
+                // Compute full dependencies for the current property
+                AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node),
+                AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
+            });
             return;
         }
 
@@ -69,13 +68,13 @@ Looked for 'PropertyChanged', 'propertyChanged', '_PropertyChanged' and '_proper
 The most likely cause is that you have implemented a custom event accessor for the PropertyChanged event and have called the PropertyChangedEventHandler something stupid.");
         }
         node.PropertyDatas.Add(new PropertyData
-                                   {
-                                       BackingFieldReference = backingFieldReference,
-                                       PropertyDefinition = propertyDefinition,
-                                       // Compute full dependencies for the current property
-                                       AlsoNotifyFor = GetFullDependencies(propertyDefinition, notifyPropertyData.AlsoNotifyFor.Union(dependenciesForProperty), node),
-                                       AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
-                                   });
+        {
+            BackingFieldReference = backingFieldReference,
+            PropertyDefinition = propertyDefinition,
+            // Compute full dependencies for the current property
+            AlsoNotifyFor = GetFullDependencies(propertyDefinition, notifyPropertyData.AlsoNotifyFor.Union(dependenciesForProperty), node),
+            AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
+        });
     }
 
     List<PropertyDefinition> GetFullDependencies(PropertyDefinition propertyDefinition, IEnumerable<PropertyDefinition> dependenciesForProperty, TypeNode node)
@@ -89,7 +88,7 @@ The most likely cause is that you have implemented a custom event accessor for t
             // Check if the property is already present in the HashSet before starting the recursion
             if (fullDependencies.Add(dependentProperty))
             {
-                ComputeDependenciesRec(dependentProperty, fullDependencies, node);
+                ComputeDependenciesRecursively(dependentProperty, fullDependencies, node);
             }
         }
 
@@ -99,10 +98,7 @@ The most likely cause is that you have implemented a custom event accessor for t
         return fullDependencies.ToList();
     }
 
-    /// <summary>
-    /// Computes dependencies recursively
-    /// </summary>
-    void ComputeDependenciesRec(PropertyDefinition propertyDefinition, HashSet<PropertyDefinition> fullDependencies, TypeNode node)
+    void ComputeDependenciesRecursively(PropertyDefinition propertyDefinition, HashSet<PropertyDefinition> fullDependencies, TypeNode node)
     {
         // TODO: An optimization could be done to avoid the multiple computation of one property for each property of the type
         // By keeping the in memory the full dependencies of each property of the type
@@ -115,10 +111,9 @@ The most likely cause is that you have implemented a custom event accessor for t
             }
             fullDependencies.Add(dependentProperty);
 
-            ComputeDependenciesRec(dependentProperty, fullDependencies, node);
+            ComputeDependenciesRecursively(dependentProperty, fullDependencies, node);
         }
     }
-
 
     public void WalkPropertyData()
     {

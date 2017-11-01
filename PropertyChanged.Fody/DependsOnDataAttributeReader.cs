@@ -4,7 +4,6 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-
     void ProcessDependsOnAttributes(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)
@@ -58,7 +57,6 @@ public partial class ModuleWeaver
         };
         node.PropertyDependencies.Add(dependency);
     }
-
 
     public void ProcessDependsOnAttributes()
     {

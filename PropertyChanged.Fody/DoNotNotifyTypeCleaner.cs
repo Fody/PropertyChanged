@@ -3,7 +3,6 @@ using System.Linq;
 
 public partial class ModuleWeaver
 {
-
     void Process(List<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes.ToList())

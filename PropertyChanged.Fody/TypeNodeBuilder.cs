@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Mono.Cecil;
 
-
 public partial class ModuleWeaver
 {
     List<TypeDefinition> allClasses;
@@ -115,5 +114,4 @@ public partial class ModuleWeaver
         }
         return null;
     }
-
 }

@@ -46,4 +46,3 @@ public partial class ModuleWeaver
         CleanReferences();
     }
 }
-

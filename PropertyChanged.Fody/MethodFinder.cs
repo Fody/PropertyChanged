@@ -4,8 +4,6 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-
-
     void ProcessChildNode(TypeNode node, EventInvokerMethod eventInvoker)
     {
         var childEventInvoker = FindEventInvokerMethod(node.TypeDefinition);
@@ -18,7 +16,7 @@ public partial class ModuleWeaver
                                    {
                                        InvokerType = eventInvoker.InvokerType,
                                        MethodReference = methodReference,
-                                       IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren 
+                                       IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren
                                    };
             }
         }
@@ -40,8 +38,6 @@ public partial class ModuleWeaver
         }
     }
 
-
-
     public EventInvokerMethod RecursiveFindEventInvoker(TypeDefinition typeDefinition)
     {
         var typeDefinitions = new Stack<TypeDefinition>();
@@ -50,7 +46,7 @@ public partial class ModuleWeaver
         do
         {
             typeDefinitions.Push(currentTypeDefinition);
-         
+
             if (FindEventInvokerMethodDefinition(currentTypeDefinition, out methodDefinition))
             {
                 break;
@@ -76,7 +72,6 @@ public partial class ModuleWeaver
     {
         return methodDefinition.IsFamilyOrAssembly || methodDefinition.IsFamily || methodDefinition.IsFamilyAndAssembly || methodDefinition.IsPublic;
     }
-
 
     EventInvokerMethod FindEventInvokerMethod(TypeDefinition type)
     {
@@ -197,5 +192,4 @@ public partial class ModuleWeaver
             }
         }
     }
-
 }

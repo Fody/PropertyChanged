@@ -57,5 +57,4 @@ public class RecursiveIlFinder
                opCode == OpCodes.Calli ||
                opCode == OpCodes.Ldftn;
     }
-
 }

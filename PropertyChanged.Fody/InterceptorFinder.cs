@@ -44,7 +44,6 @@ Intercept(object target, Action firePropertyChanged, string propertyName, object
         throw new WeavingException(message);
     }
 
-
     public bool IsSingleStringInterceptionMethod(MethodDefinition method)
     {
         var parameters = method.Parameters;

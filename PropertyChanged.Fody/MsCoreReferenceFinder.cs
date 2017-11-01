@@ -37,7 +37,6 @@ public partial class ModuleWeaver
 
     public void FindCoreReferences()
     {
-
         var types = new List<TypeDefinition>();
 
         AddAssemblyIfExists("mscorlib", types);

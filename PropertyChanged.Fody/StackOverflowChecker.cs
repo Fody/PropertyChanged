@@ -3,10 +3,8 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System.Linq;
 
-
 public partial class ModuleWeaver
 {
-
     void CheckForStackOverflow(IEnumerable<TypeNode> notifyNodes)
     {
         foreach (var node in notifyNodes)

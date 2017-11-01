@@ -1,5 +1,4 @@
-﻿
-using Mono.Cecil;
+﻿using Mono.Cecil;
 
 public class PropertyDependency
 {

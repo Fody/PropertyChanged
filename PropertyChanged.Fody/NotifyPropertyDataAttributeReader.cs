@@ -4,7 +4,6 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-
     public NotifyPropertyData ReadAlsoNotifyForData(PropertyDefinition property, List<PropertyDefinition> allProperties)
     {
         var notifyAttribute = property.CustomAttributes.GetAttribute("PropertyChanged.AlsoNotifyForAttribute");
@@ -25,23 +24,24 @@ public partial class ModuleWeaver
         var customAttributeArguments = notifyAttribute.ConstructorArguments.ToList();
         var value = (string)customAttributeArguments[0].Value;
         yield return GetPropertyDefinition(property, allProperties, value);
-        if (customAttributeArguments.Count > 1)
+        if (customAttributeArguments.Count <= 1)
         {
-            var paramsArguments = (CustomAttributeArgument[]) customAttributeArguments[1].Value;
-            foreach (string argument in paramsArguments.Select(x=>x.Value))
-            {
-                yield return GetPropertyDefinition(property, allProperties, argument);
-            }
+            yield break;
+        }
+        var paramsArguments = (CustomAttributeArgument[]) customAttributeArguments[1].Value;
+        foreach (string argument in paramsArguments.Select(x=>x.Value))
+        {
+            yield return GetPropertyDefinition(property, allProperties, argument);
         }
     }
 
     static PropertyDefinition GetPropertyDefinition(PropertyDefinition property, List<PropertyDefinition> allProperties, string argument)
     {
         var propertyDefinition = allProperties.FirstOrDefault(x => x.Name == argument);
-        if (propertyDefinition == null)
+        if (propertyDefinition != null)
         {
-            throw new WeavingException($"Could not find property '{argument}' for AlsoNotifyFor attribute assigned to '{property.Name}'.");
+            return propertyDefinition;
         }
-        return propertyDefinition;
+        throw new WeavingException($"Could not find property '{argument}' for AlsoNotifyFor attribute assigned to '{property.Name}'.");
     }
 }

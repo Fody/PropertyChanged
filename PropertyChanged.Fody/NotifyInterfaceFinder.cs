@@ -45,7 +45,6 @@ public partial class ModuleWeaver
         return baseTypeImplementsINotify;
     }
 
-
     public static bool HasPropertyChangedEvent(TypeDefinition typeDefinition)
     {
         return typeDefinition.Events.Any(IsPropertyChangedEvent);

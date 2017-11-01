@@ -35,23 +35,26 @@ public class IlGeneratedByDependencyReader
         }
     }
 
-
     static bool GenericMethodComparer(MethodReference methodReference, MethodDefinition methodDefinition)
     {
         return methodDefinition == methodReference.Resolve();
     }
+
     static bool NonGenericMethodComparer(MethodReference methodReference, MethodDefinition methodDefinition)
     {
         return methodDefinition == methodReference;
     }
+
     static bool GenericFieldComparer(FieldReference fieldReference, FieldDefinition fieldDefinition)
     {
         return fieldDefinition == fieldReference.Resolve();
     }
+
     static bool NonGenericFieldComparer(FieldReference fieldReference, FieldDefinition fieldDefinition)
     {
         return fieldDefinition == fieldReference;
     }
+
     void ProcessGet(PropertyDefinition property)
     {
         var getMethod = property.GetMethod;
@@ -74,7 +77,6 @@ public class IlGeneratedByDependencyReader
         }
     }
 
-
     void ProcessInstructionForGet(PropertyDefinition property, Instruction instruction)
     {
         if (IsPropertyGetInstruction(instruction, out var usedProperty) || IsFieldGetInstruction(instruction, out usedProperty))
@@ -92,8 +94,6 @@ public class IlGeneratedByDependencyReader
             node.PropertyDependencies.Add(dependency);
         }
     }
-
-
 
     public bool IsPropertyGetInstruction(Instruction instruction, out PropertyDefinition propertyDefinition)
     {
@@ -113,7 +113,6 @@ public class IlGeneratedByDependencyReader
         return false;
     }
 
-
     public bool IsFieldGetInstruction(Instruction instruction, out PropertyDefinition propertyDefinition)
     {
         if (instruction.OpCode.Code == Code.Ldfld)
@@ -131,5 +130,4 @@ public class IlGeneratedByDependencyReader
         propertyDefinition = null;
         return false;
     }
-
 }

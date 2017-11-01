@@ -34,7 +34,7 @@ public class DelegateHolderInjector
             Instruction.Create(OpCodes.Ldfld, PropertyNameField),
             Instruction.Create(OpCodes.Callvirt, onPropertyChangedMethodReference),
             Instruction.Create(OpCodes.Ret)
-            );
+        );
         TypeDefinition.Methods.Add(MethodDefinition);
     }
 
@@ -45,7 +45,7 @@ public class DelegateHolderInjector
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Call, ModuleWeaver.ObjectConstructor),
             Instruction.Create(OpCodes.Ret)
-            );
+        );
         TypeDefinition.Methods.Add(ConstructorDefinition);
     }
 
@@ -54,5 +54,4 @@ public class DelegateHolderInjector
     public FieldDefinition TargetField;
     public TypeDefinition TypeDefinition;
     public MethodDefinition ConstructorDefinition;
-
 }

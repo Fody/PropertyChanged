@@ -48,7 +48,6 @@ public partial class ModuleWeaver
         return null;
     }
 
-
     public void CheckForWarnings()
     {
         CheckForWarnings(NotifyNodes);

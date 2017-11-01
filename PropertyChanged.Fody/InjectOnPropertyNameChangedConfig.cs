@@ -2,8 +2,7 @@ using System.Linq;
 
 public partial class ModuleWeaver
 {
-    public bool InjectOnPropertyNameChanged =true;
-
+    public bool InjectOnPropertyNameChanged = true;
 
     public void ResolveOnPropertyNameChangedConfig()
     {
