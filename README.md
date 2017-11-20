@@ -79,6 +79,15 @@ public class Person : INotifyPropertyChanged
 ```
 ---
 
+# Troubleshooting
+* **I added the NuGet package and my classes implement `INotifyPropertyChanged` but the event is not raised when changing properties**
+    * Verify the _weavers.xml_ file was generated to the project's main folder while installing the NuGet package. In some instances, you may need to create that file manually, which in case should contain the following content:
+    ```c#
+    <?xml version="1.0" encoding="utf-8" ?>
+    <Weavers>
+        <PropertyChanged/>
+    </Weavers>
+    ```
 
 # Notes
 
