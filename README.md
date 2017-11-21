@@ -3,20 +3,46 @@
 
 ![Icon](https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png)
 
-Injects code which raises the [`PropertyChanged` event](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.propertychanged(v=vs.110).aspx), into property setters of classes which implement [INotifyPropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged(v=vs.110).aspx).
+Injects code which raises the [`PropertyChanged` event](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.propertychanged.aspx), into property setters of classes which implement [INotifyPropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx).
 
-This is an add-in for [Fody](https://github.com/Fody/Fody/); it is available via [NuGet](https://nuget.org/packages/PropertyChanged.Fody/):
-
-    PM> Install-Package PropertyChanged.Fody
-
----
+This is an add-in for [Fody](https://github.com/Fody/Fody/).
 
 
-# Overview
+## Usage
+
+See also [Fody usage](https://github.com/Fody/Fody#usage).
+
+
+### NuGet installation
+
+Install the [PropertyChanged.Fody NuGet package](https://nuget.org/packages/PropertyChanged.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
+
+```
+PM> Install-Package PropertyChanged.Fody
+PM> Update-Package Fody
+```
+
+The `Update-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
+
+
+### Add to FodyWeavers.xml
+
+Add `<PropertyChanged/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweaversxml)
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<Weavers>
+  <PropertyChanged/>
+</Weavers>
+```
+
+
+## Overview
 
 **NOTE: All classes that implement `INotifyPropertyChanged` will have notification code injected into property setters.**
 
-Your code:
+Before code:
+
 ```csharp
 public class Person : INotifyPropertyChanged
 {
@@ -79,7 +105,8 @@ public class Person : INotifyPropertyChanged
 ```
 ---
 
-# Notes
+
+## Notes
 
 * **Dependent properties** -- In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.   This behavior can be configured manually using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).
 * **Intercepting the notification call**
@@ -90,27 +117,13 @@ public class Person : INotifyPropertyChanged
 
       public void OnPropertyChanged(string propertyName, object before, object after)
 * To prevent a specific class from having the notification call injection, use the [`DoNotNotify` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#donotnotifyattribute).
-* To scope the rewriting only to specific classes, and not the whole Assembly, you can use the [`FilterType` attribute](https://github.com/Fody/PropertyChanged/blob/f4905b4f04335e393c8350cc5f06f02614241483/PropertyChanged.Fody/TypeNodeBuilder.cs#L18). This changes the general behavior from from opt-out to opt-in. Example: ``[assembly: PropertyChanged.FilterType("My.Specific.OptIn.Namespace.")]``. The string is interpreted as a Regex, and you can use multiple filters. A class will be weaved, if _any_ filter matches.
+* To scope the rewriting only to specific classes, and not the whole Assembly, you can use the [`FilterType` attribute](https://github.com/Fody/PropertyChanged/blob/f4905b4f04335e393c8350cc5f06f02614241483/PropertyChanged.Fody/TypeNodeBuilder.cs#L18). This changes the general behavior from from opt-out to opt-in. Example: `[assembly: PropertyChanged.FilterType("My.Specific.OptIn.Namespace.")]`. The string is interpreted as a Regex, and you can use multiple filters. A class will be weaved, if _any_ filter matches.
 * The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`AddINotifyPropertyChangedInterfaceAttribute` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#addinotifypropertychangedinterfaceattribute). **Raising an issue about "this attribute does not behave as expected" will result in a RTFM and the issue being closed.**
 * Behavior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
 
 For more information, see the [wiki pages](https://github.com/Fody/PropertyChanged/wiki).
 
 
-# Troubleshooting
-* **I added the NuGet package and my classes implement `INotifyPropertyChanged` but the event is not raised when changing properties**
-    * Verify the _weavers.xml_ file was generated to the project's main folder while installing the NuGet package. In some instances, you may need to create that file manually, which in case should contain the following content:
-    ```c#
-    <?xml version="1.0" encoding="utf-8" ?>
-    <Weavers>
-        <PropertyChanged/>
-    </Weavers>
-    ```
-
-# Contributors
-
- * [Cameron MacFarland](https://github.com/distantcam)
- * [Geert van Horrik](https://github.com/GeertvanHorrik)
- * [Simon Cropp](https://github.com/simoncropp)
+## Icon
 
 Icon courtesy of [The Noun Project](https://thenounproject.com)
