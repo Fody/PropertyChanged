@@ -1,4 +1,3 @@
-
 namespace GenericChildWithPropertyOnChanged
 {
     public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>

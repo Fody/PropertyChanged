@@ -102,7 +102,7 @@ namespace Microsoft.Practices.Prism.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void RaisePropertyChanged<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
+        protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
             var propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
             RaisePropertyChanged(propertyName);
@@ -123,7 +123,7 @@ namespace Microsoft.Practices.Prism.ViewModel
 
     public class PropertySupport
     {
-        public static string ExtractPropertyName<T>(System.Linq.Expressions.Expression<Func<T>> propertyExpression)
+        public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
         {
             if (propertyExpression == null)
             {

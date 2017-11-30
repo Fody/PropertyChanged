@@ -1,5 +1,4 @@
-﻿
-namespace ComplexHierarchy
+﻿namespace ComplexHierarchy
 {
     public class ClassChild1 : ClassParent
     {

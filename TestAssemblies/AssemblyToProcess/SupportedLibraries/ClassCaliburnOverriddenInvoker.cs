@@ -1,6 +1,5 @@
 ﻿using Caliburn.PresentationFramework;
 
-
 public class ClassCaliburnOverriddenInvoker : PropertyChangedBase
 {
     public string Property1 { get; set; }
@@ -11,5 +10,4 @@ public class ClassCaliburnOverriddenInvoker : PropertyChangedBase
         OverrideCalled = true;
         base.NotifyOfPropertyChange(propertyName);
     }
-
 }

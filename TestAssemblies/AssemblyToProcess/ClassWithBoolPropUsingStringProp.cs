@@ -7,10 +7,8 @@ public class ClassWithBoolPropUsingStringProp: INotifyPropertyChanged
     public bool BoolProperty { get; set; }
 
     string stringProperty;
-    public string StringProperty
-    {
-        get { return stringProperty; }
-        set
+    public string StringProperty    {
+        get => stringProperty;        set
         {
             stringProperty = value;
             if (StringCompareProperty)

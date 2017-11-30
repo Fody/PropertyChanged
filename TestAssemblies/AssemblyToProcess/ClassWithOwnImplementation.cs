@@ -12,5 +12,4 @@ public class ClassWithOwnImplementation : INotifyPropertyChanged
         BaseNotifyCalled = true;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
 }

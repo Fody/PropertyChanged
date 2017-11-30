@@ -7,10 +7,6 @@ public class ClassWithSetterThatThrows : INotifyPropertyChanged
 
     public string Item
     {
-        get { return "Foo"; }
-        set
-        {
-            throw new NotSupportedException("Obsolete Setter"); 
-        }
+        get => "Foo";        set => throw new NotSupportedException("Obsolete Setter");
     }
 }

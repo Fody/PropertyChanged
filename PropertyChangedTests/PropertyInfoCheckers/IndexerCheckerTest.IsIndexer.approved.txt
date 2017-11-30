@@ -1,1 +1,0 @@
-﻿Property is an indexer.

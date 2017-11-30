@@ -2,13 +2,16 @@ version: 1.0.{build}
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
+install:
+- cmd: appveyor downloadfile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 before_build:
 - ps: nuget restore
 build:
   verbosity: minimal
-test:
-  assemblies:
-    only:
-    - PropertyChangedTests\bin\Release\net462\PropertyChangedTests.dll
+test_script:
+- ps: >-
+    nunit3-console Tests\bin\Release\net462\Tests.dll
+
+    dotnet test "Tests\Tests.csproj" --framework netcoreapp2.0 --configuration Release --no-build --output bin\Release\netcoreapp2.0
 artifacts:
-- path: NuGetBuild\**\*.nupkg
+- path: nugets\**\*.nupkg

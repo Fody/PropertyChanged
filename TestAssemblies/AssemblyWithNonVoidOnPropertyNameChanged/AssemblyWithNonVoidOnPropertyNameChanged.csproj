@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>net462</TargetFrameworks>
-    <OutputPath>$(SolutionDir)TestAssemblyBin</OutputPath>
+    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
     <NoWarn>0067</NoWarn>
-    <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
 </Project>

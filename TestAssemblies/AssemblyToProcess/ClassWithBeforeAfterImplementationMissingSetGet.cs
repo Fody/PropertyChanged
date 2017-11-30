@@ -10,7 +10,7 @@ public class ClassWithBeforeAfterImplementationMissingSetGet : INotifyPropertyCh
 
     public string PropertyNoGet
     {
-        set { property = value; }
+        set => property = value;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -19,5 +19,4 @@ public class ClassWithBeforeAfterImplementationMissingSetGet : INotifyPropertyCh
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
 }

@@ -6,10 +6,8 @@ public class ClassSetterEndsOnThrowInRelease : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     string item;
-    public string Item
-    {
-        get { return item; }
-        set
+    public string Item    {
+        get => item;        set
         {
             if (value == "Foo")
             {

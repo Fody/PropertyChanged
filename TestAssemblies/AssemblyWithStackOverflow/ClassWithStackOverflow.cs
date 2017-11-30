@@ -6,8 +6,7 @@ public class ClassWithStackOverflow : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public string Name
-    {
+    public string Name    {
         get
         {
             if (string.IsNullOrEmpty(name))
@@ -17,8 +16,7 @@ public class ClassWithStackOverflow : INotifyPropertyChanged
 
             return Name;
         }
-        set { name = value; }
-    }
+        set => name = value;    }
 
     public string ValidName { get; set; }
 

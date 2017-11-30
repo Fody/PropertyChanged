@@ -12,7 +12,6 @@ public partial class ModuleWeaver
     {
         methodCache = new Dictionary<string, MethodReference>();
 
-
         var stringEquals = ModuleDefinition
             .TypeSystem
             .String

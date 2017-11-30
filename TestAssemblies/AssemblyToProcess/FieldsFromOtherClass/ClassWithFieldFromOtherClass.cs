@@ -9,11 +9,8 @@ public class ClassWithFieldFromOtherClass : INotifyPropertyChanged
         otherClass = new OtherClass();
     }
 
-    public string Property1
-    {
-        get { return otherClass.property1; }
-        set { otherClass.property1 = value; }
-    }
+    public string Property1    {
+        get => otherClass.property1;        set => otherClass.property1 = value;    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 }

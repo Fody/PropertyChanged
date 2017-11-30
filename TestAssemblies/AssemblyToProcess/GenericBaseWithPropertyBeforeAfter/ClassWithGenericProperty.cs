@@ -10,6 +10,5 @@ namespace GenericBaseWithPropertyBeforeAfter
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

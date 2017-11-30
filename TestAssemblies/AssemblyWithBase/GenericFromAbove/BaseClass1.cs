@@ -2,6 +2,5 @@
 {
     public class BaseClass1<T>
     {
-        
     }
 }

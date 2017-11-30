@@ -15,6 +15,5 @@ namespace HierarchyBeforeAfterAndSimple
             BeforeAfterCalled = true;
             OnPropertyChanged(propertyName);
         }
-
     }
 }

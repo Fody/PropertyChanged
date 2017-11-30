@@ -8,16 +8,9 @@ public class ClassWithCustomPropertyChanged : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged
     {
-        add
-        {
-            propertyChanged += value;
-        }
-        remove
-        {
-            propertyChanged -= value;
-        }
+        add => propertyChanged += value;
+        remove => propertyChanged -= value;
     }
 
     public string Property1 { get; set; }
-
 }
