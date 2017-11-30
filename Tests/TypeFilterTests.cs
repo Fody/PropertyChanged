@@ -1,18 +1,33 @@
-﻿using NUnit.Framework;
+﻿using System.Reflection;
+using NUnit.Framework;
 
 [TestFixture]
 public class TypeFilterTests
 {
-    [Test]
-    public void CheckIfFilterTypeExcludeRightTypes()
-    {
-        var weaverHelper = new WeaverHelper("AssemblyWithTypeFilter");
+    WeaverHelper weaverHelper;
 
-        var assembly = weaverHelper.Assembly;
-        var instance = assembly.GetInstance("TestClassExclude");
+    public TypeFilterTests()
+    {
+        weaverHelper = new WeaverHelper("AssemblyWithTypeFilter");
+    }
+
+    [Test]
+    public void CheckIfFilterTypeExcludeCorrectTypes()
+    {
+        var instance = weaverHelper.Assembly.GetInstance("TestClassExclude");
         EventTester.TestPropertyNotCalled(instance);
-        instance = assembly.GetInstance("PropertyChangedTest.TestClassInclude");
+    }
+
+    [Test]
+    public void CheckIfFilterTypeIncludeCorrectTypes()
+    {
+        var instance = weaverHelper.Assembly.GetInstance("PropertyChangedTest.TestClassInclude");
         EventTester.TestProperty(instance, false);
+    }
+
+    [Test]
+    public void Verify()
+    {
         Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
     }
 }
