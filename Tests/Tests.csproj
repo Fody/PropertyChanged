@@ -4,16 +4,12 @@
     <TargetFrameworks>net462;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="4.*" />
+    <!--<PackageReference Include="FSharp.Core" Version="4.*" />-->
     <PackageReference Include="FodyCecil" Version="2.*" />
     <PackageReference Include="NUnit" Version="3.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.*" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.*" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj" />

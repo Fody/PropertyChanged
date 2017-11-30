@@ -7,8 +7,6 @@
     <Reference Include="Microsoft.CSharp" />
     <PackageReference Include="FodyCecil" Version="2.*" />
     <PackageReference Include="PepitaPackage" Version="*" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
   <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory">
