@@ -1,4 +1,3 @@
-#if(DEBUG)
 using NUnit.Framework;
 
 [TestFixture]
@@ -25,4 +24,3 @@ public class FSharpTest
     }
 
 }
-#endif
