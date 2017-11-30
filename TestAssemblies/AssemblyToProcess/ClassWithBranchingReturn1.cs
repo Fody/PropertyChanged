@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+#pragma warning disable 649
+// ReSharper disable RedundantJumpStatement
 
 public class ClassWithBranchingReturn1 : INotifyPropertyChanged
 {
@@ -13,9 +15,7 @@ public class ClassWithBranchingReturn1 : INotifyPropertyChanged
             if (isInSomeMode)
             {
                 Console.WriteLine("code here so 'if' does not get optimized away in release mode");
-// ReSharper disable RedundantJumpStatement
                 return;
-// ReSharper restore RedundantJumpStatement
             }
         }
     }

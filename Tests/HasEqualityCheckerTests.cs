@@ -6,6 +6,7 @@ using NUnit.Framework;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable UnusedVariable
+// ReSharper disable ValueParameterNotUsed
 
 
 [TestFixture]

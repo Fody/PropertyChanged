@@ -16,7 +16,7 @@ public class RecursiveIlFinderTests
 #if(DEBUG)
         Assert.AreEqual(25, recursiveIlFinder.Instructions.Count);
 #else
-        Assert.AreEqual(22, recursiveIlFinder.Instructions.Count);
+        Assert.AreEqual(15, recursiveIlFinder.Instructions.Count);
 #endif
     }
 

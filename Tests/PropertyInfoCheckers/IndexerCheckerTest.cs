@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+// ReSharper disable ValueParameterNotUsed
 
 [TestFixture]
 public class IndexerCheckerTest

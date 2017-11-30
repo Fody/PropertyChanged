@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+#pragma warning disable 649
 
 public class ClassWithBranchingReturnAndBeforeAfter : INotifyPropertyChanged
 {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-
+// ReSharper disable ValueParameterNotUsed
 // ReSharper disable UnusedParameter.Local
 
 [TestFixture]

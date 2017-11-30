@@ -1,5 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
+// ReSharper disable ConvertToAutoProperty
+// ReSharper disable ValueParameterNotUsed
 
 [TestFixture]
 public class MappingFinderSingleBackingReadonlyFieldGet
@@ -14,7 +16,6 @@ public class MappingFinderSingleBackingReadonlyFieldGet
 
     public class ClassWithSingleBackingFieldsGet
     {
-        // ReSharper disable ConvertToAutoProperty
         readonly string propertyA = "foo";
         public string Property1
         {
