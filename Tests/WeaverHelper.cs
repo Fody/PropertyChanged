@@ -15,7 +15,6 @@ public class WeaverHelper
 
         AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
         File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
-
         var assemblyResolver = new TestAssemblyResolver();
         var readerParameters = new ReaderParameters
         {
@@ -33,6 +32,7 @@ public class WeaverHelper
 
             moduleDefinition.Write(AfterAssemblyPath);
         }
+        File.Delete(BeforeAssemblyPath);
 
         Assembly = Assembly.LoadFrom(AfterAssemblyPath);
     }
