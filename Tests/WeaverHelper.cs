@@ -32,8 +32,7 @@ public class WeaverHelper
 
             moduleDefinition.Write(AfterAssemblyPath);
         }
-        File.Delete(BeforeAssemblyPath);
 
-        Assembly = Assembly.LoadFrom(AfterAssemblyPath);
+        Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
 }

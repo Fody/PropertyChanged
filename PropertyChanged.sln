@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithInterceptor", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithBeforeAfterInterceptor", "TestAssemblies\AssemblyWithBeforeAfterInterceptor\AssemblyWithBeforeAfterInterceptor.csproj", "{2D35F37B-DE5B-4240-96F2-749156558093}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyUsingAttributeWrong", "TestAssemblies\AssemblyUsingAttributeWrong\AssemblyUsingAttributeWrong.csproj", "{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithBadNamedInvoker", "TestAssemblies\AssemblyWithBadNamedInvoker\AssemblyWithBadNamedInvoker.csproj", "{A190DEA4-0618-4792-ACAA-B5B7CFD8C464}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyInheritingBadNamedInvoker", "TestAssemblies\AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj", "{AD0C2F0B-03E5-41EB-A1F4-69CBEADD5889}"
@@ -38,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithNonVoidOnProper
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithTypeFilter", "TestAssemblies\AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj", "{6D1CF2E8-CC4F-47BB-BEE7-E4C16C8C1252}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AssemblyFSharp", "TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj", "{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AssemblyFSharp", "TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj", "{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,14 +104,6 @@ Global
 		{2D35F37B-DE5B-4240-96F2-749156558093}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D35F37B-DE5B-4240-96F2-749156558093}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2D35F37B-DE5B-4240-96F2-749156558093}.Release|x86.ActiveCfg = Release|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Release|ARM.ActiveCfg = Release|Any CPU
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB}.Release|x86.ActiveCfg = Release|Any CPU
 		{A190DEA4-0618-4792-ACAA-B5B7CFD8C464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A190DEA4-0618-4792-ACAA-B5B7CFD8C464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A190DEA4-0618-4792-ACAA-B5B7CFD8C464}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -196,7 +186,6 @@ Global
 		{215A7490-3AE7-4A76-91B5-8C5464D08CF7} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{3E3D50C4-456D-4EB8-A6E5-F5E96353CDB9} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{2D35F37B-DE5B-4240-96F2-749156558093} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
-		{D5DA2C16-94A2-428C-A1F2-4CC4D2D40BBB} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{A190DEA4-0618-4792-ACAA-B5B7CFD8C464} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{AD0C2F0B-03E5-41EB-A1F4-69CBEADD5889} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{4E375B19-D418-4FCC-8433-9CD740537450} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
