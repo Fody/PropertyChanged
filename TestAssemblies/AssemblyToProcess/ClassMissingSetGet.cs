@@ -10,9 +10,8 @@ public class ClassMissingSetGet : INotifyPropertyChanged
 
     public string PropertyNoGet
     {
-        set { property = value; }
+        set => property = value;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
-
 }

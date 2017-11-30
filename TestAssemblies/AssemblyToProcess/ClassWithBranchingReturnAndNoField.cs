@@ -7,10 +7,8 @@ public class ClassWithBranchingReturnAndNoField : INotifyPropertyChanged
 // ReSharper restore NotAccessedField.Local
     public bool HasValue;
 
-    public string Property1
-    {
-        get { return null; }
-        set
+    public string Property1    {
+        get => null;        set
         {
             if (HasValue)
             {

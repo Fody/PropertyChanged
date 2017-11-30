@@ -7,10 +7,8 @@ public class ClassWithBranchingReturnAndBeforeAfter : INotifyPropertyChanged
     bool isInSomeMode;
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public string Property1
-    {
-        get { return property1; }
-        set
+    public string Property1    {
+        get => property1;        set
         {
             property1 = value;
             if (isInSomeMode)

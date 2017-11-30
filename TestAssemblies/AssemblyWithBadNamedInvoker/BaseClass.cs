@@ -7,5 +7,4 @@ public class BaseClass : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(text1));
     }
-
 }

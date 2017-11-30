@@ -6,4 +6,3 @@ public class TestClassExclude : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 }
-

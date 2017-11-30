@@ -4,10 +4,8 @@ using System.ComponentModel;
 public class ClassWithPropertySetInCatch:INotifyPropertyChanged
 {
     string property1;
-    public string Property1
-    {
-        get { return property1; }
-        set
+    public string Property1    {
+        get => property1;        set
         {
             try
             {

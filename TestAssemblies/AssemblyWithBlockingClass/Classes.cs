@@ -4,6 +4,7 @@ using System.ComponentModel;
 public class A : ObservableCollection<string>
 {
 }
+
 public class B : INotifyPropertyChanged
 {
     public string Property1 { get; set; }

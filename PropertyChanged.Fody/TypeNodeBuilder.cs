@@ -95,7 +95,6 @@ public partial class ModuleWeaver
             parentNode.Nodes.Add(typeNode);
         }
         return typeNode;
-
     }
 
     TypeNode FindClassNode(TypeDefinition type, IEnumerable<TypeNode> typeNode)

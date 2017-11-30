@@ -1,5 +1,4 @@
-﻿
-namespace GenericChildWithProperty
+﻿namespace GenericChildWithProperty
 {
     public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>
     {

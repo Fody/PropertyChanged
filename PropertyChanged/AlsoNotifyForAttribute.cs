@@ -26,7 +26,6 @@ namespace PropertyChanged
         public AlsoNotifyForAttribute(string property, params string[] otherProperties)
         {
         }
-
     }
 }
 // ReSharper restore UnusedParameter.Local

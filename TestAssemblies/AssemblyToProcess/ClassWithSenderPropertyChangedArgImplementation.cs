@@ -3,7 +3,6 @@ using PropertyChanged;
 
 public class ClassWithSenderPropertyChangedArgImplementation : INotifyPropertyChanged
 {
-
     public string Property1 { get; set; }
     [DependsOn("Property1")]
     public string Property2 { get; set; }

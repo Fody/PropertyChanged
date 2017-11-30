@@ -14,11 +14,8 @@ public class ClassEquality : INotifyPropertyChanged
     public DateTimeOffset? NullableDateTimeOffset { get; set; }
     public DateTimeOffset DateTimeOffset { get; set; }
 
-    public DateTimeOffset MixDateTimeOffset
-    {
-        get { return mixDateTimeOffset.GetValueOrDefault(); }
-        set { mixDateTimeOffset = value; }
-    }
+    public DateTimeOffset MixDateTimeOffset    {
+        get => mixDateTimeOffset.GetValueOrDefault();        set => mixDateTimeOffset = value;    }
 
     public object ObjectProperty { get; set; }
     public short ShortProperty { get; set; }

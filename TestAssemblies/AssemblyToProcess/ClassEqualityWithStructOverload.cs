@@ -5,7 +5,7 @@ public class ClassEqualityWithStructOverload : INotifyPropertyChanged
     public SimpleStruct Property1 { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
-    
+
 #pragma warning disable 660,661
     public struct SimpleStruct
 #pragma warning restore 660,661
@@ -22,5 +22,4 @@ public class ClassEqualityWithStructOverload : INotifyPropertyChanged
             return !(left == right);
         }
     }
-
 }

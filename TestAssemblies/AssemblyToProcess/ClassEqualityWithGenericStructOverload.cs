@@ -22,5 +22,4 @@ public class ClassEqualityWithGenericStructOverload : INotifyPropertyChanged
             return !(left == right);
         }
     }
-
 }

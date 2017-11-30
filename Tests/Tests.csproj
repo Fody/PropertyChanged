@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net462;netcoreapp2.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="4.*" />
+    <PackageReference Include="FodyCecil" Version="2.*" />
+    <PackageReference Include="NUnit" Version="3.*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.*" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.*" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyToProcess\AssemblyToProcess.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyUsingAttributeWrong\AssemblyUsingAttributeWrong.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithBadNamedInvoker\AssemblyWithBadNamedInvoker.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithBaseInDifferentModule\AssemblyWithBaseInDifferentModule.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithBase\AssemblyWithBase.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithBeforeAfterInterceptor\AssemblyWithBeforeAfterInterceptor.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithBlockingClass\AssemblyWithBlockingClass.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithInterceptor\AssemblyWithInterceptor.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithNonVoidOnPropertyNameChanged\AssemblyWithNonVoidOnPropertyNameChanged.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj" />
+  </ItemGroup>
+</Project>

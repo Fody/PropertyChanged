@@ -2,7 +2,6 @@
 
 public class ClassWithNested
 {
-
     public class ClassNested : INotifyPropertyChanged
     {
         public string Property1 { get; set; }
@@ -14,7 +13,6 @@ public class ClassWithNested
             public string Property1 { get; set; }
 
             public event PropertyChangedEventHandler PropertyChanged;
-
         }
     }
 }

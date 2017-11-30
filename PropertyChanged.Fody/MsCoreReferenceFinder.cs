@@ -94,5 +94,4 @@ public partial class ModuleWeaver
         InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
     }
-
 }

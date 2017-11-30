@@ -15,7 +15,6 @@ public partial class ModuleWeaver
         "raisePropertyChanged"
     };
 
-
     public void ResolveEventInvokerName()
     {
         var eventInvokerAttribute = Config?.Attributes("EventInvokerNames").FirstOrDefault();

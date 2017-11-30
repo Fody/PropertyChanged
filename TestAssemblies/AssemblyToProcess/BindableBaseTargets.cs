@@ -6,7 +6,7 @@ public class ClassBindableBaseCallingOnPropertyChanged : BindableBase
 
     public string Property1
     {
-        get { return property1; }
+        get => property1;
         set
         {
             property1 = value;
@@ -14,19 +14,18 @@ public class ClassBindableBaseCallingOnPropertyChanged : BindableBase
         }
     }
 }
+
 public class ClassBindableBaseCallingSetProperty : BindableBase
 {
     string property1;
 
     public string Property1
     {
-        get { return property1; }
-        set
-        {
-            SetProperty(ref property1, value, "Property1");
-        }
+        get => property1;
+        set => SetProperty(ref property1, value, "Property1");
     }
 }
+
 public abstract class BindableBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;

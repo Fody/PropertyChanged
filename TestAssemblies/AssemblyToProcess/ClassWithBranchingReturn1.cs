@@ -6,10 +6,8 @@ public class ClassWithBranchingReturn1 : INotifyPropertyChanged
     string property1;
     bool isInSomeMode;
 
-    public string Property1
-    {
-        get { return property1; }
-        set
+    public string Property1    {
+        get => property1;        set
         {
             property1 = value;
             if (isInSomeMode)

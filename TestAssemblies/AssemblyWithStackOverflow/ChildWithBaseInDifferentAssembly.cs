@@ -2,8 +2,7 @@
 
 public class ChildWithBaseInDifferentAssembly : BaseClassWithVirtualProperty
 {
-    public override string Property1
-    {
+    public override string Property1    {
         get
         {
             if (string.IsNullOrEmpty(base.Property1))
@@ -14,6 +13,5 @@ public class ChildWithBaseInDifferentAssembly : BaseClassWithVirtualProperty
             return base.Property1;
         }
 
-        set { base.Property1 = value; }
-    }
+        set => base.Property1 = value;    }
 }

@@ -1,11 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net462</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
     <NoWarn>0067;0649</NoWarn>
-    <OutputPath>$(SolutionDir)TestAssemblyBin</OutputPath>
-    <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj" />

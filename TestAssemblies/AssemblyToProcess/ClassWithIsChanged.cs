@@ -6,6 +6,4 @@ public class ClassWithIsChanged : INotifyPropertyChanged
     public bool IsChanged { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
-
-
 }

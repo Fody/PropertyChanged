@@ -9,6 +9,5 @@ namespace GenericChildWithPropertyBeforeAfter
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
