@@ -12,17 +12,17 @@ public class TypesWithInitializedPropertiesTests
     readonly Assembly assembly = new WeaverHelper(assemblyName).Assembly;
 
     [Test]
-    [TestCase("ClassWithInlineInitializedAutoProperties", 
+    [TestCase("ClassWithInlineInitializedAutoProperties",
         "Test", "Test2", false, new string[0])]
-    [TestCase("ClassWithExplicitInitializedAutoProperties", 
+    [TestCase("ClassWithExplicitInitializedAutoProperties",
         "Test", "Test2", true, new[]{ "IsChanged", "Property1", "Property2" })]
-    [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedWeakDesign", 
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedWeakDesign",
         "test", "test2", true, new[] { "IsChanged", "Property1", "Property2", "Property1", "Property2", "Property3" })]
-    [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign", 
+    [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign",
         "test", "test2", true, new[] { "IsChanged", "Property1", "Property2", "Property3" })]
-    [TestCase("ClassWithAutoPropertiesInitializedInSeparateMethod", 
+    [TestCase("ClassWithAutoPropertiesInitializedInSeparateMethod",
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
-    [TestCase("ClassWithExplicitInitializedBackingFieldProperties", 
+    [TestCase("ClassWithExplicitInitializedBackingFieldProperties",
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
     public void TypesWithInitializedPropertiesTest(string className, string property1Value, string property2Value, bool isChangedStateAfterConstructor, string[] propertyChangedCallsInConstructor)
     {
