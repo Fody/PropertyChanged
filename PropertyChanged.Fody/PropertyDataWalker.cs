@@ -31,11 +31,6 @@ public partial class ModuleWeaver
         }
     }
 
-    //if (AlreadyContainsNotification(propertyData.PropertyDefinition, node.EventInvoker.MethodReference.Name))
-    //          {
-    //              moduleWeaver.LogInfo(string.Format("\t{0} Already has notification functionality. Property will be ignored.", propertyData.PropertyDefinition.GetName()));
-    //              continue;
-    //          }
     void GetPropertyData(PropertyDefinition propertyDefinition, TypeNode node)
     {
         var notifyPropertyData = ReadAlsoNotifyForData(propertyDefinition, node.AllProperties);
