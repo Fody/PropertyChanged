@@ -11,9 +11,16 @@ public class FSharpTest
     }
 
     [Test]
-    public void EnsureReferenceIsRemoved()
+    public void SimpleClass()
     {
         var instance = weaverHelper.Assembly.GetInstance("Namespace.ClassWithProperties");
+        EventTester.TestProperty(instance, false);
+    }
+
+    [Test]
+    public void ClassWithNoOnPropertyChanged()
+    {
+        var instance = weaverHelper.Assembly.GetInstance("Namespace.ClassWithNoOnPropertyChanged");
         EventTester.TestProperty(instance, false);
     }
 
@@ -22,5 +29,4 @@ public class FSharpTest
     {
         Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
     }
-
 }
