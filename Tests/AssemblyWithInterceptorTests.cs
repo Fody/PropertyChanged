@@ -17,8 +17,8 @@ public class AssemblyWithInterceptorTests
         var value = (bool)propertyInfo.GetValue(null, null);
         Assert.IsTrue(value);
         Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
-
     }
+
     [Test]
     public void BeforeAfter()
     {
