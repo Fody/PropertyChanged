@@ -9,7 +9,7 @@
     <PackageReference Include="PepitaPackage" Version="*" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
-  <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory">
+  <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(ConfigurationName)' == 'Release'">
     <ItemGroup>
       <FilesToDelete Include="$(SolutionDir)nugets\**\*.*" />
     </ItemGroup>
