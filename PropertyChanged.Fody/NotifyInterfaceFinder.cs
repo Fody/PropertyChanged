@@ -43,11 +43,4 @@ public partial class ModuleWeaver
         typesImplementingINotify[fullName] = baseTypeImplementsINotify;
         return baseTypeImplementsINotify;
     }
-
-    public static bool IsPropertyChangedEventHandler(TypeReference typeReference)
-    {
-        return typeReference.FullName == "System.ComponentModel.PropertyChangedEventHandler" ||
-               typeReference.FullName == "Windows.UI.Xaml.Data.PropertyChangedEventHandler" ||
-               typeReference.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
-    }
 }
