@@ -11,6 +11,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.*" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyExplicitPropertyChanged\AssemblyExplicitPropertyChanged.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyToProcess\AssemblyToProcess.csproj" />

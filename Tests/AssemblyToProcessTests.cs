@@ -9,7 +9,7 @@ using NUnit.Framework;
 public class AssemblyToProcessTests
 {
     const string assemblyName = "AssemblyToProcess";
-    readonly Assembly assembly = new WeaverHelper(assemblyName).Assembly;
+    Assembly assembly = new WeaverHelper(assemblyName).Assembly;
 
     [Test]
     [TestCase("ClassWithInlineInitializedAutoProperties",
