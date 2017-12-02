@@ -6,21 +6,15 @@ public partial class ModuleWeaver
 {
     public EventInvokerMethod AddOnPropertyChangedMethod(TypeDefinition targetType)
     {
-        var propertyChangedField = FindPropertyChangedField(targetType);
-        if (propertyChangedField == null)
-        {
-            return null;
-        }
-
         if (FoundInterceptor)
         {
             if (targetType.HasGenericParameters)
             {
-                var message = $"Error processing '{targetType.Name}'. Interception is not supported on generic types. To manually work around this problem add a [DoNotNotify] to the class and then manually implement INotifyPropertyChanged for that class and all child classes. If you would like this feature handled automatically please feel free to submit a pull request.";
+                var message = $"Error processing '{targetType.Name}'. Interception is not supported on generic types. To manually work around this problem add a [DoNotNotify] to the class and then manually implement INotifyPropertyChanged for that class and all child classes. If you would like this feature handled automatically feel free to submit a pull request.";
                 throw new WeavingException(message);
             }
 
-            var methodDefinition = GetMethodDefinition(targetType, propertyChangedField);
+            var methodDefinition = GetMethodDefinition(targetType);
 
             return new EventInvokerMethod
             {
@@ -32,13 +26,13 @@ public partial class ModuleWeaver
 
         return new EventInvokerMethod
         {
-            MethodReference = InjectMethod(targetType, EventInvokerNames.First(), propertyChangedField).GetGeneric(),
+            MethodReference = InjectMethod(targetType, EventInvokerNames.First()).GetGeneric(),
             InvokerType = InterceptorType,
             IsVisibleFromChildren = true,
         };
     }
 
-    MethodDefinition GetMethodDefinition(TypeDefinition targetType, FieldReference propertyChangedField)
+    MethodDefinition GetMethodDefinition(TypeDefinition targetType)
     {
         var eventInvokerName = $"Inner{EventInvokerNames.First()}";
         var methodDefinition = targetType.Methods.FirstOrDefault(x => x.Name == eventInvokerName);
@@ -46,10 +40,50 @@ public partial class ModuleWeaver
         {
             return methodDefinition;
         }
-        return InjectMethod(targetType, eventInvokerName, propertyChangedField);
+        return InjectMethod(targetType, eventInvokerName);
     }
 
-    MethodDefinition InjectMethod(TypeDefinition targetType, string eventInvokerName, FieldReference propertyChangedField)
+    MethodDefinition InjectMethod(TypeDefinition targetType, string eventInvokerName)
+    {
+        var propertyChangedFieldDef = targetType.Fields
+            .SingleOrDefault(x => IsPropertyChangedEventHandler(x.FieldType));
+        if (propertyChangedFieldDef != null)
+        {
+            var propertyChangedField = propertyChangedFieldDef.GetGeneric();
+            return InjectNormal(targetType, eventInvokerName, propertyChangedField);
+        }
+
+        var fsharpPropertyChangedFieldDef = targetType.Fields
+            .SingleOrDefault(x => IsFsharpEventHandler(x.FieldType));
+        if (fsharpPropertyChangedFieldDef != null)
+        {
+            throw new WeavingException($"Could not inject EventInvoker method on type '{targetType.FullName}'. Current;y adding an event invoker for events using the FSharpEvent type is not supported. Instead add an event invoker named with one of the `EventInvokerNames`.");
+        }
+
+        var message = $"Could not inject EventInvoker method on type '{targetType.FullName}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on {targetType.FullName}.";
+        throw new WeavingException(message);
+    }
+
+    //MethodDefinition InjectFsharp(TypeDefinition targetType, string eventInvokerName, FieldReference fsharpEvent)
+    //{
+    //    var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+    //    method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
+
+    //    var instructions = method.Body.Instructions;
+    //    instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+    //    instructions.Add(Instruction.Create(OpCodes.Ldfld, fsharpEvent));
+    //    instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+    //    instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
+    //    instructions.Add(Instruction.Create(OpCodes.Newobj, ComponentModelPropertyChangedEventConstructorReference));
+    //    instructions.Add(Instruction.Create(OpCodes.Tail));
+    //    instructions.Add(Instruction.Create(OpCodes.Callvirt, X));
+    //    instructions.Add(Instruction.Create(OpCodes.Ret));
+    //    method.Body.InitLocals = true;
+    //    targetType.Methods.Add(method);
+    //    return method;
+    //}
+
+    MethodDefinition InjectNormal(TypeDefinition targetType, string eventInvokerName, FieldReference propertyChangedField)
     {
         var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
         method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
@@ -92,16 +126,15 @@ public partial class ModuleWeaver
         return MethodAttributes.Virtual | MethodAttributes.Public | MethodAttributes.NewSlot;
     }
 
-    public static FieldReference FindPropertyChangedField(TypeDefinition targetType)
+    static bool IsPropertyChangedEventHandler(TypeReference type)
     {
-        var findPropertyChangedField = targetType.Fields.FirstOrDefault(x => IsPropertyChangedEventHandler(x.FieldType));
-        return findPropertyChangedField?.GetGeneric();
+        return type.FullName == "System.ComponentModel.PropertyChangedEventHandler" ||
+               type.FullName == "Windows.UI.Xaml.Data.PropertyChangedEventHandler" ||
+               type.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
     }
 
-    public static bool IsPropertyChangedEventHandler(TypeReference typeReference)
+    static bool IsFsharpEventHandler(TypeReference type)
     {
-        return typeReference.FullName == "System.ComponentModel.PropertyChangedEventHandler" ||
-               typeReference.FullName == "Windows.UI.Xaml.Data.PropertyChangedEventHandler" ||
-               typeReference.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
+        return type.FullName == "Microsoft.FSharp.Control.FSharpEvent`2<System.ComponentModel.PropertyChangedEventHandler,System.ComponentModel.PropertyChangedEventArgs>";
     }
 }

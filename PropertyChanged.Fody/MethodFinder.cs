@@ -176,12 +176,6 @@ public partial class ModuleWeaver
             if (eventInvoker == null)
             {
                 eventInvoker = AddOnPropertyChangedMethod(notifyNode.TypeDefinition);
-                if (eventInvoker == null)
-                {
-                    var message = string.Format("\tCould not find EventInvoker method on type '{1}'. Possible names are '{0}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Please either correct 'EventInvokerNames' or implement your own EventInvoker on this class. No derived types will be processed. If you want to suppress this message place a [DoNotNotifyAttribute] on {1}.", string.Join(", ", EventInvokerNames), notifyNode.TypeDefinition.Name);
-                    LogWarning(message);
-                    continue;
-                }
             }
 
             notifyNode.EventInvoker = eventInvoker;

@@ -1,15 +1,15 @@
 ﻿using NUnit.Framework;
 
 [TestFixture]
-[Explicit]
 public class AssemblyWithBadNamedInvokerTests
 {
     [Test]
-    public void WithOnNotify()
+    public void Run()
     {
-        var weaverHelper = new WeaverHelper("AssemblyInheritingBadNamedInvoker");
-         weaverHelper.Assembly.GetInstance("ChildClass");
-        //TODO: validate that a log message is written
-        //EventTester.TestProperty(instance, false);
+        var weavingException = Assert.Throws<WeavingException>(() =>
+        {
+            new WeaverHelper("AssemblyInheritingBadNamedInvoker");
+        });
+        Assert.AreEqual("Could not inject EventInvoker method on type 'ChildClass'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on ChildClass.", weavingException.Message);
     }
 }

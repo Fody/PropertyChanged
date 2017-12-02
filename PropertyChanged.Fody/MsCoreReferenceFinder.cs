@@ -46,6 +46,7 @@ public partial class ModuleWeaver
         AddAssemblyIfExists("netstandard", types);
         AddAssemblyIfExists("System.ObjectModel", types);
         AddAssemblyIfExists("System.Threading", types);
+        AddAssemblyIfExists("FSharp.Core", types);
 
         var objectDefinition = types.First(x => x.Name == "Object");
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);

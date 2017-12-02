@@ -16,13 +16,14 @@ public partial class ModuleWeaver
         var method = new MethodDefinition(EventInvokerNames.First(), GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
 
         var propertyName = new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String);
-        method.Parameters.Add(propertyName);
+        var parameters = method.Parameters;
+        parameters.Add(propertyName);
         if (InterceptorType == InvokerTypes.BeforeAfter)
         {
             var before = new ParameterDefinition("before", ParameterAttributes.None, ModuleDefinition.TypeSystem.Object);
-            method.Parameters.Add(before);
+            parameters.Add(before);
             var after = new ParameterDefinition("after", ParameterAttributes.None, ModuleDefinition.TypeSystem.Object);
-            method.Parameters.Add(after);
+            parameters.Add(after);
         }
 
         var action = new VariableDefinition(ActionTypeReference);
