@@ -6,7 +6,7 @@ using System.Reflection;
 
 using NUnit.Framework;
 
-public class TypesWithInitializedPropertiesTests
+public class AssemblyToProcessTests
 {
     const string assemblyName = "AssemblyToProcess";
     readonly Assembly assembly = new WeaverHelper(assemblyName).Assembly;
@@ -15,7 +15,7 @@ public class TypesWithInitializedPropertiesTests
     [TestCase("ClassWithInlineInitializedAutoProperties",
         "Test", "Test2", false, new string[0])]
     [TestCase("ClassWithExplicitInitializedAutoProperties",
-        "Test", "Test2", true, new[]{ "IsChanged", "Property1", "Property2" })]
+        "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
     [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedWeakDesign",
         "test", "test2", true, new[] { "IsChanged", "Property1", "Property2", "Property1", "Property2", "Property3" })]
     [TestCase("ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign",
@@ -55,5 +55,12 @@ public class TypesWithInitializedPropertiesTests
         instance.Property2 = "b";
         Assert.AreEqual(initial + 3, eventCount);
         Assert.IsTrue(instance.IsChanged);
+    }
+
+    [Test]
+    public void ClassWithIndirectImplementation()
+    {
+        var instance = assembly.GetInstance("ClassWithIndirectImplementation");
+        EventTester.TestProperty(instance, false);
     }
 }
