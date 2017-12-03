@@ -4,4 +4,4 @@
 [assembly: AssemblyProduct("PropertyChanged")]
 [assembly: AssemblyCompany("Simon Cropp and Contributors")]
 [assembly: AssemblyDescription("Fody add-in for injecting INotifyPropertyChanged code into properties.")]
-[assembly: AssemblyVersion("2.1.5")]
+[assembly: AssemblyVersion("2.2.0")]
