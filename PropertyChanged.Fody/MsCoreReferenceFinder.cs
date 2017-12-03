@@ -4,8 +4,8 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    public MethodReference ComponentModelPropertyChangedEventHandlerInvokeReference;
-    public MethodReference ComponentModelPropertyChangedEventConstructorReference;
+    public MethodReference PropertyChangedEventHandlerInvokeReference;
+    public MethodReference PropertyChangedEventConstructorReference;
     public MethodReference ActionConstructorReference;
     public MethodReference ObjectConstructor;
     public MethodReference ObjectEqualsMethod;
@@ -69,9 +69,9 @@ public partial class ModuleWeaver
         PropChangedInterfaceReference = ModuleDefinition.ImportReference(propChangedInterfaceDefinition);
         var propChangedHandlerDefinition = types.First(x => x.Name == "PropertyChangedEventHandler");
         PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
-        ComponentModelPropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
+        PropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
         var propChangedArgsDefinition = types.First(x => x.Name == "PropertyChangedEventArgs");
-        ComponentModelPropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
+        PropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
         var delegateDefinition = types.First(x => x.Name == "Delegate");
         var combineMethodDefinition = delegateDefinition.Methods
@@ -94,5 +94,14 @@ public partial class ModuleWeaver
 
         InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
+
+        var fSharpEvent = types.FirstOrDefault(x => x.FullName == "Microsoft.FSharp.Control.FSharpEvent`2");
+        if (fSharpEvent != null)
+        {
+            var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
+            Trigger = ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
+        }
     }
+
+    public MethodReference Trigger;
 }

@@ -57,31 +57,31 @@ public partial class ModuleWeaver
             .SingleOrDefault(x => IsFsharpEventHandler(x.FieldType));
         if (fsharpPropertyChangedFieldDef != null)
         {
-            throw new WeavingException($"Could not inject EventInvoker method on type '{targetType.FullName}'. Current;y adding an event invoker for events using the FSharpEvent type is not supported. Instead add an event invoker named with one of the `EventInvokerNames`.");
+            return InjectFsharp(targetType, eventInvokerName, fsharpPropertyChangedFieldDef);
         }
 
         var message = $"Could not inject EventInvoker method on type '{targetType.FullName}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on {targetType.FullName}.";
         throw new WeavingException(message);
     }
 
-    //MethodDefinition InjectFsharp(TypeDefinition targetType, string eventInvokerName, FieldReference fsharpEvent)
-    //{
-    //    var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
-    //    method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
+    MethodDefinition InjectFsharp(TypeDefinition targetType, string eventInvokerName, FieldDefinition fsharpEvent)
+    {
+        var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
 
-    //    var instructions = method.Body.Instructions;
-    //    instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
-    //    instructions.Add(Instruction.Create(OpCodes.Ldfld, fsharpEvent));
-    //    instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
-    //    instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
-    //    instructions.Add(Instruction.Create(OpCodes.Newobj, ComponentModelPropertyChangedEventConstructorReference));
-    //    instructions.Add(Instruction.Create(OpCodes.Tail));
-    //    instructions.Add(Instruction.Create(OpCodes.Callvirt, X));
-    //    instructions.Add(Instruction.Create(OpCodes.Ret));
-    //    method.Body.InitLocals = true;
-    //    targetType.Methods.Add(method);
-    //    return method;
-    //}
+        var instructions = method.Body.Instructions;
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldfld, fsharpEvent));
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
+        instructions.Add(Instruction.Create(OpCodes.Newobj, PropertyChangedEventConstructorReference));
+        instructions.Add(Instruction.Create(OpCodes.Tail));
+        instructions.Add(Instruction.Create(OpCodes.Callvirt, Trigger));
+        instructions.Add(Instruction.Create(OpCodes.Ret));
+        method.Body.InitLocals = true;
+        targetType.Methods.Add(method);
+        return method;
+    }
 
     MethodDefinition InjectNormal(TypeDefinition targetType, string eventInvokerName, FieldReference propertyChangedField)
     {
@@ -108,8 +108,8 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
-        instructions.Add(Instruction.Create(OpCodes.Newobj, ComponentModelPropertyChangedEventConstructorReference));
-        instructions.Add(Instruction.Create(OpCodes.Callvirt, ComponentModelPropertyChangedEventHandlerInvokeReference));
+        instructions.Add(Instruction.Create(OpCodes.Newobj, PropertyChangedEventConstructorReference));
+        instructions.Add(Instruction.Create(OpCodes.Callvirt, PropertyChangedEventHandlerInvokeReference));
 
         instructions.Add(last);
         method.Body.InitLocals = true;

@@ -197,7 +197,7 @@ public class PropertyWeaver
         return instructions.Insert(index,
                                    Instruction.Create(OpCodes.Ldarg_0),
                                    Instruction.Create(OpCodes.Ldstr, property.Name),
-                                   Instruction.Create(OpCodes.Newobj, moduleWeaver.ComponentModelPropertyChangedEventConstructorReference),
+                                   Instruction.Create(OpCodes.Newobj, moduleWeaver.PropertyChangedEventConstructorReference),
                                    CallEventInvoker(property));
     }
 
@@ -207,7 +207,7 @@ public class PropertyWeaver
                                    Instruction.Create(OpCodes.Ldarg_0),
                                    Instruction.Create(OpCodes.Ldarg_0),
                                    Instruction.Create(OpCodes.Ldstr, property.Name),
-                                   Instruction.Create(OpCodes.Newobj, moduleWeaver.ComponentModelPropertyChangedEventConstructorReference),
+                                   Instruction.Create(OpCodes.Newobj, moduleWeaver.PropertyChangedEventConstructorReference),
                                    CallEventInvoker(property));
     }
 

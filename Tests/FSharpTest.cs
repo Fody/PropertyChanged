@@ -18,6 +18,13 @@ public class FSharpTest
     }
 
     [Test]
+    public void WithNoOnPropertyChanged()
+    {
+        var instance = weaverHelper.Assembly.GetInstance("Namespace.ClassWithNoOnPropertyChanged");
+        EventTester.TestProperty(instance, false);
+    }
+
+    [Test]
     public void Verify()
     {
         Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);

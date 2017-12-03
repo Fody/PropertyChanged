@@ -2,6 +2,7 @@
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 
 public static class CecilExtensions
 {
@@ -75,6 +76,25 @@ public static class CecilExtensions
         return reference;
     }
 
+
+    public static MethodReference MakeGeneric(this MethodReference self, params TypeReference[] arguments)
+    {
+        var reference = new MethodReference(self.Name, self.ReturnType)
+        {
+            HasThis = self.HasThis,
+            ExplicitThis = self.ExplicitThis,
+            DeclaringType = self.DeclaringType.MakeGenericInstanceType(arguments),
+            CallingConvention = self.CallingConvention,
+        };
+
+        foreach (var parameter in self.Parameters)
+            reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
+
+        foreach (var genericParameter in self.GenericParameters)
+            reference.GenericParameters.Add(new GenericParameter(genericParameter.Name, reference));
+
+        return reference;
+    }
     public static IEnumerable<CustomAttribute> GetAllCustomAttributes(this TypeDefinition typeDefinition)
     {
         foreach (var attribute in typeDefinition.CustomAttributes)
