@@ -18,8 +18,8 @@
     <MakeDir Directories="$(SolutionDir)nugets" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\net452\PropertyChanged.dll" DestinationFolder="$(SolutionDir)nugets\lib\net452" />
     <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\net452\PropertyChanged.xml" DestinationFolder="$(SolutionDir)nugets\lib\net452" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.dll" DestinationFolder="$(SolutionDir)nugets\lib\netstandard1.4" />
-    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.xml" DestinationFolder="$(SolutionDir)nugets\lib\netstandard1.4" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.dll" DestinationFolder="$(SolutionDir)nugets\lib\netstandard1.0" />
+    <Copy SourceFiles="$(SolutionDir)PropertyChanged\bin\$(ConfigurationName)\netstandard1.0\PropertyChanged.xml" DestinationFolder="$(SolutionDir)nugets\lib\netstandard1.0" />
     <Copy SourceFiles="$(ProjectDir)PropertyChanged.Fody.nuspec" DestinationFolder="$(SolutionDir)nugets" />
     <Copy SourceFiles="$(ProjectDir)bin\$(ConfigurationName)\net452\PropertyChanged.Fody.dll" DestinationFolder="$(SolutionDir)nugets" />
     <Copy SourceFiles="$(ProjectDir)bin\$(ConfigurationName)\net452\PropertyChanged.Fody.pdb" DestinationFolder="$(SolutionDir)nugets" />
