@@ -7,7 +7,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <PackageReference Include="FodyCecil" Version="2.*" />
-    <PackageReference Include="PepitaPackage" Version="*" />
+    <PackageReference Include="PepitaPackage" Version="1.*" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
   <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(ConfigurationName)' == 'Release'">

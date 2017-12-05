@@ -95,11 +95,7 @@ public class Person : INotifyPropertyChanged
 
     public virtual void OnPropertyChanged(string propertyName)
     {
-        var propertyChanged = PropertyChanged;
-        if (propertyChanged != null)
-        {
-            propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+        PropertyChanged?(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 ```
