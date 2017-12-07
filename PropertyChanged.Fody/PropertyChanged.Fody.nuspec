@@ -7,7 +7,7 @@
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/Fody/PropertyChanged</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://raw.github.com/Fody/PropertyChanged/master/Icons/package_icon.png</iconUrl>
+    <iconUrl>https://raw.github.com/Fody/PropertyChanged/master/package_icon.png</iconUrl>
     <tags>Xaml, MVVM, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</tags>
     <dependencies>
       <dependency id="Fody" version="[2.2.1, 3.0.0)"/>
