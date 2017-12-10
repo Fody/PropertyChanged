@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
@@ -17,6 +18,7 @@ public partial class ModuleWeaver
     public MethodReference DelegateCombineMethodRef;
     public MethodReference DelegateRemoveMethodRef;
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
+    public Lazy<MethodReference> Trigger;
 
     void AddAssemblyIfExists(string name, List<TypeDefinition> types)
     {
@@ -94,14 +96,16 @@ public partial class ModuleWeaver
 
         InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
-
-        var fSharpEvent = types.FirstOrDefault(x => x.FullName == "Microsoft.FSharp.Control.FSharpEvent`2");
-        if (fSharpEvent != null)
+        Trigger = new Lazy<MethodReference>(() =>
         {
-            var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
-            Trigger = ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
-        }
-    }
+            var fSharpEvent = types.FirstOrDefault(x => x.FullName == "Microsoft.FSharp.Control.FSharpEvent`2");
+            if (fSharpEvent == null)
+            {
+                return null;
+            }
 
-    public MethodReference Trigger;
+            var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
+            return ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
+        });
+    }
 }
