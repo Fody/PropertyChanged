@@ -19,17 +19,27 @@ public partial class ModuleWeaver
     public MethodReference DelegateRemoveMethodRef;
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
     public Lazy<MethodReference> Trigger;
+    public MethodReference StringEquals;
 
     void AddAssemblyIfExists(string name, List<TypeDefinition> types)
     {
         try
         {
-            var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+            var assembly = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
 
-            if (msCoreLibDefinition != null)
+            if (assembly == null)
             {
-                types.AddRange(msCoreLibDefinition.MainModule.Types);
+                return;
             }
+
+            var module = assembly.MainModule;
+            types.AddRange(module.Types.Where(x => x.IsPublic));
+            var exported = module.ExportedTypes
+                .Select(x => x.Resolve())
+                .Where(x => x != null && 
+                            x.IsPublic &&  
+                            x.Scope.Name != "System.Private.CoreLib.dll");
+            types.AddRange(exported);
         }
         catch (AssemblyResolutionException)
         {
@@ -55,6 +65,16 @@ public partial class ModuleWeaver
         ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
         var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
         ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
+
+        var stringEquals = types.First(x => x.Name == "String")
+            .Methods
+            .First(x => x.IsStatic &&
+                        x.Name == "Equals" &&
+                        x.Parameters.Count == 3 &&
+                        x.Parameters[0].ParameterType.Name == "String" &&
+                        x.Parameters[1].ParameterType.Name == "String" &&
+                        x.Parameters[2].ParameterType.Name == "StringComparison");
+        StringEquals = ModuleDefinition.ImportReference(stringEquals);
 
         var nullableDefinition = types.FirstOrDefault(x => x.Name == "Nullable");
         NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
