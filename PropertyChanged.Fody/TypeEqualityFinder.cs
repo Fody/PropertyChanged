@@ -5,25 +5,12 @@ using Mono.Cecil;
 public partial class ModuleWeaver
 {
     Dictionary<string, MethodReference> methodCache;
-    public MethodReference StringEquals;
     public int OrdinalStringComparison;
 
     public void FindComparisonMethods()
     {
         methodCache = new Dictionary<string, MethodReference>();
 
-        var stringEquals = ModuleDefinition
-            .TypeSystem
-            .String
-            .Resolve()
-            .Methods
-            .First(x => x.IsStatic &&
-                        x.Name == "Equals" &&
-                        x.Parameters.Count == 3 &&
-                        x.Parameters[0].ParameterType.Name == "String" &&
-                        x.Parameters[1].ParameterType.Name == "String" &&
-                        x.Parameters[2].ParameterType.Name == "StringComparison");
-        StringEquals = ModuleDefinition.ImportReference(stringEquals);
         OrdinalStringComparison = (int) StringEquals
             .Parameters[2]
             .ParameterType
@@ -48,7 +35,6 @@ public partial class ModuleWeaver
 
     MethodReference GetEquality(TypeReference typeDefinition)
     {
-
         if (typeDefinition.IsArray)
         {
             return null;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
@@ -17,17 +18,28 @@ public partial class ModuleWeaver
     public MethodReference DelegateCombineMethodRef;
     public MethodReference DelegateRemoveMethodRef;
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
+    public Lazy<MethodReference> Trigger;
+    public MethodReference StringEquals;
 
     void AddAssemblyIfExists(string name, List<TypeDefinition> types)
     {
         try
         {
-            var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+            var assembly = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
 
-            if (msCoreLibDefinition != null)
+            if (assembly == null)
             {
-                types.AddRange(msCoreLibDefinition.MainModule.Types);
+                return;
             }
+
+            var module = assembly.MainModule;
+            types.AddRange(module.Types.Where(x => x.IsPublic));
+            var exported = module.ExportedTypes
+                .Select(x => x.Resolve())
+                .Where(x => x != null && 
+                            x.IsPublic &&  
+                            x.Scope.Name != "System.Private.CoreLib.dll");
+            types.AddRange(exported);
         }
         catch (AssemblyResolutionException)
         {
@@ -53,6 +65,16 @@ public partial class ModuleWeaver
         ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
         var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
         ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
+
+        var stringEquals = types.First(x => x.Name == "String")
+            .Methods
+            .First(x => x.IsStatic &&
+                        x.Name == "Equals" &&
+                        x.Parameters.Count == 3 &&
+                        x.Parameters[0].ParameterType.Name == "String" &&
+                        x.Parameters[1].ParameterType.Name == "String" &&
+                        x.Parameters[2].ParameterType.Name == "StringComparison");
+        StringEquals = ModuleDefinition.ImportReference(stringEquals);
 
         var nullableDefinition = types.FirstOrDefault(x => x.Name == "Nullable");
         NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
@@ -94,14 +116,16 @@ public partial class ModuleWeaver
 
         InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
-
-        var fSharpEvent = types.FirstOrDefault(x => x.FullName == "Microsoft.FSharp.Control.FSharpEvent`2");
-        if (fSharpEvent != null)
+        Trigger = new Lazy<MethodReference>(() =>
         {
-            var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
-            Trigger = ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
-        }
-    }
+            var fSharpEvent = types.FirstOrDefault(x => x.FullName == "Microsoft.FSharp.Control.FSharpEvent`2");
+            if (fSharpEvent == null)
+            {
+                return null;
+            }
 
-    public MethodReference Trigger;
+            var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
+            return ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
+        });
+    }
 }
