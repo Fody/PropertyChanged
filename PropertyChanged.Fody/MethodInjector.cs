@@ -76,7 +76,7 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
         instructions.Add(Instruction.Create(OpCodes.Newobj, PropertyChangedEventConstructorReference));
         instructions.Add(Instruction.Create(OpCodes.Tail));
-        instructions.Add(Instruction.Create(OpCodes.Callvirt, Trigger));
+        instructions.Add(Instruction.Create(OpCodes.Callvirt, Trigger.Value));
         instructions.Add(Instruction.Create(OpCodes.Ret));
         method.Body.InitLocals = true;
         targetType.Methods.Add(method);
