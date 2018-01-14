@@ -93,14 +93,13 @@ public partial class ModuleWeaver
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
         Trigger = new Lazy<MethodReference>(() =>
         {
-            var fSharpEvent = FindType("Microsoft.FSharp.Control.FSharpEvent`2");
-            if (fSharpEvent == null)
+            if (TryFindType("Microsoft.FSharp.Control.FSharpEvent`2", out var fSharpEvent))
             {
-                return null;
+                var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
+                return ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
             }
 
-            var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
-            return ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
+            return null;
         });
     }
 }
