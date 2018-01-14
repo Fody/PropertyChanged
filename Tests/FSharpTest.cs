@@ -9,11 +9,7 @@ public class FSharpTest
     public FSharpTest()
     {
         var weavingTask = new ModuleWeaver();
-        testResult = weavingTask.ExecuteTestRun("AssemblyFSharp.dll"
-#if NETCOREAPP2_0
-            , runPeVerify: false
-#endif
-            );
+        testResult = weavingTask.ExecuteTestRun("AssemblyFSharp.dll", runPeVerify: false);
     }
 
     [Fact]
