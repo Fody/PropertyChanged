@@ -1,10 +1,9 @@
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class WithLambda
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<TestClass>();
@@ -14,9 +13,9 @@ public class WithLambda
                            Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
                        };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.AreEqual(1,node.PropertyDependencies.Count);
-        Assert.AreEqual("PropertyWithLambda", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("Property1", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
+        Assert.Single(node.PropertyDependencies);
+        Assert.Equal("PropertyWithLambda", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("Property1", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
     }
 
     public class TestClass

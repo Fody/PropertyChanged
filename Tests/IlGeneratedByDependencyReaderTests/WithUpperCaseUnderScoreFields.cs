@@ -1,13 +1,14 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Xunit;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable InconsistentNaming
 
-[TestFixture]
+
 public class WithUpperCaseUnderScoreFields
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
@@ -17,23 +18,29 @@ public class WithUpperCaseUnderScoreFields
             Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
         };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.AreEqual(2, node.PropertyDependencies.Count);
+        Assert.Equal(2, node.PropertyDependencies.Count);
 
-        Assert.AreEqual("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
-        Assert.AreEqual("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
     }
 
     public class Person
     {
         string _GivenNames;
-        public string GivenNames        {
-            get => _GivenNames;            set => _GivenNames = value;        }
+        public string GivenNames
+        {
+            get => _GivenNames;
+            set => _GivenNames = value;
+        }
 
         string _FamilyName;
-        public string FamilyName        {
-            get => _FamilyName;            set => _FamilyName = value;        }
+        public string FamilyName
+        {
+            get => _FamilyName;
+            set => _FamilyName = value;
+        }
 
         public string FullName => $"{_GivenNames} {_FamilyName}";
     }

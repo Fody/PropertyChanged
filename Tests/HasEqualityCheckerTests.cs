@@ -2,14 +2,13 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
-using NUnit.Framework;
+using Xunit;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable UnusedVariable
 // ReSharper disable ValueParameterNotUsed
 
-
-[TestFixture]
 public class HasEqualityCheckerTests
 {
     Mono.Collections.Generic.Collection<PropertyDefinition> properties;
@@ -22,125 +21,125 @@ public class HasEqualityCheckerTests
         fields = typeDefinition.Fields;
     }
 
-    [Test]
+    [Fact]
     public void EqualityShortCutTest()
     {
         var instructions = GetInstructions("EqualityShortCut");
         var field = GetField("intField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void EqualsNoFieldTest()
     {
         var instructions = GetInstructions("EqualsNoField");
         var field = GetField("intField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, null));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, null));
     }
-    [Test]
+    [Fact]
     public void NoEqualsNoFieldTest()
     {
         var instructions = GetInstructions("NoEqualsNoField");
         var field = GetField("intField");
-        Assert.IsFalse(HasEqualityChecker.AlreadyHasEquality(instructions, null));
+        Assert.False(HasEqualityChecker.AlreadyHasEquality(instructions, null));
     }
-    [Test]
+    [Fact]
     public void EqualityShortCutInverseTest()
     {
         var instructions = GetInstructions("EqualityShortCutInverse");
         var field = GetField("intField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void EqualityNestedTest()
     {
         var instructions = GetInstructions("EqualityNested");
         var field = GetField("intField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
-    [Test]
+    [Fact]
     public void EqualityNestedInverseTest()
     {
         var instructions = GetInstructions("EqualityNestedInverse");
         var field = GetField("intField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void EqualsShortCutTest()
     {
         var instructions = GetInstructions("EqualsShortCut");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
-    [Test]
+    [Fact]
     public void EqualsShortCutInverseTest()
     {
         var instructions = GetInstructions("EqualsShortCutInverse");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void EqualsNestedInverseTest()
     {
         var instructions = GetInstructions("EqualsNestedInverse");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
-    [Test]
+    [Fact]
     public void EqualsNestedTest()
     {
         var instructions = GetInstructions("EqualsNested");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
-    [Test]
+    [Fact]
     public void StringEqualsShortCutTest()
     {
         var instructions = GetInstructions("StringEqualsShortCut");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
-    [Test]
+    [Fact]
     public void StringEqualsShortCutInverseTest()
     {
         var instructions = GetInstructions("StringEqualsShortCutInverse");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void StringEqualsNestedTest()
     {
         var instructions = GetInstructions("StringEqualsNested");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void StringEqualsOrdinalTest()
     {
         var instructions = GetInstructions("StringEqualsOrdinal");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void StringEqualsNestedInverseTest()
     {
         var instructions = GetInstructions("StringEqualsNestedInverse");
         var field = GetField("stringField");
-        Assert.IsTrue(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
-    [Test]
+    [Fact]
     public void NoEqualityTest()
     {
         var instructions = GetInstructions("NoEquality");
         var field = GetField("stringField");
-        Assert.IsFalse(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        Assert.False(HasEqualityChecker.AlreadyHasEquality(instructions, field));
     }
 
     PropertyDefinition GetInstructions(string equalityShortcut)

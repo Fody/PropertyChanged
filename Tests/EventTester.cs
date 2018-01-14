@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using NUnit.Framework;
+using Xunit;
 
 public static class EventTester
 {
@@ -17,7 +17,7 @@ public static class EventTester
             }
         };
         instance.Property1 = "a";
-        Assert.IsFalse(property1EventCalled);
+        Assert.False(property1EventCalled);
     }
 
     internal static void TestProperty(dynamic instance, bool checkProperty2)
@@ -38,20 +38,20 @@ public static class EventTester
         };
         instance.Property1 = "a";
 
-        Assert.IsTrue(property1EventCalled);
+        Assert.True(property1EventCalled);
         if (checkProperty2)
         {
-            Assert.IsTrue(property2EventCalled);
+            Assert.True(property2EventCalled);
         }
 
         property1EventCalled = false;
         property2EventCalled = false;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
-        Assert.IsFalse(property1EventCalled);
+        Assert.False(property1EventCalled);
         if (checkProperty2)
         {
-            Assert.IsFalse(property2EventCalled);
+            Assert.False(property2EventCalled);
         }
     }
 
@@ -70,7 +70,7 @@ public static class EventTester
         var propertyInfo = type.GetProperties().First(x => x.Name == propertyName);
         propertyInfo.SetValue(instance, propertyValue, null);
 
-        Assert.IsTrue(eventCalled);
+        Assert.True(eventCalled);
         if (ignoreEquality)
         {
             return;
@@ -78,7 +78,7 @@ public static class EventTester
 
         eventCalled = false;
         propertyInfo.SetValue(instance, propertyValue, null);
-        Assert.IsFalse(eventCalled);
+        Assert.False(eventCalled);
     }
 
     public static dynamic GetInstance(this Assembly assembly, string className, params object[] args)

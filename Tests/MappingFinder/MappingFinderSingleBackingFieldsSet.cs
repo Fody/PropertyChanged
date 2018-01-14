@@ -1,15 +1,15 @@
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
+
 public class MappingFinderSingleBackingFieldsSet
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsSet>()).ToList();
-        Assert.AreEqual("propertyA", memberMappings.Single(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.AreEqual("propertyB", memberMappings.Single(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        Assert.Equal("propertyA", memberMappings.Single(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
+        Assert.Equal("propertyB", memberMappings.Single(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }
 
     public class ClassWithSingleBackingFieldsSet

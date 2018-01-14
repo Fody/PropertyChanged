@@ -1,21 +1,22 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Xunit;
+
 // ReSharper disable ValueParameterNotUsed
 // ReSharper disable UnusedParameter.Local
 
-[TestFixture]
 public class AlreadyNotifyFinderTest
 {
-    [Test]
+    [Fact]
     public void ContainsNotification()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
         var moduleWeaver = new ModuleWeaver();
         var propertyNames = moduleWeaver .GetAlreadyNotifies(propertyDefinition);
-        Assert.AreEqual(1,propertyNames.Count());
+        Assert.Single(propertyNames);
     }
-    [Test]
+
+    [Fact]
     public void MultipleNotifications()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Multiple().Property);
@@ -26,34 +27,34 @@ public class AlreadyNotifyFinderTest
         Assert.Contains("Property2",propertyNames);
     }
 
-    [Test]
+    [Fact]
     public void WithoutNotification()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithoutNotificationProperty);
 
         var moduleWeaver = new ModuleWeaver();
         var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.IsEmpty(propertyNames);
+        Assert.Empty(propertyNames);
     }
 
-    [Test]
+    [Fact]
     public void AlreadyContainsNotificationVirtual()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Virtual().WithNotificationProperty);
 
         var moduleWeaver = new ModuleWeaver();
         var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.IsNotEmpty(propertyNames);
+        Assert.NotEmpty(propertyNames);
     }
 
-    [Test]
+    [Fact]
     public void AlreadyContainsNotificationNonVirtual()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
         var moduleWeaver = new ModuleWeaver();
         var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.IsNotEmpty(propertyNames);
+        Assert.NotEmpty(propertyNames);
     }
 
     public class NonVirtual

@@ -1,32 +1,32 @@
 ﻿using System.Xml.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
+
 public class OnPropertyNameChangedConfigTests
 {
-    [Test]
+    [Fact]
     public void False()
     {
         var xElement = XElement.Parse("<PropertyChanged InjectOnPropertyNameChanged='false'/>");
         var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
-        Assert.IsFalse(moduleWeaver.InjectOnPropertyNameChanged);
+        Assert.False(moduleWeaver.InjectOnPropertyNameChanged);
     }
 
-    [Test]
+    [Fact]
     public void True()
     {
         var xElement = XElement.Parse("<PropertyChanged InjectOnPropertyNameChanged='true'/>");
         var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
-        Assert.IsTrue(moduleWeaver.InjectOnPropertyNameChanged);
+        Assert.True(moduleWeaver.InjectOnPropertyNameChanged);
     }
 
-    [Test]
+    [Fact]
     public void Default()
     {
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
-        Assert.IsTrue(moduleWeaver.InjectOnPropertyNameChanged);
+        Assert.True(moduleWeaver.InjectOnPropertyNameChanged);
     }
 }

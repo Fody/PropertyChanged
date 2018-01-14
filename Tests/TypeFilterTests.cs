@@ -1,32 +1,28 @@
-﻿using NUnit.Framework;
+﻿using Fody;
+using Xunit;
+#pragma warning disable 618
 
-[TestFixture]
 public class TypeFilterTests
 {
-    WeaverHelper weaverHelper;
+    TestResult testResult;
 
     public TypeFilterTests()
     {
-        weaverHelper = new WeaverHelper("AssemblyWithTypeFilter");
+        var weavingTask = new ModuleWeaver();
+        testResult = weavingTask.ExecuteTestRun("AssemblyWithTypeFilter.dll");
     }
 
-    [Test]
+    [Fact]
     public void CheckIfFilterTypeExcludeCorrectTypes()
     {
-        var instance = weaverHelper.Assembly.GetInstance("TestClassExclude");
+        var instance = testResult.GetInstance("TestClassExclude");
         EventTester.TestPropertyNotCalled(instance);
     }
 
-    [Test]
+    [Fact]
     public void CheckIfFilterTypeIncludeCorrectTypes()
     {
-        var instance = weaverHelper.Assembly.GetInstance("PropertyChangedTest.TestClassInclude");
+        var instance = testResult.GetInstance("PropertyChangedTest.TestClassInclude");
         EventTester.TestProperty(instance, false);
-    }
-
-    [Test]
-    public void Verify()
-    {
-        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
     }
 }

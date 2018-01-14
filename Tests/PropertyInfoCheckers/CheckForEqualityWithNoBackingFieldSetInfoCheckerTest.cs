@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 // ReSharper disable ValueParameterNotUsed
 
-[TestFixture]
+
 public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
 {
-    [Test]
+    [Fact]
     public void WithBackingField()
     {
         var checker = new ModuleWeaver();
@@ -16,10 +16,10 @@ public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
                                                                   PropertyDefinition = propertyDefinition,
                                                                   BackingFieldReference = propertyDefinition.DeclaringType.Fields[0]
                                                               }, InvokerTypes.String);
-        Assert.IsNull(warning);
+        Assert.Null(warning);
     }
 
-    [Test]
+    [Fact]
     public void WithoutBackingField()
     {
         var checker = new ModuleWeaver();
@@ -31,7 +31,7 @@ public class CheckForEqualityWithNoBackingFieldSetInfoCheckerTest
                                                                   PropertyDefinition = propertyDefinition,
                                                                   BackingFieldReference = null,
                                                               }, InvokerTypes.String);
-        Assert.IsNotNull(warning);
+        Assert.NotNull(warning);
     }
 
     public int WithBackingFieldProperty { get; set; }

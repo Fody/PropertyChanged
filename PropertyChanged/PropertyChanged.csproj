@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.0;net452</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard1.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <Authors>Simon Cropp</Authors>
+    <Description>Add property notification to all classes that implement INotifyPropertyChanged.</Description>
+    <PackageTags>Xaml, MVVM, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
+    <PackageReference Include="Fody" Version="2.3.18" PrivateAssets="None" />
+    <PackageReference Include="FodyPackaging" Version="2.3.18" PrivateAssets="All" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System.Linq;
+using Fody;
 
 public partial class ModuleWeaver
 {
@@ -64,8 +65,8 @@ public partial class ModuleWeaver
                     {
                         continue;
                     }
-                    var operand = instruction.Operand as MethodReference;
-                    if (operand == null)
+
+                    if (!(instruction.Operand is MethodReference operand))
                     {
                         continue;
                     }

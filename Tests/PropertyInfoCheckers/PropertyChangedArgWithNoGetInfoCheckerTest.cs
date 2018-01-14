@@ -1,11 +1,11 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
-[TestFixture]
+
 public class PropertyChangedArgWithNoGetInfoCheckerTest
 {
-    [Test]
+    [Fact]
     public void WithGet()
     {
         var checker = new ModuleWeaver();
@@ -16,10 +16,10 @@ public class PropertyChangedArgWithNoGetInfoCheckerTest
                                                 {
                                                     PropertyDefinition = propertyDefinition,
                                                 }, InvokerTypes.PropertyChangedArg);
-        Assert.IsNull(message);
+        Assert.Null(message);
     }
 
-    [Test]
+    [Fact]
     public void NoGet()
     {
         var checker = new ModuleWeaver();
@@ -30,7 +30,7 @@ public class PropertyChangedArgWithNoGetInfoCheckerTest
                                                 {
                                                     PropertyDefinition = propertyDefinition,
                                                 }, InvokerTypes.PropertyChangedArg);
-        Assert.IsNotNull(message);
+        Assert.NotNull(message);
     }
 
     string property;

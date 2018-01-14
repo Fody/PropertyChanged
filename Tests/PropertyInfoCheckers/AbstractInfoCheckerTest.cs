@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
+
 public class AbstractInfoCheckerTest
 {
-    [Test]
+    [Fact]
     public void IsAbstract()
     {
         var checker = new ModuleWeaver();
@@ -14,10 +14,10 @@ public class AbstractInfoCheckerTest
 
         var message = checker.CheckForWarning(new PropertyData
             {PropertyDefinition = propertyDefinition,}, InvokerTypes.String);
-        Assert.IsNotNull(message);
+        Assert.NotNull(message);
     }
 
-    [Test]
+    [Fact]
     public void NonAbstract()
     {
         var checker = new ModuleWeaver();
@@ -27,7 +27,7 @@ public class AbstractInfoCheckerTest
 
         var message = checker.CheckForWarning(new PropertyData
             {PropertyDefinition = propertyDefinition,}, InvokerTypes.String);
-        Assert.IsNull(message);
+        Assert.Null(message);
     }
 
     public abstract class BaseClass

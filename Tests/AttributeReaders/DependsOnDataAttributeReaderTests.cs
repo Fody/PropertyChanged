@@ -1,11 +1,10 @@
-﻿using NUnit.Framework;
-using PropertyChanged;
-// ReSharper disable UnusedVariable
+﻿using PropertyChanged;
+using Xunit;
 
-[TestFixture]
+// ReSharper disable UnusedVariable
 public class DependsOnDataAttributeReaderTests
 {
-    [Test]
+    [Fact]
     public void Integration()
     {
         var reader = new ModuleWeaver();
@@ -16,10 +15,10 @@ public class DependsOnDataAttributeReaderTests
         reader.ProcessDependsOnAttributes(node);
 
         var dependencies = node.PropertyDependencies;
-        Assert.AreEqual("FullName", dependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", dependencies[0].WhenPropertyIsSet.Name);
-        Assert.AreEqual("FullName", dependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("FamilyName", dependencies[1].WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", dependencies[0].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("GivenNames", dependencies[0].WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", dependencies[1].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("FamilyName", dependencies[1].WhenPropertyIsSet.Name);
     }
 
     public class Person
@@ -31,7 +30,7 @@ public class DependsOnDataAttributeReaderTests
         public string FullName => $"{GivenNames} {FamilyName}";
     }
 
-    [Test]
+    [Fact]
     public void PropertyThatDoesNotExist()
     {
         var reader = new ModuleWeaver();

@@ -1,32 +1,31 @@
 ﻿using System.Xml.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class CheckForEqualityUsingBaseEqualsConfigTests
 {
-    [Test]
+    [Fact]
     public void False()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='false'/>");
         var moduleWeaver = new ModuleWeaver { Config = xElement };
         moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.IsFalse(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        Assert.False(moduleWeaver.CheckForEqualityUsingBaseEquals);
     }
 
-    [Test]
+    [Fact]
     public void True()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='true'/>");
         var moduleWeaver = new ModuleWeaver { Config = xElement };
         moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.IsTrue(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
     }
 
-    [Test]
+    [Fact]
     public void Default()
     {
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.IsTrue(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
     }
 }

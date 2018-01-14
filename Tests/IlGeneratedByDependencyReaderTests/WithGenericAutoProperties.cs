@@ -1,10 +1,9 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class WithGenericAutoProperties
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person<int>>();
@@ -15,11 +14,11 @@ public class WithGenericAutoProperties
                        };
         new IlGeneratedByDependencyReader(node).Process();
         var first = node.PropertyDependencies[0];
-        Assert.AreEqual("FullName", first.ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", first.WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", first.ShouldAlsoNotifyFor.Name);
+        Assert.Equal("GivenNames", first.WhenPropertyIsSet.Name);
         var second = node.PropertyDependencies[1];
-        Assert.AreEqual("FullName", second.ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("FamilyName", second.WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", second.ShouldAlsoNotifyFor.Name);
+        Assert.Equal("FamilyName", second.WhenPropertyIsSet.Name);
     }
 
     public class Person<T>

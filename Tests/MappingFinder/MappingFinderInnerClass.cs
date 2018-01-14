@@ -1,22 +1,25 @@
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 #pragma warning disable 649
 
-[TestFixture]
+
 public class MappingFinderInnerClass
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<Model>()).ToList();
-        Assert.IsNull(memberMappings.Single().FieldDefinition);
+        Assert.Null(memberMappings.Single().FieldDefinition);
     }
 
     public class Model
     {
         InnerClass innerClass;
-        public string Property1        {
-            get => innerClass.Property1;            set => innerClass.Property1 = value;        }
+        public string Property1
+        {
+            get => innerClass.Property1;
+            set => innerClass.Property1 = value;
+        }
     }
 
     class InnerClass

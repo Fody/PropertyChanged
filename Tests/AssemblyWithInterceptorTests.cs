@@ -1,35 +1,35 @@
 ﻿using System.Reflection;
-using NUnit.Framework;
+using Fody;
+using Xunit;
 
-[TestFixture]
 public class AssemblyWithInterceptorTests
 {
-    [Test]
+    [Fact]
     public void Simple()
     {
-        var weaverHelper = new WeaverHelper("AssemblyWithInterceptor");
+        var weavingTask = new ModuleWeaver();
+        var testResult = weavingTask.ExecuteTestRun("AssemblyWithInterceptor.dll");
 
-        var assembly = weaverHelper.Assembly;
+        var assembly = testResult.Assembly;
         var instance = assembly.GetInstance("ClassToTest");
         EventTester.TestProperty(instance, false);
         var type = assembly.GetType("PropertyChangedNotificationInterceptor");
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public);
         var value = (bool)propertyInfo.GetValue(null, null);
-        Assert.IsTrue(value);
-        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
+        Assert.True(value);
     }
 
-    [Test]
+    [Fact]
     public void BeforeAfter()
     {
-        var weaverHelper = new WeaverHelper("AssemblyWithBeforeAfterInterceptor");
-        var assembly = weaverHelper.Assembly;
+        var weavingTask = new ModuleWeaver();
+        var testResult = weavingTask.ExecuteTestRun("AssemblyWithBeforeAfterInterceptor.dll");
+        var assembly = testResult.Assembly;
         var instance = assembly.GetInstance("ClassToTest");
         EventTester.TestProperty(instance, false);
         var type = assembly.GetType("PropertyChangedNotificationInterceptor");
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public);
         var value = (bool)propertyInfo.GetValue(null, null);
-        Assert.IsTrue(value);
-        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
+        Assert.True(value);
     }
 }

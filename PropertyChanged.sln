@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 14.0.22823.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcess", "TestAssemblies\AssemblyToProcess\AssemblyToProcess.csproj", "{7DEC4E2D-F872-434E-A267-0BAD65299950}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyChanged.Fody", "PropertyChanged.Fody\PropertyChanged.Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{40235741-D750-45B1-8DC5-49576025ABA9} = {40235741-D750-45B1-8DC5-49576025ABA9}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{5A86453B-96FB-4B6E-A283-225BB9F753D3}"
 EndProject
@@ -39,6 +36,11 @@ EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AssemblyFSharp", "TestAssemblies\AssemblyFSharp\AssemblyFSharp.fsproj", "{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyExplicitPropertyChanged", "TestAssemblies\AssemblyExplicitPropertyChanged\AssemblyExplicitPropertyChanged.csproj", "{EED92D0E-0DC4-43F4-95A5-1F067807C206}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19A5180B-ADE5-426B-AD51-27B443F9C400}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

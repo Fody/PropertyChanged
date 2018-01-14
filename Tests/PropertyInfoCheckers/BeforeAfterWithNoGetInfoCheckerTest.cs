@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 // ReSharper disable UnusedMember.Global
 
-[TestFixture]
+
 public class BeforeAfterWithNoGetInfoCheckerTest
 {
-    [Test]
+    [Fact]
     public void WithGet()
     {
         var checker = new ModuleWeaver();
@@ -15,10 +15,10 @@ public class BeforeAfterWithNoGetInfoCheckerTest
                                                 {
                                                     PropertyDefinition = propertyDefinition,
                                                 }, InvokerTypes.BeforeAfter);
-        Assert.IsNull(message);
+        Assert.Null(message);
     }
 
-    [Test]
+    [Fact]
     public void NoGet()
     {
         var checker = new ModuleWeaver();
@@ -29,10 +29,12 @@ public class BeforeAfterWithNoGetInfoCheckerTest
                                                 {
                                                     PropertyDefinition = propertyDefinition,
                                                 }, InvokerTypes.BeforeAfter);
-        Assert.IsNotNull(message);
+        Assert.NotNull(message);
     }
 
-    public string PropertyNoGet    {
-        set => PropertyWithGet = value;    }
+    public string PropertyNoGet
+    {
+        set => PropertyWithGet = value;
+    }
     public string PropertyWithGet { set; get; }
 }

@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Xunit;
 // ReSharper disable ValueParameterNotUsed
 
-[TestFixture]
+
 public class IndexerCheckerTest
 {
-    [Test]
+    [Fact]
     public void IsIndexer()
     {
         var checker = new ModuleWeaver();
@@ -18,7 +18,7 @@ public class IndexerCheckerTest
             PropertyDefinition = propertyDefinition,
         };
         var message = checker.CheckForWarning(propertyData, InvokerTypes.String);
-        Assert.AreEqual("Property is an indexer.", message);
+        Assert.Equal("Property is an indexer.", message);
     }
 
     public abstract class IndexerClass

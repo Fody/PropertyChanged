@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
+
 public class RecursiveIlFinderTests
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<InnerClass>();
@@ -14,9 +14,9 @@ public class RecursiveIlFinderTests
         var methodDefinition = typeDefinition.Methods.First(x => x.Name == "Method1");
         recursiveIlFinder.Execute(methodDefinition);
 #if(DEBUG)
-        Assert.AreEqual(25, recursiveIlFinder.Instructions.Count);
+        Assert.Equal(25, recursiveIlFinder.Instructions.Count);
 #else
-        Assert.AreEqual(15, recursiveIlFinder.Instructions.Count);
+        Assert.Equal(15, recursiveIlFinder.Instructions.Count);
 #endif
     }
 

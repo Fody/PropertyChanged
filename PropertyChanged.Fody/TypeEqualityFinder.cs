@@ -115,10 +115,14 @@ public partial class ModuleWeaver
     static bool MatchParameter(ParameterDefinition parameter, TypeReference typeMatch)
     {
         if (parameter.ParameterType == typeMatch)
+        {
             return true;
+        }
 
         if (parameter.ParameterType.IsGenericInstance && typeMatch.IsGenericInstance)
+        {
             return parameter.ParameterType.Resolve() == typeMatch.Resolve();
+        }
 
         return false;
     }

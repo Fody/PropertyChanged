@@ -1,13 +1,14 @@
-﻿using NUnit.Framework;
+﻿using Fody;
+using Xunit;
 
-[TestFixture]
 public class AssemblyWithBlockingClassTests
 {
-    [Test]
+    [Fact]
     public void TestClassIsNotBlocked()
     {
-        var weaverHelper = new WeaverHelper("AssemblyWithBlockingClass");
-        var instance = weaverHelper.Assembly.GetInstance("B");
+        var weavingTask = new ModuleWeaver();
+        var testResult = weavingTask.ExecuteTestRun("AssemblyWithBlockingClass.dll");
+        var instance = testResult.GetInstance("B");
         EventTester.TestProperty(instance, false);
     }
 }

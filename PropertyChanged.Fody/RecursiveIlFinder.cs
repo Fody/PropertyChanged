@@ -29,8 +29,8 @@ public class RecursiveIlFinder
             {
                 continue;
             }
-            var methodDefinition = instruction.Operand as MethodDefinition;
-            if (methodDefinition == null)
+
+            if (!(instruction.Operand is MethodDefinition methodDefinition))
             {
                 continue;
             }

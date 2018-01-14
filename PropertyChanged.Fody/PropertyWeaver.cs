@@ -67,8 +67,7 @@ public class PropertyWeaver
             var instruction = instructions[index];
             if (instruction.OpCode == OpCodes.Stfld)
             {
-                var fieldReference = instruction.Operand as FieldReference;
-                if (fieldReference == null)
+                if (!(instruction.Operand is FieldReference fieldReference))
                 {
                     continue;
                 }
@@ -88,8 +87,8 @@ public class PropertyWeaver
                 {
                     continue;
                 }
-                var fieldReference = instruction.Operand as FieldReference;
-                if (fieldReference == null)
+
+                if (!(instruction.Operand is FieldReference fieldReference))
                 {
                     continue;
                 }

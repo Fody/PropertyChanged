@@ -1,12 +1,11 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class WithAutoProperties
 {
     //TODO: add test for abstract
 
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
@@ -16,13 +15,13 @@ public class WithAutoProperties
                            Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
                        };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.AreEqual(2, node.PropertyDependencies.Count);
+        Assert.Equal(2, node.PropertyDependencies.Count);
         var first = node.PropertyDependencies[0];
-        Assert.AreEqual("FullName", first.ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", first.WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", first.ShouldAlsoNotifyFor.Name);
+        Assert.Equal("GivenNames", first.WhenPropertyIsSet.Name);
         var second = node.PropertyDependencies[1];
-        Assert.AreEqual("FullName", second.ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("FamilyName", second.WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", second.ShouldAlsoNotifyFor.Name);
+        Assert.Equal("FamilyName", second.WhenPropertyIsSet.Name);
     }
 
     public class Person

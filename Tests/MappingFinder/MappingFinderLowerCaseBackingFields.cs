@@ -1,15 +1,15 @@
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
+
 public class MappingFinderLowerCaseBackingFields
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithLowerCaseBackingFields>()).ToList();
-        Assert.AreEqual("property1", memberMappings.Single(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.AreEqual("property2", memberMappings.Single(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        Assert.Equal("property1", memberMappings.Single(x => x.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
+        Assert.Equal("property2", memberMappings.Single(x => x.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
     }
 
     public class ClassWithLowerCaseBackingFields

@@ -1,32 +1,32 @@
-using NUnit.Framework;
+using Fody;
+using Xunit;
+#pragma warning disable 618
 
-[TestFixture]
 public class FSharpTest
 {
-    WeaverHelper weaverHelper;
+    TestResult testResult;
 
     public FSharpTest()
     {
-        weaverHelper = new WeaverHelper("AssemblyFSharp");
+        var weavingTask = new ModuleWeaver();
+        testResult = weavingTask.ExecuteTestRun("AssemblyFSharp.dll"
+#if NETCOREAPP2_0
+            , runPeVerify: false
+#endif
+            );
     }
 
-    [Test]
+    [Fact]
     public void SimpleClass()
     {
-        var instance = weaverHelper.Assembly.GetInstance("Namespace.ClassWithProperties");
+        var instance = testResult.GetInstance("Namespace.ClassWithProperties");
         EventTester.TestProperty(instance, false);
     }
 
-    [Test]
+    [Fact]
     public void WithNoOnPropertyChanged()
     {
-        var instance = weaverHelper.Assembly.GetInstance("Namespace.ClassWithNoOnPropertyChanged");
+        var instance = testResult.GetInstance("Namespace.ClassWithNoOnPropertyChanged");
         EventTester.TestProperty(instance, false);
-    }
-
-    [Test]
-    public void Verify()
-    {
-        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
     }
 }

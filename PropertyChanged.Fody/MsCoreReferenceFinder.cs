@@ -21,52 +21,27 @@ public partial class ModuleWeaver
     public Lazy<MethodReference> Trigger;
     public MethodReference StringEquals;
 
-    void AddAssemblyIfExists(string name, List<TypeDefinition> types)
+    public override IEnumerable<string> GetAssembliesForScanning()
     {
-        try
-        {
-            var assembly = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
-
-            if (assembly == null)
-            {
-                return;
-            }
-
-            var module = assembly.MainModule;
-            types.AddRange(module.Types.Where(x => x.IsPublic));
-            var exported = module.ExportedTypes
-                .Select(x => x.Resolve())
-                .Where(x => x != null && 
-                            x.IsPublic &&  
-                            x.Scope.Name != "System.Private.CoreLib.dll");
-            types.AddRange(exported);
-        }
-        catch (AssemblyResolutionException)
-        {
-            LogInfo($"Failed to resolve '{name}'. So skipping its types.");
-        }
+        yield return "mscorlib";
+        yield return "System";
+        yield return "System.Runtime";
+        yield return "System.Core";
+        yield return "netstandard";
+        yield return "System.ObjectModel";
+        yield return "System.Threading";
+        yield return "FSharp.Core";
     }
 
     public void FindCoreReferences()
     {
-        var types = new List<TypeDefinition>();
-
-        AddAssemblyIfExists("mscorlib", types);
-        AddAssemblyIfExists("System", types);
-        AddAssemblyIfExists("System.Runtime", types);
-        AddAssemblyIfExists("System.Core", types);
-        AddAssemblyIfExists("netstandard", types);
-        AddAssemblyIfExists("System.ObjectModel", types);
-        AddAssemblyIfExists("System.Threading", types);
-        AddAssemblyIfExists("FSharp.Core", types);
-
-        var objectDefinition = types.First(x => x.Name == "Object");
+        var objectDefinition = FindType("System.Object");
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
         ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
         var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
         ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
 
-        var stringEquals = types.First(x => x.Name == "String")
+        var stringEquals = FindType("System.String")
             .Methods
             .First(x => x.IsStatic &&
                         x.Name == "Equals" &&
@@ -76,26 +51,26 @@ public partial class ModuleWeaver
                         x.Parameters[2].ParameterType.Name == "StringComparison");
         StringEquals = ModuleDefinition.ImportReference(stringEquals);
 
-        var nullableDefinition = types.FirstOrDefault(x => x.Name == "Nullable");
+        var nullableDefinition = FindType("System.Nullable");
         NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
 
-        EqualityComparerTypeReference = types.FirstOrDefault(x => x.Name == "EqualityComparer`1");
+        EqualityComparerTypeReference = FindType("System.Collections.Generic.EqualityComparer`1");
 
-        var actionDefinition = types.First(x => x.Name == "Action");
+        var actionDefinition = FindType("System.Action");
         ActionTypeReference = ModuleDefinition.ImportReference(actionDefinition);
 
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
 
-        var propChangedInterfaceDefinition = types.First(x => x.Name == "INotifyPropertyChanged");
+        var propChangedInterfaceDefinition = FindType("System.ComponentModel.INotifyPropertyChanged");
         PropChangedInterfaceReference = ModuleDefinition.ImportReference(propChangedInterfaceDefinition);
-        var propChangedHandlerDefinition = types.First(x => x.Name == "PropertyChangedEventHandler");
+        var propChangedHandlerDefinition = FindType("System.ComponentModel.PropertyChangedEventHandler");
         PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
         PropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
-        var propChangedArgsDefinition = types.First(x => x.Name == "PropertyChangedEventArgs");
+        var propChangedArgsDefinition = FindType("System.ComponentModel.PropertyChangedEventArgs");
         PropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
-        var delegateDefinition = types.First(x => x.Name == "Delegate");
+        var delegateDefinition = FindType("System.Delegate");
         var combineMethodDefinition = delegateDefinition.Methods
             .Single(x =>
                 x.Name == "Combine" &&
@@ -105,7 +80,7 @@ public partial class ModuleWeaver
         var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
         DelegateRemoveMethodRef = ModuleDefinition.ImportReference(removeMethodDefinition);
 
-        var interlockedDefinition = types.First(x => x.FullName == "System.Threading.Interlocked");
+        var interlockedDefinition = FindType("System.Threading.Interlocked");
         var genericCompareExchangeMethodDefinition = interlockedDefinition
             .Methods.First(x =>
                 x.IsStatic &&
@@ -118,7 +93,7 @@ public partial class ModuleWeaver
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
         Trigger = new Lazy<MethodReference>(() =>
         {
-            var fSharpEvent = types.FirstOrDefault(x => x.FullName == "Microsoft.FSharp.Control.FSharpEvent`2");
+            var fSharpEvent = FindType("Microsoft.FSharp.Control.FSharpEvent`2");
             if (fSharpEvent == null)
             {
                 return null;

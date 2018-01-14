@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using NUnit.Framework;
-// ReSharper disable UnusedMember.Global
+using Xunit;
 
-[TestFixture]
+// ReSharper disable UnusedMember.Global
 public class WithGenericFields
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person<int>>();
@@ -16,10 +15,10 @@ public class WithGenericFields
                        };
 
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.AreEqual("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
-        Assert.AreEqual("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
+        Assert.Equal("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
+        Assert.Equal("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
     }
 
     public class Person<T>

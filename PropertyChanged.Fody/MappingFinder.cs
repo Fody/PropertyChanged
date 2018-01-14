@@ -85,8 +85,8 @@ public partial class ModuleWeaver
                 {
                     return null;
                 }
-                var field = instruction.Operand as FieldReference;
-                if (field == null)
+
+                if (!(instruction.Operand is FieldReference field))
                 {
                     continue;
                 }

@@ -1,30 +1,30 @@
 using System.Data.SqlTypes;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
+
 public class TypeEqualityFinderTests
 {
-    [Test]
+    [Fact]
     public void TestSqlGuid()
     {
         var typeDefinition = DefinitionFinder.FindType<SqlGuid>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
-        Assert.IsNull(findNamedMethod);
+        Assert.Null(findNamedMethod);
     }
 
-    [Test]
+    [Fact]
     public void TestInt()
     {
         var typeDefinition = DefinitionFinder.FindType<int>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
-        Assert.IsNull(findNamedMethod);
+        Assert.Null(findNamedMethod);
     }
 
-    [Test]
+    [Fact]
     public void TestString()
     {
         var typeDefinition = DefinitionFinder.FindType<string>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
-        Assert.AreEqual("System.Boolean System.String::Equals(System.String,System.String)", findNamedMethod.FullName);
+        Assert.Equal("System.Boolean System.String::Equals(System.String,System.String)", findNamedMethod.FullName);
     }
 }

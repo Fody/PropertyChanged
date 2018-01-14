@@ -1,48 +1,49 @@
 ﻿using System.Linq;
-using NUnit.Framework;
+using Fody;
+using Xunit;
 
-[TestFixture]
 public class StackOverflowCheckerTests
 {
     ModuleWeaver stackOverflowChecker;
 
-    [SetUp]
-    public void SetUp()
+    public StackOverflowCheckerTests()
     {
         stackOverflowChecker = new ModuleWeaver();
     }
 
-    [Test]
+    [Fact]
     public void CanDetectStackOverflow()
     {
-        Assert.Throws<WeavingException>(() => new WeaverHelper("AssemblyWithStackOverflow"));
+        var weavingTask = new ModuleWeaver();
+        Assert.Throws<WeavingException>(() => { weavingTask.ExecuteTestRun("AssemblyWithStackOverflow.dll"); });
     }
 
-    [TestCase("Name", true)]
-    [TestCase("ValidName", false)]
+    [Theory]
+    [InlineData("Name", true)]
+    [InlineData("ValidName", false)]
     public void CanCheckIfGetterCallsSetter(string propertyName, bool expectedResult)
     {
         var propertyDefinition = DefinitionFinder.FindType<ClassWithStackOverflow>().Properties.First(x => x.Name == propertyName);
         var result = stackOverflowChecker.CheckIfGetterCallsSetter(propertyDefinition);
 
-        Assert.AreEqual(expectedResult, result);
+        Assert.Equal(expectedResult, result);
     }
 
-    [Test]
+    [Fact]
     public void CanDetectIfGetterCallsVirtualBaseSetter()
     {
         var propertyDefinition = DefinitionFinder.FindType<ChildClassWithOverflow>().Properties.First(x => x.Name == "Property1");
         var result = stackOverflowChecker.CheckIfGetterCallsVirtualBaseSetter(propertyDefinition);
 
-        Assert.AreEqual(true, result);
+        Assert.True(result);
     }
 
-    [Test]
+    [Fact]
     public void CanDetectIfGetterCallsVirtualBaseSetterWhenBaseClassInDifferentAssembly()
     {
         var propertyDefinition = DefinitionFinder.FindType<ChildWithBaseInDifferentAssembly>().Properties.First(x => x.Name == "Property1");
         var result = stackOverflowChecker.CheckIfGetterCallsVirtualBaseSetter(propertyDefinition);
 
-        Assert.AreEqual(true, result);
+        Assert.True(result);
     }
 }

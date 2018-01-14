@@ -1,16 +1,16 @@
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 // ReSharper disable ValueParameterNotUsed
 
-[TestFixture]
+
 public class MappingFinderSingleBackingConstantFieldGet
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsGet>()).ToList();
         var memberMapping = memberMappings.Single(x => x.PropertyDefinition.Name == "Property1");
-        Assert.IsNull(memberMapping.FieldDefinition);
+        Assert.Null(memberMapping.FieldDefinition);
     }
 
     public class ClassWithSingleBackingFieldsGet

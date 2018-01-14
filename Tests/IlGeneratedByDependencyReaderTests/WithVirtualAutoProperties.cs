@@ -1,10 +1,9 @@
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class WithVirtualAutoProperties
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
@@ -15,9 +14,9 @@ public class WithVirtualAutoProperties
                        };
         new IlGeneratedByDependencyReader(node).Process();
         var first = node.PropertyDependencies[0];
-        Assert.AreEqual(1, node.PropertyDependencies.Count);
-        Assert.AreEqual("FullName", first.ShouldAlsoNotifyFor.Name);
-        Assert.AreEqual("GivenNames", first.WhenPropertyIsSet.Name);
+        Assert.Single(node.PropertyDependencies);
+        Assert.Equal("FullName", first.ShouldAlsoNotifyFor.Name);
+        Assert.Equal("GivenNames", first.WhenPropertyIsSet.Name);
     }
 
     public class Person

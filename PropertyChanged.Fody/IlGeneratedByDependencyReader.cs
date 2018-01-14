@@ -79,7 +79,8 @@ public class IlGeneratedByDependencyReader
 
     void ProcessInstructionForGet(PropertyDefinition property, Instruction instruction)
     {
-        if (IsPropertyGetInstruction(instruction, out var usedProperty) || IsFieldGetInstruction(instruction, out usedProperty))
+        if (IsPropertyGetInstruction(instruction, out var usedProperty) ||
+            IsFieldGetInstruction(instruction, out usedProperty))
         {
             if (usedProperty == property)
             {

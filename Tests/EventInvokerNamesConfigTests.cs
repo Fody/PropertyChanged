@@ -1,10 +1,9 @@
 ﻿using System.Xml.Linq;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class EventInvokerNamesConfigTests
 {
-    [Test]
+    [Fact]
     public void GetStringComparisonFromXml()
     {
         var xElement = XElement.Parse("<PropertyChanged EventInvokerNames='A,B'/>");
@@ -14,7 +13,7 @@ public class EventInvokerNamesConfigTests
         Assert.Contains("B", moduleWeaver.EventInvokerNames);
     }
 
-    [Test]
+    [Fact]
     public void Default()
     {
         var moduleWeaver = new ModuleWeaver();

@@ -1,62 +1,58 @@
 ﻿using AssemblyWithBase.BaseWithEquals;
-using NUnit.Framework;
+using Fody;
+using Xunit;
+#pragma warning disable 618
 
-[TestFixture]
 public class AssemblyWithBaseInDifferentModuleTests
 {
-    WeaverHelper weaverHelper;
+    TestResult testResult;
 
     public AssemblyWithBaseInDifferentModuleTests()
     {
-        weaverHelper = new WeaverHelper("AssemblyWithBaseInDifferentModule");
+        var weavingTask = new ModuleWeaver();
+        testResult = weavingTask.ExecuteTestRun("AssemblyWithBaseInDifferentModule.dll", ignoreCodes:new []{ "0x80131869" });
     }
 
-    [Test]
+    [Fact]
     public void SimpleChildClass()
     {
-        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.Simple.ChildClass");
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.Simple.ChildClass");
         EventTester.TestProperty(instance, false);
     }
 
-    [Test]
+    [Fact]
     public void GenericChildClass()
     {
-        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.BaseWithGenericParent.ChildClass");
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.BaseWithGenericParent.ChildClass");
         EventTester.TestProperty(instance, false);
     }
 
-    [Test]
+    [Fact]
     public void GenericFromAbove()
     {
-        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.GenericFromAbove.ChildClass");
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.GenericFromAbove.ChildClass");
         EventTester.TestProperty(instance, false);
     }
 
-    [Test]
+    [Fact]
     public void DirectChildClass()
     {
-        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.DirectGeneric.ChildClass");
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.DirectGeneric.ChildClass");
         EventTester.TestProperty(instance, false);
     }
 
-    [Test]
+    [Fact]
     public void GenericChildClassFromMultiType()
     {
-        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.MultiTypes.ChildClass");
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.MultiTypes.ChildClass");
         EventTester.TestProperty(instance, false);
     }
 
-    [Test]
+    [Fact]
     public void GenericEquals()
     {
-        var instance = weaverHelper.Assembly.GetInstance("AssemblyWithBaseInDifferentModule.BaseWithGenericProperty.Class");
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.BaseWithGenericProperty.Class");
         EventTester.TestProperty(instance, true);
-        Assert.IsTrue(BaseClass1<int>.EqualsCalled);
-    }
-
-    [Test]
-    public void Verify()
-    {
-        Verifier.Verify(weaverHelper.BeforeAssemblyPath, weaverHelper.AfterAssemblyPath);
+        Assert.True(BaseClass1<int>.EqualsCalled);
     }
 }

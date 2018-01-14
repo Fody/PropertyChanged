@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using NUnit.Framework;
 using PropertyChanged;
+using Xunit;
 
-[TestFixture]
 public class WithDoNotNotifyProperty
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
@@ -15,7 +14,7 @@ public class WithDoNotNotifyProperty
             Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
         };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.AreEqual(0, node.PropertyDependencies.Count);
+        Assert.Empty(node.PropertyDependencies);
     }
 
     public class Person

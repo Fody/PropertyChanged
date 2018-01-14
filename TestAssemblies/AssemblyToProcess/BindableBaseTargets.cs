@@ -32,7 +32,10 @@ public abstract class BindableBase : INotifyPropertyChanged
 
     protected virtual bool SetProperty<T>(ref T storage, T value, string propertyName = null)
     {
-        if (Equals(storage, value)) return false;
+        if (Equals(storage, value))
+        {
+            return false;
+        }
 
         storage = value;
         OnPropertyChanged(propertyName);
