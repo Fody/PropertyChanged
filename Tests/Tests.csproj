@@ -15,6 +15,7 @@
     <ProjectReference Include="..\TestAssemblies\AssemblyExplicitPropertyChanged\AssemblyExplicitPropertyChanged.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyToProcess\AssemblyToProcess.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyFSharp\AssemblyFSharp.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithBadNamedInvoker\AssemblyWithBadNamedInvoker.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithBaseInDifferentModule\AssemblyWithBaseInDifferentModule.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithBase\AssemblyWithBase.csproj" />
