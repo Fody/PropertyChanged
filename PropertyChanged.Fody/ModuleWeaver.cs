@@ -25,7 +25,9 @@ public partial class ModuleWeaver: BaseModuleWeaver
         ProcessOnChangedMethods();
         CheckForStackOverflow();
         FindComparisonMethods();
+        InitEventArgsCache();
         ProcessTypes();
+        InjectEventArgsCache();
         CleanAttributes();
     }
 
