@@ -6,6 +6,7 @@ using Mono.Cecil;
 public partial class ModuleWeaver
 {
     public MethodReference PropertyChangedEventHandlerInvokeReference;
+    public TypeReference PropertyChangedEventArgsReference;
     public MethodReference PropertyChangedEventConstructorReference;
     public MethodReference ActionConstructorReference;
     public MethodReference ObjectConstructor;
@@ -68,6 +69,7 @@ public partial class ModuleWeaver
         PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
         PropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
         var propChangedArgsDefinition = FindType("System.ComponentModel.PropertyChangedEventArgs");
+        PropertyChangedEventArgsReference = ModuleDefinition.ImportReference(propChangedArgsDefinition);
         PropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
         var delegateDefinition = FindType("System.Delegate");
