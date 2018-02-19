@@ -102,8 +102,6 @@ public partial class ModuleWeaver
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable);
-        var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
-        method.Body.Variables.Add(boolVariable);
 
         var instructions = method.Body.Instructions;
 
@@ -112,15 +110,12 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Ldfld, propertyChangedField));
         instructions.Add(Instruction.Create(OpCodes.Stloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
-        instructions.Add(Instruction.Create(OpCodes.Ldnull));
-        instructions.Add(Instruction.Create(OpCodes.Ceq));
-        instructions.Add(Instruction.Create(OpCodes.Stloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Brtrue_S, last));
+        instructions.Add(Instruction.Create(OpCodes.Brfalse_S, last));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
         instructions.Add(Instruction.Create(OpCodes.Newobj, PropertyChangedEventConstructorReference));
+        instructions.Add(Instruction.Create(OpCodes.Tail));
         instructions.Add(Instruction.Create(OpCodes.Callvirt, PropertyChangedEventHandlerInvokeReference));
 
         instructions.Add(last);
@@ -136,8 +131,6 @@ public partial class ModuleWeaver
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable);
-        var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
-        method.Body.Variables.Add(boolVariable);
 
         var instructions = method.Body.Instructions;
 
@@ -146,14 +139,11 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Ldfld, propertyChangedField));
         instructions.Add(Instruction.Create(OpCodes.Stloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
-        instructions.Add(Instruction.Create(OpCodes.Ldnull));
-        instructions.Add(Instruction.Create(OpCodes.Ceq));
-        instructions.Add(Instruction.Create(OpCodes.Stloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Brtrue_S, last));
+        instructions.Add(Instruction.Create(OpCodes.Brfalse_S, last));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
+        instructions.Add(Instruction.Create(OpCodes.Tail));
         instructions.Add(Instruction.Create(OpCodes.Callvirt, PropertyChangedEventHandlerInvokeReference));
 
         instructions.Add(last);
