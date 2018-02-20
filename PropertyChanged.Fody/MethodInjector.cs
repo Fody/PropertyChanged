@@ -15,7 +15,7 @@ public partial class ModuleWeaver
                 throw new WeavingException(message);
             }
 
-            var methodDefinition = GetMethodDefinition(targetType);
+            var methodDefinition = GetMethodDefinition(targetType, out _);
 
             return new EventInvokerMethod
             {
@@ -27,37 +27,48 @@ public partial class ModuleWeaver
 
         return new EventInvokerMethod
         {
-            MethodReference = InjectMethod(targetType, EventInvokerNames.First()).GetGeneric(),
-            InvokerType = InterceptorType,
+            MethodReference = InjectMethod(targetType, EventInvokerNames.First(), out var invokerType).GetGeneric(),
+            InvokerType = invokerType,
             IsVisibleFromChildren = true,
         };
     }
 
-    MethodDefinition GetMethodDefinition(TypeDefinition targetType)
+    MethodDefinition GetMethodDefinition(TypeDefinition targetType, out InvokerTypes invokerType)
     {
         var eventInvokerName = $"Inner{EventInvokerNames.First()}";
         var methodDefinition = targetType.Methods.FirstOrDefault(x => x.Name == eventInvokerName);
         if (methodDefinition?.Parameters.Count == 1 && methodDefinition.Parameters[0].ParameterType.FullName == "System.String")
         {
+            invokerType = InvokerTypes.String;
             return methodDefinition;
         }
-        return InjectMethod(targetType, eventInvokerName);
+
+        return InjectMethod(targetType, eventInvokerName, out invokerType);
     }
 
-    MethodDefinition InjectMethod(TypeDefinition targetType, string eventInvokerName)
+    MethodDefinition InjectMethod(TypeDefinition targetType, string eventInvokerName, out InvokerTypes invokerType)
     {
         var propertyChangedFieldDef = targetType.Fields
             .SingleOrDefault(x => IsPropertyChangedEventHandler(x.FieldType));
         if (propertyChangedFieldDef != null)
         {
             var propertyChangedField = propertyChangedFieldDef.GetGeneric();
-            return InjectNormal(targetType, eventInvokerName, propertyChangedField);
+
+            if (FoundInterceptor)
+            {
+                invokerType = InvokerTypes.String;
+                return InjectNormal(targetType, eventInvokerName, propertyChangedField);
+            }
+
+            invokerType = InvokerTypes.PropertyChangedArg;
+            return InjectEventArgsMethod(targetType, eventInvokerName, propertyChangedField);
         }
 
         var fsharpPropertyChangedFieldDef = targetType.Fields
             .SingleOrDefault(x => IsFsharpEventHandler(x.FieldType));
         if (fsharpPropertyChangedFieldDef != null)
         {
+            invokerType = InvokerTypes.String;
             return InjectFsharp(targetType, eventInvokerName, fsharpPropertyChangedFieldDef);
         }
 
@@ -91,8 +102,6 @@ public partial class ModuleWeaver
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable);
-        var boolVariable = new VariableDefinition(ModuleDefinition.TypeSystem.Boolean);
-        method.Body.Variables.Add(boolVariable);
 
         var instructions = method.Body.Instructions;
 
@@ -101,15 +110,40 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Ldfld, propertyChangedField));
         instructions.Add(Instruction.Create(OpCodes.Stloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
-        instructions.Add(Instruction.Create(OpCodes.Ldnull));
-        instructions.Add(Instruction.Create(OpCodes.Ceq));
-        instructions.Add(Instruction.Create(OpCodes.Stloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Ldloc_1));
-        instructions.Add(Instruction.Create(OpCodes.Brtrue_S, last));
+        instructions.Add(Instruction.Create(OpCodes.Brfalse_S, last));
         instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
         instructions.Add(Instruction.Create(OpCodes.Newobj, PropertyChangedEventConstructorReference));
+        instructions.Add(Instruction.Create(OpCodes.Tail));
+        instructions.Add(Instruction.Create(OpCodes.Callvirt, PropertyChangedEventHandlerInvokeReference));
+
+        instructions.Add(last);
+        method.Body.InitLocals = true;
+        targetType.Methods.Add(method);
+        return method;
+    }
+
+    MethodDefinition InjectEventArgsMethod(TypeDefinition targetType, string eventInvokerName, FieldReference propertyChangedField)
+    {
+        var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        method.Parameters.Add(new ParameterDefinition("eventArgs", ParameterAttributes.None, PropertyChangedEventArgsReference));
+
+        var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
+        method.Body.Variables.Add(handlerVariable);
+
+        var instructions = method.Body.Instructions;
+
+        var last = Instruction.Create(OpCodes.Ret);
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldfld, propertyChangedField));
+        instructions.Add(Instruction.Create(OpCodes.Stloc_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
+        instructions.Add(Instruction.Create(OpCodes.Brfalse_S, last));
+        instructions.Add(Instruction.Create(OpCodes.Ldloc_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+        instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
+        instructions.Add(Instruction.Create(OpCodes.Tail));
         instructions.Add(Instruction.Create(OpCodes.Callvirt, PropertyChangedEventHandlerInvokeReference));
 
         instructions.Add(last);

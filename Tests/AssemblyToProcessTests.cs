@@ -72,4 +72,19 @@ public class AssemblyToProcessTests
         var instance = testResult.GetInstance("ClassWithIndirectImplementation");
         EventTester.TestProperty(instance, false);
     }
+
+    [Fact]
+    public void UseSingleEventInstance()
+    {
+        var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
+
+        var argsList = new List<PropertyChangedEventArgs>();
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) => argsList.Add(args);
+
+        instance.Property1 = "a";
+        instance.Property1 = "b";
+
+        Assert.Equal(2, argsList.Count);
+        Assert.Same(argsList[0], argsList[1]);
+    }
 }

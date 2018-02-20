@@ -15,9 +15,9 @@ public static class InstructionListExtensions
 
     public static void Append(this Collection<Instruction> collection, params Instruction[] instructions)
     {
-        for (var index = 0; index < instructions.Length; index++)
+        foreach (var instruction in instructions)
         {
-            collection.Insert(index, instructions[index]);
+            collection.Add(instruction);
         }
     }
 

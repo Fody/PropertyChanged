@@ -93,16 +93,36 @@ public partial class ModuleWeaver
     {
         methodDefinition = type.Methods
             .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
-            .OrderByDescending(definition => definition.Parameters.Count)
+            .OrderByDescending(GetInvokerPriority)
             .FirstOrDefault(x => IsBeforeAfterGenericMethod(x) || IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         if (methodDefinition == null)
         {
             methodDefinition = type.Methods
                 .Where(x => EventInvokerNames.Contains(x.Name))
-                .OrderByDescending(definition => definition.Parameters.Count)
+                .OrderByDescending(GetInvokerPriority)
                 .FirstOrDefault(x => IsBeforeAfterGenericMethod(x) || IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
         }
         return methodDefinition != null;
+    }
+
+    static int GetInvokerPriority(MethodDefinition method)
+    {
+        if (IsBeforeAfterGenericMethod(method))
+            return 5;
+
+        if (IsBeforeAfterMethod(method))
+            return 4;
+
+        if (IsSenderPropertyChangedArgMethod(method))
+            return 3;
+
+        if (IsPropertyChangedArgMethod(method))
+            return 2;
+
+        if (IsSingleStringMethod(method))
+            return 1;
+
+        return 0;
     }
 
     public static InvokerTypes ClassifyInvokerMethod(MethodDefinition method)

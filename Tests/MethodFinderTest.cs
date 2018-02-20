@@ -126,4 +126,39 @@ public class MethodFinderTest
         {
         }
     }
+
+    [Theory]
+    [InlineData(nameof(MultipleInvokersStringFirst))]
+    [InlineData(nameof(ClassWithMultipleInvokersEventArgsFirst))]
+    public void PreferEventArgsOverString(string typeName)
+    {
+        var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == typeName);
+        var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
+        Assert.NotNull(methodReference);
+        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
+        Assert.Equal(nameof(PropertyChangedEventArgs), methodReference.MethodReference.Parameters.First().ParameterType.Name);
+        Assert.Equal(InvokerTypes.PropertyChangedArg, methodReference.InvokerType);
+    }
+
+    public class MultipleInvokersStringFirst
+    {
+        protected void OnPropertyChanged(string propertyName)
+        {
+        }
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        {
+        }
+    }
+
+    public class ClassWithMultipleInvokersEventArgsFirst
+    {
+        protected void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        {
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+        }
+    }
 }
