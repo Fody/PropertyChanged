@@ -70,8 +70,8 @@ public class Person : INotifyPropertyChanged
             if (value != givenNames)
             {
                 givenNames = value;
-                OnPropertyChanged("GivenNames");
-                OnPropertyChanged("FullName");
+                OnPropertyChanged(InternalEventArgsCache.GivenNames);
+                OnPropertyChanged(InternalEventArgsCache.FullName);
             }
         }
     }
@@ -85,20 +85,30 @@ public class Person : INotifyPropertyChanged
             if (value != familyName)
             {
                 familyName = value;
-                OnPropertyChanged("FamilyName");
-                OnPropertyChanged("FullName");
+                OnPropertyChanged(InternalEventArgsCache.FamilyName);
+                OnPropertyChanged(InternalEventArgsCache.FullName);
             }
         }
     }
 
     public string FullName => $"{GivenNames} {FamilyName}";
 
-    public virtual void OnPropertyChanged(string propertyName)
+    protected void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, eventArgs);
     }
 }
+
+internal static class InternalEventArgsCache
+{
+    internal static readonly FamilyName = new PropertyChangedEventArgs("FamilyName");
+    internal static readonly FullName = new PropertyChangedEventArgs("FullName");
+    internal static readonly GivenNames = new PropertyChangedEventArgs("GivenNames");
+}
 ```
+
+(the actual injected type and method names are different)
+
 ---
 
 
