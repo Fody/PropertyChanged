@@ -53,17 +53,21 @@ public partial class ModuleWeaver
                         ?? targetType.Events.SingleOrDefault(i => i.Name == nameof(INotifyPropertyChanged.PropertyChanged))?.AddMethod;
 
         if (addMethod == null)
+        {
             return null;
+        }
 
         var fieldReferences = addMethod.Body.Instructions
-                                       .Where(i => i.OpCode == OpCodes.Ldfld || i.OpCode == OpCodes.Ldflda || i.OpCode == OpCodes.Stfld)
-                                       .Select(i => i.Operand)
-                                       .OfType<FieldReference>()
-                                       .Where(fld => IsPropertyChangedEventHandler(fld.FieldType) || IsFsharpEventHandler(fld.FieldType))
-                                       .ToList();
+            .Where(i => i.OpCode == OpCodes.Ldfld || i.OpCode == OpCodes.Ldflda || i.OpCode == OpCodes.Stfld)
+            .Select(i => i.Operand)
+            .OfType<FieldReference>()
+            .Where(fld => IsPropertyChangedEventHandler(fld.FieldType) || IsFsharpEventHandler(fld.FieldType))
+            .ToList();
 
         if (fieldReferences.Select(i => i.FullName).Distinct().Count() != 1)
+        {
             return null;
+        }
 
         return fieldReferences[0].Resolve();
     }
@@ -71,28 +75,28 @@ public partial class ModuleWeaver
     MethodDefinition InjectMethod(TypeDefinition targetType, string eventInvokerName, out InvokerTypes invokerType)
     {
         var propertyChangedFieldDef = GetEventHandlerField(targetType);
-        if (propertyChangedFieldDef != null)
+        if (propertyChangedFieldDef == null)
         {
-            var propertyChangedField = propertyChangedFieldDef.GetGeneric();
-
-            if (IsFsharpEventHandler(propertyChangedFieldDef.FieldType))
-            {
-                invokerType = InvokerTypes.String;
-                return InjectFsharp(targetType, eventInvokerName, propertyChangedFieldDef);
-            }
-
-            if (FoundInterceptor)
-            {
-                invokerType = InvokerTypes.String;
-                return InjectNormal(targetType, eventInvokerName, propertyChangedField);
-            }
-
-            invokerType = InvokerTypes.PropertyChangedArg;
-            return InjectEventArgsMethod(targetType, eventInvokerName, propertyChangedField);
+            var message = $"Could not inject EventInvoker method on type '{targetType.FullName}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on {targetType.FullName}.";
+            throw new WeavingException(message);
         }
 
-        var message = $"Could not inject EventInvoker method on type '{targetType.FullName}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on {targetType.FullName}.";
-        throw new WeavingException(message);
+        var propertyChangedField = propertyChangedFieldDef.GetGeneric();
+
+        if (IsFsharpEventHandler(propertyChangedFieldDef.FieldType))
+        {
+            invokerType = InvokerTypes.String;
+            return InjectFsharp(targetType, eventInvokerName, propertyChangedFieldDef);
+        }
+
+        if (FoundInterceptor)
+        {
+            invokerType = InvokerTypes.String;
+            return InjectNormal(targetType, eventInvokerName, propertyChangedField);
+        }
+
+        invokerType = InvokerTypes.PropertyChangedArg;
+        return InjectEventArgsMethod(targetType, eventInvokerName, propertyChangedField);
     }
 
     MethodDefinition InjectFsharp(TypeDefinition targetType, string eventInvokerName, FieldDefinition fsharpEvent)

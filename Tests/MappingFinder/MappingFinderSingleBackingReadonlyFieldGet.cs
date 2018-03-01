@@ -19,7 +19,7 @@ public class MappingFinderSingleBackingReadonlyFieldGet
         readonly string propertyA = "foo";
         public string Property1
         {
-            get { return propertyA; }
+            get => propertyA;
             set { }
         }
     }
