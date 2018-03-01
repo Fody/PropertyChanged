@@ -29,6 +29,7 @@ public partial class ModuleWeaver
         yield return "System.Runtime";
         yield return "System.Core";
         yield return "netstandard";
+        yield return "System.Collections";
         yield return "System.ObjectModel";
         yield return "System.Threading";
         yield return "FSharp.Core";
