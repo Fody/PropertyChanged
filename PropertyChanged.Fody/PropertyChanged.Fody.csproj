@@ -5,6 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <PackageReference Include="FodyHelpers" Version="2.3.20" />
+    <PackageReference Include="FodyHelpers" Version="2.4.4" />
   </ItemGroup>
 </Project>
