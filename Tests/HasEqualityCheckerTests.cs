@@ -256,7 +256,7 @@ public class HasEqualityCheckerTests
 
     public string NoEqualsNoField
     {
-        get { return ""; }
+        get => "";
         set { }
     }
     public string EqualsNoField

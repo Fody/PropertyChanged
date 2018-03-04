@@ -20,14 +20,14 @@ public class MappingFinderSingleBackingFieldsGet
         string propertyA;
         public string Property1
         {
-            get { return propertyA; }
+            get => propertyA;
             set { }
         }
 
         string propertyB;
         public string Property2
         {
-            get { return propertyB; }
+            get => propertyB;
             set { }
         }
         // ReSharper restore ConvertToAutoProperty

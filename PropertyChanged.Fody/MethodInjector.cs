@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Fody;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -46,32 +47,56 @@ public partial class ModuleWeaver
         return InjectMethod(targetType, out invokerType);
     }
 
+    public FieldDefinition GetEventHandlerField(TypeDefinition targetType)
+    {
+        var addMethod = targetType.Methods.SingleOrDefault(i => i.Overrides.Any(o => o.FullName == "System.Void System.ComponentModel.INotifyPropertyChanged::add_PropertyChanged(System.ComponentModel.PropertyChangedEventHandler)"))
+                        ?? targetType.Events.SingleOrDefault(i => i.Name == nameof(INotifyPropertyChanged.PropertyChanged))?.AddMethod;
+
+        if (addMethod == null)
+        {
+            return null;
+        }
+
+        var fieldReferences = addMethod.Body.Instructions
+            .Where(i => i.OpCode == OpCodes.Ldfld || i.OpCode == OpCodes.Ldflda || i.OpCode == OpCodes.Stfld)
+            .Select(i => i.Operand)
+            .OfType<FieldReference>()
+            .Where(fld => IsPropertyChangedEventHandler(fld.FieldType) || IsFsharpEventHandler(fld.FieldType))
+            .ToList();
+
+        if (fieldReferences.Select(i => i.FullName).Distinct().Count() != 1)
+        {
+            return null;
+        }
+
+        return fieldReferences[0].Resolve();
+    }
+
     MethodDefinition InjectMethod(TypeDefinition targetType, out InvokerTypes invokerType)
     {
-        var propertyChangedFieldDef = targetType.Fields.SingleOrDefault(x => IsPropertyChangedEventHandler(x.FieldType));
-        if (propertyChangedFieldDef != null)
+        var propertyChangedFieldDef = GetEventHandlerField(targetType);
+        if (propertyChangedFieldDef == null)
         {
-            var propertyChangedField = propertyChangedFieldDef.GetGeneric();
-
-            if (FoundInterceptor)
-            {
-                invokerType = InvokerTypes.String;
-                return InjectNormal(targetType, propertyChangedField);
-            }
-
-            invokerType = InvokerTypes.PropertyChangedArg;
-            return InjectEventArgsMethod(targetType, propertyChangedField);
+            var message = $"Could not inject EventInvoker method on type '{targetType.FullName}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on {targetType.FullName}.";
+            throw new WeavingException(message);
         }
 
-        var fsharpPropertyChangedFieldDef = targetType.Fields.SingleOrDefault(x => IsFsharpEventHandler(x.FieldType));
-        if (fsharpPropertyChangedFieldDef != null)
+        var propertyChangedField = propertyChangedFieldDef.GetGeneric();
+
+        if (IsFsharpEventHandler(propertyChangedFieldDef.FieldType))
         {
             invokerType = InvokerTypes.String;
-            return InjectFsharp(targetType, fsharpPropertyChangedFieldDef);
+            return InjectFsharp(targetType, propertyChangedFieldDef);
         }
 
-        var message = $"Could not inject EventInvoker method on type '{targetType.FullName}'. It is possible you are inheriting from a base class and have not correctly set 'EventInvokerNames' or you are using a explicit PropertyChanged event and the event field is not visible to this instance. Either correct 'EventInvokerNames' or implement your own EventInvoker on this class. If you want to suppress this place a [DoNotNotifyAttribute] on {targetType.FullName}.";
-        throw new WeavingException(message);
+        if (FoundInterceptor)
+        {
+            invokerType = InvokerTypes.String;
+            return InjectNormal(targetType, propertyChangedField);
+        }
+
+        invokerType = InvokerTypes.PropertyChangedArg;
+        return InjectEventArgsMethod(targetType, propertyChangedField);
     }
 
     MethodDefinition InjectFsharp(TypeDefinition targetType, FieldDefinition fsharpEvent)
@@ -162,9 +187,9 @@ public partial class ModuleWeaver
 
     static bool IsPropertyChangedEventHandler(TypeReference type)
     {
-        return type.FullName == "System.ComponentModel.PropertyChangedEventHandler" ||
-               type.FullName == "Windows.UI.Xaml.Data.PropertyChangedEventHandler" ||
-               type.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
+        return type.FullName == "System.ComponentModel.PropertyChangedEventHandler"
+               || type.FullName == "Windows.UI.Xaml.Data.PropertyChangedEventHandler"
+               || type.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
     }
 
     static bool IsFsharpEventHandler(TypeReference type)

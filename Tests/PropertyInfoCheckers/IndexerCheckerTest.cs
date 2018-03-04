@@ -25,10 +25,7 @@ public class IndexerCheckerTest
     {
         public string this[string i]
         {
-            get
-            {
-                return null;
-            }
+            get => null;
             set
             {
             }
