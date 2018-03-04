@@ -28,7 +28,7 @@ public partial class ModuleWeaver
 
         return new EventInvokerMethod
         {
-            MethodReference = InjectMethod(targetType, EventInvokerNames.First(), out var invokerType).GetGeneric(),
+            MethodReference = InjectMethod(targetType, out var invokerType).GetGeneric(),
             InvokerType = invokerType,
             IsVisibleFromChildren = true
         };
@@ -44,7 +44,7 @@ public partial class ModuleWeaver
             return methodDefinition;
         }
 
-        return InjectMethod(targetType, eventInvokerName, out invokerType);
+        return InjectMethod(targetType, out invokerType);
     }
 
     public FieldDefinition GetEventHandlerField(TypeDefinition targetType)
@@ -72,7 +72,7 @@ public partial class ModuleWeaver
         return fieldReferences[0].Resolve();
     }
 
-    MethodDefinition InjectMethod(TypeDefinition targetType, string eventInvokerName, out InvokerTypes invokerType)
+    MethodDefinition InjectMethod(TypeDefinition targetType, out InvokerTypes invokerType)
     {
         var propertyChangedFieldDef = GetEventHandlerField(targetType);
         if (propertyChangedFieldDef == null)
@@ -86,22 +86,22 @@ public partial class ModuleWeaver
         if (IsFsharpEventHandler(propertyChangedFieldDef.FieldType))
         {
             invokerType = InvokerTypes.String;
-            return InjectFsharp(targetType, eventInvokerName, propertyChangedFieldDef);
+            return InjectFsharp(targetType, propertyChangedFieldDef);
         }
 
         if (FoundInterceptor)
         {
             invokerType = InvokerTypes.String;
-            return InjectNormal(targetType, eventInvokerName, propertyChangedField);
+            return InjectNormal(targetType, propertyChangedField);
         }
 
         invokerType = InvokerTypes.PropertyChangedArg;
-        return InjectEventArgsMethod(targetType, eventInvokerName, propertyChangedField);
+        return InjectEventArgsMethod(targetType, propertyChangedField);
     }
 
-    MethodDefinition InjectFsharp(TypeDefinition targetType, string eventInvokerName, FieldDefinition fsharpEvent)
+    MethodDefinition InjectFsharp(TypeDefinition targetType, FieldDefinition fsharpEvent)
     {
-        var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
         method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
 
         var instructions = method.Body.Instructions;
@@ -118,9 +118,9 @@ public partial class ModuleWeaver
         return method;
     }
 
-    MethodDefinition InjectNormal(TypeDefinition targetType, string eventInvokerName, FieldReference propertyChangedField)
+    MethodDefinition InjectNormal(TypeDefinition targetType, FieldReference propertyChangedField)
     {
-        var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
         method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
@@ -147,9 +147,9 @@ public partial class ModuleWeaver
         return method;
     }
 
-    MethodDefinition InjectEventArgsMethod(TypeDefinition targetType, string eventInvokerName, FieldReference propertyChangedField)
+    MethodDefinition InjectEventArgsMethod(TypeDefinition targetType, FieldReference propertyChangedField)
     {
-        var method = new MethodDefinition(eventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
         method.Parameters.Add(new ParameterDefinition("eventArgs", ParameterAttributes.None, PropertyChangedEventArgsReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
@@ -179,10 +179,10 @@ public partial class ModuleWeaver
     {
         if (targetType.IsSealed)
         {
-            return MethodAttributes.Public | MethodAttributes.HideBySig;
+            return MethodAttributes.Private | MethodAttributes.HideBySig;
         }
 
-        return MethodAttributes.Virtual | MethodAttributes.Public | MethodAttributes.NewSlot;
+        return MethodAttributes.Family | MethodAttributes.HideBySig;
     }
 
     static bool IsPropertyChangedEventHandler(TypeReference type)
@@ -196,4 +196,6 @@ public partial class ModuleWeaver
     {
         return type.FullName == "Microsoft.FSharp.Control.FSharpEvent`2<System.ComponentModel.PropertyChangedEventHandler,System.ComponentModel.PropertyChangedEventArgs>";
     }
+
+    const string injectedEventInvokerName = "<>OnPropertyChanged";
 }
