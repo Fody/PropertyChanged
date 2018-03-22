@@ -30,7 +30,7 @@ public partial class ModuleWeaver
         }
 
         var equality = GetEquality(typeDefinition);
-        methodCache.Add(fullName, equality);
+        methodCache[fullName] = equality;
         return equality;
     }
 
@@ -63,12 +63,8 @@ public partial class ModuleWeaver
                 return ModuleDefinition.ImportReference(genericInstanceMethod);
             }
         }
-        var equality = GetStaticEquality(typeDefinition);
-        if (equality == null)
-        {
-            return null;
-        }
-        return ModuleDefinition.ImportReference(equality);
+        
+        return GetStaticEquality(typeDefinition);
     }
 
     MethodReference GetStaticEquality(TypeReference typeReference)
@@ -79,20 +75,31 @@ public partial class ModuleWeaver
             return null;
         }
 
+        MethodReference equality = null;
+        var typesChecked = new List<string>();
+
         if (UseStaticEqualsFromBase)
         {
-            MethodReference equality = null;
-            while (equality == null && typeReference != null && typeReference.FullName != typeof(object).FullName)
+            while (equality == null && 
+                   typeReference != null && 
+                   typeReference.FullName != typeof(object).FullName &&
+                   !methodCache.TryGetValue(typeReference.FullName, out equality))
             {
+                typesChecked.Add(typeReference.FullName);
                 equality = FindNamedMethod(typeReference);
                 if (equality == null)
                     typeReference = GetBaseType(typeReference);
             }
-
-            return equality;
         }
+        else
+            equality = FindNamedMethod(typeReference);
 
-        return FindNamedMethod(typeReference);
+        if (equality != null)
+            equality = ModuleDefinition.ImportReference(equality);
+
+        typesChecked.ForEach(typeName => methodCache[typeName] = equality);
+
+        return equality;
     }
 
     TypeReference GetBaseType(TypeReference typeReference)
