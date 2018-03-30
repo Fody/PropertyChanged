@@ -19,10 +19,21 @@ public partial class ModuleWeaver
             .Fields
             .First(x => x.Name == "Ordinal")
             .Constant;
+
+        foreach (var node in NotifyNodes)
+        {
+            foreach (var data in node.PropertyDatas)
+            {
+                data.EqualsMethod = FindTypeEquality(data);
+            }
+        }
+
+        methodCache = null;
     }
 
-    public MethodReference FindTypeEquality(TypeReference typeDefinition)
+    MethodReference FindTypeEquality(PropertyData propertyData)
     {
+        var typeDefinition = propertyData.PropertyDefinition.PropertyType;
         var fullName = typeDefinition.FullName;
         if (methodCache.TryGetValue(fullName, out var methodReference))
         {
