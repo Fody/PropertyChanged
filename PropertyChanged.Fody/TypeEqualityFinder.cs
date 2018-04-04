@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Rocks;
 
 public partial class ModuleWeaver
 {
@@ -18,10 +19,21 @@ public partial class ModuleWeaver
             .Fields
             .First(x => x.Name == "Ordinal")
             .Constant;
+
+        foreach (var node in NotifyNodes)
+        {
+            foreach (var data in node.PropertyDatas)
+            {
+                data.EqualsMethod = FindTypeEquality(data);
+            }
+        }
+
+        methodCache = null;
     }
 
-    public MethodReference FindTypeEquality(TypeReference typeDefinition)
+    MethodReference FindTypeEquality(PropertyData propertyData)
     {
+        var typeDefinition = propertyData.PropertyDefinition.PropertyType;
         var fullName = typeDefinition.FullName;
         if (methodCache.TryGetValue(fullName, out var methodReference))
         {
@@ -29,7 +41,7 @@ public partial class ModuleWeaver
         }
 
         var equality = GetEquality(typeDefinition);
-        methodCache.Add(fullName, equality);
+        methodCache[fullName] = equality;
         return equality;
     }
 
@@ -62,12 +74,8 @@ public partial class ModuleWeaver
                 return ModuleDefinition.ImportReference(genericInstanceMethod);
             }
         }
-        var equality = GetStaticEquality(typeDefinition);
-        if (equality == null)
-        {
-            return null;
-        }
-        return ModuleDefinition.ImportReference(equality);
+        
+        return GetStaticEquality(typeDefinition);
     }
 
     MethodReference GetStaticEquality(TypeReference typeReference)
@@ -78,7 +86,73 @@ public partial class ModuleWeaver
             return null;
         }
 
-        return FindNamedMethod(typeReference);
+        MethodReference equality = null;
+        var typesChecked = new List<string>();
+
+        if (UseStaticEqualsFromBase)
+        {
+            while (equality == null && 
+                   typeReference != null && 
+                   typeReference.FullName != typeof(object).FullName &&
+                   !methodCache.TryGetValue(typeReference.FullName, out equality))
+            {
+                typesChecked.Add(typeReference.FullName);
+                equality = FindNamedMethod(typeReference);
+                if (equality == null)
+                    typeReference = GetBaseType(typeReference);
+            }
+        }
+        else
+            equality = FindNamedMethod(typeReference);
+
+        if (equality != null)
+            equality = ModuleDefinition.ImportReference(equality);
+
+        typesChecked.ForEach(typeName => methodCache[typeName] = equality);
+
+        return equality;
+    }
+
+    TypeReference GetBaseType(TypeReference typeReference)
+    {
+        var typeDef = typeReference as TypeDefinition ?? typeReference.Resolve();
+        var baseType = typeDef?.BaseType;
+
+        if (baseType == null)
+            return null;
+
+        if (baseType.IsGenericInstance && typeReference.IsGenericInstance)
+        {
+            //currently we have something like: baseType = BaseClass<T>, typeReference = Class<int> (where the class inherits from BaseClass<T> and int is the parameter for T).
+            //We want BaseClass<int> -> map generic arguments to the actual parameter types
+            var genericBaseType = (GenericInstanceType)baseType;
+            var genericTypeRef = (GenericInstanceType)typeReference;
+
+            //create a map from the type reference (child class): generic argument name -> type
+            var typeRefDict = new Dictionary<string, TypeReference>();
+            var typeRefParams = genericTypeRef.ElementType.Resolve().GenericParameters;
+            for (int i = 0; i < typeRefParams.Count; i++)
+            {
+                string paramName = typeRefParams[i].FullName;
+                TypeReference paramType = genericTypeRef.GenericArguments[i];
+                typeRefDict[paramName] = paramType;
+            }
+            
+            //apply to base type
+            //note: even though the base class may have different argument names in the source code, the argument names of the inheriting class are used in the GenericArguments
+            //thus we can directly map them.
+            var baseTypeArgs = genericBaseType.GenericArguments.Select(arg =>
+            {
+                if (typeRefDict.TryGetValue(arg.FullName, out TypeReference t))
+                    return t;
+
+                return arg;
+            }).ToArray();
+
+            baseType = genericBaseType.ElementType.MakeGenericInstanceType(baseTypeArgs);
+        }
+
+        return baseType;
     }
 
     public static MethodReference FindNamedMethod(TypeReference typeReference)
@@ -103,13 +177,18 @@ public partial class ModuleWeaver
 
     static MethodReference FindNamedMethod(TypeDefinition typeDefinition, string methodName, TypeReference parameterType)
     {
-        return typeDefinition.Methods.FirstOrDefault(x => x.Name == methodName &&
+        MethodReference reference =  typeDefinition.Methods.FirstOrDefault(x => x.Name == methodName &&
                                                           x.IsStatic &&
                                                           x.ReturnType.Name == "Boolean" &&
                                                           x.HasParameters &&
                                                           x.Parameters.Count == 2 &&
                                                           MatchParameter(x.Parameters[0], parameterType) &&
                                                           MatchParameter(x.Parameters[1], parameterType));
+
+        if (reference == null && typeDefinition != parameterType)
+            reference = FindNamedMethod(typeDefinition, methodName, typeDefinition);
+
+        return reference;
     }
 
     static bool MatchParameter(ParameterDefinition parameter, TypeReference typeMatch)
