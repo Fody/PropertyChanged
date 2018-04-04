@@ -74,7 +74,7 @@ public partial class ModuleWeaver
                 return ModuleDefinition.ImportReference(genericInstanceMethod);
             }
         }
-        
+
         return GetStaticEquality(typeDefinition);
     }
 
@@ -91,8 +91,8 @@ public partial class ModuleWeaver
 
         if (UseStaticEqualsFromBase)
         {
-            while (equality == null && 
-                   typeReference != null && 
+            while (equality == null &&
+                   typeReference != null &&
                    typeReference.FullName != typeof(object).FullName &&
                    !methodCache.TryGetValue(typeReference.FullName, out equality))
             {
@@ -103,10 +103,14 @@ public partial class ModuleWeaver
             }
         }
         else
+        {
             equality = FindNamedMethod(typeReference);
+        }
 
         if (equality != null)
+        {
             equality = ModuleDefinition.ImportReference(equality);
+        }
 
         typesChecked.ForEach(typeName => methodCache[typeName] = equality);
 
@@ -119,7 +123,9 @@ public partial class ModuleWeaver
         var baseType = typeDef?.BaseType;
 
         if (baseType == null)
+        {
             return null;
+        }
 
         if (baseType.IsGenericInstance && typeReference.IsGenericInstance)
         {
@@ -131,20 +137,22 @@ public partial class ModuleWeaver
             //create a map from the type reference (child class): generic argument name -> type
             var typeRefDict = new Dictionary<string, TypeReference>();
             var typeRefParams = genericTypeRef.ElementType.Resolve().GenericParameters;
-            for (int i = 0; i < typeRefParams.Count; i++)
+            for (var i = 0; i < typeRefParams.Count; i++)
             {
-                string paramName = typeRefParams[i].FullName;
-                TypeReference paramType = genericTypeRef.GenericArguments[i];
+                var paramName = typeRefParams[i].FullName;
+                var paramType = genericTypeRef.GenericArguments[i];
                 typeRefDict[paramName] = paramType;
             }
-            
+
             //apply to base type
             //note: even though the base class may have different argument names in the source code, the argument names of the inheriting class are used in the GenericArguments
             //thus we can directly map them.
             var baseTypeArgs = genericBaseType.GenericArguments.Select(arg =>
             {
-                if (typeRefDict.TryGetValue(arg.FullName, out TypeReference t))
+                if (typeRefDict.TryGetValue(arg.FullName, out var t))
+                {
                     return t;
+                }
 
                 return arg;
             }).ToArray();
