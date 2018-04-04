@@ -74,7 +74,7 @@ public class EqualityCheckWeaver
                 Instruction.Create(OpCodes.Ret));
             return;
         }
-        var typeEqualityMethod = typeEqualityFinder.FindTypeEquality(targetType);
+        var typeEqualityMethod = propertyData.EqualsMethod;
         if (typeEqualityMethod == null)
         {
             if (targetType.SupportsCeq() && (targetType.IsValueType || !typeEqualityFinder.CheckForEqualityUsingBaseEquals))
