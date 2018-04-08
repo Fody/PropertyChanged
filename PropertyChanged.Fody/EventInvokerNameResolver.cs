@@ -20,7 +20,8 @@ public partial class ModuleWeaver
         var eventInvokerAttribute = Config?.Attributes("EventInvokerNames").FirstOrDefault();
         if (eventInvokerAttribute != null)
         {
-            EventInvokerNames.InsertRange(0, eventInvokerAttribute.Value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).Where(x => x.Length > 0).ToList());
+            EventInvokerNames.Clear();
+            EventInvokerNames.AddRange(eventInvokerAttribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).Where(x => x.Length > 0));
         }
     }
 }
