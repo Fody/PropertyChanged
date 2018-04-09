@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -77,7 +78,18 @@ public class EqualityCheckWeaver
         var typeEqualityMethod = propertyData.EqualsMethod;
         if (typeEqualityMethod == null)
         {
-            if (targetType.SupportsCeq() && (targetType.IsValueType || !typeEqualityFinder.CheckForEqualityUsingBaseEquals))
+            var supportsCeq = false;
+
+            try
+            {
+                supportsCeq = targetType.SupportsCeq();
+            }
+            catch (Exception ex)
+            {
+                typeEqualityFinder.LogWarning($"Ignoring Ceq of type {targetType.FullName} => {ex.Message}");
+            }
+
+            if (supportsCeq && (targetType.IsValueType || !typeEqualityFinder.CheckForEqualityUsingBaseEquals))
             {
                 instructions.Prepend(
                     Instruction.Create(OpCodes.Ldarg_0),
