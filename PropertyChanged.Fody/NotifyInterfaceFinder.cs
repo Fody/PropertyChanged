@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mono.Cecil;
 
@@ -20,7 +21,15 @@ public partial class ModuleWeaver
         }
         else
         {
-            typeDefinition = Resolve(typeReference);
+            try
+            {
+                typeDefinition = Resolve(typeReference);
+            }
+            catch (Exception ex)
+            {
+                LogWarning($"Ignoring type {fullName} in type hierarchy => {ex.Message}");
+                return false;
+            }
         }
 
         foreach (var interfaceImplementation in typeDefinition.Interfaces)
