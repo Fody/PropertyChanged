@@ -101,9 +101,9 @@ public class Person : INotifyPropertyChanged
 
 internal static class InternalEventArgsCache
 {
-    internal static readonly FamilyName = new PropertyChangedEventArgs("FamilyName");
-    internal static readonly FullName = new PropertyChangedEventArgs("FullName");
-    internal static readonly GivenNames = new PropertyChangedEventArgs("GivenNames");
+    internal static readonly PropertyChangedEventArgs FamilyName = new PropertyChangedEventArgs("FamilyName");
+    internal static readonly PropertyChangedEventArgs FullName = new PropertyChangedEventArgs("FullName");
+    internal static readonly PropertyChangedEventArgs GivenNames = new PropertyChangedEventArgs("GivenNames");
 }
 ```
 
