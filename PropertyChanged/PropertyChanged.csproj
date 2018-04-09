@@ -10,7 +10,7 @@
     <PackageTags>Xaml, MVVM, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Fody" Version="3.0.3" />
+    <PackageReference Include="Fody" Version="3.0.3" PrivateAssets="None" />
     <PackageReference Include="FodyPackaging" Version="3.0.3" PrivateAssets="All" />
   </ItemGroup>
 </Project>
