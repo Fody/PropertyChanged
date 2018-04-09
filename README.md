@@ -101,9 +101,9 @@ public class Person : INotifyPropertyChanged
 
 internal static class InternalEventArgsCache
 {
-    internal static readonly FamilyName = new PropertyChangedEventArgs("FamilyName");
-    internal static readonly FullName = new PropertyChangedEventArgs("FullName");
-    internal static readonly GivenNames = new PropertyChangedEventArgs("GivenNames");
+    internal static readonly PropertyChangedEventArgs FamilyName = new PropertyChangedEventArgs("FamilyName");
+    internal static readonly PropertyChangedEventArgs FullName = new PropertyChangedEventArgs("FullName");
+    internal static readonly PropertyChangedEventArgs GivenNames = new PropertyChangedEventArgs("GivenNames");
 }
 ```
 
@@ -114,11 +114,11 @@ internal static class InternalEventArgsCache
 
 ## Notes
 
-* **Dependent properties** -- In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.   This behavior can be configured manually using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).
+* **Dependent properties** — In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.   This behavior can be configured manually using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).
 * **Intercepting the notification call**
     * [**Global interception**](https://github.com/Fody/PropertyChanged/wiki/NotificationInterception)
-    * **Class-level interception** --The `OnPropertyChanged` method will only be injected if there is no such existing method on the class; if there is such a method, then calls to that method will be injected into the setters -- see [here](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection).
-    * **Property-level interception** -- For a given property, if there is a method of the form `On<PropertyName>Changed`, then that method will be called -- see [here](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed).
+    * **Class-level interception** — The `OnPropertyChanged` method will only be injected if there is no such existing method on the class; if there is such a method, then calls to that method will be injected into the setters — see [here](https://github.com/Fody/PropertyChanged/wiki/EventInvokerSelectionInjection).
+    * **Property-level interception** — For a given property, if there is a method of the form `On<PropertyName>Changed`, then that method will be called — see [here](https://github.com/Fody/PropertyChanged/wiki/On_PropertyName_Changed).
 * To get the [**before / after values**](https://github.com/Fody/PropertyChanged/wiki/BeforeAfter), use the following signature for `OnPropertyChanged` / `On<PropertyName>Changed`:
 
       public void OnPropertyChanged(string propertyName, object before, object after)
