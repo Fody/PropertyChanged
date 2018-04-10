@@ -21,15 +21,19 @@ public partial class ModuleWeaver
             .First(x => x.Name == "Ordinal")
             .Constant;
 
-        foreach (var node in NotifyNodes)
-        {
-            foreach (var data in node.PropertyDatas)
-            {
-                data.EqualsMethod = FindTypeEquality(data);
-            }
-        }
+        NotifyNodes.ForEach(FindComparisonMethods);
 
         methodCache = null;
+    }
+
+    void FindComparisonMethods(TypeNode node)
+    {
+        foreach (var data in node.PropertyDatas)
+        {
+            data.EqualsMethod = FindTypeEquality(data);
+        }
+
+        node.Nodes.ForEach(FindComparisonMethods);
     }
 
     MethodReference FindTypeEquality(PropertyData propertyData)
