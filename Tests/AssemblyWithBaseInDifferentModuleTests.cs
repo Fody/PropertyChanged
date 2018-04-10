@@ -74,6 +74,17 @@ public class AssemblyWithBaseInDifferentModuleTests
     }
 
     [Fact]
+    public void StaticEquals_Hierarchy()
+    {
+        Weave(true);
+        var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.Hierarchy.ChildClass");
+        EventTester.TestProperty(instance, true);
+        Assert.NotNull(instance.Property2);
+        Assert.True(instance.Property2.StaticEqualsCalled);
+        instance.Property2.StaticEqualsCalled = false;
+    }
+
+    [Fact]
     public void GenericStaticEquals()
     {
         Weave(false);
