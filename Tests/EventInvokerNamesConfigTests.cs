@@ -9,11 +9,13 @@ public class EventInvokerNamesConfigTests
         var xElement = XElement.Parse("<PropertyChanged EventInvokerNames='A,B'/>");
         var moduleWeaver = new ModuleWeaver { Config = xElement };
         moduleWeaver.ResolveEventInvokerName();
-        Assert.Contains("A", moduleWeaver.EventInvokerNames);
-        Assert.Contains("B", moduleWeaver.EventInvokerNames);
 
-        // Custom values should override the defaults
-        Assert.DoesNotContain("OnPropertyChanged", moduleWeaver.EventInvokerNames);
+        // Custom values should override the defaults, but the injected method name should always be included
+
+        Assert.Equal(new[]
+        {
+            "A", "B", "<>OnPropertyChanged"
+        }, moduleWeaver.EventInvokerNames);
     }
 
     [Fact]
@@ -28,5 +30,6 @@ public class EventInvokerNamesConfigTests
         Assert.Contains("NotifyPropertyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("NotifyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("raisePropertyChanged", moduleWeaver.EventInvokerNames);
+        Assert.Contains("<>OnPropertyChanged", moduleWeaver.EventInvokerNames);
     }
 }
