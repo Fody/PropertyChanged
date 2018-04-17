@@ -13,7 +13,8 @@ public partial class ModuleWeaver
         "RaisePropertyChanged",
         "NotifyPropertyChanged",
         "NotifyChanged",
-        "raisePropertyChanged"
+        "raisePropertyChanged",
+        injectedEventInvokerName
     };
 
     public void ResolveEventInvokerName()
@@ -28,9 +29,12 @@ public partial class ModuleWeaver
             .Select(x => x.Trim())
             .Where(x => x.Length > 0)
             .ToList();
+
         if (!EventInvokerNames.Any())
         {
             throw new WeavingException("EventInvokerNames contained no items.");
         }
+
+        EventInvokerNames.Add(injectedEventInvokerName);
     }
 }
