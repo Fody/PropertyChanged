@@ -87,4 +87,19 @@ public class AssemblyToProcessTests
         Assert.Equal(2, argsList.Count);
         Assert.Same(argsList[0], argsList[1]);
     }
+
+    [Fact]
+    public void SupportedLibrariesClassReactiveUI()
+    {
+        var instance = testResult.GetInstance("ClassReactiveUI");
+        
+        var argsList = new List<PropertyChangedEventArgs>();
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) => argsList.Add(args);
+
+        instance.Property1 = "a";
+        instance.Property1 = "b";
+        
+        Assert.Equal(2, argsList.Count);
+        Assert.Same(argsList[0], argsList[1]);
+    }
 }

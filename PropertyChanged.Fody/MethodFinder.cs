@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Fody;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -28,11 +27,29 @@ public partial class ModuleWeaver
 
         if (!eventInvoker.IsVisibleFromChildren)
         {
-            var error = $"Cannot use '{eventInvoker.MethodReference.FullName}' in '{node.TypeDefinition.FullName}' since that method is not visible from the child class.";
-            throw new WeavingException(error);
-        }
-        node.EventInvoker = eventInvoker;
+            var methodName = eventInvoker.MethodReference.Name;
+            var viewModelBaseType = node.TypeDefinition.BaseType.Resolve();
+            
+            // WARN: Not finished yet.
+            // TODO: Support nested hierarchies.
+            foreach (var implementation in viewModelBaseType.Interfaces)
+            {
+                var interfaceType = implementation.InterfaceType;
+                var interfaceResolution = interfaceType.Resolve();
+                var method = interfaceResolution.Methods.FirstOrDefault(x => methodName.Contains(x.Name));
+                if (method == null) continue;
 
+                var methodReference = MakeGeneric(interfaceType, method);
+                eventInvoker = new EventInvokerMethod
+                {
+                    IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren,
+                    InvokerType = eventInvoker.InvokerType,
+                    MethodReference = methodReference
+                };
+            }
+        }
+        
+        node.EventInvoker = eventInvoker;
         foreach (var childNode in node.Nodes)
         {
             ProcessChildNode(childNode, eventInvoker);
