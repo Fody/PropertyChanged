@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Fody;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -13,11 +14,11 @@ public partial class ModuleWeaver
             {
                 var methodReference = MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
                 eventInvoker = new EventInvokerMethod
-                                   {
-                                       InvokerType = eventInvoker.InvokerType,
-                                       MethodReference = methodReference,
-                                       IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren
-                                   };
+                {
+                    InvokerType = eventInvoker.InvokerType,
+                    MethodReference = methodReference,
+                    IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren
+                };
             }
         }
         else
@@ -27,25 +28,17 @@ public partial class ModuleWeaver
 
         if (!eventInvoker.IsVisibleFromChildren)
         {
-            var methodName = eventInvoker.MethodReference.Name;
-            var viewModelBaseType = node.TypeDefinition.BaseType.Resolve();
-            
-            // WARN: Not finished yet.
-            // TODO: Support nested hierarchies.
-            foreach (var implementation in viewModelBaseType.Interfaces)
+            var baseExplicitInterfaceEventInvoker = RecursiveFindExplicitInterfaceEventInvoker(node, eventInvoker);
+            if (baseExplicitInterfaceEventInvoker != null)
             {
-                var interfaceType = implementation.InterfaceType;
-                var interfaceResolution = interfaceType.Resolve();
-                var method = interfaceResolution.Methods.FirstOrDefault(x => methodName.Contains(x.Name));
-                if (method == null) continue;
-
-                var methodReference = MakeGeneric(interfaceType, method);
-                eventInvoker = new EventInvokerMethod
-                {
-                    IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren,
-                    InvokerType = eventInvoker.InvokerType,
-                    MethodReference = methodReference
-                };
+                eventInvoker = baseExplicitInterfaceEventInvoker;
+            }
+            else
+            {
+                var error = $"Cannot use '{eventInvoker.MethodReference.FullName}' in " +
+                            $"'{node.TypeDefinition.FullName}' since that method is not " +
+                             "visible from the child class.";
+                throw new WeavingException(error);
             }
         }
         
@@ -54,6 +47,32 @@ public partial class ModuleWeaver
         {
             ProcessChildNode(childNode, eventInvoker);
         }
+    }
+
+    static EventInvokerMethod RecursiveFindExplicitInterfaceEventInvoker(TypeNode node, EventInvokerMethod eventInvoker)
+    {
+        var methodName = eventInvoker.MethodReference.Name;
+        var viewModelBaseType = node.TypeDefinition.BaseType.Resolve();
+    
+        // WARN: Not finished yet.
+        // TODO: Support nested hierarchies.
+        foreach (var implementation in viewModelBaseType.Interfaces)
+        {
+            var interfaceType = implementation.InterfaceType;
+            var interfaceResolution = interfaceType.Resolve();
+            var method = interfaceResolution.Methods.FirstOrDefault(x => methodName.Contains(x.Name));
+            if (method == null) continue;
+
+            var methodReference = MakeGeneric(interfaceType, method);
+            return new EventInvokerMethod
+            {
+                IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren,
+                InvokerType = eventInvoker.InvokerType,
+                MethodReference = methodReference
+            };
+        }
+        
+        return null;
     }
 
     public EventInvokerMethod RecursiveFindEventInvoker(TypeDefinition typeDefinition)
