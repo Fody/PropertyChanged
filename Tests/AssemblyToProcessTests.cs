@@ -100,6 +100,6 @@ public class AssemblyToProcessTests
         instance.Property1 = "b";
         
         Assert.Equal(2, argsList.Count);
-        Assert.Same(argsList[0], argsList[1]);
+        Assert.All(argsList, i => Assert.Equal("Property1", i.PropertyName));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Fody;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -27,29 +28,12 @@ public partial class ModuleWeaver
 
         if (!eventInvoker.IsVisibleFromChildren)
         {
-            var methodName = eventInvoker.MethodReference.Name;
-            var viewModelBaseType = node.TypeDefinition.BaseType.Resolve();
-            
-            // WARN: Not finished yet.
-            // TODO: Support nested hierarchies.
-            foreach (var implementation in viewModelBaseType.Interfaces)
-            {
-                var interfaceType = implementation.InterfaceType;
-                var interfaceResolution = interfaceType.Resolve();
-                var method = interfaceResolution.Methods.FirstOrDefault(x => methodName.Contains(x.Name));
-                if (method == null) continue;
-
-                var methodReference = MakeGeneric(interfaceType, method);
-                eventInvoker = new EventInvokerMethod
-                {
-                    IsVisibleFromChildren = eventInvoker.IsVisibleFromChildren,
-                    InvokerType = eventInvoker.InvokerType,
-                    MethodReference = methodReference
-                };
-            }
+            var error = $"Cannot use '{eventInvoker.MethodReference.FullName}' in '{node.TypeDefinition.FullName}' since that method is not visible from the child class.";
+            throw new WeavingException(error);
         }
         
         node.EventInvoker = eventInvoker;
+
         foreach (var childNode in node.Nodes)
         {
             ProcessChildNode(childNode, eventInvoker);
@@ -65,7 +49,8 @@ public partial class ModuleWeaver
         {
             typeDefinitions.Push(currentTypeDefinition);
 
-            if (FindEventInvokerMethodDefinition(currentTypeDefinition, out methodDefinition))
+            methodDefinition = FindEventInvokerMethodDefinition(currentTypeDefinition);
+            if (methodDefinition != null)
             {
                 break;
             }
@@ -93,10 +78,25 @@ public partial class ModuleWeaver
 
     EventInvokerMethod FindEventInvokerMethod(TypeDefinition type)
     {
-        if (!FindEventInvokerMethodDefinition(type, out var methodDefinition))
+        var methodDefinition = FindEventInvokerMethodDefinition(type);
+
+        if (methodDefinition == null || methodDefinition.IsPrivate)
         {
-            return null;
+            var overriddenMethod = FindExplicitImplementation(type);
+            if (overriddenMethod != null)
+            {
+                return new EventInvokerMethod
+                {
+                    MethodReference = ModuleDefinition.ImportReference(overriddenMethod).GetGeneric(),
+                    IsVisibleFromChildren = true,
+                    InvokerType = ClassifyInvokerMethod(overriddenMethod)
+                };
+            }
         }
+
+        if (methodDefinition == null)
+            return null;
+
         var methodReference = ModuleDefinition.ImportReference(methodDefinition);
         return new EventInvokerMethod
         {
@@ -106,23 +106,35 @@ public partial class ModuleWeaver
         };
     }
 
-    bool FindEventInvokerMethodDefinition(TypeDefinition type, out MethodDefinition methodDefinition)
+    MethodDefinition FindEventInvokerMethodDefinition(TypeDefinition type)
     {
-        methodDefinition = type.Methods
+        var methodDefinition = type.Methods
             .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
             .OrderByDescending(GetInvokerPriority)
-            .FirstOrDefault(x => IsBeforeAfterGenericMethod(x) || IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
+            .FirstOrDefault(IsEventInvokerMethod);
+
         if (methodDefinition == null)
         {
             methodDefinition = type.Methods
                 .Where(x => EventInvokerNames.Contains(x.Name))
                 .OrderByDescending(GetInvokerPriority)
-                .FirstOrDefault(x => IsBeforeAfterGenericMethod(x) || IsBeforeAfterMethod(x) || IsSingleStringMethod(x) || IsPropertyChangedArgMethod(x) || IsSenderPropertyChangedArgMethod(x));
+                .FirstOrDefault(IsEventInvokerMethod);
         }
-        return methodDefinition != null;
+
+        return methodDefinition;
     }
 
-    static int GetInvokerPriority(MethodDefinition method)
+    MethodReference FindExplicitImplementation(TypeDefinition type)
+    {
+        return type.GetAllInterfaces()
+            .Select(i => i.Resolve())
+            .Where(i => i != null && i.IsPublic)
+            .SelectMany(i => i.Methods.Where(m => EventInvokerNames.Contains($"{i.FullName}.{m.Name}")))
+            .OrderByDescending(GetInvokerPriority)
+            .FirstOrDefault(IsEventInvokerMethod);
+    }
+
+    static int GetInvokerPriority(MethodReference method)
     {
         if (IsBeforeAfterGenericMethod(method))
             return 5;
@@ -142,7 +154,7 @@ public partial class ModuleWeaver
         return 0;
     }
 
-    public static InvokerTypes ClassifyInvokerMethod(MethodDefinition method)
+    public static InvokerTypes ClassifyInvokerMethod(MethodReference method)
     {
         if (IsSenderPropertyChangedArgMethod(method))
         {
@@ -164,7 +176,16 @@ public partial class ModuleWeaver
         return InvokerTypes.String;
     }
 
-    public static bool IsSenderPropertyChangedArgMethod(MethodDefinition method)
+    static bool IsEventInvokerMethod(MethodReference method)
+    {
+        return IsBeforeAfterGenericMethod(method)
+               || IsBeforeAfterMethod(method)
+               || IsSingleStringMethod(method)
+               || IsPropertyChangedArgMethod(method)
+               || IsSenderPropertyChangedArgMethod(method);
+    }
+
+    public static bool IsSenderPropertyChangedArgMethod(MethodReference method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 2
@@ -172,21 +193,21 @@ public partial class ModuleWeaver
                && parameters[1].ParameterType.FullName == "System.ComponentModel.PropertyChangedEventArgs";
     }
 
-    public static bool IsPropertyChangedArgMethod(MethodDefinition method)
+    public static bool IsPropertyChangedArgMethod(MethodReference method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 1
                && parameters[0].ParameterType.FullName == "System.ComponentModel.PropertyChangedEventArgs";
     }
 
-    public static bool IsSingleStringMethod(MethodDefinition method)
+    public static bool IsSingleStringMethod(MethodReference method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 1
                && parameters[0].ParameterType.FullName == "System.String";
     }
 
-    public static bool IsBeforeAfterMethod(MethodDefinition method)
+    public static bool IsBeforeAfterMethod(MethodReference method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 3
@@ -195,7 +216,7 @@ public partial class ModuleWeaver
                && parameters[2].ParameterType.FullName == "System.Object";
     }
 
-    public static bool IsBeforeAfterGenericMethod(MethodDefinition method)
+    public static bool IsBeforeAfterGenericMethod(MethodReference method)
     {
         var parameters = method.Parameters;
         return parameters.Count == 3
