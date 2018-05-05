@@ -205,14 +205,23 @@ namespace Jounce.Core.ViewModel
 
 namespace ReactiveUI
 {
-    public abstract class ReactiveObject : INotifyPropertyChanged
+    public interface IReactiveObject : INotifyPropertyChanged 
     {
-        public bool BaseNotifyCalled { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public virtual void raisePropertyChanged(string propertyName)
+        void RaisePropertyChanged(PropertyChangedEventArgs args);
+    }
+    
+    public class ReactiveObject : IReactiveObject
+    {
+        void IReactiveObject.RaisePropertyChanged(PropertyChangedEventArgs args)
         {
-            BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            changed?.Invoke(this, args);
+        }
+
+        event PropertyChangedEventHandler changed;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add => changed += value;
+            remove => changed -= value;
         }
     }
 }

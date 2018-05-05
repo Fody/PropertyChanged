@@ -13,7 +13,7 @@ public partial class ModuleWeaver
         "RaisePropertyChanged",
         "NotifyPropertyChanged",
         "NotifyChanged",
-        "raisePropertyChanged",
+        "ReactiveUI.IReactiveObject.RaisePropertyChanged",
         injectedEventInvokerName
     };
 

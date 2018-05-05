@@ -29,7 +29,7 @@ public class EventInvokerNamesConfigTests
         Assert.Contains("RaisePropertyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("NotifyPropertyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("NotifyChanged", moduleWeaver.EventInvokerNames);
-        Assert.Contains("raisePropertyChanged", moduleWeaver.EventInvokerNames);
+        Assert.Contains("ReactiveUI.IReactiveObject.RaisePropertyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("<>OnPropertyChanged", moduleWeaver.EventInvokerNames);
     }
 }

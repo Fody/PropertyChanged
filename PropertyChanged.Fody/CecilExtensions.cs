@@ -126,4 +126,18 @@ public static class CecilExtensions
     {
         return attributes.Any(attribute => attribute.Constructor.DeclaringType.FullName == attributeName);
     }
+
+    public static IEnumerable<TypeReference> GetAllInterfaces(this TypeDefinition type)
+    {
+        while (type != null)
+        {
+            if (type.HasInterfaces)
+            {
+                foreach (var iface in type.Interfaces)
+                    yield return iface.InterfaceType;
+            }
+
+            type = type.BaseType?.Resolve();
+        }
+    }
 }
