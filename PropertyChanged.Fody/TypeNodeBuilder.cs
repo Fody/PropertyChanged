@@ -61,6 +61,10 @@ public partial class ModuleWeaver
                 {
                     throw new WeavingException($"The type '{node.TypeDefinition.FullName}' already implements INotifyPropertyChanged so [AddINotifyPropertyChangedInterfaceAttribute] is redundant.");
                 }
+                if (node.TypeDefinition.GetPropertyChangedAddMethods().Any())
+                {
+                    throw new WeavingException($"The type '{node.TypeDefinition.FullName}' already has a PropertyChanged event. If type has a [AddINotifyPropertyChangedInterfaceAttribute] then the PropertyChanged event can be removed.");
+                }
                 InjectINotifyPropertyChangedInterface(node.TypeDefinition);
                 NotifyNodes.Add(node);
                 continue;

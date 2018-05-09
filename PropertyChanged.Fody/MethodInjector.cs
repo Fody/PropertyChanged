@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Fody;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -49,15 +48,19 @@ public partial class ModuleWeaver
 
     public FieldDefinition GetEventHandlerField(TypeDefinition targetType)
     {
-        var addMethod = targetType.Methods.SingleOrDefault(i => i.Overrides.Any(o => o.FullName == "System.Void System.ComponentModel.INotifyPropertyChanged::add_PropertyChanged(System.ComponentModel.PropertyChangedEventHandler)"))
-                        ?? targetType.Events.SingleOrDefault(i => i.Name == nameof(INotifyPropertyChanged.PropertyChanged))?.AddMethod;
+        var addMethods = targetType.GetPropertyChangedAddMethods().ToList();
 
-        if (addMethod == null)
+        if (!addMethods.Any())
         {
             return null;
         }
 
-        var fieldReferences = addMethod.Body.Instructions
+        if (addMethods.Count > 1)
+        {
+            throw new WeavingException("Found more than one PropertyChangedAddMethod");
+        }
+
+        var fieldReferences = addMethods.Single().Body.Instructions
             .Where(i => i.OpCode == OpCodes.Ldfld || i.OpCode == OpCodes.Ldflda || i.OpCode == OpCodes.Stfld)
             .Select(i => i.Operand)
             .OfType<FieldReference>()
