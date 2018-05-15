@@ -57,7 +57,7 @@ public partial class ModuleWeaver
 
         if (addMethods.Count > 1)
         {
-            throw new WeavingException("Found more than one PropertyChangedAddMethod");
+            throw new WeavingException("Found more than one PropertyChanged event");
         }
 
         var fieldReferences = addMethods.Single().Body.Instructions
