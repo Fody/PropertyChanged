@@ -46,6 +46,16 @@ public class MethodInjectorTests
     }
 
     [Fact]
+    public void ShouldNotConfuseExplicitImplWithUnrelatedEvent()
+    {
+        var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithExplicitImplAndPropertyChangedEvent).FullName, true).Resolve();
+        var field = methodInjector.GetEventHandlerField(type);
+
+        Assert.NotNull(field);
+        Assert.Equal(ClassWithExplicitImplAndPropertyChangedEvent.ExpectedFieldName, field.Name);
+    }
+
+    [Fact]
     public void ShouldFindCorrectHandlerFieldInClassThatReimplementsInterface()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassThatReimplementsInterface).FullName, true).Resolve();
@@ -118,6 +128,26 @@ public class MethodInjectorTests
 
     class ClassWithMultipleHandlerFieldsExplicitImpl : INotifyPropertyChanged
     {
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add => Second += value;
+            remove => Second -= value;
+        }
+
+        PropertyChangedEventHandler First;
+        PropertyChangedEventHandler Second;
+        PropertyChangedEventHandler Third;
+        public const string ExpectedFieldName = nameof(Second);
+    }
+
+    class ClassWithExplicitImplAndPropertyChangedEvent : INotifyPropertyChanged
+    {
+        event PropertyChangedEventHandler PropertyChanged
+        {
+            add => First += value;
+            remove => First -= value;
+        }
+
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
             add => Second += value;
