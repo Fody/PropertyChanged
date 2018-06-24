@@ -13,16 +13,16 @@ public partial class ModuleWeaver
                                          ModuleWeaver = this,
                                      };
         delegateHolderInjector.InjectDelegateHolder();
-        var method = new MethodDefinition(EventInvokerNames.First(), GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        var method = new MethodDefinition(EventInvokerNames.First(), GetMethodAttributes(targetType), TypeSystem.VoidReference);
 
-        var propertyName = new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String);
+        var propertyName = new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference);
         var parameters = method.Parameters;
         parameters.Add(propertyName);
         if (InterceptorType == InvokerTypes.BeforeAfter)
         {
-            var before = new ParameterDefinition("before", ParameterAttributes.None, ModuleDefinition.TypeSystem.Object);
+            var before = new ParameterDefinition("before", ParameterAttributes.None, TypeSystem.ObjectReference);
             parameters.Add(before);
-            var after = new ParameterDefinition("after", ParameterAttributes.None, ModuleDefinition.TypeSystem.Object);
+            var after = new ParameterDefinition("after", ParameterAttributes.None, TypeSystem.ObjectReference);
             parameters.Add(after);
         }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
+using TypeSystem = Fody.TypeSystem;
 
 public class PropertyWeaver
 {
@@ -99,7 +100,7 @@ public class PropertyWeaver
                 }
             }
         }
-    }    
+    }
 
     int AddIsChangedSetterCall(int index)
     {
@@ -230,9 +231,9 @@ public class PropertyWeaver
 
     int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)
     {
-        var beforeVariable = new VariableDefinition(typeSystem.Object);
+        var beforeVariable = new VariableDefinition(typeSystem.ObjectReference);
         setMethodBody.Variables.Add(beforeVariable);
-        var afterVariable = new VariableDefinition(typeSystem.Object);
+        var afterVariable = new VariableDefinition(typeSystem.ObjectReference);
         setMethodBody.Variables.Add(afterVariable);
 
         index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
@@ -257,9 +258,9 @@ public class PropertyWeaver
 
     int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
     {
-        var beforeVariable = new VariableDefinition(typeSystem.Object);
+        var beforeVariable = new VariableDefinition(typeSystem.ObjectReference);
         setMethodBody.Variables.Add(beforeVariable);
-        var afterVariable = new VariableDefinition(typeSystem.Object);
+        var afterVariable = new VariableDefinition(typeSystem.ObjectReference);
         setMethodBody.Variables.Add(afterVariable);
         index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
 

@@ -18,14 +18,17 @@ public static class CecilExtensions
         {
             return false;
         }
+
         if (!(instruction.Operand is MethodReference methodReference))
         {
             return false;
         }
+
         if (methodReference.Name != methodName)
         {
             return false;
         }
+
         var parameterDefinition = methodReference.Parameters.FirstOrDefault(x => x.Name == "propertyName");
         if (parameterDefinition != null)
         {
@@ -49,6 +52,7 @@ public static class CecilExtensions
             {
                 declaringType.GenericArguments.Add(parameter);
             }
+
             return new FieldReference(definition.Name, definition.FieldType, declaringType);
         }
 
@@ -64,18 +68,19 @@ public static class CecilExtensions
             {
                 declaringType.GenericArguments.Add(parameter);
             }
+
             var methodReference = new MethodReference(reference.Name, reference.MethodReturnType.ReturnType, declaringType);
             foreach (var parameterDefinition in reference.Parameters)
             {
                 methodReference.Parameters.Add(parameterDefinition);
             }
+
             methodReference.HasThis = reference.HasThis;
             return methodReference;
         }
 
         return reference;
     }
-
 
     public static MethodReference MakeGeneric(this MethodReference self, params TypeReference[] arguments)
     {
@@ -95,6 +100,7 @@ public static class CecilExtensions
 
         return reference;
     }
+
     public static IEnumerable<CustomAttribute> GetAllCustomAttributes(this TypeDefinition typeDefinition)
     {
         foreach (var attribute in typeDefinition.CustomAttributes)
@@ -106,6 +112,7 @@ public static class CecilExtensions
         {
             yield break;
         }
+
         foreach (var attribute in baseDefinition.GetAllCustomAttributes())
         {
             yield return attribute;
@@ -134,7 +141,9 @@ public static class CecilExtensions
             if (type.HasInterfaces)
             {
                 foreach (var iface in type.Interfaces)
+                {
                     yield return iface.InterfaceType;
+                }
             }
 
             type = type.BaseType?.Resolve();

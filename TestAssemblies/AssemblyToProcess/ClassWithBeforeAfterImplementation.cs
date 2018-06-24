@@ -25,7 +25,7 @@ public class ClassWithBeforeAfterImplementation : INotifyPropertyChanged
             var name = value.GetType().Name;
             if (name != "String")
             {
-                throw new Exception($"Value shoud be string but is '{name}'.");
+                throw new Exception($"Value should be string but is '{name}'.");
             }
         }
     }

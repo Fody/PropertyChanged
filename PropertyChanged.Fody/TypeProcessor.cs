@@ -29,7 +29,7 @@ public partial class ModuleWeaver
 
                 body.MakeLastStatementReturn();
 
-                var propertyWeaver = new PropertyWeaver(this, propertyData, node, ModuleDefinition.TypeSystem);
+                var propertyWeaver = new PropertyWeaver(this, propertyData, node, TypeSystem);
                 propertyWeaver.Execute();
 
                 if (!alreadyHasEquality)

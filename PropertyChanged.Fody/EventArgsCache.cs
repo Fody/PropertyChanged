@@ -8,14 +8,16 @@ public class EventArgsCache
     public EventArgsCache(ModuleWeaver moduleWeaver)
     {
         this.moduleWeaver = moduleWeaver;
-        cacheTypeDefinition = new TypeDefinition(null, "<>PropertyChangedEventArgs", TypeAttributes.AutoClass | TypeAttributes.AutoLayout | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.NotPublic, moduleWeaver.ModuleDefinition.TypeSystem.Object);
+        var attributes = TypeAttributes.AutoClass | TypeAttributes.AutoLayout | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.NotPublic;
+        cacheTypeDefinition = new TypeDefinition(null, "<>PropertyChangedEventArgs", attributes, moduleWeaver.TypeSystem.ObjectReference);
     }
 
     public FieldReference GetEventArgsField(string propertyName)
     {
         if (!properties.TryGetValue(propertyName, out var field))
         {
-            field = new FieldDefinition(propertyName, FieldAttributes.Assembly | FieldAttributes.Static | FieldAttributes.InitOnly, moduleWeaver.PropertyChangedEventArgsReference);
+            var attributes = FieldAttributes.Assembly | FieldAttributes.Static | FieldAttributes.InitOnly;
+            field = new FieldDefinition(propertyName, attributes, moduleWeaver.PropertyChangedEventArgsReference);
             properties.Add(propertyName, field);
         }
 
@@ -27,7 +29,8 @@ public class EventArgsCache
         if (properties.Count == 0)
             return;
 
-        var cctor = new MethodDefinition(".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static, moduleWeaver.ModuleDefinition.TypeSystem.Void);
+        var attributes = MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+        var cctor = new MethodDefinition(".cctor", attributes, moduleWeaver.TypeSystem.VoidReference);
 
         foreach (var pair in properties.OrderBy(i => i.Key))
         {
@@ -51,7 +54,7 @@ public class EventArgsCache
         moduleWeaver.ModuleDefinition.Types.Add(cacheTypeDefinition);
     }
 
-    readonly ModuleWeaver moduleWeaver;
+    ModuleWeaver moduleWeaver;
     TypeDefinition cacheTypeDefinition;
     Dictionary<string, FieldDefinition> properties = new Dictionary<string, FieldDefinition>();
 }

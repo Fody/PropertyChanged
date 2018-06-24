@@ -104,8 +104,8 @@ public partial class ModuleWeaver
 
     MethodDefinition InjectFsharp(TypeDefinition targetType, FieldDefinition fsharpEvent)
     {
-        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
-        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
+        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
+        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
 
         var instructions = method.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
@@ -123,8 +123,8 @@ public partial class ModuleWeaver
 
     MethodDefinition InjectNormal(TypeDefinition targetType, FieldReference propertyChangedField)
     {
-        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
-        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, ModuleDefinition.TypeSystem.String));
+        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
+        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable);
@@ -152,7 +152,7 @@ public partial class ModuleWeaver
 
     MethodDefinition InjectEventArgsMethod(TypeDefinition targetType, FieldReference propertyChangedField)
     {
-        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), ModuleDefinition.TypeSystem.Void);
+        var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
         method.Parameters.Add(new ParameterDefinition("eventArgs", ParameterAttributes.None, PropertyChangedEventArgsReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);

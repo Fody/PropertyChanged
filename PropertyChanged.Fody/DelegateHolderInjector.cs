@@ -9,7 +9,8 @@ public class DelegateHolderInjector
 
     public void InjectDelegateHolder()
     {
-        TypeDefinition = new TypeDefinition(null, "<>PropertyNotificationDelegateHolder", TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.Sealed | TypeAttributes.NestedPrivate | TypeAttributes.BeforeFieldInit, ModuleWeaver.ModuleDefinition.TypeSystem.Object);
+        var attributes = TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.Sealed | TypeAttributes.NestedPrivate | TypeAttributes.BeforeFieldInit;
+        TypeDefinition = new TypeDefinition(null, "<>PropertyNotificationDelegateHolder", attributes, ModuleWeaver.TypeSystem.ObjectReference);
         CreateFields(TargetTypeDefinition);
         CreateOnPropChanged(OnPropertyChangedMethodReference);
         CreateConstructor();
@@ -20,13 +21,14 @@ public class DelegateHolderInjector
     {
         TargetField = new FieldDefinition("target", FieldAttributes.Public, targetTypeDefinition);
         TypeDefinition.Fields.Add(TargetField);
-        PropertyNameField = new FieldDefinition("propertyName", FieldAttributes.Public, ModuleWeaver.ModuleDefinition.TypeSystem.String);
+        PropertyNameField = new FieldDefinition("propertyName", FieldAttributes.Public, ModuleWeaver.TypeSystem.StringReference);
         TypeDefinition.Fields.Add(PropertyNameField);
     }
 
     void CreateOnPropChanged(MethodReference onPropertyChangedMethodReference)
     {
-        MethodDefinition = new MethodDefinition("OnPropertyChanged", MethodAttributes.Public | MethodAttributes.HideBySig, ModuleWeaver.ModuleDefinition.TypeSystem.Void);
+        var attributes = MethodAttributes.Public | MethodAttributes.HideBySig;
+        MethodDefinition = new MethodDefinition("OnPropertyChanged", attributes, ModuleWeaver.TypeSystem.VoidReference);
         MethodDefinition.Body.Instructions.Append(
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldfld, TargetField),
@@ -40,7 +42,8 @@ public class DelegateHolderInjector
 
     void CreateConstructor()
     {
-        ConstructorDefinition = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, ModuleWeaver.ModuleDefinition.TypeSystem.Void);
+        var attributes = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName;
+        ConstructorDefinition = new MethodDefinition(".ctor", attributes, ModuleWeaver.TypeSystem.VoidReference);
         ConstructorDefinition.Body.Instructions.Append(
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Call, ModuleWeaver.ObjectConstructor),
