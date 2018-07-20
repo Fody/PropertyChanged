@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Xunit;
 
 public static class EventTester
@@ -20,7 +21,7 @@ public static class EventTester
         Assert.False(property1EventCalled);
     }
 
-    internal static void TestProperty(dynamic instance, bool checkProperty2)
+    internal static void TestProperty(dynamic instance, bool checkProperty2, bool delayAfterSetProperty1 = false)
     {
         var property1EventCalled = false;
         var property2EventCalled = false;
@@ -37,6 +38,11 @@ public static class EventTester
             }
         };
         instance.Property1 = "a";
+
+        if(delayAfterSetProperty1)
+        {
+            Task.Delay(TimeSpan.FromMilliseconds(25)).Wait();
+        }
 
         Assert.True(property1EventCalled);
         if (checkProperty2)

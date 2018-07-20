@@ -77,7 +77,7 @@ public class AssemblyToProcessTests
     public void ClassWithTaskReturningPropertyChangedNotifier()
     {
         var instance = testResult.GetInstance("ClassWithTaskReturningPropertyChangedNotifier");
-        EventTester.TestProperty(instance, false);
+        EventTester.TestProperty(instance, false, true);
     }
 
     [Fact]
