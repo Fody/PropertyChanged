@@ -186,27 +186,30 @@ public class PropertyWeaver
 
     int AddSimpleInvokerCall(int index, PropertyDefinition property)
     {
-        return instructions.Insert(index,
+        index = instructions.Insert(index,
                                    Instruction.Create(OpCodes.Ldarg_0),
-                                   Instruction.Create(OpCodes.Ldstr, property.Name),
-                                   CallEventInvoker(property));
+                                   Instruction.Create(OpCodes.Ldstr, property.Name));
+
+        return instructions.Insert(index, CallEventInvoker(property).ToArray());
     }
 
     int AddPropertyChangedArgInvokerCall(int index, PropertyDefinition property)
     {
-        return instructions.Insert(index,
+        index = instructions.Insert(index,
                                    Instruction.Create(OpCodes.Ldarg_0),
-                                   Instruction.Create(OpCodes.Ldsfld, moduleWeaver.EventArgsCache.GetEventArgsField(property.Name)),
-                                   CallEventInvoker(property));
+                                   Instruction.Create(OpCodes.Ldsfld, moduleWeaver.EventArgsCache.GetEventArgsField(property.Name)));
+
+        return instructions.Insert(index, CallEventInvoker(property).ToArray());
     }
 
     int AddSenderPropertyChangedArgInvokerCall(int index, PropertyDefinition property)
     {
-        return instructions.Insert(index,
+        index = instructions.Insert(index,
                                    Instruction.Create(OpCodes.Ldarg_0),
                                    Instruction.Create(OpCodes.Ldarg_0),
-                                   Instruction.Create(OpCodes.Ldsfld, moduleWeaver.EventArgsCache.GetEventArgsField(property.Name)),
-                                   CallEventInvoker(property));
+                                   Instruction.Create(OpCodes.Ldsfld, moduleWeaver.EventArgsCache.GetEventArgsField(property.Name)));
+
+        return instructions.Insert(index, CallEventInvoker(property).ToArray());
     }
 
     int AddBeforeAfterGenericInvokerCall(int index, PropertyDefinition property)
@@ -222,9 +225,9 @@ public class PropertyWeaver
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldstr, property.Name),
             Instruction.Create(OpCodes.Ldloc, beforeVariable),
-            Instruction.Create(OpCodes.Ldloc, afterVariable),
-            CallEventInvoker(property)
-            );
+            Instruction.Create(OpCodes.Ldloc, afterVariable));
+
+        index = instructions.Insert(index, CallEventInvoker(property).ToArray());
 
         return AddBeforeVariableAssignment(index, property, beforeVariable);
     }
@@ -242,9 +245,9 @@ public class PropertyWeaver
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldstr, property.Name),
             Instruction.Create(OpCodes.Ldloc, beforeVariable),
-            Instruction.Create(OpCodes.Ldloc, afterVariable),
-            CallEventInvoker(property)
-            );
+            Instruction.Create(OpCodes.Ldloc, afterVariable));
+
+        index = instructions.Insert(index, CallEventInvoker(property).ToArray());
 
         return AddBeforeVariableAssignment(index, property, beforeVariable);
     }
@@ -300,7 +303,7 @@ public class PropertyWeaver
         return index + 4;
     }
 
-    public Instruction CallEventInvoker(PropertyDefinition propertyDefinition)
+    public IEnumerable<Instruction> CallEventInvoker(PropertyDefinition propertyDefinition)
     {
         var method = typeNode.EventInvoker.MethodReference;
 
@@ -311,7 +314,14 @@ public class PropertyWeaver
             method = genericMethod;
         }
 
-        return Instruction.Create(OpCodes.Callvirt, method);
+        var instructionList =  new List<Instruction>{Instruction.Create(OpCodes.Callvirt, method)};
+
+        if(method.ReturnType.FullName != typeSystem.VoidReference.FullName)
+        {
+            instructionList.Add(Instruction.Create(OpCodes.Pop));
+        }
+
+        return instructionList;
     }
 
     public Instruction CreateIsChangedInvoker()
