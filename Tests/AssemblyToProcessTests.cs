@@ -14,7 +14,7 @@ public class AssemblyToProcessTests
     {
         var weavingTask = new ModuleWeaver();
         testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll"
-#if NETCOREAPP2_0
+#if NETCOREAPP2_1
             , runPeVerify:false
 #endif
         );
