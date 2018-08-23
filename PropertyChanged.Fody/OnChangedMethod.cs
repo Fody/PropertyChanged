@@ -3,7 +3,8 @@
 public enum OnChangedTypes
 {
     NoArg,
-    BeforeAfter,
+    BeforeAfterObject,
+    BeforeAfterType
 }
 
 public class OnChangedMethod

@@ -170,9 +170,16 @@ public class PropertyWeaver
             return AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
         }
 
-        if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfter)
+        if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfterObject)
         {
-            return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
+            return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference, typeSystem.ObjectReference);
+        }
+
+        if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfterType)
+        {
+            var methodParameterType = onChangedMethod.MethodReference.Parameters[0].ParameterType;
+            if (methodParameterType == property.PropertyType)
+                return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference, property.PropertyType);
         }
         return index;
     }
@@ -259,11 +266,11 @@ public class PropertyWeaver
             CreateCall(methodReference));
     }
 
-    int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
+    int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference, TypeReference typeReference)
     {
-        var beforeVariable = new VariableDefinition(typeSystem.ObjectReference);
+        var beforeVariable = new VariableDefinition(typeReference);
         setMethodBody.Variables.Add(beforeVariable);
-        var afterVariable = new VariableDefinition(typeSystem.ObjectReference);
+        var afterVariable = new VariableDefinition(typeReference);
         setMethodBody.Variables.Add(afterVariable);
         index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
 

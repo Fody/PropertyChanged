@@ -110,4 +110,29 @@ public class AssemblyToProcessTests
         Assert.Equal("Property1", argsList[0].PropertyName);
         Assert.Equal("Property2", argsList[1].PropertyName);
     }
+
+    [Theory]
+    [InlineData("ClassWithOnChanged")]
+    [InlineData("ClassWithOnChangedConcrete")]
+    [InlineData("ClassWithOnChangedAndNoPropertyChanged")]
+    [InlineData("ClassWithOnChangedAndOnPropertyChanged")]
+    public void TypesWithOnChangedTests(string className)
+    {
+        var instance = testResult.GetInstance(className);
+        instance.Property1 = "a";
+        Assert.True(instance.OnProperty1ChangedCalled);
+    }
+
+    [Theory]
+    [InlineData("ClassWithOnChangedBeforeAfterObject", "a", true, null, "a")]
+    [InlineData("ClassWithOnChangedBeforeAfterType", "a", true, null, "a")]
+    [InlineData("ClassWithOnChangedBeforeAfterWrongType", "a", false, 0, 0)]
+    public void TypesWithOnChangedBeforeAfterTests(string className, dynamic newValue, bool shouldPropertyChange, dynamic expectedBefore, dynamic expectedAfter)
+    {
+        var instance = testResult.GetInstance(className);
+        instance.Property1 = newValue;
+        Assert.Equal(shouldPropertyChange, instance.OnProperty1ChangedCalled);
+        Assert.Equal(expectedBefore, instance.Before);
+        Assert.Equal(expectedAfter, instance.After);
+    }
 }

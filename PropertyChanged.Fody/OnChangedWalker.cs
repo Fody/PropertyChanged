@@ -47,9 +47,13 @@ public partial class ModuleWeaver
             }
             else if (IsBeforeAfterOnChangedMethod(methodDefinition))
             {
+                var onChangedType = methodDefinition.Parameters[0].ParameterType.FullName == "System.Object" 
+                    ? OnChangedTypes.BeforeAfterObject 
+                    : OnChangedTypes.BeforeAfterType;
+
                 yield return new OnChangedMethod
                 {
-                    OnChangedType = OnChangedTypes.BeforeAfter,
+                    OnChangedType = onChangedType,
                     MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
                 };
             }
@@ -65,8 +69,7 @@ public partial class ModuleWeaver
     public static bool IsBeforeAfterOnChangedMethod(MethodDefinition method)
     {
         var parameters = method.Parameters;
-        return parameters.Count == 2
-               && parameters[0].ParameterType.FullName == "System.Object"
-               && parameters[1].ParameterType.FullName == "System.Object";
+        return parameters.Count == 2 
+               && parameters[0].ParameterType == parameters[1].ParameterType;
     }
 }

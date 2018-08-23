@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 public class ClassWithOnChangedAndNoPropertyChanged : INotifyPropertyChanged
 {
-    public int OnProperty1ChangedCalled;
+    public bool OnProperty1ChangedCalled;
     string property1;
 
     public string Property1    {
@@ -15,7 +15,7 @@ public class ClassWithOnChangedAndNoPropertyChanged : INotifyPropertyChanged
 
     public void OnProperty1Changed ()
     {
-        OnProperty1ChangedCalled++;
+        OnProperty1ChangedCalled = true;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
