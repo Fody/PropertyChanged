@@ -14,7 +14,7 @@ public class PropertyWeaver
     MethodBody setMethodBody;
     Collection<Instruction> instructions;
 
-    public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem )
+    public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem)
     {
         this.moduleWeaver = moduleWeaver;
         this.propertyData = propertyData;
@@ -42,12 +42,12 @@ public class PropertyWeaver
     {
         if (propertyData.BackingFieldReference == null)
         {
-            return new List<int> { instructions.Count -1};
+            return new List<int> { instructions.Count - 1 };
         }
         var setFieldInstructions = FindSetFieldInstructions().ToList();
         if (setFieldInstructions.Count == 0)
         {
-            return new List<int> {instructions.Count-1};
+            return new List<int> { instructions.Count - 1 };
         }
         return setFieldInstructions;
     }
@@ -80,11 +80,11 @@ public class PropertyWeaver
             }
             else if (instruction.OpCode == OpCodes.Ldflda)
             {
-                if (instruction.Next==null)
+                if (instruction.Next == null)
                 {
                     continue;
                 }
-                if (instruction.Next.OpCode!=OpCodes.Initobj)
+                if (instruction.Next.OpCode != OpCodes.Initobj)
                 {
                     continue;
                 }
@@ -133,7 +133,7 @@ public class PropertyWeaver
         }
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfterGenericParameters)
         {
-            return AddBeforeAfterGenericInvokerCall(index, property);
+            return AddBeforeAfterInvokerCallWithGenericParameters(index, property);
         }
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfter)
         {
@@ -184,12 +184,12 @@ public class PropertyWeaver
             var methodParameterType = onChangedMethod.MethodReference.Parameters[0].ParameterType;
             if (methodParameterType == property.PropertyType)
             {
-                #if NETFRAMEWORK
+#if NETFRAMEWORK
                 if (property.PropertyType.IsGenericParameter)
                 {
                     return index;
                 }
-                #endif
+#endif
                 return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference, property.PropertyType);
             }
         }
@@ -231,30 +231,6 @@ public class PropertyWeaver
         return instructions.Insert(index, CallEventInvoker(property).ToArray());
     }
 
-    int AddBeforeAfterGenericInvokerCall(int index, PropertyDefinition property)
-    {
-        #if NETFRAMEWORK
-        return index;
-        #else
-        var beforeVariable = new VariableDefinition(property.PropertyType);
-        setMethodBody.Variables.Add(beforeVariable);
-        var afterVariable = new VariableDefinition(property.PropertyType);
-        setMethodBody.Variables.Add(afterVariable);
-
-        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
-
-        index = instructions.Insert(index,
-            Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Ldstr, property.Name),
-            Instruction.Create(OpCodes.Ldloc, beforeVariable),
-            Instruction.Create(OpCodes.Ldloc, afterVariable));
-
-        index = instructions.Insert(index, CallEventInvoker(property).ToArray());
-
-        return AddBeforeVariableAssignment(index, property, beforeVariable);
-        #endif
-    }
-
     int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)
     {
         var beforeVariable = new VariableDefinition(typeSystem.ObjectReference);
@@ -273,6 +249,50 @@ public class PropertyWeaver
         index = instructions.Insert(index, CallEventInvoker(property).ToArray());
 
         return AddBeforeVariableAssignment(index, property, beforeVariable);
+    }
+
+    int AddBeforeAfterGenericInvokerCall(int index, PropertyDefinition property)
+    {
+        var beforeVariable = new VariableDefinition(property.PropertyType);
+        setMethodBody.Variables.Add(beforeVariable);
+        var afterVariable = new VariableDefinition(property.PropertyType);
+        setMethodBody.Variables.Add(afterVariable);
+
+        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
+
+        index = instructions.Insert(index,
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldstr, property.Name),
+            Instruction.Create(OpCodes.Ldloc, beforeVariable),
+            Instruction.Create(OpCodes.Ldloc, afterVariable));
+
+        index = instructions.Insert(index, CallEventInvoker(property).ToArray());
+
+        return AddBeforeVariableAssignment(index, property, beforeVariable);
+    }
+
+    int AddBeforeAfterInvokerCallWithGenericParameters(int index, PropertyDefinition property)
+    {
+#if NETFRAMEWORK
+        return index;
+#else
+        var beforeVariable = new VariableDefinition(property.PropertyType);
+        setMethodBody.Variables.Add(beforeVariable);
+        var afterVariable = new VariableDefinition(property.PropertyType);
+        setMethodBody.Variables.Add(afterVariable);
+
+        index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
+
+        index = instructions.Insert(index,
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldstr, property.Name),
+            Instruction.Create(OpCodes.Ldloc, beforeVariable),
+            Instruction.Create(OpCodes.Ldloc, afterVariable));
+
+        index = instructions.Insert(index, CallEventInvoker(property).ToArray());
+
+        return AddBeforeVariableAssignment(index, property, beforeVariable);
+#endif
     }
 
     int AddSimpleOnChangedCall(int index, MethodReference methodReference)
@@ -337,9 +357,9 @@ public class PropertyWeaver
             method = genericMethod;
         }
 
-        var instructionList =  new List<Instruction>{Instruction.Create(OpCodes.Callvirt, method)};
+        var instructionList = new List<Instruction> { Instruction.Create(OpCodes.Callvirt, method) };
 
-        if(method.ReturnType.FullName != typeSystem.VoidReference.FullName)
+        if (method.ReturnType.FullName != typeSystem.VoidReference.FullName)
         {
             instructionList.Add(Instruction.Create(OpCodes.Pop));
         }
