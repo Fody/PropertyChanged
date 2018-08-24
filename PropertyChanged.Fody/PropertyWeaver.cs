@@ -127,7 +127,11 @@ public class PropertyWeaver
         }
 
         moduleWeaver.LogDebug($"\t\t\t{property.Name}");
-        if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfterGeneric)
+        if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfterGenericMethod)
+        {
+            return AddBeforeAfterGenericInvokerCall(index, property);
+        }
+        if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfterGenericParameters)
         {
             return AddBeforeAfterGenericInvokerCall(index, property);
         }
@@ -179,7 +183,15 @@ public class PropertyWeaver
         {
             var methodParameterType = onChangedMethod.MethodReference.Parameters[0].ParameterType;
             if (methodParameterType == property.PropertyType)
+            {
+                #if NETFRAMEWORK
+                if (property.PropertyType.IsGenericParameter)
+                {
+                    return index;
+                }
+                #endif
                 return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference, property.PropertyType);
+            }
         }
         return index;
     }
@@ -221,6 +233,9 @@ public class PropertyWeaver
 
     int AddBeforeAfterGenericInvokerCall(int index, PropertyDefinition property)
     {
+        #if NETFRAMEWORK
+        return index;
+        #else
         var beforeVariable = new VariableDefinition(property.PropertyType);
         setMethodBody.Variables.Add(beforeVariable);
         var afterVariable = new VariableDefinition(property.PropertyType);
@@ -237,6 +252,7 @@ public class PropertyWeaver
         index = instructions.Insert(index, CallEventInvoker(property).ToArray());
 
         return AddBeforeVariableAssignment(index, property, beforeVariable);
+        #endif
     }
 
     int AddBeforeAfterInvokerCall(int index, PropertyDefinition property)

@@ -135,4 +135,44 @@ public class AssemblyToProcessTests
         Assert.Equal(expectedBefore, instance.Before);
         Assert.Equal(expectedAfter, instance.After);
     }
+
+    [Fact]
+    public void ClassWithBeforeAfterGeneric()
+    {
+        var instance = testResult.GetInstance("ClassWithBeforeAfterGeneric");
+        instance.Property1 = "a";
+        Assert.True(instance.GenericOnPropertyChangedCalled);
+        Assert.Null(instance.Before);
+        Assert.Equal("a", instance.After);
+    }
+
+    [Fact]
+    public void ClassWithGenericPropertyAndBeforeAfterGeneric()
+    {
+        var instance = testResult.GetGenericInstance("ClassWithBeforeAfterGeneric`1", typeof(string));
+        instance.Property1 = "a";
+        Assert.True(instance.GenericOnPropertyChangedCalled);
+        Assert.Null(instance.Before);
+        Assert.Equal("a", instance.After);
+    }
+
+    [Fact]
+    public void ClassWithOnChangedBeforeAfterGeneric()
+    {
+        var instance = testResult.GetInstance("ClassWithOnChangedBeforeAfterGeneric");
+        instance.Property1 = "a";
+        Assert.True(instance.OnProperty1ChangedCalled);
+        Assert.Null(instance.Before);
+        Assert.Equal("a", instance.After);
+    }
+
+    [Fact]
+    public void ClassWithGenericPropertyAndOnChangedBeforeAfterGeneric()
+    {
+        var instance = testResult.GetGenericInstance("ClassWithOnChangedBeforeAfterGeneric`1", typeof(string));
+        instance.Property1 = "a";
+        Assert.True(instance.OnProperty1ChangedCalled);
+        Assert.Null(instance.Before);
+        Assert.Equal("a", instance.After);
+    }
 }

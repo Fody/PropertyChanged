@@ -137,6 +137,9 @@ public partial class ModuleWeaver
     static int GetInvokerPriority(MethodReference method)
     {
         if (IsBeforeAfterGenericMethod(method))
+            return 6;
+
+        if (IsBeforeAfterMethodWithGenericParameters(method))
             return 5;
 
         if (IsBeforeAfterMethod(method))
@@ -170,7 +173,11 @@ public partial class ModuleWeaver
         }
         if (IsBeforeAfterGenericMethod(method))
         {
-            return InvokerTypes.BeforeAfterGeneric;
+            return InvokerTypes.BeforeAfterGenericMethod;
+        }
+        if (IsBeforeAfterMethodWithGenericParameters(method))
+        {
+            return InvokerTypes.BeforeAfterGenericParameters;
         }
 
         return InvokerTypes.String;
@@ -179,6 +186,7 @@ public partial class ModuleWeaver
     static bool IsEventInvokerMethod(MethodReference method)
     {
         return IsBeforeAfterGenericMethod(method)
+               || IsBeforeAfterMethodWithGenericParameters(method)
                || IsBeforeAfterMethod(method)
                || IsSingleStringMethod(method)
                || IsPropertyChangedArgMethod(method)
@@ -225,6 +233,16 @@ public partial class ModuleWeaver
                && parameters[0].ParameterType.FullName == "System.String"
                && parameters[1].ParameterType.FullName == method.GenericParameters[0].FullName
                && parameters[2].ParameterType.FullName == method.GenericParameters[0].FullName;
+    }
+
+    public static bool IsBeforeAfterMethodWithGenericParameters(MethodReference method)
+    {
+        var parameters = method.Parameters;
+        return parameters.Count == 3
+               && !method.HasGenericParameters
+               && parameters[0].ParameterType.FullName == "System.String"
+               && parameters[1].ParameterType.IsGenericParameter
+               && parameters[2].ParameterType.IsGenericParameter;
     }
 
     public void FindMethodsForNodes()

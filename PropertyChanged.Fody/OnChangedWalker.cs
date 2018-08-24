@@ -37,39 +37,34 @@ public partial class ModuleWeaver
             var typeDefinitions = new Stack<TypeDefinition>();
             typeDefinitions.Push(notifyNode.TypeDefinition);
 
-            if (IsNoArgOnChangedMethod(methodDefinition))
+            var onChangedType = GetOnChangedType(methodDefinition);
+            if (onChangedType != null)
             {
                 yield return new OnChangedMethod
                 {
-                    OnChangedType = OnChangedTypes.NoArg,
-                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
-                };
-            }
-            else if (IsBeforeAfterOnChangedMethod(methodDefinition))
-            {
-                var onChangedType = methodDefinition.Parameters[0].ParameterType.FullName == "System.Object" 
-                    ? OnChangedTypes.BeforeAfterObject 
-                    : OnChangedTypes.BeforeAfterType;
-
-                yield return new OnChangedMethod
-                {
-                    OnChangedType = onChangedType,
+                    OnChangedType = onChangedType.Value,
                     MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
                 };
             }
         }
     }
 
-    public static bool IsNoArgOnChangedMethod(MethodDefinition method)
+    OnChangedTypes? GetOnChangedType(IMethodSignature methodDefinition)
     {
-        var parameters = method.Parameters;
-        return parameters.Count == 0;
-    }
+        var parameters = methodDefinition.Parameters;
 
-    public static bool IsBeforeAfterOnChangedMethod(MethodDefinition method)
-    {
-        var parameters = method.Parameters;
-        return parameters.Count == 2 
-               && parameters[0].ParameterType == parameters[1].ParameterType;
+        if (parameters.Count == 0)
+            return OnChangedTypes.NoArg;
+
+        if (parameters.Count == 2 && parameters[0].ParameterType == parameters[1].ParameterType)
+        {
+            var parameterType = parameters[0].ParameterType;
+            if (parameterType.FullName == "System.Object")
+                return OnChangedTypes.BeforeAfterObject;
+
+            return OnChangedTypes.BeforeAfterType;
+        }
+
+        return null;
     }
 }

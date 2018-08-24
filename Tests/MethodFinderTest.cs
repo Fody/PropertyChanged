@@ -56,6 +56,40 @@ public class MethodFinderTest
     }
 
     [Fact]
+    public void WithStringAndGenericBeforeAfterTest()
+    {
+        var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WithStringAndGenericBeforeAfter");
+        var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
+        Assert.NotNull(methodReference);
+        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
+        Assert.Equal(InvokerTypes.BeforeAfterGenericMethod, methodReference.InvokerType);
+    }
+
+    public class WithStringAndGenericBeforeAfter
+    {
+        public void OnPropertyChanged<T>(string propertyName, T before, T after)
+        {
+        }
+    }
+
+    [Fact]
+    public void WithStringAndGenericBeforeAfterParamTest()
+    {
+        var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WithStringAndGenericBeforeAfter`1");
+        var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
+        Assert.NotNull(methodReference);
+        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
+        Assert.Equal(InvokerTypes.BeforeAfterGenericParameters, methodReference.InvokerType);
+    }
+
+    public class WithStringAndGenericBeforeAfter<T>
+    {
+        public void OnPropertyChanged(string propertyName, T before, T after)
+        {
+        }
+    }
+
+    [Fact]
     public void WithPropertyChangedArgTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WithPropertyChangedArg");

@@ -2,7 +2,8 @@
 {
     String,
     BeforeAfter,
-    BeforeAfterGeneric,
+    BeforeAfterGenericMethod,
+    BeforeAfterGenericParameters,
     PropertyChangedArg,
     SenderPropertyChangedArg
 }
