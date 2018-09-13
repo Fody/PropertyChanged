@@ -110,4 +110,21 @@ public class AssemblyToProcessTests
         Assert.Equal("Property1", argsList[0].PropertyName);
         Assert.Equal("Property2", argsList[1].PropertyName);
     }
+
+    [Fact]
+    public void ClassWithOpenGenericStruct()
+    {
+        var instance = testResult.GetGenericInstance("ClassWithOpenGenericStruct`1", typeof(int));
+
+        var argsList = new List<PropertyChangedEventArgs>();
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) => argsList.Add(args);
+
+        var value = new KeyValuePair<string, int>("a", 1);
+
+        instance.Property1 = value;
+
+        Assert.Single(argsList);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal(value, instance.Property1);
+    }
 }
