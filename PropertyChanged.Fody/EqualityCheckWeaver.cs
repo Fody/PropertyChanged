@@ -39,7 +39,7 @@ public class EqualityCheckWeaver
         var fieldReference = propertyData.BackingFieldReference.Resolve().GetGeneric();
         if (propertyData.BackingFieldReference.FieldType.FullName == propertyData.PropertyDefinition.PropertyType.FullName)
         {
-            InjectEqualityCheck(Instruction.Create(OpCodes.Ldfld, fieldReference), fieldReference.FieldType);
+            InjectEqualityCheck(Instruction.Create(OpCodes.Ldfld, fieldReference), fieldReference.FieldType, fieldReference.DeclaringType);
         }
     }
 
@@ -47,10 +47,10 @@ public class EqualityCheckWeaver
     {
         var propertyReference = propertyData.PropertyDefinition;
         var methodDefinition = propertyData.PropertyDefinition.GetMethod.GetGeneric();
-        InjectEqualityCheck(Instruction.Create(OpCodes.Call, methodDefinition), propertyReference.PropertyType);
+        InjectEqualityCheck(Instruction.Create(OpCodes.Call, methodDefinition), propertyReference.PropertyType, propertyReference.DeclaringType);
     }
 
-    void InjectEqualityCheck(Instruction targetInstruction, TypeReference targetType)
+    void InjectEqualityCheck(Instruction targetInstruction, TypeReference targetType, TypeReference declaringType)
     {
         if (ShouldSkipEqualityCheck())
         {
@@ -104,7 +104,7 @@ public class EqualityCheckWeaver
                 var module = typeEqualityFinder.ModuleDefinition;
                 var ec = typeEqualityFinder.EqualityComparerTypeReference.Resolve();
 
-                var specificEqualityComparerType = module.ImportReference(ec.MakeGenericInstanceType(targetType));
+                var specificEqualityComparerType = module.ImportReference(ec.MakeGenericInstanceType(targetType), declaringType);
                 var defaultProperty = module.ImportReference(ec.Properties.Single(p => p.Name == "Default").GetMethod);
                 var equalsMethod = module.ImportReference(ec.Methods.Single(p => p.Name == "Equals" && p.Parameters.Count == 2));
 
