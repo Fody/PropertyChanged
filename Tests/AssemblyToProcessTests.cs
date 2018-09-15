@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -112,19 +113,65 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
-    public void ClassWithOpenGenericStruct()
+    public void ClassWithOpenGenerics()
     {
-        var instance = testResult.GetGenericInstance("ClassWithOpenGenericStruct`1", typeof(int));
+        var instance = testResult.GetGenericInstance("ClassWithOpenGenerics`1", typeof(int));
 
         var argsList = new List<PropertyChangedEventArgs>();
         ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) => argsList.Add(args);
 
-        var value = new KeyValuePair<string, int>("a", 1);
+        var value1 = new KeyValuePair<string, int>("a", 1);
 
-        instance.Property1 = value;
+        instance.Property1 = value1;
 
         Assert.Single(argsList);
         Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal(value, instance.Property1);
+        Assert.Equal(value1, instance.Property1);
+        Assert.Equal(new KeyValuePair<string, int>("a", 1), instance.Property1);
+
+        instance.Property1 = new KeyValuePair<string, int>("a", 1);
+
+        Assert.Single(argsList);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal(value1, instance.Property1);
+        Assert.Equal(new KeyValuePair<string, int>("a", 1), instance.Property1);
+
+        instance.Property1 = new KeyValuePair<string, int>("a", 2);
+
+        Assert.Equal(2, argsList.Count);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal("Property1", argsList[1].PropertyName);
+        Assert.NotEqual(value1, instance.Property1);
+        Assert.NotEqual(new KeyValuePair<string, int>("a", 1), instance.Property1);
+
+        var value2 = new Tuple<string, int>("b", 2);
+
+        instance.Property2 = value2;
+
+        Assert.Equal(3, argsList.Count);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal("Property1", argsList[1].PropertyName);
+        Assert.Equal("Property2", argsList[2].PropertyName);
+        Assert.Equal(value2, instance.Property2);
+        Assert.Equal(new Tuple<string, int>("b", 2), instance.Property2);
+
+        instance.Property2 = new Tuple<string, int>("b", 2);
+
+        Assert.Equal(3, argsList.Count);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal("Property1", argsList[1].PropertyName);
+        Assert.Equal("Property2", argsList[2].PropertyName);
+        Assert.Equal(value2, instance.Property2);
+        Assert.Equal(new Tuple<string, int>("b", 2), instance.Property2);
+
+        instance.Property2 = new Tuple<string, int>("b", 1);
+
+        Assert.Equal(4, argsList.Count);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal("Property1", argsList[1].PropertyName);
+        Assert.Equal("Property2", argsList[2].PropertyName);
+        Assert.Equal("Property2", argsList[3].PropertyName);
+        Assert.NotEqual(value2, instance.Property2);
+        Assert.NotEqual(new Tuple<string, int>("b", 2), instance.Property2);
     }
 }
