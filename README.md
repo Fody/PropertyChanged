@@ -17,12 +17,12 @@ See also [Fody usage](https://github.com/Fody/Fody#usage).
 
 Install the [PropertyChanged.Fody NuGet package](https://nuget.org/packages/PropertyChanged.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
 
-```
+```powershell
+PM> Install-Package Fody
 PM> Install-Package PropertyChanged.Fody
-PM> Update-Package Fody
 ```
 
-The `Update-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
+The `Install-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
 
 
 ### Add to FodyWeavers.xml
@@ -101,9 +101,9 @@ public class Person : INotifyPropertyChanged
 
 internal static class InternalEventArgsCache
 {
-    internal static readonly PropertyChangedEventArgs FamilyName = new PropertyChangedEventArgs("FamilyName");
-    internal static readonly PropertyChangedEventArgs FullName = new PropertyChangedEventArgs("FullName");
-    internal static readonly PropertyChangedEventArgs GivenNames = new PropertyChangedEventArgs("GivenNames");
+    internal static PropertyChangedEventArgs FamilyName = new PropertyChangedEventArgs("FamilyName");
+    internal static PropertyChangedEventArgs FullName = new PropertyChangedEventArgs("FullName");
+    internal static PropertyChangedEventArgs GivenNames = new PropertyChangedEventArgs("GivenNames");
 }
 ```
 
