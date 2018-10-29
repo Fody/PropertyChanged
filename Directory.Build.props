@@ -5,5 +5,7 @@
     <Version>2.5.13</Version>
     <LangVersion>latest</LangVersion>
     <NoWarn>NU5118</NoWarn>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 </Project>
