@@ -2,7 +2,7 @@
 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:attribute name="InjectOnPropertyNameChanged" type="xs:boolean">
     <xs:annotation>
-      <xs:documentation>Used to control if the On_PropertyName_Changed feature is enable.</xs:documentation>
+      <xs:documentation>Used to control if the On_PropertyName_Changed feature is enabled.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="EventInvokerNames" type="xs:string" >
