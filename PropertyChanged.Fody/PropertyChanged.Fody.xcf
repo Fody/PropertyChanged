@@ -12,7 +12,7 @@
   </xs:attribute>
   <xs:attribute name="CheckForEquality" type="xs:boolean" >
     <xs:annotation>
-      <xs:documentation>Used to control if equality checks should be created. If false, equality checking will be disabled for the project.</xs:documentation>
+      <xs:documentation>Used to control if equality checks should be inserted. If false, equality checking will be disabled for the project.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="CheckForEqualityUsingBaseEquals" type="xs:boolean" >
