@@ -22,7 +22,7 @@
   </xs:attribute>
   <xs:attribute name="UseStaticEqualsFromBase" type="xs:boolean" >
     <xs:annotation>
-      <xs:documentation>Used to control if equality checks should use the static equals method resolved from the base class.</xs:documentation>
+      <xs:documentation>Used to control if equality checks should use the static Equals method resolved from the base class.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
 </xs:complexType>
