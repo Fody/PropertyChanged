@@ -25,4 +25,14 @@ public class TypeFilterTests
         var instance = testResult.GetInstance("PropertyChangedTest.TestClassInclude");
         EventTester.TestProperty(instance, false);
     }
+
+    [Fact]
+    public void CheckIfMultipleFilterTypeIncludeCorrectTypes()
+    {
+        var instance1 = testResult.GetInstance("PropertyChangedTest.TestClassInclude");
+        var instance2 = testResult.GetInstance("PropertyChangedTestWithDifferentNamespace.TestClassIncludeAlso");
+
+        EventTester.TestProperty(instance1, false);
+        EventTester.TestProperty(instance2, false);
+    }
 }

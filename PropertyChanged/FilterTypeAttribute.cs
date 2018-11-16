@@ -8,7 +8,7 @@ namespace PropertyChanged
     /// weaving process. These filters are Regex based and
     /// are matched against the Type.FullName
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class FilterTypeAttribute : Attribute
     {
         /// <summary>
