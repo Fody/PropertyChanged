@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Xml;
 
 public partial class ModuleWeaver
 {
@@ -6,10 +7,10 @@ public partial class ModuleWeaver
 
     public void ResolveUseStaticEqualsFromBaseConfig()
     {
-        var value = Config?.Attributes("UseStaticEqualsFromBase").FirstOrDefault();
+        var value = Config?.Attributes("UseStaticEqualsFromBase").Select(a => a.Value).FirstOrDefault();
         if (value != null)
         {
-            UseStaticEqualsFromBase = bool.Parse((string)value);
+            UseStaticEqualsFromBase = XmlConvert.ToBoolean(value);
         }
     }
 }

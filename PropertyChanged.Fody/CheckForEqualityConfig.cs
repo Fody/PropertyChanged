@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Xml;
 
 public partial class ModuleWeaver
 {
@@ -6,10 +7,10 @@ public partial class ModuleWeaver
 
     public void ResolveCheckForEqualityConfig()
     {
-        var value = Config?.Attributes("CheckForEquality").FirstOrDefault();
+        var value = Config?.Attributes("CheckForEquality").Select(a => a.Value).FirstOrDefault();
         if (value != null)
         {
-            CheckForEquality = bool.Parse((string)value);
+            CheckForEquality = XmlConvert.ToBoolean(value);
         }
     }
 }

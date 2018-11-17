@@ -13,9 +13,27 @@ public class CheckForEqualityUsingBaseEqualsConfigTests
     }
 
     [Fact]
+    public void False0()
+    {
+        var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='0'/>");
+        var moduleWeaver = new ModuleWeaver { Config = xElement };
+        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.False(moduleWeaver.CheckForEqualityUsingBaseEquals);
+    }
+
+    [Fact]
     public void True()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='true'/>");
+        var moduleWeaver = new ModuleWeaver { Config = xElement };
+        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
+    }
+
+    [Fact]
+    public void True1()
+    {
+        var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='1'/>");
         var moduleWeaver = new ModuleWeaver { Config = xElement };
         moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
         Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
