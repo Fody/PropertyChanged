@@ -24,7 +24,7 @@ public class CheckForEqualityConfigTests
     [Fact]
     public void True()
     {
-        var xElement = XElement.Parse("<PropertyChanged CheckForEquality='true'/>");
+        var xElement = XElement.Parse("<PropertyChanged CheckForEquality='True'/>");
         var moduleWeaver = new ModuleWeaver { Config = xElement };
         moduleWeaver.ResolveCheckForEqualityConfig();
         Assert.True(moduleWeaver.CheckForEquality);

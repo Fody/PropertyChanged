@@ -10,7 +10,7 @@ public partial class ModuleWeaver
         var value = Config?.Attributes("CheckForEquality").Select(a => a.Value).FirstOrDefault();
         if (value != null)
         {
-            CheckForEquality = XmlConvert.ToBoolean(value);
+            CheckForEquality = XmlConvert.ToBoolean(value.ToLowerInvariant());
         }
     }
 }

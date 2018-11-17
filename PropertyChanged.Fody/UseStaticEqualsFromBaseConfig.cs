@@ -10,7 +10,7 @@ public partial class ModuleWeaver
         var value = Config?.Attributes("UseStaticEqualsFromBase").Select(a => a.Value).FirstOrDefault();
         if (value != null)
         {
-            UseStaticEqualsFromBase = XmlConvert.ToBoolean(value);
+            UseStaticEqualsFromBase = XmlConvert.ToBoolean(value.ToLowerInvariant());
         }
     }
 }
