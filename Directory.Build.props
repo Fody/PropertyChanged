@@ -2,10 +2,8 @@
 <Project>
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Version>2.5.14</Version>
+    <Version>2.6.0</Version>
     <LangVersion>latest</LangVersion>
     <NoWarn>NU5118</NoWarn>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 </Project>
