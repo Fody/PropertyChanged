@@ -7,7 +7,7 @@ public class AssemblyWithBaseInDifferentModuleTests
 {
     TestResult testResult;
 
-    private void Weave(bool useStaticEqualsFromBase)
+    void Weave(bool useStaticEqualsFromBase)
     {
         var weavingTask = new ModuleWeaver { UseStaticEqualsFromBase = useStaticEqualsFromBase };
         testResult = weavingTask.ExecuteTestRun("AssemblyWithBaseInDifferentModule.dll", ignoreCodes:new []{ "0x80131869" });
@@ -15,7 +15,7 @@ public class AssemblyWithBaseInDifferentModuleTests
 
     [Fact]
     public void SimpleChildClass()
-    { 
+    {
         Weave(false);
         var instance = testResult.GetInstance("AssemblyWithBaseInDifferentModule.Simple.ChildClass");
         EventTester.TestProperty(instance, false);

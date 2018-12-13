@@ -6,7 +6,7 @@ namespace AssemblyWithBaseInDifferentModule.StaticEquals
 {
     public class StaticEquals : INotifyPropertyChanged
     {
-        private string property1;
+        string property1;
         public string Property1
         {
             get => property1;

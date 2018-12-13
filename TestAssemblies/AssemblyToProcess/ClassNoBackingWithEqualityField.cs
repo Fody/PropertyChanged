@@ -5,7 +5,7 @@ public class ClassNoBackingWithEqualityField : INotifyPropertyChanged
 {
     public string StringProperty
     {
-        get { return "Foo"; }
+        get => "Foo";
         set { }
     }
 

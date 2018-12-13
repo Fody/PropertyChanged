@@ -13,7 +13,7 @@ public class ClassWithTaskReturningPropertyChangedNotifier : INotifyPropertyChan
         return RaisePropertyChanged(changedArgs);
     }
 
-    private async Task RaisePropertyChanged(PropertyChangedEventArgs changedArgs)
+    async Task RaisePropertyChanged(PropertyChangedEventArgs changedArgs)
     {
         void raiseChange()
         {

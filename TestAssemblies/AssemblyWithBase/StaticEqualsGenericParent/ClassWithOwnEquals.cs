@@ -2,7 +2,7 @@
 {
     public class ClassWithOwnEquals : BaseClass<int>
     {
-        private static bool childStaticEqualsCalled;
+        static bool childStaticEqualsCalled;
 
         public bool ChildStaticEqualsCalled
         {
@@ -15,10 +15,14 @@
             childStaticEqualsCalled = true;
 
             if (ReferenceEquals(first, second))
+            {
                 return true;
+            }
 
             if (first == null || second == null)
+            {
                 return false;
+            }
 
             return first.Equals(second);
         }

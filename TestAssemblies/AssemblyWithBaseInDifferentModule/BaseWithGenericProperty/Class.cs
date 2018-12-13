@@ -6,7 +6,7 @@ namespace AssemblyWithBaseInDifferentModule.BaseWithGenericProperty
 {
     public class Class : INotifyPropertyChanged
     {
-        private string property1;
+        string property1;
 
         public string Property1
         {

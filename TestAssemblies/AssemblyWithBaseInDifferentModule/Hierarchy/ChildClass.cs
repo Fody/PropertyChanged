@@ -4,7 +4,7 @@
 
     public class ChildClass : StaticEquals
     {
-        private string property1;
+        string property1;
         public string Property1
         {
             get => property1;

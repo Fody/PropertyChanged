@@ -6,7 +6,7 @@ namespace AssemblyWithBaseInDifferentModule.StaticEqualsGenericParent
 {
     public class ArgsMapping1 : INotifyPropertyChanged
     {
-        private string property1;
+        string property1;
         public string Property1
         {
             get => property1;
