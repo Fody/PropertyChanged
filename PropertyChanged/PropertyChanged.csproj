@@ -8,6 +8,7 @@
     <Authors>Simon Cropp</Authors>
     <Description>Add property notification to all classes that implement INotifyPropertyChanged.</Description>
     <PackageTags>Xaml, MVVM, INotifyPropertyChanged, DataBinding, ILWeaving, Cecil</PackageTags>
+    <PackageOutputPath>$(SolutionDir)nugets</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="None" />
