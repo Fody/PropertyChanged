@@ -7,7 +7,9 @@ public partial class ModuleWeaver
 
     public void ResolveUseStaticEqualsFromBaseConfig()
     {
-        var value = Config?.Attributes("UseStaticEqualsFromBase").Select(a => a.Value).FirstOrDefault();
+        var value = Config?.Attributes("UseStaticEqualsFromBase")
+            .Select(a => a.Value)
+            .SingleOrDefault();
         if (value != null)
         {
             UseStaticEqualsFromBase = XmlConvert.ToBoolean(value.ToLowerInvariant());

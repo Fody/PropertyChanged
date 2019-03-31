@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Xml;
 
 public partial class ModuleWeaver
 {
@@ -6,10 +7,12 @@ public partial class ModuleWeaver
 
     public void ResolveOnPropertyNameChangedConfig()
     {
-        var value = Config?.Attributes("InjectOnPropertyNameChanged").FirstOrDefault();
+        var value = Config?.Attributes("InjectOnPropertyNameChanged")
+            .Select(a => a.Value)
+            .SingleOrDefault();
         if (value != null)
         {
-            InjectOnPropertyNameChanged = bool.Parse((string) value);
+            InjectOnPropertyNameChanged = XmlConvert.ToBoolean(value.ToLowerInvariant());
         }
     }
 }

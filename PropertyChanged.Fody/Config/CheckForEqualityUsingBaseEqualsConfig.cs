@@ -7,7 +7,9 @@ public partial class ModuleWeaver
 
     public void ResolveCheckForEqualityUsingBaseEqualsConfig()
     {
-        var value = Config?.Attributes("CheckForEqualityUsingBaseEquals").Select(a => a.Value).FirstOrDefault();
+        var value = Config?.Attributes("CheckForEqualityUsingBaseEquals")
+            .Select(a => a.Value)
+            .SingleOrDefault();
         if (value != null)
         {
             CheckForEqualityUsingBaseEquals = XmlConvert.ToBoolean(value.ToLowerInvariant());
