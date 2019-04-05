@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 16.0.28721.148
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
 EndProject
@@ -28,6 +28,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithStackOverflow", "TestAssemblies\AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj", "{A3BC44F0-27B3-4498-8DA3-337ABC41B441}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyChanged", "PropertyChanged\PropertyChanged.csproj", "{40235741-D750-45B1-8DC5-49576025ABA9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C3578A7B-09A6-4444-9383-0DEAFA4958BD} = {C3578A7B-09A6-4444-9383-0DEAFA4958BD}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithNonVoidOnPropertyNameChanged", "TestAssemblies\AssemblyWithNonVoidOnPropertyNameChanged\AssemblyWithNonVoidOnPropertyNameChanged.csproj", "{DA025360-790C-46E8-8143-2D2DEADCFE8A}"
 EndProject
