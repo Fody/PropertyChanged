@@ -1,9 +1,10 @@
 ﻿using AssemblyWithBase.BaseWithEquals;
 using Fody;
 using Xunit;
-#pragma warning disable 618
+using Xunit.Abstractions;
 
-public class AssemblyWithBaseInDifferentModuleTests
+public class AssemblyWithBaseInDifferentModuleTests :
+    XunitLoggingBase
 {
     TestResult testResult;
 
@@ -149,5 +150,10 @@ public class AssemblyWithBaseInDifferentModuleTests
         Assert.NotNull(instance.Property2);
         Assert.True(instance.Property2.StaticEqualsCalled);
         instance.Property2.StaticEqualsCalled = false;
+    }
+
+    public AssemblyWithBaseInDifferentModuleTests(ITestOutputHelper output) : 
+        base(output)
+    {
     }
 }

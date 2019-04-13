@@ -1,7 +1,9 @@
 ﻿using System.Xml.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
-public class EventInvokerNamesConfigTests
+public class EventInvokerNamesConfigTests :
+    XunitLoggingBase
 {
     [Fact]
     public void GetStringComparisonFromXml()
@@ -31,5 +33,10 @@ public class EventInvokerNamesConfigTests
         Assert.Contains("NotifyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("ReactiveUI.IReactiveObject.RaisePropertyChanged", moduleWeaver.EventInvokerNames);
         Assert.Contains("<>OnPropertyChanged", moduleWeaver.EventInvokerNames);
+    }
+
+    public EventInvokerNamesConfigTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

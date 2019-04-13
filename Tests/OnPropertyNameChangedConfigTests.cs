@@ -1,8 +1,9 @@
 ﻿using System.Xml.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
-
-public class OnPropertyNameChangedConfigTests
+public class OnPropertyNameChangedConfigTests :
+    XunitLoggingBase
 {
     [Fact]
     public void False()
@@ -28,5 +29,10 @@ public class OnPropertyNameChangedConfigTests
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
         Assert.True(moduleWeaver.InjectOnPropertyNameChanged);
+    }
+
+    public OnPropertyNameChangedConfigTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

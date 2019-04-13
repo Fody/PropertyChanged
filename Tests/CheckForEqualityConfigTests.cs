@@ -1,7 +1,9 @@
 ﻿using System.Xml.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
-public class CheckForEqualityConfigTests
+public class CheckForEqualityConfigTests :
+    XunitLoggingBase
 {
     [Fact]
     public void False()
@@ -45,5 +47,10 @@ public class CheckForEqualityConfigTests
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveCheckForEqualityConfig();
         Assert.True(moduleWeaver.CheckForEquality);
+    }
+
+    public CheckForEqualityConfigTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

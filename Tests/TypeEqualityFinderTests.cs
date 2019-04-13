@@ -1,8 +1,9 @@
 using System.Data.SqlTypes;
 using Xunit;
+using Xunit.Abstractions;
 
-
-public class TypeEqualityFinderTests
+public class TypeEqualityFinderTests :
+    XunitLoggingBase
 {
     [Fact]
     public void TestSqlGuid()
@@ -26,5 +27,10 @@ public class TypeEqualityFinderTests
         var typeDefinition = DefinitionFinder.FindType<string>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
         Assert.Equal("System.Boolean System.String::Equals(System.String,System.String)", findNamedMethod.FullName);
+    }
+
+    public TypeEqualityFinderTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

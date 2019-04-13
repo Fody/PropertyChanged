@@ -5,9 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using Fody;
 using Xunit;
-#pragma warning disable 618
+using Xunit.Abstractions;
 
-public class AssemblyToProcessTests
+public class AssemblyToProcessTests :
+    XunitLoggingBase
 {
     static TestResult testResult;
 
@@ -173,5 +174,10 @@ public class AssemblyToProcessTests
         Assert.Equal("Property2", argsList[3].PropertyName);
         Assert.NotEqual(value2, instance.Property2);
         Assert.NotEqual(new Tuple<string, int>("b", 2), instance.Property2);
+    }
+
+    public AssemblyToProcessTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

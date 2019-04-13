@@ -3,7 +3,6 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Collections.Generic;
 
-
 public partial class ModuleWeaver
 {
     List<string> typeLevelAttributeNames = new List<string>

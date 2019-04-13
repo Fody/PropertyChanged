@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Fody;
 using Mono.Cecil;
 
 public static class DefinitionFinder
@@ -44,7 +45,11 @@ public static class DefinitionFinder
     static TypeDefinition FindType(Type typeToFind)
     {
         var targetPath = typeToFind.Assembly.CodeBase.Replace("file:///","");
-        var moduleDefinition = ModuleDefinition.ReadModule(targetPath);
+        var parameters = new ReaderParameters
+        {
+            AssemblyResolver = new TestAssemblyResolver()
+        };
+        var moduleDefinition = ModuleDefinition.ReadModule(targetPath, parameters);
 
         foreach (var type in moduleDefinition.Types)
         {

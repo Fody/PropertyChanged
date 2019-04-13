@@ -1,12 +1,15 @@
 ﻿using System.Linq;
 using Fody;
 using Xunit;
+using Xunit.Abstractions;
 
-public class StackOverflowCheckerTests
+public class StackOverflowCheckerTests :
+    XunitLoggingBase
 {
     ModuleWeaver stackOverflowChecker;
 
-    public StackOverflowCheckerTests()
+    public StackOverflowCheckerTests(ITestOutputHelper output) :
+        base(output)
     {
         stackOverflowChecker = new ModuleWeaver();
     }

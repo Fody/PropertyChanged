@@ -1,12 +1,14 @@
 ﻿using Fody;
 using Xunit;
-#pragma warning disable 618
+using Xunit.Abstractions;
 
-public class TypeFilterTests
+public class TypeFilterTests :
+    XunitLoggingBase
 {
     TestResult testResult;
 
-    public TypeFilterTests()
+    public TypeFilterTests(ITestOutputHelper output) :
+        base(output)
     {
         var weavingTask = new ModuleWeaver();
         testResult = weavingTask.ExecuteTestRun("AssemblyWithTypeFilter.dll");

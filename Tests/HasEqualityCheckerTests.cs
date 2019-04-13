@@ -3,17 +3,21 @@ using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
 using Xunit;
+using Xunit.Abstractions;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable UnusedVariable
 // ReSharper disable ValueParameterNotUsed
 
-public class HasEqualityCheckerTests
+public class HasEqualityCheckerTests :
+    XunitLoggingBase
 {
     Mono.Collections.Generic.Collection<PropertyDefinition> properties;
     Mono.Collections.Generic.Collection<FieldDefinition> fields;
-    public HasEqualityCheckerTests()
+
+    public HasEqualityCheckerTests(ITestOutputHelper output) :
+        base(output)
     {
         var moduleDefinition = ModuleDefinition.ReadModule(GetType().Assembly.Location);
         var typeDefinition = moduleDefinition.Types.First(definition => definition.Name == "HasEqualityCheckerTests");

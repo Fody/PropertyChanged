@@ -1,7 +1,6 @@
 using System.Linq;
 using Xunit;
 
-
 public class MappingFinderWithAutoProperties
 {
     [Fact]

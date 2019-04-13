@@ -2,12 +2,15 @@
 using System.Diagnostics.CodeAnalysis;
 using Mono.Cecil;
 using Xunit;
+using Xunit.Abstractions;
 
 [SuppressMessage("ReSharper", "NotAccessedField.Local")]
 [SuppressMessage("ReSharper", "DelegateSubtraction")]
-public class MethodInjectorTests
+public class MethodInjectorTests :
+    XunitLoggingBase
 {
-    public MethodInjectorTests()
+    public MethodInjectorTests(ITestOutputHelper output) :
+        base(output)
     {
         methodInjector = new ModuleWeaver
         {

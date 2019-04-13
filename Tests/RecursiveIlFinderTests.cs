@@ -1,9 +1,10 @@
 using System.Diagnostics;
 using System.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
-
-public class RecursiveIlFinderTests
+public class RecursiveIlFinderTests :
+    XunitLoggingBase
 {
     [Fact]
     public void Run()
@@ -43,5 +44,10 @@ public class RecursiveIlFinderTests
         }
 
         public string Property { get; set; }
+    }
+
+    public RecursiveIlFinderTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }
