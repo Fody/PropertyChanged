@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <DisableFody>true</DisableFody>
+    <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ClassWithNoOnPropertyChanged.fs" />
@@ -10,8 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.5.2" />
     <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
