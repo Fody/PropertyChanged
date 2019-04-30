@@ -9,9 +9,7 @@ public class EventArgsCache
     {
         this.moduleWeaver = moduleWeaver;
         var attributes = TypeAttributes.AutoClass | TypeAttributes.AutoLayout | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.NotPublic;
-        // need to qualify the namespace to avoid linker issues
-        var nameSpace = moduleWeaver.ModuleDefinition.Name;
-        cacheTypeDefinition = new TypeDefinition(nameSpace, "<>PropertyChangedEventArgs", attributes, moduleWeaver.TypeSystem.ObjectReference);
+        cacheTypeDefinition = new TypeDefinition(moduleWeaver.ModuleDefinition.Name, "<>PropertyChangedEventArgs", attributes, moduleWeaver.TypeSystem.ObjectReference);
     }
 
     public FieldReference GetEventArgsField(string propertyName)
