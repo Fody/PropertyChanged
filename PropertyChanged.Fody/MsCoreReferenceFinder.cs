@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Rocks;
 
 public partial class ModuleWeaver
 {
@@ -21,6 +22,8 @@ public partial class ModuleWeaver
     public GenericInstanceMethod InterlockedCompareExchangeForPropChangedHandler;
     public Lazy<MethodReference> Trigger;
     public MethodReference StringEquals;
+    public MethodReference DebuggerNonUserCodeAttributeConstructor;
+    public MethodReference GeneratedCodeAttributeConstructor;
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
@@ -104,5 +107,13 @@ public partial class ModuleWeaver
 
             return null;
         });
+
+        var generatedCodeType = FindType("System.CodeDom.Compiler.GeneratedCodeAttribute");
+        var generatedCodeAttributeConstructor = generatedCodeType.GetConstructors().Single(c => c.Parameters.Count == 2 && c.Parameters.All(p => p.ParameterType.Name == "String"));
+        GeneratedCodeAttributeConstructor = ModuleDefinition.ImportReference(generatedCodeAttributeConstructor);
+
+        var debuggerNonUserCodeType = FindType("System.Diagnostics.DebuggerNonUserCodeAttribute");
+        var debuggerNonUserCodeConstructor = debuggerNonUserCodeType.GetConstructors().Single(c => !c.HasParameters);
+        DebuggerNonUserCodeAttributeConstructor = ModuleDefinition.ImportReference(debuggerNonUserCodeConstructor);
     }
 }
