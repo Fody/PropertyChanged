@@ -3,6 +3,9 @@ using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
+    static string AssemblyVersion = typeof(ModuleWeaver).Assembly.GetName().Version.ToString();
+    static string AssemblyName = typeof(ModuleWeaver).Assembly.GetName().Name;
+
     public void MarkAsGeneratedCode(Collection<CustomAttribute> customAttributes)
     {
         AddCustomAttributeArgument(customAttributes);
@@ -17,12 +20,9 @@ public partial class ModuleWeaver
 
     void AddCustomAttributeArgument(Collection<CustomAttribute> customAttributes)
     {
-        var version = typeof(ModuleWeaver).Assembly.GetName().Version.ToString();
-        var name = typeof(ModuleWeaver).Assembly.GetName().Name;
-
         var attribute = new CustomAttribute(GeneratedCodeAttributeConstructor);
-        attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, name));
-        attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, version));
+        attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, AssemblyName));
+        attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, AssemblyVersion));
         customAttributes.Add(attribute);
     }
 }
