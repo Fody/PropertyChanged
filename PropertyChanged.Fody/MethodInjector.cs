@@ -105,6 +105,7 @@ public partial class ModuleWeaver
     MethodDefinition InjectFsharp(TypeDefinition targetType, FieldDefinition fsharpEvent)
     {
         var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
+        MarkAsGeneratedCode(method.CustomAttributes);
         method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
 
         var instructions = method.Body.Instructions;
@@ -124,6 +125,7 @@ public partial class ModuleWeaver
     MethodDefinition InjectNormal(TypeDefinition targetType, FieldReference propertyChangedField)
     {
         var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
+        MarkAsGeneratedCode(method.CustomAttributes);
         method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
@@ -153,6 +155,7 @@ public partial class ModuleWeaver
     MethodDefinition InjectEventArgsMethod(TypeDefinition targetType, FieldReference propertyChangedField)
     {
         var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
+        MarkAsGeneratedCode(method.CustomAttributes);
         method.Parameters.Add(new ParameterDefinition("eventArgs", ParameterAttributes.None, PropertyChangedEventArgsReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
