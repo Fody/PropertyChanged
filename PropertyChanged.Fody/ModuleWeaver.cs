@@ -23,7 +23,12 @@ public partial class ModuleWeaver: BaseModuleWeaver
         ProcessDependsOnAttributes();
         WalkPropertyData();
         CheckForWarnings();
-        ProcessOnChangedMethods();
+
+        if (InjectOnPropertyNameChanged)
+        {
+            ProcessOnChangedMethods();
+        }
+
         CheckForStackOverflow();
         FindComparisonMethods();
         InitEventArgsCache();
