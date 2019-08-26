@@ -38,6 +38,7 @@ public partial class ModuleWeaver
         yield return "FSharp.Core";
         //TODO: remove when move to only netstandard2.0
         yield return "System.Diagnostics.Tools";
+        yield return "System.Diagnostics.Debug";
     }
 
     public void FindCoreReferences()

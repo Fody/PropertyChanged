@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net40;net45;net472;netstandard1.1;netstandard1.4;netstandard1.6;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+    <NoWarn>NU5118;CS0067</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WeaverFiles Include="$(SolutionDir)$(SolutionName).Fody\bin\$(Configuration)\netstandard2.0\$(SolutionName).Fody.dll" />
+  </ItemGroup>
+
+</Project>
