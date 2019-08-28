@@ -29,7 +29,7 @@ public class OnPropertyNameChangedConfigTests :
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
         Assert.True(moduleWeaver.InjectOnPropertyNameChanged);
-    }
+    }    
 
     public OnPropertyNameChangedConfigTests(ITestOutputHelper output) :
         base(output)
