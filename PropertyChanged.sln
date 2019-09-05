@@ -1,8 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
-MinimumVisualStudioVersion = 16.0.28729.10
+VisualStudioVersion = 16.0.29201.188
+MinimumVisualStudioVersion = 16.0.29201.188
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcess", "TestAssemblies\AssemblyToProcess\AssemblyToProcess.csproj", "{7DEC4E2D-F872-434E-A267-0BAD65299950}"
