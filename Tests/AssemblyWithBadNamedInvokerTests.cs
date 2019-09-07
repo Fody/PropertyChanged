@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithBadNamedInvokerTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void Run()

@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 // ReSharper disable UnusedVariable
 public class DependsOnDataAttributeReaderTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void Integration()

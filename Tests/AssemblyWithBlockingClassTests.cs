@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithBlockingClassTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void TestClassIsNotBlocked()

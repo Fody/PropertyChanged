@@ -8,7 +8,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyToProcessTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     static TestResult testResult;
 

@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 [SuppressMessage("ReSharper", "NotAccessedField.Local")]
 [SuppressMessage("ReSharper", "DelegateSubtraction")]
 public class MethodInjectorTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     public MethodInjectorTests(ITestOutputHelper output) :
         base(output)

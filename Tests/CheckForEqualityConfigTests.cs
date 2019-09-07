@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class CheckForEqualityConfigTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void False()

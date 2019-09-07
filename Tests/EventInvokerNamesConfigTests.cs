@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class EventInvokerNamesConfigTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void GetStringComparisonFromXml()

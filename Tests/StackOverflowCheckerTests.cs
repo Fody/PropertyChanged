@@ -4,7 +4,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class StackOverflowCheckerTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     ModuleWeaver stackOverflowChecker;
 

@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 // ReSharper disable ValueParameterNotUsed
 
 public class HasEqualityCheckerTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     Mono.Collections.Generic.Collection<PropertyDefinition> properties;
     Mono.Collections.Generic.Collection<FieldDefinition> fields;

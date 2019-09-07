@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithAttributeAndEventTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void WithAttributeAndEvent()

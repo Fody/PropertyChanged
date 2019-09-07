@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class TypeEqualityFinderTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void TestSqlGuid()
