@@ -7,7 +7,10 @@ public class ClassWithInvalidOnChanged : INotifyPropertyChanged
     public string PropertyWithInvalidOnChangedMethodSuppressed { get; set; }
     public string PropertyWithValidOnChangedMethod { get; set; }
     
-    public void OnPropertyWithInvalidOnChangedMethodChanged (int foo)
+    [DoNotNotify]
+    public string IgnoredProperty { get; set; }
+
+    public void OnPropertyWithInvalidOnChangedMethodChanged(int foo)
     {
     }
 
@@ -15,8 +18,21 @@ public class ClassWithInvalidOnChanged : INotifyPropertyChanged
     public void OnPropertyWithInvalidOnChangedMethodSuppressedChanged(int foo)
     {
     }
+
+    public void OnPropertyWithValidOnChangedMethodChanged()
+    {
+    }
     
-    public void OnPropertyWithValidOnChangedMethodChanged ()
+    public void OnNonExistingPropertyChanged()
+    {
+    }
+
+    [SuppressPropertyChangedWarnings]
+    public void OnNonExistingPropertySuppressedChanged()
+    {
+    }
+    
+    public void OnIgnoredPropertyChanged()
     {
     }
 
