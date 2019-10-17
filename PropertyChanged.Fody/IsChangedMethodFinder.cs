@@ -83,7 +83,7 @@ public partial class ModuleWeaver
         {
             if (propertyDefinition.PropertyType.FullName != TypeSystem.BooleanDefinition.FullName)
             {
-                LogWarning($"Found '{propertyDefinition.GetName()}' but is was of type '{propertyDefinition.PropertyType.Name}' instead of '{TypeSystem.BooleanDefinition.Name}' so it will not be used.");
+                EmitWarning($"Found '{propertyDefinition.GetName()}' but is was of type '{propertyDefinition.PropertyType.Name}' instead of '{TypeSystem.BooleanDefinition.Name}' so it will not be used.");
                 return false;
             }
             if (propertyDefinition.SetMethod.IsStatic)

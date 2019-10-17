@@ -92,7 +92,7 @@ public partial class ModuleWeaver
         }
         catch (Exception ex)
         {
-            LogWarning($"Ignoring static equality of type {typeReference.FullName} => {ex.Message}");
+            EmitWarning($"Ignoring static equality of type {typeReference.FullName} => {ex.Message}");
             return null;
         }
 

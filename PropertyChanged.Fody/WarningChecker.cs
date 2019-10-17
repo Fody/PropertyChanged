@@ -53,9 +53,20 @@ public partial class ModuleWeaver
     {
         CheckForWarnings(NotifyNodes);
     }
-    
-    void EmitConditionalWarning(ICustomAttributeProvider member, string message)
+
+    public void EmitWarning(string message)
     {
+        if (SuppressWarnings)
+            return;
+        
+        LogWarning?.Invoke(message);
+    }
+    
+    public void EmitConditionalWarning(ICustomAttributeProvider member, string message)
+    {
+        if (SuppressWarnings)
+            return;
+        
         if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute("PropertyChanged.SuppressPropertyChangedWarningsAttribute"))
             return;
         
