@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
-    List<string> typeLevelAttributeNames = new List<string>
+    HashSet<string> typeLevelAttributeNames = new HashSet<string>
     {
         "PropertyChanged.DoNotCheckEqualityAttribute",
         "PropertyChanged.DoNotNotifyAttribute",
         "PropertyChanged.DoNotSetChangedAttribute",
         "PropertyChanged.AlsoNotifyForAttribute",
         "PropertyChanged.DependsOnAttribute",
-        "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute"
+        "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute",
+        "PropertyChanged.SuppressPropertyChangedWarningsAttribute"
     };
 
-    List<string> assemblyLevelAttributeNames = new List<string>
+    HashSet<string> assemblyLevelAttributeNames = new HashSet<string>
     {
         "PropertyChanged.FilterTypeAttribute"
     };
@@ -23,30 +23,37 @@ public partial class ModuleWeaver
     void ProcessAssembly()
     {
         var assembly = ModuleDefinition.Assembly;
-        RemoveAttributes(assembly.CustomAttributes, assemblyLevelAttributeNames);
+        RemoveAttributes(assembly, assemblyLevelAttributeNames);
     }
 
     void ProcessType(TypeDefinition type)
     {
-        RemoveAttributes(type.CustomAttributes, typeLevelAttributeNames);
+        RemoveAttributes(type, typeLevelAttributeNames);
         foreach (var property in type.Properties)
         {
-            RemoveAttributes(property.CustomAttributes, typeLevelAttributeNames);
+            RemoveAttributes(property, typeLevelAttributeNames);
         }
         foreach (var field in type.Fields)
         {
-            RemoveAttributes(field.CustomAttributes, typeLevelAttributeNames);
+            RemoveAttributes(field, typeLevelAttributeNames);
+        }
+        foreach (var field in type.Methods)
+        {
+            RemoveAttributes(field, typeLevelAttributeNames);
         }
     }
 
-    void RemoveAttributes(Collection<CustomAttribute> customAttributes, IEnumerable<string> attributeNames)
+    static void RemoveAttributes(ICustomAttributeProvider member, IEnumerable<string> attributeNames)
     {
-        var attributes = customAttributes
+        if (!member.HasCustomAttributes)
+            return;
+        
+        var attributes = member.CustomAttributes
             .Where(attribute => attributeNames.Contains(attribute.Constructor.DeclaringType.FullName));
 
         foreach (var customAttribute in attributes.ToList())
         {
-            customAttributes.Remove(customAttribute);
+            member.CustomAttributes.Remove(customAttribute);
         }
     }
 

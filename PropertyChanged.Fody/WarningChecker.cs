@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
@@ -51,5 +52,21 @@ public partial class ModuleWeaver
     public void CheckForWarnings()
     {
         CheckForWarnings(NotifyNodes);
+    }
+    
+    void EmitConditionalWarning(ICustomAttributeProvider member, string message)
+    {
+        if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute("PropertyChanged.SuppressPropertyChangedWarningsAttribute"))
+            return;
+        
+        // Get the first sequence point of the method to get an approximate location for the warning 
+        var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
+            ? method.DebugInformation.SequencePoints.FirstOrDefault()
+            : null;
+        
+        if (!message.EndsWith("."))
+            message += ".";
+        
+        LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
     }
 }

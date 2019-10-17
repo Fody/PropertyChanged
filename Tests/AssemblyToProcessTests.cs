@@ -176,6 +176,16 @@ public class AssemblyToProcessTests :
         Assert.NotEqual(new Tuple<string, int>("b", 2), instance.Property2);
     }
 
+    [Fact]
+    public void InvalidOnPropertyNameChangedMethodSignatureEmitsWarning()
+    {
+        const string className = nameof(ClassWithInvalidOnChanged);
+
+        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethod)));
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethodSuppressed)));
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithValidOnChangedMethod)));
+    }
+
     public AssemblyToProcessTests(ITestOutputHelper output) :
         base(output)
     {

@@ -53,6 +53,10 @@ public partial class ModuleWeaver
                     MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
                 };
             }
+            else if (!EventInvokerNames.Contains(methodDefinition.Name))
+            {
+                EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
+            }
         }
     }
 
