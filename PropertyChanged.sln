@@ -48,6 +48,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithAttributeAndEve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmokeTest", "SmokeTest\SmokeTest.csproj", "{7C7CF462-F512-4E0C-9476-E241B54D8E40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithStaticOnPropertyNameChanged", "TestAssemblies\AssemblyWithStaticOnPropertyNameChanged\AssemblyWithStaticOnPropertyNameChanged.csproj", "{99568358-1828-4FB8-9140-506ABE536057}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -222,6 +224,18 @@ Global
 		{7C7CF462-F512-4E0C-9476-E241B54D8E40}.Release|ARM.Build.0 = Release|Any CPU
 		{7C7CF462-F512-4E0C-9476-E241B54D8E40}.Release|x86.ActiveCfg = Release|Any CPU
 		{7C7CF462-F512-4E0C-9476-E241B54D8E40}.Release|x86.Build.0 = Release|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Debug|ARM.Build.0 = Debug|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Debug|x86.Build.0 = Debug|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Release|ARM.ActiveCfg = Release|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Release|ARM.Build.0 = Release|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Release|x86.ActiveCfg = Release|Any CPU
+		{99568358-1828-4FB8-9140-506ABE536057}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -241,6 +255,7 @@ Global
 		{257B24FC-1F76-47A6-BCD3-06EC78BDF8A5} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{EED92D0E-0DC4-43F4-95A5-1F067807C206} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{B28F547A-87F9-4F65-96DC-7911DEAB07AA} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
+		{99568358-1828-4FB8-9140-506ABE536057} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ABD5CA78-3690-4D62-8642-3463D9FAE144}

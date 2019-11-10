@@ -23,13 +23,18 @@ public partial class ModuleWeaver
     {
         var methods = notifyNode.TypeDefinition.Methods;
 
-        var onChangedMethods = methods.Where(x => !x.IsStatic &&
-                                                  x.Name.StartsWith("On") &&
+        var onChangedMethods = methods.Where(x => x.Name.StartsWith("On") &&
                                                   x.Name.EndsWith("Changed") &&
                                                   x.Name != "OnChanged");
 
         foreach (var methodDefinition in onChangedMethods)
         {
+            if (methodDefinition.IsStatic)
+            {
+                var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.";
+                throw new WeavingException(message);
+            }
+            
             if (methodDefinition.ReturnType.FullName != "System.Void")
             {
                 var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.";
