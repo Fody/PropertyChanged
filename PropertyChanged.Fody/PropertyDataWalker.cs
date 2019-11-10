@@ -48,6 +48,7 @@ public partial class ModuleWeaver
             }
             node.PropertyDatas.Add(new PropertyData
             {
+                ParentType = node,
                 BackingFieldReference = backingFieldReference,
                 PropertyDefinition = propertyDefinition,
                 // Compute full dependencies for the current property
@@ -65,6 +66,7 @@ The most likely cause is that you have implemented a custom event accessor for t
         }
         node.PropertyDatas.Add(new PropertyData
         {
+            ParentType = node,
             BackingFieldReference = backingFieldReference,
             PropertyDefinition = propertyDefinition,
             // Compute full dependencies for the current property

@@ -55,10 +55,14 @@ public class PropertyWeaver
     void InjectAtIndex(int index)
     {
         index = AddIsChangedSetterCall(index);
-        var propertyDefinitions = propertyData.AlsoNotifyFor.Distinct();
 
-        index = propertyDefinitions.Aggregate(index, AddEventInvokeCall);
-        AddEventInvokeCall(index, propertyData.PropertyDefinition);
+        var alsoNotifyProperties = propertyData.AlsoNotifyFor
+            .Distinct()
+            .Select(n => propertyData.ParentType.PropertyDatas.FirstOrDefault(p => p.PropertyDefinition == n))
+            .Where(p => p != null);
+
+        index = alsoNotifyProperties.Aggregate(index, AddEventInvokeCall);
+        AddEventInvokeCall(index, propertyData);
     }
 
     IEnumerable<int> FindSetFieldInstructions()
@@ -117,9 +121,11 @@ public class PropertyWeaver
         return index;
     }
 
-    int AddEventInvokeCall(int index, PropertyDefinition property)
+    int AddEventInvokeCall(int index, PropertyData targetProperty)
     {
-        index = AddOnChangedMethodCall(index, property);
+        var property = targetProperty.PropertyDefinition;
+        
+        index = AddOnChangedMethodCalls(index, targetProperty);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
             moduleWeaver.LogDebug($"\t\t\t{property.Name} skipped since call already exists");
@@ -146,34 +152,28 @@ public class PropertyWeaver
         return AddSimpleInvokerCall(index, property);
     }
 
-    int AddOnChangedMethodCall(int index, PropertyDefinition property)
+    int AddOnChangedMethodCalls(int index, PropertyData targetProperty)
     {
         if (!moduleWeaver.InjectOnPropertyNameChanged)
-        {
             return index;
-        }
-        var onChangedMethodName = $"On{property.Name}Changed";
-        if (ContainsCallToMethod(onChangedMethodName))
+
+        foreach (var onChangedMethod in targetProperty.OnChangedMethods)
         {
-            return index;
-        }
-        var onChangedMethod = typeNode
-            .OnChangedMethods
-            .FirstOrDefault(x => x.MethodReference.Name == onChangedMethodName);
-        if (onChangedMethod == null)
-        {
-            return index;
+            if (ContainsCallToMethod(onChangedMethod.MethodReference.Name))
+                continue;
+            
+            switch (onChangedMethod.OnChangedType)
+            {
+                case OnChangedTypes.NoArg:
+                    index = AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
+                    break;
+                
+                case OnChangedTypes.BeforeAfter:
+                    index = AddBeforeAfterOnChangedCall(index, targetProperty.PropertyDefinition, onChangedMethod.MethodReference);
+                    break;
+            }
         }
 
-        if (onChangedMethod.OnChangedType == OnChangedTypes.NoArg)
-        {
-            return AddSimpleOnChangedCall(index, onChangedMethod.MethodReference);
-        }
-
-        if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfter)
-        {
-            return AddBeforeAfterOnChangedCall(index, property, onChangedMethod.MethodReference);
-        }
         return index;
     }
 
