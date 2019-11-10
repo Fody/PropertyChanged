@@ -13,7 +13,7 @@ public partial class ModuleWeaver
                 var warning = CheckForWarning(propertyData, node.EventInvoker.InvokerType);
                 if (warning != null)
                 {
-                    LogDebug($"\t{propertyData.PropertyDefinition.GetName()} {warning} Property will be ignored.");
+                    EmitConditionalWarning(propertyData.PropertyDefinition, $"{propertyData.PropertyDefinition.GetName()} {warning} Property will be ignored.");
                     node.PropertyDatas.Remove(propertyData);
                 }
             }
