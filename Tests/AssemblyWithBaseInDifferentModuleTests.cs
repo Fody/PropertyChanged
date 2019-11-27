@@ -1,10 +1,11 @@
 ﻿using AssemblyWithBase.BaseWithEquals;
 using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithBaseInDifferentModuleTests :
-    XunitApprovalBase
+    VerifyBase
 {
     TestResult testResult;
 

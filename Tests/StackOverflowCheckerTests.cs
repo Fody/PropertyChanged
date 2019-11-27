@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class StackOverflowCheckerTests :
-    XunitApprovalBase
+    VerifyBase
 {
     ModuleWeaver stackOverflowChecker;
 

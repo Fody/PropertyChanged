@@ -4,11 +4,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyToProcessTests :
-    XunitApprovalBase
+    VerifyBase
 {
     static TestResult testResult;
 

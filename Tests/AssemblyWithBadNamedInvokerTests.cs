@@ -1,9 +1,10 @@
 ﻿using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithBadNamedInvokerTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void Run()

@@ -1,9 +1,10 @@
 ﻿using System.Xml.Linq;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class CheckForEqualityUsingBaseEqualsConfigTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void False()

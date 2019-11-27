@@ -1,9 +1,10 @@
 ﻿using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class TypeFilterTests :
-    XunitApprovalBase
+    VerifyBase
 {
     TestResult testResult;
 

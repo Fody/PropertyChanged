@@ -1,9 +1,10 @@
 ﻿using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithBlockingClassTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void TestClassIsNotBlocked()

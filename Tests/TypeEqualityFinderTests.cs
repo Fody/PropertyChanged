@@ -1,9 +1,10 @@
 using System.Data.SqlTypes;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class TypeEqualityFinderTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void TestSqlGuid()

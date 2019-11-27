@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyWithInterceptorTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void Simple()

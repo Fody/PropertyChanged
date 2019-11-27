@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Mono.Cecil;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 [SuppressMessage("ReSharper", "NotAccessedField.Local")]
 [SuppressMessage("ReSharper", "DelegateSubtraction")]
 public class MethodInjectorTests :
-    XunitApprovalBase
+    VerifyBase
 {
     public MethodInjectorTests(ITestOutputHelper output) :
         base(output)
@@ -205,12 +206,15 @@ public class MethodInjectorTests :
         PropertyChangedEventHandler Second;
     }
 
-    class ClassDerivedFromExplicit : ClassWithMultipleHandlerFieldsDefaultImpl
+    class ClassDerivedFromExplicit :
+        ClassWithMultipleHandlerFieldsDefaultImpl
     {
         PropertyChangedEventHandler Other;
     }
 
-    class ClassThatReimplementsInterface : ClassWithMultipleHandlerFieldsExplicitImpl, INotifyPropertyChanged
+    class ClassThatReimplementsInterface :
+        ClassWithMultipleHandlerFieldsExplicitImpl,
+        INotifyPropertyChanged
     {
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {

@@ -1,10 +1,11 @@
 ﻿using PropertyChanged;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 // ReSharper disable UnusedVariable
 public class DependsOnDataAttributeReaderTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void Integration()

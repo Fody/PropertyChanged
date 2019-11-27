@@ -1,6 +1,7 @@
 using System.ComponentModel;
 
-public class ClassWithLdfldaShortCircuit : INotifyPropertyChanged
+public class ClassWithLdfldaShortCircuit :
+    INotifyPropertyChanged
 {
     decimal? property1;
     public event PropertyChangedEventHandler PropertyChanged;

@@ -1,10 +1,11 @@
 using System.Diagnostics;
 using System.Linq;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class RecursiveIlFinderTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void Run()

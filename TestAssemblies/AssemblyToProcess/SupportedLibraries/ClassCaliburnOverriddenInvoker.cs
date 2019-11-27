@@ -1,6 +1,7 @@
 ﻿using Caliburn.PresentationFramework;
 
-public class ClassCaliburnOverriddenInvoker : PropertyChangedBase
+public class ClassCaliburnOverriddenInvoker :
+    PropertyChangedBase
 {
     public string Property1 { get; set; }
     public bool OverrideCalled { get; set; }

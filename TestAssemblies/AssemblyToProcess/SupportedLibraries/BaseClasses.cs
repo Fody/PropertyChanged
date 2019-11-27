@@ -8,7 +8,8 @@ using Jounce.Core.Model;
 
 namespace Caliburn.Micro
 {
-    public class PropertyChangedBase : INotifyPropertyChanged
+    public class PropertyChangedBase :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -22,7 +23,8 @@ namespace Caliburn.Micro
 
 namespace Catel.Data
 {
-    public class ObservableObject : INotifyPropertyChanged
+    public class ObservableObject :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,7 +39,8 @@ namespace Catel.Data
 
 namespace Telerik.Windows.Controls
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -57,7 +60,8 @@ namespace Telerik.Windows.Controls
 
 namespace Magellan.Framework
 {
-    public abstract class PresentationObject : INotifyPropertyChanged
+    public abstract class PresentationObject :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
 
@@ -76,7 +80,8 @@ namespace Magellan.Framework
 
 namespace Cinch
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -91,7 +96,8 @@ namespace Cinch
 #if (!WINDOWS_PHONE)
 namespace Microsoft.Practices.Prism.ViewModel
 {
-    public class NotificationObject : INotifyPropertyChanged
+    public class NotificationObject :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -152,7 +158,8 @@ namespace Microsoft.Practices.Prism.ViewModel
 #endif
 namespace GalaSoft.MvvmLight
 {
-    public class ViewModelBase : ObservableObject
+    public class ViewModelBase :
+        ObservableObject
     {
     }
     public class ObservableObject : INotifyPropertyChanged
@@ -169,7 +176,8 @@ namespace GalaSoft.MvvmLight
 
 namespace Caliburn.PresentationFramework
 {
-    public class PropertyChangedBase : INotifyPropertyChanged
+    public class PropertyChangedBase :
+        INotifyPropertyChanged
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -183,7 +191,8 @@ namespace Caliburn.PresentationFramework
 
 namespace Jounce.Core.Model
 {
-    public abstract class BaseNotify : INotifyPropertyChanged
+    public abstract class BaseNotify :
+        INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public bool BaseNotifyCalled { get; set; }
@@ -198,18 +207,20 @@ namespace Jounce.Core.Model
 
 namespace Jounce.Core.ViewModel
 {
-    public abstract class BaseViewModel : BaseNotify
+    public abstract class BaseViewModel :
+        BaseNotify
     {
     }
 }
 
 namespace ReactiveUI
 {
-    public interface IReactiveObject : INotifyPropertyChanged 
+    public interface IReactiveObject :
+        INotifyPropertyChanged
     {
         void RaisePropertyChanged(PropertyChangedEventArgs args);
     }
-    
+
     public class ReactiveObject : IReactiveObject
     {
         void IReactiveObject.RaisePropertyChanged(PropertyChangedEventArgs args)
