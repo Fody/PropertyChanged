@@ -29,17 +29,20 @@ public partial class ModuleWeaver
     void ProcessType(TypeDefinition type)
     {
         RemoveAttributes(type, typeLevelAttributeNames);
+        
         foreach (var property in type.Properties)
         {
             RemoveAttributes(property, typeLevelAttributeNames);
         }
+        
         foreach (var field in type.Fields)
         {
             RemoveAttributes(field, typeLevelAttributeNames);
         }
-        foreach (var field in type.Methods)
+        
+        foreach (var method in type.Methods)
         {
-            RemoveAttributes(field, typeLevelAttributeNames);
+            RemoveAttributes(method, typeLevelAttributeNames);
         }
     }
 
