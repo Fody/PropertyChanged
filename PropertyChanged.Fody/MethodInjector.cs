@@ -60,7 +60,13 @@ public partial class ModuleWeaver
             throw new WeavingException("Found more than one PropertyChanged event");
         }
 
-        var fieldReferences = addMethods.Single().Body.Instructions
+        var method = addMethods[0];
+        if (method.IsAbstract)
+        {
+            throw new WeavingException($"{targetType.FullName}.PropertyChanged event is abstract");
+        }
+
+        var fieldReferences = method.Body.Instructions
             .Where(i => i.OpCode == OpCodes.Ldfld || i.OpCode == OpCodes.Ldflda || i.OpCode == OpCodes.Stfld)
             .Select(i => i.Operand)
             .OfType<FieldReference>()
