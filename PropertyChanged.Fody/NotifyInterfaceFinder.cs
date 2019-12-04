@@ -27,7 +27,7 @@ public partial class ModuleWeaver
             }
             catch (Exception ex)
             {
-                LogWarning($"Ignoring type {fullName} in type hierarchy => {ex.Message}");
+                EmitWarning($"Ignoring type {fullName} in type hierarchy => {ex.Message}");
                 return false;
             }
         }

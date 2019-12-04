@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
@@ -12,7 +13,7 @@ public partial class ModuleWeaver
                 var warning = CheckForWarning(propertyData, node.EventInvoker.InvokerType);
                 if (warning != null)
                 {
-                    LogDebug($"\t{propertyData.PropertyDefinition.GetName()} {warning} Property will be ignored.");
+                    EmitConditionalWarning(propertyData.PropertyDefinition, $"{propertyData.PropertyDefinition.GetName()} {warning} Property will be ignored.");
                     node.PropertyDatas.Remove(propertyData);
                 }
             }
@@ -51,5 +52,32 @@ public partial class ModuleWeaver
     public void CheckForWarnings()
     {
         CheckForWarnings(NotifyNodes);
+    }
+
+    public void EmitWarning(string message)
+    {
+        if (SuppressWarnings)
+            return;
+        
+        LogWarning?.Invoke(message);
+    }
+    
+    public void EmitConditionalWarning(ICustomAttributeProvider member, string message)
+    {
+        if (SuppressWarnings)
+            return;
+        
+        if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute("PropertyChanged.SuppressPropertyChangedWarningsAttribute"))
+            return;
+        
+        // Get the first sequence point of the method to get an approximate location for the warning 
+        var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
+            ? method.DebugInformation.SequencePoints.FirstOrDefault()
+            : null;
+        
+        if (!message.EndsWith("."))
+            message += ".";
+        
+        LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
     }
 }

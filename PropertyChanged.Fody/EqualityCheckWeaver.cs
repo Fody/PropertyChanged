@@ -86,7 +86,7 @@ public class EqualityCheckWeaver
             }
             catch (Exception ex)
             {
-                typeEqualityFinder.LogWarning($"Ignoring Ceq of type {targetType.FullName} => {ex.Message}");
+                typeEqualityFinder.EmitWarning($"Ignoring Ceq of type {targetType.FullName} => {ex.Message}");
             }
 
             if (supportsCeq && (targetType.IsValueType || !typeEqualityFinder.CheckForEqualityUsingBaseEquals))

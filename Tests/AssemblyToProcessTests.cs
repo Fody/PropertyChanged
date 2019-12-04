@@ -177,6 +177,27 @@ public class AssemblyToProcessTests :
         Assert.NotEqual(new Tuple<string, int>("b", 2), instance.Property2);
     }
 
+    [Fact]
+    public void InvalidOnPropertyNameChangedMethodSignatureEmitsWarning()
+    {
+        const string className = nameof(ClassWithInvalidOnChanged);
+
+        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethod)));
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethodSuppressed)));
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithValidOnChangedMethod)));
+    }
+    
+    [Fact]
+    public void OnPropertyNameChangedMethodWithoutMatchingPropertyEmitsWarning()
+    {
+        const string className = nameof(ClassWithInvalidOnChanged);
+
+        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnNonExistingPropertyChanged)));
+        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnIgnoredPropertyChanged)));
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnNonExistingPropertySuppressedChanged)));
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(nameof(ClassWithOnChangedConcrete)) && w.Text.Contains(nameof(ClassWithOnChangedConcrete.OnProperty1Changed)));
+    }
+
     public AssemblyToProcessTests(ITestOutputHelper output) :
         base(output)
     {
