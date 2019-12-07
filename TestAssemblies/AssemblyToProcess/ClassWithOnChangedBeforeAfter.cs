@@ -7,7 +7,8 @@ public class ClassWithOnChangedBeforeAfter : INotifyPropertyChanged
 
     public string Property1 { get; set; }
     public string Property2 { get; set; }
-    public void OnProperty1Changed ()
+
+    public void OnProperty1Changed()
     {
         OnProperty1ChangedCalled = true;
     }
@@ -19,7 +20,7 @@ public class ClassWithOnChangedBeforeAfter : INotifyPropertyChanged
 
     public void OnPropertyChanged(string propertyName, object before, object after)
     {
-        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

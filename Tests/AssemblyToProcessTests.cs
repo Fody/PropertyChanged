@@ -207,6 +207,26 @@ public class AssemblyToProcessTests :
         Assert.True(instance.OnProperty1ChangedCalled);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChanged)));
     }
+    
+    [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterIsCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfter));
+        instance.Property2 = "foo";
+        
+        Assert.True(instance.OnProperty2ChangedCalled);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfter)));
+    }
+    
+    [Fact]
+    public void OnPropertyNameChangedMethodCallInOriginalCodePreventsInsertingAdditionalCall()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedAndNoPropertyChanged));
+        instance.Property1 = "foo";
+        
+        Assert.Equal(1, instance.OnProperty1ChangedCalled);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedAndNoPropertyChanged)));
+    }
 
     [Fact]
     public void OnChangedMethodAttributeCustomizesCalledMethods()
@@ -231,6 +251,7 @@ public class AssemblyToProcessTests :
         Assert.False(instance.OnProperty2ChangedCalled);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)));
     }
+    
     public AssemblyToProcessTests(ITestOutputHelper output) :
         base(output)
     {
