@@ -30,12 +30,14 @@ public partial class ModuleWeaver
             if (!methodName.StartsWith("On") || !methodName.EndsWith("Changed") || methodName == "OnChanged")
                 continue;
 
+            var onChangedMethod = CreateOnChangedMethod(notifyNode, methodDefinition, true);
+            if (onChangedMethod == null)
+                continue;
+
             if (methods.ContainsKey(methodName))
                 throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which has multiple valid overloads.");
 
-            var onChangedMethod = CreateOnChangedMethod(notifyNode, methodDefinition, true);
-            if (onChangedMethod != null)
-                methods.Add(methodName, onChangedMethod);
+            methods.Add(methodName, onChangedMethod);
         }
 
         foreach (var propertyData in notifyNode.PropertyDatas)
@@ -46,6 +48,9 @@ public partial class ModuleWeaver
             {
                 hasCustomMethods = true;
                 var methodName = (string)attribute.ConstructorArguments[0].Value;
+
+                if (string.IsNullOrEmpty(methodName))
+                    continue;
 
                 if (!methods.TryGetValue(methodName, out var onChangedMethod))
                 {

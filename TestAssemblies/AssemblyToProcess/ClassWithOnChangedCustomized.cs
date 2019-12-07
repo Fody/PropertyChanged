@@ -10,8 +10,8 @@ public class ClassWithOnChangedCustomized : INotifyPropertyChanged
     [OnChangedMethod(nameof(FirstCustom))]
     [OnChangedMethod(nameof(SecondCustom))]
     public string Property1 { get; set; }
-    
-    public void OnProperty1Changed ()
+
+    public void OnProperty1Changed()
     {
         OnProperty1ChangedCalled = true;
     }
@@ -20,7 +20,7 @@ public class ClassWithOnChangedCustomized : INotifyPropertyChanged
     {
         FirstCustomCalled = true;
     }
-    
+
     void SecondCustom()
     {
         SecondCustomCalled = true;

@@ -220,6 +220,17 @@ public class AssemblyToProcessTests :
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized)));
     }
 
+    [Fact]
+    public void OnChangedMethodAttributeSuppressedDefaultMethodsWhenMethodNameIsNullOrEmpty()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedSuppressed));
+        instance.Property1 = "foo";
+        instance.Property2 = "bar";
+        
+        Assert.False(instance.OnProperty1ChangedCalled);
+        Assert.False(instance.OnProperty2ChangedCalled);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)));
+    }
     public AssemblyToProcessTests(ITestOutputHelper output) :
         base(output)
     {
