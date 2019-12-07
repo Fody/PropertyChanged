@@ -78,7 +78,7 @@ public partial class ModuleWeaver
             var method = CreateOnChangedMethod(notifyNode, methodDefinition, false);
             if (method == null)
                 continue;
-            
+
             if (foundMethod != null)
                 throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has multiple valid overloads of a On_PropertyName_Changed method named {methodName}).");
 
@@ -108,25 +108,26 @@ public partial class ModuleWeaver
         var typeDefinitions = new Stack<TypeDefinition>();
         typeDefinitions.Push(notifyNode.TypeDefinition);
 
+        var onChangedType = OnChangedTypes.None;
+
         if (IsNoArgOnChangedMethod(methodDefinition))
         {
-            ValidateOnChangedMethod(notifyNode, methodDefinition, isDefaultMethod);
-
-            return new OnChangedMethod
-            {
-                OnChangedType = OnChangedTypes.NoArg,
-                MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
-            };
+            onChangedType = OnChangedTypes.NoArg;
+        }
+        else if (IsBeforeAfterOnChangedMethod(methodDefinition))
+        {
+            onChangedType = OnChangedTypes.BeforeAfter;
         }
 
-        if (IsBeforeAfterOnChangedMethod(methodDefinition))
+        if (onChangedType != OnChangedTypes.None)
         {
             ValidateOnChangedMethod(notifyNode, methodDefinition, isDefaultMethod);
 
             return new OnChangedMethod
             {
-                OnChangedType = OnChangedTypes.BeforeAfter,
-                MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
+                OnChangedType = onChangedType,
+                MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
+                IsDefaultMethod = isDefaultMethod
             };
         }
 

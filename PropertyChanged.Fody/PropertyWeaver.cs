@@ -159,7 +159,7 @@ public class PropertyWeaver
 
         foreach (var onChangedMethod in targetProperty.OnChangedMethods)
         {
-            if (ContainsCallToMethod(onChangedMethod.MethodReference.Name))
+            if (onChangedMethod.IsDefaultMethod && ContainsCallToMethod(onChangedMethod.MethodReference.Name))
                 continue;
             
             switch (onChangedMethod.OnChangedType)

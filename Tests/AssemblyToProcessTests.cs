@@ -239,7 +239,27 @@ public class AssemblyToProcessTests :
         Assert.True(instance.SecondCustomCalled);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized)));
     }
-
+    
+    [Fact]
+    public void OnChangedMethodAttributeAlwaysCallsMethod()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedCustomized));
+        instance.Property2 = "foo";
+        
+        Assert.Equal(2, instance.PropertyChangedCounterValue);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized)));
+    }
+    
+    [Fact]
+    public void OnChangedMethodAttributeCanCallSameMethodSeveralTimes()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedCustomized));
+        instance.Property3 = "foo";
+        
+        Assert.Equal(3, instance.PropertyChangedCounterValue);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized)));
+    }
+    
     [Fact]
     public void OnChangedMethodAttributeSuppressedDefaultMethodsWhenMethodNameIsNullOrEmpty()
     {
