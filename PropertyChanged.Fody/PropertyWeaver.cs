@@ -154,13 +154,16 @@ public class PropertyWeaver
 
     int AddOnChangedMethodCalls(int index, PropertyData targetProperty)
     {
-        if (!moduleWeaver.InjectOnPropertyNameChanged)
-            return index;
-
         foreach (var onChangedMethod in targetProperty.OnChangedMethods)
         {
-            if (onChangedMethod.IsDefaultMethod && ContainsCallToMethod(onChangedMethod.MethodReference.Name))
-                continue;
+            if (onChangedMethod.IsDefaultMethod)
+            {
+                if (!moduleWeaver.InjectOnPropertyNameChanged)
+                    continue;
+
+                if (ContainsCallToMethod(onChangedMethod.MethodReference.Name))
+                    continue;
+            }
             
             switch (onChangedMethod.OnChangedType)
             {

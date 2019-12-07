@@ -23,21 +23,24 @@ public partial class ModuleWeaver
     {
         var methods = new Dictionary<string, OnChangedMethod>();
 
-        foreach (var methodDefinition in notifyNode.TypeDefinition.Methods)
+        if (InjectOnPropertyNameChanged)
         {
-            var methodName = methodDefinition.Name;
+            foreach (var methodDefinition in notifyNode.TypeDefinition.Methods)
+            {
+                var methodName = methodDefinition.Name;
 
-            if (!methodName.StartsWith("On") || !methodName.EndsWith("Changed") || methodName == "OnChanged")
-                continue;
+                if (!methodName.StartsWith("On") || !methodName.EndsWith("Changed") || methodName == "OnChanged")
+                    continue;
 
-            var onChangedMethod = CreateOnChangedMethod(notifyNode, methodDefinition, true);
-            if (onChangedMethod == null)
-                continue;
+                var onChangedMethod = CreateOnChangedMethod(notifyNode, methodDefinition, true);
+                if (onChangedMethod == null)
+                    continue;
 
-            if (methods.ContainsKey(methodName))
-                throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which has multiple valid overloads.");
+                if (methods.ContainsKey(methodName))
+                    throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which has multiple valid overloads.");
 
-            methods.Add(methodName, onChangedMethod);
+                methods.Add(methodName, onChangedMethod);
+            }
         }
 
         foreach (var propertyData in notifyNode.PropertyDatas)
@@ -61,7 +64,7 @@ public partial class ModuleWeaver
                 propertyData.OnChangedMethods.Add(onChangedMethod);
             }
 
-            if (!hasCustomMethods && methods.TryGetValue("On" + propertyData.PropertyDefinition.Name + "Changed", out var defaultMethod))
+            if (InjectOnPropertyNameChanged && !hasCustomMethods && methods.TryGetValue("On" + propertyData.PropertyDefinition.Name + "Changed", out var defaultMethod))
                 propertyData.OnChangedMethods.Add(defaultMethod);
         }
     }
