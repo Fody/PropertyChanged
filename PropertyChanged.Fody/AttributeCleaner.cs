@@ -12,7 +12,8 @@ public partial class ModuleWeaver
         "PropertyChanged.AlsoNotifyForAttribute",
         "PropertyChanged.DependsOnAttribute",
         "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute",
-        "PropertyChanged.SuppressPropertyChangedWarningsAttribute"
+        "PropertyChanged.SuppressPropertyChangedWarningsAttribute",
+        "PropertyChanged.OnChangedMethodAttribute"
     };
 
     HashSet<string> assemblyLevelAttributeNames = new HashSet<string>

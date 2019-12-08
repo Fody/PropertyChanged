@@ -14,61 +14,132 @@ public partial class ModuleWeaver
     {
         foreach (var notifyNode in notifyNodes)
         {
-            notifyNode.OnChangedMethods = GetOnChangedMethods(notifyNode).ToList();
+            ProcessOnChangedMethods(notifyNode);
             ProcessOnChangedMethods(notifyNode.Nodes);
         }
     }
 
-    IEnumerable<OnChangedMethod> GetOnChangedMethods(TypeNode notifyNode)
+    void ProcessOnChangedMethods(TypeNode notifyNode)
     {
-        var methods = notifyNode.TypeDefinition.Methods;
+        var methods = new Dictionary<string, OnChangedMethod>();
 
-        var onChangedMethods = methods.Where(x => x.Name.StartsWith("On") &&
-                                                  x.Name.EndsWith("Changed") &&
-                                                  x.Name != "OnChanged");
-
-        foreach (var methodDefinition in onChangedMethods)
+        if (InjectOnPropertyNameChanged)
         {
-            if (methodDefinition.IsStatic)
+            foreach (var methodDefinition in notifyNode.TypeDefinition.Methods)
             {
-                var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.";
-                throw new WeavingException(message);
-            }
-            
-            if (methodDefinition.ReturnType.FullName != "System.Void")
-            {
-                var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.";
-                throw new WeavingException(message);
-            }
-            
-            var typeDefinitions = new Stack<TypeDefinition>();
-            typeDefinitions.Push(notifyNode.TypeDefinition);
+                var methodName = methodDefinition.Name;
 
-            if (IsNoArgOnChangedMethod(methodDefinition))
-            {
-                ValidateOnChangedMethod(notifyNode, methodDefinition);
-                
-                yield return new OnChangedMethod
-                {
-                    OnChangedType = OnChangedTypes.NoArg,
-                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
-                };
-            }
-            else if (IsBeforeAfterOnChangedMethod(methodDefinition))
-            {
-                ValidateOnChangedMethod(notifyNode, methodDefinition);
-                
-                yield return new OnChangedMethod
-                {
-                    OnChangedType = OnChangedTypes.BeforeAfter,
-                    MethodReference = GetMethodReference(typeDefinitions, methodDefinition)
-                };
-            }
-            else if (!EventInvokerNames.Contains(methodDefinition.Name))
-            {
-                EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
+                if (!methodName.StartsWith("On") || !methodName.EndsWith("Changed") || methodName == "OnChanged")
+                    continue;
+
+                var onChangedMethod = CreateOnChangedMethod(notifyNode, methodDefinition, true);
+                if (onChangedMethod == null)
+                    continue;
+
+                if (methods.ContainsKey(methodName))
+                    throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which has multiple valid overloads.");
+
+                methods.Add(methodName, onChangedMethod);
             }
         }
+
+        foreach (var propertyData in notifyNode.PropertyDatas)
+        {
+            var hasCustomMethods = false;
+
+            foreach (var attribute in propertyData.PropertyDefinition.CustomAttributes.GetAttributes("PropertyChanged.OnChangedMethodAttribute"))
+            {
+                hasCustomMethods = true;
+                var methodName = (string)attribute.ConstructorArguments[0].Value;
+
+                if (string.IsNullOrEmpty(methodName))
+                    continue;
+
+                if (!methods.TryGetValue(methodName, out var onChangedMethod))
+                {
+                    onChangedMethod = FindOnChangedMethod(notifyNode, methodName);
+                    methods.Add(methodName, onChangedMethod);
+                }
+
+                propertyData.OnChangedMethods.Add(onChangedMethod);
+            }
+
+            if (InjectOnPropertyNameChanged && !hasCustomMethods && methods.TryGetValue("On" + propertyData.PropertyDefinition.Name + "Changed", out var defaultMethod))
+                propertyData.OnChangedMethods.Add(defaultMethod);
+        }
+    }
+
+    OnChangedMethod FindOnChangedMethod(TypeNode notifyNode, string methodName)
+    {
+        OnChangedMethod foundMethod = null;
+
+        foreach (var methodDefinition in notifyNode.TypeDefinition.Methods)
+        {
+            if (methodDefinition.Name != methodName)
+                continue;
+
+            var method = CreateOnChangedMethod(notifyNode, methodDefinition, false);
+            if (method == null)
+                continue;
+
+            if (foundMethod != null)
+                throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has multiple valid overloads of a On_PropertyName_Changed method named {methodName}).");
+
+            foundMethod = method;
+        }
+
+        if (foundMethod == null)
+            throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} does not have a valid On_PropertyName_Changed method named {methodName}).");
+
+        return foundMethod;
+    }
+
+    OnChangedMethod CreateOnChangedMethod(TypeNode notifyNode, MethodDefinition methodDefinition, bool isDefaultMethod)
+    {
+        if (methodDefinition.IsStatic)
+        {
+            var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.";
+            throw new WeavingException(message);
+        }
+
+        if (methodDefinition.ReturnType.FullName != "System.Void")
+        {
+            var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.";
+            throw new WeavingException(message);
+        }
+
+        var typeDefinitions = new Stack<TypeDefinition>();
+        typeDefinitions.Push(notifyNode.TypeDefinition);
+
+        var onChangedType = OnChangedTypes.None;
+
+        if (IsNoArgOnChangedMethod(methodDefinition))
+        {
+            onChangedType = OnChangedTypes.NoArg;
+        }
+        else if (IsBeforeAfterOnChangedMethod(methodDefinition))
+        {
+            onChangedType = OnChangedTypes.BeforeAfter;
+        }
+
+        if (onChangedType != OnChangedTypes.None)
+        {
+            ValidateOnChangedMethod(notifyNode, methodDefinition, isDefaultMethod);
+
+            return new OnChangedMethod
+            {
+                OnChangedType = onChangedType,
+                MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
+                IsDefaultMethod = isDefaultMethod
+            };
+        }
+
+        if (!EventInvokerNames.Contains(methodDefinition.Name))
+        {
+            EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
+        }
+
+        return null;
     }
 
     public static bool IsNoArgOnChangedMethod(MethodDefinition method)
@@ -85,16 +156,19 @@ public partial class ModuleWeaver
                && parameters[1].ParameterType.FullName == "System.Object";
     }
 
-    void ValidateOnChangedMethod(TypeNode notifyNode, MethodDefinition method)
+    void ValidateOnChangedMethod(TypeNode notifyNode, MethodDefinition method, bool isDefaultMethod)
     {
         if (method.IsVirtual && !method.IsNewSlot)
             return;
-        
-        var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
 
-        if (notifyNode.PropertyDatas.All(i => i.PropertyDefinition.Name != propertyName))
+        if (isDefaultMethod)
         {
-            EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
+            var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
+
+            if (notifyNode.PropertyDatas.All(i => i.PropertyDefinition.Name != propertyName))
+            {
+                EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
+            }
         }
     }
 }
