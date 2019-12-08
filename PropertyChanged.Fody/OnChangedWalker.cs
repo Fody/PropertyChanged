@@ -30,14 +30,20 @@ public partial class ModuleWeaver
                 var methodName = methodDefinition.Name;
 
                 if (!methodName.StartsWith("On") || !methodName.EndsWith("Changed") || methodName == "OnChanged")
+                {
                     continue;
+                }
 
                 var onChangedMethod = CreateOnChangedMethod(notifyNode, methodDefinition, true);
                 if (onChangedMethod == null)
+                {
                     continue;
+                }
 
                 if (methods.ContainsKey(methodName))
+                {
                     throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which has multiple valid overloads.");
+                }
 
                 methods.Add(methodName, onChangedMethod);
             }
@@ -53,7 +59,9 @@ public partial class ModuleWeaver
                 var methodName = (string)attribute.ConstructorArguments[0].Value;
 
                 if (string.IsNullOrEmpty(methodName))
+                {
                     continue;
+                }
 
                 if (!methods.TryGetValue(methodName, out var onChangedMethod))
                 {
@@ -65,7 +73,9 @@ public partial class ModuleWeaver
             }
 
             if (InjectOnPropertyNameChanged && !hasCustomMethods && methods.TryGetValue("On" + propertyData.PropertyDefinition.Name + "Changed", out var defaultMethod))
+            {
                 propertyData.OnChangedMethods.Add(defaultMethod);
+            }
         }
     }
 
@@ -76,20 +86,27 @@ public partial class ModuleWeaver
         foreach (var methodDefinition in notifyNode.TypeDefinition.Methods)
         {
             if (methodDefinition.Name != methodName)
+            {
                 continue;
+            }
 
             var method = CreateOnChangedMethod(notifyNode, methodDefinition, false);
             if (method == null)
+            {
                 continue;
+            }
 
             if (foundMethod != null)
-                throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has multiple valid overloads of a On_PropertyName_Changed method named {methodName}).");
+            {
+                throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has multiple valid overloads of a On_PropertyName_Changed method named {methodName}).");}
 
             foundMethod = method;
         }
 
         if (foundMethod == null)
+        {
             throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} does not have a valid On_PropertyName_Changed method named {methodName}).");
+        }
 
         return foundMethod;
     }
@@ -159,16 +176,20 @@ public partial class ModuleWeaver
     void ValidateOnChangedMethod(TypeNode notifyNode, MethodDefinition method, bool isDefaultMethod)
     {
         if (method.IsVirtual && !method.IsNewSlot)
-            return;
-
-        if (isDefaultMethod)
         {
-            var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
-
-            if (notifyNode.PropertyDatas.All(i => i.PropertyDefinition.Name != propertyName))
-            {
-                EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
-            }
+            return;
         }
+
+        if (!isDefaultMethod)
+        {
+            return;
+        }
+        var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
+
+        if (notifyNode.PropertyDatas.Any(i => i.PropertyDefinition.Name == propertyName))
+        {
+            return;
+        }
+        EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
     }
 }
