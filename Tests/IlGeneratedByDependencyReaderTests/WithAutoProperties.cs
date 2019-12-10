@@ -10,10 +10,10 @@ public class WithAutoProperties
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
         var node = new TypeNode
-                       {
-                           TypeDefinition = typeDefinition,
-                           Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
-                       };
+        {
+            TypeDefinition = typeDefinition,
+            Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
+        };
         new IlGeneratedByDependencyReader(node).Process();
         Assert.Equal(2, node.PropertyDependencies.Count);
         var first = node.PropertyDependencies[0];
