@@ -1,6 +1,7 @@
 using System.ComponentModel;
 
-public class ClassAlreadyHasSingleNotificationDiffParamLocation : INotifyPropertyChanged
+public class ClassAlreadyHasSingleNotificationDiffParamLocation :
+    INotifyPropertyChanged
 {
     string property1;
 

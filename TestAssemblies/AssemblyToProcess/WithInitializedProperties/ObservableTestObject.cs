@@ -3,7 +3,8 @@ using System.ComponentModel;
 
 using PropertyChanged;
 
-public abstract class ObservableTestObject : INotifyPropertyChanged
+public abstract class ObservableTestObject :
+    INotifyPropertyChanged
 {
     [DoNotNotify]
     public IList<string> PropertyChangedCalls { get; } = new List<string>();

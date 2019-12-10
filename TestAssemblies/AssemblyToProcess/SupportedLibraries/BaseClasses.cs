@@ -162,8 +162,8 @@ namespace GalaSoft.MvvmLight
         ObservableObject
     {
     }
-    public class ObservableObject : INotifyPropertyChanged
-    {
+    public class ObservableObject :
+    INotifyPropertyChanged    {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void RaisePropertyChanged(string propertyName)

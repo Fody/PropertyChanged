@@ -3,13 +3,16 @@ using System.ComponentModel;
 #pragma warning disable 649
 // ReSharper disable RedundantJumpStatement
 
-public class ClassWithBranchingReturn1 : INotifyPropertyChanged
+public class ClassWithBranchingReturn1 :
+    INotifyPropertyChanged
 {
     string property1;
     bool isInSomeMode;
 
-    public string Property1    {
-        get => property1;        set
+    public string Property1
+    {
+        get => property1;
+        set
         {
             property1 = value;
             if (isInSomeMode)

@@ -1,9 +1,11 @@
 using System.ComponentModel;
 using PropertyChanged;
 
-public class ClassCircularProperties : INotifyPropertyChanged
+public class ClassCircularProperties :
+    INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
+
     [DependsOn("Self")]
     public string Self { get; set; }
 
@@ -13,9 +15,9 @@ public class ClassCircularProperties : INotifyPropertyChanged
     [DependsOn("PropertyA1")]
     public string PropertyA2 { get; set; }
 
-    [AlsoNotifyFor ("PropertyB2")]
+    [AlsoNotifyFor("PropertyB2")]
     public string PropertyB1 { get; set; }
 
-    [AlsoNotifyFor ("PropertyB1")]
+    [AlsoNotifyFor("PropertyB1")]
     public string PropertyB2 { get; set; }
 }

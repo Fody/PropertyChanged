@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassDoNotCheckEquality : INotifyPropertyChanged
+public class ClassDoNotCheckEquality :
+    INotifyPropertyChanged
 {
     public int TimesProperty1Changed;
     public int TimesProperty2Changed;

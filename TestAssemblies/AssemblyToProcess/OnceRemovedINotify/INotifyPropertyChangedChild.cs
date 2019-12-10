@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 
-public interface INotifyPropertyChangedChild : INotifyPropertyChanged
+public interface INotifyPropertyChangedChild :
+    INotifyPropertyChanged
 {
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassAlreadyHasNotification : INotifyPropertyChanged
+public class ClassAlreadyHasNotification :
+    INotifyPropertyChanged
 {
     string property1;
 

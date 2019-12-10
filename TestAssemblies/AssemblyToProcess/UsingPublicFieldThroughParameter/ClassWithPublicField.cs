@@ -1,6 +1,7 @@
 using System.ComponentModel;
 
-public class ClassWithPublicField : INotifyPropertyChanged
+public class ClassWithPublicField :
+    INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

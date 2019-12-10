@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithFieldFromOtherClass : INotifyPropertyChanged
+public class ClassWithFieldFromOtherClass :
+    INotifyPropertyChanged
 {
     OtherClass otherClass;
 
@@ -9,8 +10,11 @@ public class ClassWithFieldFromOtherClass : INotifyPropertyChanged
         otherClass = new OtherClass();
     }
 
-    public string Property1    {
-        get => otherClass.property1;        set => otherClass.property1 = value;    }
+    public string Property1
+    {
+        get => otherClass.property1;
+        set => otherClass.property1 = value;
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 }

@@ -1,11 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-public class A : ObservableCollection<string>
+public class A :
+    ObservableCollection<string>
 {
 }
 
-public class B : INotifyPropertyChanged
+public class B :
+    INotifyPropertyChanged
 {
     public string Property1 { get; set; }
 

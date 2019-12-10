@@ -1,7 +1,8 @@
 using System.ComponentModel;
 using PropertyChanged;
 
-public class ClassWithOnChangedCustomized : INotifyPropertyChanged
+public class ClassWithOnChangedCustomized :
+    INotifyPropertyChanged
 {
     public bool OnProperty1ChangedCalled;
     public bool FirstCustomCalled;

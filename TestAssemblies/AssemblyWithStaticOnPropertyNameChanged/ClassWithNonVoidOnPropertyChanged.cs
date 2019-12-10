@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithStaticOnPropertyChanged : INotifyPropertyChanged
+public class ClassWithStaticOnPropertyChanged :
+    INotifyPropertyChanged
 {
     public string Property1 { get; set; }
 

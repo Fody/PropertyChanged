@@ -2,8 +2,8 @@
 
 namespace AssemblyWithBase.DirectGeneric
 {
-    public class BaseClass<T> : INotifyPropertyChanged
-    {
+    public class BaseClass<T> :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void OnPropertyChanged(string propertyName)
         {

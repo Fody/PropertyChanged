@@ -1,7 +1,8 @@
 using System.ComponentModel;
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 
-public class ClassMissingSetGet : INotifyPropertyChanged
+public class ClassMissingSetGet :
+    INotifyPropertyChanged
 {
     string property;
 

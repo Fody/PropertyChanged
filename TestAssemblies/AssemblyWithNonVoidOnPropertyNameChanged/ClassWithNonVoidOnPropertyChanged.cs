@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithNonVoidOnPropertyChanged : INotifyPropertyChanged
+public class ClassWithNonVoidOnPropertyChanged :
+    INotifyPropertyChanged
 {
     public string Property1 { get; set; }
 

@@ -4,8 +4,8 @@ using AssemblyWithBase.BaseWithEquals;
 
 namespace AssemblyWithBaseInDifferentModule.BaseWithGenericProperty
 {
-    public class Class : INotifyPropertyChanged
-    {
+    public class Class :
+    INotifyPropertyChanged    {
         string property1;
 
         public string Property1

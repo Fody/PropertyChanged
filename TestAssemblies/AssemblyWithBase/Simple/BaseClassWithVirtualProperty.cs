@@ -2,8 +2,8 @@
 {
     using System.ComponentModel;
 
-    public class BaseClassWithVirtualProperty : INotifyPropertyChanged
-    {
+    public class BaseClassWithVirtualProperty :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public virtual string Property1 { get; set; }

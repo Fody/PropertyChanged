@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class WithOwnIsChangedImplementation : INotifyPropertyChanged
+public class WithOwnIsChangedImplementation :
+    INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

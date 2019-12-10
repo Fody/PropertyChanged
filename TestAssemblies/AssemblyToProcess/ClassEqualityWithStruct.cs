@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassEqualityWithStruct : INotifyPropertyChanged
+public class ClassEqualityWithStruct :
+    INotifyPropertyChanged
 {
     public SimpleStruct Property1 { get; set; }
 

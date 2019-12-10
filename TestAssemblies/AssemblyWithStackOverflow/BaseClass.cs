@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class BaseClass : INotifyPropertyChanged
+public class BaseClass :
+    INotifyPropertyChanged
 {
     public virtual string Property1 { get; set; }
 

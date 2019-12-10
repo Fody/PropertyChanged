@@ -4,8 +4,8 @@ using AssemblyWithBase.StaticEqualsGenericParent;
 
 namespace AssemblyWithBaseInDifferentModule.StaticEqualsGenericParent
 {
-    public class StaticEquals : INotifyPropertyChanged
-    {
+    public class StaticEquals :
+    INotifyPropertyChanged    {
         string property1;
         public string Property1
         {

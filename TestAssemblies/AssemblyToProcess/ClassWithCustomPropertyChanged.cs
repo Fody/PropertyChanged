@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithCustomPropertyChanged : INotifyPropertyChanged
+public class ClassWithCustomPropertyChanged :
+    INotifyPropertyChanged
 {
 // ReSharper disable NotAccessedField.Local
     PropertyChangedEventHandler propertyChanged;

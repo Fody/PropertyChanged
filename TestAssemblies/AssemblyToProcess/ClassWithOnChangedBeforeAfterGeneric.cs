@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithOnChangedBeforeAfterGeneric : INotifyPropertyChanged
+public class ClassWithOnChangedBeforeAfterGeneric :
+    INotifyPropertyChanged
 {
     public bool GenericOnPropertyChangedCalled;
 

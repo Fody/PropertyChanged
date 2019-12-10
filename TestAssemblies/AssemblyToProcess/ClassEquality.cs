@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 
-public class ClassEquality : INotifyPropertyChanged
+public class ClassEquality :
+    INotifyPropertyChanged
 {
     DateTimeOffset? mixDateTimeOffset;
     public string StringProperty { get; set; }
@@ -14,8 +15,11 @@ public class ClassEquality : INotifyPropertyChanged
     public DateTimeOffset? NullableDateTimeOffset { get; set; }
     public DateTimeOffset DateTimeOffset { get; set; }
 
-    public DateTimeOffset MixDateTimeOffset    {
-        get => mixDateTimeOffset.GetValueOrDefault();        set => mixDateTimeOffset = value;    }
+    public DateTimeOffset MixDateTimeOffset
+    {
+        get => mixDateTimeOffset.GetValueOrDefault();
+        set => mixDateTimeOffset = value;
+    }
 
     public object ObjectProperty { get; set; }
     public short ShortProperty { get; set; }

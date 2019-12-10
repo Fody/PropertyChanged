@@ -1,6 +1,7 @@
 using System.ComponentModel;
 
-public class ClassEqualityWithGenericClassOverload : INotifyPropertyChanged
+public class ClassEqualityWithGenericClassOverload :
+    INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
     public SimpleClass<int> Property1 { get; set; }
@@ -21,10 +22,12 @@ public class ClassEqualityWithGenericClassOverload : INotifyPropertyChanged
             {
                 return true;
             }
+
             if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
             {
                 return false;
             }
+
             return left.X == right.X;
         }
 

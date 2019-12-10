@@ -2,13 +2,16 @@ using System.ComponentModel;
 // ReSharper disable ValueParameterNotUsed
 // ReSharper disable NotAccessedField.Local
 
-public class ClassWithBranchingReturnAndNoField : INotifyPropertyChanged
+public class ClassWithBranchingReturnAndNoField :
+    INotifyPropertyChanged
 {
     int x;
     public bool HasValue;
 
-    public string Property1    {
-        get => null;        set
+    public string Property1
+    {
+        get => null;
+        set
         {
             if (HasValue)
             {

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using PropertyChanged;
 
-public class ClassWithBeforeAfterValueCheckImplementation : INotifyPropertyChanged
+public class ClassWithBeforeAfterValueCheckImplementation :
+    INotifyPropertyChanged
 {
     public string Property1 { get; set; }
 

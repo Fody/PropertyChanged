@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
-public class ClassWithLogicInSet : INotifyPropertyChanged
+public class ClassWithLogicInSet :
+    INotifyPropertyChanged
 {
 
     string property1;
 
-    public string Property1    {
-        get => property1;        set
+    public string Property1
+    {
+        get => property1;
+        set
         {
             Debug.WriteLine("Foo");
             property1 = value;

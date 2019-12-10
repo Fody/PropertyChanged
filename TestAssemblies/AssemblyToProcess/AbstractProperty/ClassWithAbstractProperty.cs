@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public abstract class ClassWithAbstractProperty : INotifyPropertyChanged
+public abstract class ClassWithAbstractProperty :
+    INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

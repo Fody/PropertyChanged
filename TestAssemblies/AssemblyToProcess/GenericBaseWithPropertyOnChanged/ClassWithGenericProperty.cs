@@ -2,8 +2,8 @@ using System.ComponentModel;
 
 namespace GenericBaseWithPropertyOnChanged
 {
-    public class ClassWithGenericPropertyParent<T> : INotifyPropertyChanged
-    {
+    public class ClassWithGenericPropertyParent<T> :
+    INotifyPropertyChanged    {
         public bool OnProperty1ChangedCalled;
         public bool OnProperty2ChangedCalled;
 

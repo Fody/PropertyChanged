@@ -2,8 +2,8 @@
 
 namespace AssemblyWithBase.Simple
 {
-    public class BaseClass : INotifyPropertyChanged
-    {
+    public class BaseClass :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public virtual void OnPropertyChanged(string text1)

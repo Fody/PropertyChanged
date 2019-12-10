@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithBranchingReturn2 : INotifyPropertyChanged
+public class ClassWithBranchingReturn2 :
+    INotifyPropertyChanged
 {
     string property1;
     public bool HasValue;
 
-    public string Property1    {
-        get => property1;        set
+    public string Property1
+    {
+        get => property1;
+        set
         {
             if (HasValue)
             {

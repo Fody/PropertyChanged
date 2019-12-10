@@ -3,8 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace AssemblyWithBase.BaseWithEquals
 {
-    public class BaseClass1<T> : INotifyPropertyChanged
-    {
+    public class BaseClass1<T> :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public static bool EqualsCalled { get; set; }

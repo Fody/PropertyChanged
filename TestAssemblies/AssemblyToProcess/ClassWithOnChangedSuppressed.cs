@@ -1,7 +1,8 @@
 using System.ComponentModel;
 using PropertyChanged;
 
-public class ClassWithOnChangedSuppressed : INotifyPropertyChanged
+public class ClassWithOnChangedSuppressed :
+    INotifyPropertyChanged
 {
     public bool OnProperty1ChangedCalled;
     public bool OnProperty2ChangedCalled;

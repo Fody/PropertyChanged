@@ -108,16 +108,16 @@ public class MethodInjectorTests :
     ModuleWeaver methodInjector;
 #pragma warning disable CS0067, CS0169, CS0649
 
-    class ClassWithMultipleHandlerFieldsDefaultImpl : INotifyPropertyChanged
-    {
+    class ClassWithMultipleHandlerFieldsDefaultImpl :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged;
 
         PropertyChangedEventHandler Other;
         public const string UnexpectedFieldName = nameof(Other);
     }
 
-    class ClassWithMultipleHandlerFieldsCustomImpl : INotifyPropertyChanged
-    {
+    class ClassWithMultipleHandlerFieldsCustomImpl :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged
         {
             add => Second += value;
@@ -130,8 +130,8 @@ public class MethodInjectorTests :
         public const string ExpectedFieldName = nameof(Second);
     }
 
-    class ClassWithMultipleHandlerFieldsExplicitImpl : INotifyPropertyChanged
-    {
+    class ClassWithMultipleHandlerFieldsExplicitImpl :
+    INotifyPropertyChanged    {
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
             add => Second += value;
@@ -144,8 +144,8 @@ public class MethodInjectorTests :
         public const string ExpectedFieldName = nameof(Second);
     }
 
-    class ClassWithExplicitImplAndPropertyChangedEvent : INotifyPropertyChanged
-    {
+    class ClassWithExplicitImplAndPropertyChangedEvent :
+    INotifyPropertyChanged    {
         event PropertyChangedEventHandler PropertyChanged
         {
             add => First += value;
@@ -164,8 +164,8 @@ public class MethodInjectorTests :
         public const string ExpectedFieldName = nameof(Second);
     }
 
-    class ClassWithMultipleHandlerFieldsCustomInvalid : INotifyPropertyChanged
-    {
+    class ClassWithMultipleHandlerFieldsCustomInvalid :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged
         {
             add { }
@@ -175,8 +175,8 @@ public class MethodInjectorTests :
         PropertyChangedEventHandler Other;
     }
 
-    class ClassWithMultipleHandlerFieldsExplicitInvalid : INotifyPropertyChanged
-    {
+    class ClassWithMultipleHandlerFieldsExplicitInvalid :
+    INotifyPropertyChanged    {
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
             add { }
@@ -186,8 +186,8 @@ public class MethodInjectorTests :
         PropertyChangedEventHandler Other;
     }
 
-    class ClassWithMultipleHandlerFieldReferences : INotifyPropertyChanged
-    {
+    class ClassWithMultipleHandlerFieldReferences :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged
         {
             add

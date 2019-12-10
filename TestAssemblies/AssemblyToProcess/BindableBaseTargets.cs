@@ -26,7 +26,8 @@ public class ClassBindableBaseCallingSetProperty : BindableBase
     }
 }
 
-public abstract class BindableBase : INotifyPropertyChanged
+public abstract class BindableBase :
+    INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

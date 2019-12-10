@@ -3,7 +3,8 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 // ReSharper disable UnusedVariable
 
-public class ClassWithExpression : INotifyPropertyChanged
+public class ClassWithExpression :
+    INotifyPropertyChanged
 {
     public string Property1;
 

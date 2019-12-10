@@ -1,6 +1,7 @@
 using System.ComponentModel;
 
-public abstract class ClassWithOnChangedAbstract : INotifyPropertyChanged
+public abstract class ClassWithOnChangedAbstract :
+    INotifyPropertyChanged
 {
     public bool OnProperty1ChangedCalled;
 
@@ -10,7 +11,8 @@ public abstract class ClassWithOnChangedAbstract : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 }
 
-public class ClassWithOnChangedConcrete : ClassWithOnChangedAbstract
+public class ClassWithOnChangedConcrete :
+    ClassWithOnChangedAbstract
 {
     public override void OnProperty1Changed()
     {

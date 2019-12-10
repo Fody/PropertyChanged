@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithStackOverflow : INotifyPropertyChanged
+public class ClassWithStackOverflow :
+    INotifyPropertyChanged
 {
     string name;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public string Name    {
+    public string Name
+    {
         get
         {
             if (string.IsNullOrEmpty(name))
@@ -16,7 +18,8 @@ public class ClassWithStackOverflow : INotifyPropertyChanged
 
             return Name;
         }
-        set => name = value;    }
+        set => name = value;
+    }
 
     public string ValidName { get; set; }
 

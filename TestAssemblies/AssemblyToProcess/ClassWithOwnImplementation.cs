@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
-public class ClassWithOwnImplementation : INotifyPropertyChanged
+public class ClassWithOwnImplementation :
+    INotifyPropertyChanged
 {
     public string Property1 { get; set; }
     public bool BaseNotifyCalled { get; set; }

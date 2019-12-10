@@ -2,10 +2,11 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
 [SuppressMessage("ReSharper", "NotAccessedField.Global")]
-public class ClassWithOnPropertyChangedMethod : INotifyPropertyChanged
+public class ClassWithOnPropertyChangedMethod :
+    INotifyPropertyChanged
 {
     public int OnProperty1ChangedCallCount;
-    
+
     public string Property1 { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;

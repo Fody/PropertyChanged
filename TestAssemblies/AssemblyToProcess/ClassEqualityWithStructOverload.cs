@@ -1,6 +1,7 @@
 using System.ComponentModel;
 
-public class ClassEqualityWithStructOverload : INotifyPropertyChanged
+public class ClassEqualityWithStructOverload :
+    INotifyPropertyChanged
 {
     public SimpleStruct Property1 { get; set; }
 
@@ -11,7 +12,8 @@ public class ClassEqualityWithStructOverload : INotifyPropertyChanged
 #pragma warning restore 660,661
     {
 
-        public int X ;
+        public int X;
+
         public static bool operator ==(SimpleStruct left, SimpleStruct right)
         {
             return left.X == right.X;

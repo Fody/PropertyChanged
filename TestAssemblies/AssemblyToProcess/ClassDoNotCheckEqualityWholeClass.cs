@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 
 [PropertyChanged.DoNotCheckEquality]
-public class ClassDoNotCheckEqualityWholeClass : INotifyPropertyChanged
+public class ClassDoNotCheckEqualityWholeClass :
+    INotifyPropertyChanged
 {
     public int TimesProperty1Changed;
     public int TimesProperty2Changed;
@@ -23,7 +24,8 @@ public class ClassDoNotCheckEqualityWholeClass : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 }
 
-public class ClassDoNotCheckEqualityWholeClassInherited : ClassDoNotCheckEqualityWholeClass
+public class ClassDoNotCheckEqualityWholeClassInherited :
+    ClassDoNotCheckEqualityWholeClass
 {
 
 }

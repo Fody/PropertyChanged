@@ -2,7 +2,8 @@
 
 namespace HierarchyBeforeAfterAndSimple
 {
-    public class ClassBase : INotifyPropertyChanged
+    public class ClassBase :
+        INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

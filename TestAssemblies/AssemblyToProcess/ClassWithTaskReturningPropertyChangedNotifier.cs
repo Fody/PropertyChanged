@@ -2,7 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-public class ClassWithTaskReturningPropertyChangedNotifier : INotifyPropertyChanged
+public class ClassWithTaskReturningPropertyChangedNotifier :
+    INotifyPropertyChanged
 {
     public string Property1 { get; set; }
     public event PropertyChangedEventHandler PropertyChanged;

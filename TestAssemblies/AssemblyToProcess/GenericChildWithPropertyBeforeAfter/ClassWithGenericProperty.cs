@@ -2,8 +2,8 @@
 
 namespace GenericChildWithPropertyBeforeAfter
 {
-    public class ClassWithGenericPropertyParent<T> : INotifyPropertyChanged
-    {
+    public class ClassWithGenericPropertyParent<T> :
+    INotifyPropertyChanged    {
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName, object before, object after)
         {
