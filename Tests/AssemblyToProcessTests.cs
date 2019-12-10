@@ -91,6 +91,20 @@ public class AssemblyToProcessTests :
     }
 
     [Fact]
+    public void ClassWithAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("ClassWithAlsoNotifyFor");
+        EventTester.TestProperty(instance, true);
+    }
+
+    [Fact]
+    public void ClassWithDependsOn()
+    {
+        var instance = testResult.GetInstance("ClassWithDependsOn");
+        EventTester.TestProperty(instance, true);
+    }
+
+    [Fact]
     public void UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
