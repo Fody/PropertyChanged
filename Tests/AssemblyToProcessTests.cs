@@ -84,6 +84,13 @@ public class AssemblyToProcessTests :
     }
 
     [Fact]
+    public void ClassWithInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("ClassWithInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true);
+    }
+
+    [Fact]
     public void UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
