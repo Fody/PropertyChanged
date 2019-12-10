@@ -58,13 +58,21 @@ public class PropertyWeaver
     {
         index = AddIsChangedSetterCall(index);
 
-        var alsoNotifyProperties = propertyData.AlsoNotifyFor
-            .Distinct()
-            .Select(n => propertyData.ParentType.PropertyDatas.FirstOrDefault(p => p.PropertyDefinition == n))
-            .Where(p => p != null);
+        foreach (var propertyDefinition in propertyData.AlsoNotifyFor
+            .Distinct())
+        {
+            var data = propertyData.ParentType.PropertyDatas.SingleOrDefault(p => p.PropertyDefinition == propertyDefinition);
+            if (data == null)
+            {
+                index = AddEventInvokeCall(index, new List<OnChangedMethod>(), propertyDefinition);
+            }
+            else
+            {
+                index = AddEventInvokeCall(index, data.OnChangedMethods, propertyDefinition);
+            }
+        }
 
-        index = alsoNotifyProperties.Aggregate(index, AddEventInvokeCall);
-        AddEventInvokeCall(index, propertyData);
+        AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyData.PropertyDefinition);
     }
 
     IEnumerable<int> FindSetFieldInstructions()
@@ -130,11 +138,9 @@ public class PropertyWeaver
         return index;
     }
 
-    int AddEventInvokeCall(int index, PropertyData targetProperty)
+    int AddEventInvokeCall(int index, List<OnChangedMethod> onChangedMethods, PropertyDefinition property)
     {
-        var property = targetProperty.PropertyDefinition;
-
-        index = AddOnChangedMethodCalls(index, targetProperty);
+        index = AddOnChangedMethodCalls(index, onChangedMethods, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
             moduleWeaver.LogDebug($"\t\t\t{property.Name} skipped since call already exists");
@@ -165,9 +171,9 @@ public class PropertyWeaver
         return AddSimpleInvokerCall(index, property);
     }
 
-    int AddOnChangedMethodCalls(int index, PropertyData targetProperty)
+    int AddOnChangedMethodCalls(int index, List<OnChangedMethod> onChangedMethods, PropertyDefinition propertyDefinition)
     {
-        foreach (var onChangedMethod in targetProperty.OnChangedMethods)
+        foreach (var onChangedMethod in onChangedMethods)
         {
             if (onChangedMethod.IsDefaultMethod)
             {
@@ -189,7 +195,7 @@ public class PropertyWeaver
                     break;
 
                 case OnChangedTypes.BeforeAfter:
-                    index = AddBeforeAfterOnChangedCall(index, targetProperty.PropertyDefinition, onChangedMethod.MethodReference);
+                    index = AddBeforeAfterOnChangedCall(index, propertyDefinition, onChangedMethod.MethodReference);
                     break;
             }
         }
