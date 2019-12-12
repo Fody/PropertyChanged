@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Fody;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
 using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
@@ -291,6 +293,19 @@ public class AssemblyToProcessTests :
         Assert.False(instance.OnProperty1ChangedCalled);
         Assert.False(instance.OnProperty2ChangedCalled);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)));
+    }
+
+    [Fact]
+    public void ClassWithGenericTypeInInheritanceChainUsesCorrectEventInvoker()
+    {
+        // Issue #477
+        using (var module = ModuleDefinition.ReadModule(testResult.AssemblyPath))
+        {
+            var typeDef = module.GetType(nameof(ClassWithGenericMiddleChild));
+            var setter = typeDef.Methods.Single(m => m.Name == "set_" + nameof(ClassWithGenericMiddleChild.Property));
+            var callInstruction = setter.Body.Instructions.Single(i => i.OpCode == OpCodes.Callvirt);
+            Assert.Equal(nameof(ClassWithGenericMiddleBase), ((MethodReference)callInstruction.Operand).DeclaringType.FullName);
+        }
     }
 
     public AssemblyToProcessTests(ITestOutputHelper output) :
