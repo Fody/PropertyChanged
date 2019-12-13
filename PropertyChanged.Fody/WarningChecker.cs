@@ -75,17 +75,14 @@ public partial class ModuleWeaver
         if (member is IMemberDefinition memberDefinition && memberDefinition.DeclaringType.GetAllCustomAttributes().ContainsAttribute(suppressAttrName))
             return;
 
-        if (member is MethodDefinition method)
-        {
-            // Get the first sequence point of the method to get an approximate location for the warning 
-            var sequencePoint = method.DebugInformation.HasSequencePoints
-                ? method.DebugInformation.SequencePoints.FirstOrDefault()
-                : null;
-        
-            if (!message.EndsWith("."))
-                message += ".";
-            
-            LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
-        }
-    }
+        // Get the first sequence point of the method to get an approximate location for the warning 
+        var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
+            ? method.DebugInformation.SequencePoints.FirstOrDefault()
+            : null;
+
+        if (!message.EndsWith("."))
+          message += ".";
+
+        LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
+  }
 }
