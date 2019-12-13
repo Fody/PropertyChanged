@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 16.0.29201.188
@@ -41,6 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyExplicitPropertyCha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19A5180B-ADE5-426B-AD51-27B443F9C400}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
@@ -48,9 +50,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithAttributeAndEve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmokeTest", "SmokeTest\SmokeTest.csproj", "{7C7CF462-F512-4E0C-9476-E241B54D8E40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithStaticOnPropertyNameChanged", "TestAssemblies\AssemblyWithStaticOnPropertyNameChanged\AssemblyWithStaticOnPropertyNameChanged.csproj", "{99568358-1828-4FB8-9140-506ABE536057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithStaticOnPropertyNameChanged", "TestAssemblies\AssemblyWithStaticOnPropertyNameChanged\AssemblyWithStaticOnPropertyNameChanged.csproj", "{99568358-1828-4FB8-9140-506ABE536057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithDisabledInjectOnPropertyNameChanged", "TestAssemblies\AssemblyWithDisabledInjectOnPropertyNameChanged\AssemblyWithDisabledInjectOnPropertyNameChanged.csproj", "{CE399B3E-5BC3-40DA-95C5-F83FC9581636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithDisabledInjectOnPropertyNameChanged", "TestAssemblies\AssemblyWithDisabledInjectOnPropertyNameChanged\AssemblyWithDisabledInjectOnPropertyNameChanged.csproj", "{CE399B3E-5BC3-40DA-95C5-F83FC9581636}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

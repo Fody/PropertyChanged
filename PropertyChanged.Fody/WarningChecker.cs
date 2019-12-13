@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -66,18 +67,26 @@ public partial class ModuleWeaver
     {
         if (SuppressWarnings)
             return;
-        
-        if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute("PropertyChanged.SuppressPropertyChangedWarningsAttribute"))
+
+        var suppressAttrName = "PropertyChanged.SuppressPropertyChangedWarningsAttribute";
+
+        if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute(suppressAttrName))
             return;
+
+        if (member is IMemberDefinition memberDefinition && memberDefinition.DeclaringType.GetAllCustomAttributes().ContainsAttribute(suppressAttrName))
+            return;
+
+        if (member is MethodDefinition method)
+        {
+            // Get the first sequence point of the method to get an approximate location for the warning 
+            var sequencePoint = method.DebugInformation.HasSequencePoints
+                ? method.DebugInformation.SequencePoints.FirstOrDefault()
+                : null;
         
-        // Get the first sequence point of the method to get an approximate location for the warning 
-        var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
-            ? method.DebugInformation.SequencePoints.FirstOrDefault()
-            : null;
-        
-        if (!message.EndsWith("."))
-            message += ".";
-        
-        LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
+            if (!message.EndsWith("."))
+                message += ".";
+            
+            LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
+        }
     }
 }
