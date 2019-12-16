@@ -72,7 +72,9 @@ public partial class ModuleWeaver
         if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute(suppressAttrName))
             return;
 
-        if (member is IMemberDefinition memberDefinition && memberDefinition.DeclaringType.GetAllCustomAttributes().ContainsAttribute(suppressAttrName))
+        if (member is IMemberDefinition memberDefinition &&
+            memberDefinition.DeclaringType.HasCustomAttributes &&
+            memberDefinition.DeclaringType.CustomAttributes.ContainsAttribute(suppressAttrName))
             return;
 
         // Get the first sequence point of the method to get an approximate location for the warning 
