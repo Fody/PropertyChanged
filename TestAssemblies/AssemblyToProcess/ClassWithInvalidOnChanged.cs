@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using PropertyChanged;
 
 public class ClassWithInvalidOnChanged :
@@ -7,6 +8,11 @@ public class ClassWithInvalidOnChanged :
     public string PropertyWithInvalidOnChangedMethod { get; set; }
     public string PropertyWithInvalidOnChangedMethodSuppressed { get; set; }
     public string PropertyWithValidOnChangedMethod { get; set; }
+
+    public const string IndexerName = "Item";
+    [IndexerName(IndexerName)]
+    [SuppressPropertyChangedWarnings]
+    public string this[string index] { get => null; set { } }
 
     [DoNotNotify]
     public string IgnoredProperty { get; set; }
@@ -38,4 +44,15 @@ public class ClassWithInvalidOnChanged :
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+}
+
+[SuppressPropertyChangedWarnings]
+public class ClassWithSuppressedInvalidOnChanged 
+  : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    public void OnNonExistingPropertyChanged()
+    {
+    }
 }

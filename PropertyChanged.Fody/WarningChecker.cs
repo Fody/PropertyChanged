@@ -71,13 +71,22 @@ public partial class ModuleWeaver
             return;
         }
 
+        const string suppressAttrName = "PropertyChanged.SuppressPropertyChangedWarningsAttribute";
+
         if (member.HasCustomAttributes &&
-            member.CustomAttributes.ContainsAttribute("PropertyChanged.SuppressPropertyChangedWarningsAttribute"))
+            member.CustomAttributes.ContainsAttribute(suppressAttrName))
         {
             return;
         }
 
-        // Get the first sequence point of the method to get an approximate location for the warning
+        if (member is IMemberDefinition memberDefinition &&
+            memberDefinition.DeclaringType.HasCustomAttributes &&
+            memberDefinition.DeclaringType.CustomAttributes.ContainsAttribute(suppressAttrName))
+        {
+            return;
+        }
+
+        // Get the first sequence point of the method to get an approximate location for the warning 
         var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
             ? method.DebugInformation.SequencePoints.FirstOrDefault()
             : null;

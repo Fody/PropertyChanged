@@ -222,6 +222,20 @@ public class AssemblyToProcessTests :
     }
 
     [Fact]
+    public void IgnoreSuppressedProperties()
+    {
+        const string className = nameof(ClassWithInvalidOnChanged);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(ClassWithInvalidOnChanged.IndexerName));
+    }
+
+    [Fact]
+    public void IgnoreSuppressedClasses()
+    {
+        const string className = nameof(ClassWithSuppressedInvalidOnChanged);        
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithSuppressedInvalidOnChanged.OnNonExistingPropertyChanged)));
+    }
+
+    [Fact]
     public void OnPropertyNameChangedMethodIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChanged));
