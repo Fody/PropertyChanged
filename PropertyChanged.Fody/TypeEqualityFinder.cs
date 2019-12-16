@@ -64,23 +64,26 @@ public partial class ModuleWeaver
         {
             return null;
         }
-        if (typeDefinition.IsGenericInstance)
-        {
-            if (typeDefinition.FullName.StartsWith("System.Nullable"))
-            {
-                var genericInstanceMethod = new GenericInstanceMethod(NullableEqualsMethod);
-                var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
-                genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
 
-                if (typeWrappedByNullable.IsGenericParameter)
-                {
-                    return ModuleDefinition.ImportReference(genericInstanceMethod, typeWrappedByNullable.DeclaringType);
-                }
-                return ModuleDefinition.ImportReference(genericInstanceMethod);
-            }
+        if (!typeDefinition.IsGenericInstance)
+        {
+            return GetStaticEquality(typeDefinition);
         }
 
-        return GetStaticEquality(typeDefinition);
+        if (!typeDefinition.FullName.StartsWith("System.Nullable"))
+        {
+            return GetStaticEquality(typeDefinition);
+        }
+        var genericInstanceMethod = new GenericInstanceMethod(NullableEqualsMethod);
+        var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
+        genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
+
+        if (typeWrappedByNullable.IsGenericParameter)
+        {
+            return ModuleDefinition.ImportReference(genericInstanceMethod, typeWrappedByNullable.DeclaringType);
+        }
+        return ModuleDefinition.ImportReference(genericInstanceMethod);
+
     }
 
     MethodReference GetStaticEquality(TypeReference typeReference)
@@ -114,7 +117,9 @@ public partial class ModuleWeaver
                 typesChecked.Add(typeReference.FullName);
                 equality = FindNamedMethod(typeReference);
                 if (equality == null)
+                {
                     typeReference = GetBaseType(typeReference);
+                }
             }
         }
         else
@@ -162,15 +167,17 @@ public partial class ModuleWeaver
             //apply to base type
             //note: even though the base class may have different argument names in the source code, the argument names of the inheriting class are used in the GenericArguments
             //thus we can directly map them.
-            var baseTypeArgs = genericBaseType.GenericArguments.Select(arg =>
-            {
-                if (typeRefDict.TryGetValue(arg.FullName, out var t))
+            var baseTypeArgs = genericBaseType.GenericArguments
+                .Select(arg =>
                 {
-                    return t;
-                }
+                    if (typeRefDict.TryGetValue(arg.FullName, out var t))
+                    {
+                        return t;
+                    }
 
-                return arg;
-            }).ToArray();
+                    return arg;
+                })
+                .ToArray();
 
             baseType = genericBaseType.ElementType.MakeGenericInstanceType(baseTypeArgs);
         }
@@ -186,32 +193,36 @@ public partial class ModuleWeaver
         {
             equalsMethod = FindNamedMethod(typeDefinition, "op_Equality", typeReference);
         }
-        if (equalsMethod != null && typeReference.IsGenericInstance)
+
+        if (equalsMethod == null || !typeReference.IsGenericInstance)
         {
-            var genericType = new GenericInstanceType(equalsMethod.DeclaringType);
-            foreach (var argument in ((GenericInstanceType) typeReference).GenericArguments)
-            {
-                genericType.GenericArguments.Add(argument);
-            }
-            equalsMethod = MakeGeneric(genericType, equalsMethod);
+            return equalsMethod;
         }
-        return equalsMethod;
+        var genericType = new GenericInstanceType(equalsMethod.DeclaringType);
+        foreach (var argument in ((GenericInstanceType) typeReference).GenericArguments)
+        {
+            genericType.GenericArguments.Add(argument);
+        }
+        return MakeGeneric(genericType, equalsMethod);
     }
 
     static MethodReference FindNamedMethod(TypeDefinition typeDefinition, string methodName, TypeReference parameterType)
     {
-        MethodReference reference =  typeDefinition.Methods.FirstOrDefault(x => x.Name == methodName &&
-                                                          x.IsStatic &&
-                                                          x.ReturnType.Name == "Boolean" &&
-                                                          x.HasParameters &&
-                                                          x.Parameters.Count == 2 &&
-                                                          MatchParameter(x.Parameters[0], parameterType) &&
-                                                          MatchParameter(x.Parameters[1], parameterType));
+        MethodReference reference = typeDefinition.Methods
+            .FirstOrDefault(x => x.Name == methodName &&
+                                 x.IsStatic &&
+                                 x.ReturnType.Name == "Boolean" &&
+                                 x.HasParameters &&
+                                 x.Parameters.Count == 2 &&
+                                 MatchParameter(x.Parameters[0], parameterType) &&
+                                 MatchParameter(x.Parameters[1], parameterType));
 
-        if (reference == null && typeDefinition != parameterType)
-            reference = FindNamedMethod(typeDefinition, methodName, typeDefinition);
+        if (reference != null || typeDefinition == parameterType)
+        {
+            return reference;
+        }
 
-        return reference;
+        return FindNamedMethod(typeDefinition, methodName, typeDefinition);
     }
 
     static bool MatchParameter(ParameterDefinition parameter, TypeReference typeMatch)
@@ -221,11 +232,10 @@ public partial class ModuleWeaver
             return true;
         }
 
-        if (parameter.ParameterType.IsGenericInstance && typeMatch.IsGenericInstance)
+        if (!parameter.ParameterType.IsGenericInstance || !typeMatch.IsGenericInstance)
         {
-            return parameter.ParameterType.Resolve() == typeMatch.Resolve();
+            return false;
         }
-
-        return false;
+        return parameter.ParameterType.Resolve() == typeMatch.Resolve();
     }
 }
