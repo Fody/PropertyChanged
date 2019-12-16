@@ -10,7 +10,7 @@ public partial class ModuleWeaver
         var childEventInvoker = FindEventInvokerMethod(node.TypeDefinition);
         if (childEventInvoker == null)
         {
-            if (node.TypeDefinition.BaseType.IsGenericInstance)
+            if (node.TypeDefinition.BaseType.IsGenericInstance && eventInvoker.MethodReference.DeclaringType.GetElementType() == node.TypeDefinition.BaseType.GetElementType())
             {
                 var methodReference = MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
                 eventInvoker = new EventInvokerMethod
