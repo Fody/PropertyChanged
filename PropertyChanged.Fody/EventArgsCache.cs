@@ -28,7 +28,9 @@ public class EventArgsCache
     public void InjectType()
     {
         if (properties.Count == 0)
+        {
             return;
+        }
 
         var attributes = MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
         var cctor = new MethodDefinition(".cctor", attributes, moduleWeaver.TypeSystem.VoidReference);

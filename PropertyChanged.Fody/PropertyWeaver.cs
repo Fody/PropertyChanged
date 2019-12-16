@@ -124,18 +124,18 @@ public class PropertyWeaver
 
     int AddIsChangedSetterCall(int index)
     {
-        if (typeNode.IsChangedInvoker != null &&
-            !propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotSetChangedAttribute") &&
-            propertyData.PropertyDefinition.Name != "IsChanged")
+        if (typeNode.IsChangedInvoker == null ||
+            propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotSetChangedAttribute") ||
+            propertyData.PropertyDefinition.Name == "IsChanged")
         {
-            moduleWeaver.LogDebug("\t\t\tSet IsChanged");
-            return instructions.Insert(index,
-                Instruction.Create(OpCodes.Ldarg_0),
-                Instruction.Create(OpCodes.Ldc_I4, 1),
-                CreateIsChangedInvoker());
+            return index;
         }
+        moduleWeaver.LogDebug("\t\t\tSet IsChanged");
+        return instructions.Insert(index,
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldc_I4, 1),
+            CreateIsChangedInvoker());
 
-        return index;
     }
 
     int AddEventInvokeCall(int index, List<OnChangedMethod> onChangedMethods, PropertyDefinition property)

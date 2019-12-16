@@ -1,9 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System.Reflection;
-using System;
-// ReSharper restore RedundantUsingDirective
-using System.ComponentModel;
-using System.Linq.Expressions;
+﻿using System.ComponentModel;
 using Jounce.Core.Model;
 
 namespace Caliburn.Micro
@@ -93,79 +88,19 @@ namespace Cinch
     }
 }
 
-#if (!WINDOWS_PHONE)
-namespace Microsoft.Practices.Prism.ViewModel
-{
-    public class NotificationObject :
-        INotifyPropertyChanged
-    {
-        public bool BaseNotifyCalled { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void RaisePropertyChanged(string propertyName)
-        {
-            BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
-        {
-            var propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
-            RaisePropertyChanged(propertyName);
-        }
-
-        protected void RaisePropertyChanged(params string[] propertyNames)
-        {
-            if (propertyNames == null)
-            {
-                throw new ArgumentNullException("propertyNames");
-            }
-            foreach (var str in propertyNames)
-            {
-                RaisePropertyChanged(str);
-            }
-        }
-    }
-
-    public class PropertySupport
-    {
-        public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
-        {
-            if (propertyExpression == null)
-            {
-                throw new ArgumentNullException("propertyExpression");
-            }
-            if (!(propertyExpression.Body is MemberExpression body))
-            {
-                throw new ArgumentException("propertyExpression");
-            }
-            var member = body.Member as PropertyInfo;
-            if (member == null)
-            {
-                throw new ArgumentException("propertyExpression");
-            }
-            if (member.GetGetMethod(true).IsStatic)
-            {
-                throw new ArgumentException("propertyExpression");
-            }
-            return body.Member.Name;
-        }
-
-
-
-    }
-}
-#endif
 namespace GalaSoft.MvvmLight
 {
     public class ViewModelBase :
         ObservableObject
     {
     }
+
     public class ObservableObject :
-    INotifyPropertyChanged    {
+        INotifyPropertyChanged
+    {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
         public virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
@@ -181,6 +116,7 @@ namespace Caliburn.PresentationFramework
     {
         public bool BaseNotifyCalled { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
             BaseNotifyCalled = true;
@@ -221,7 +157,8 @@ namespace ReactiveUI
         void RaisePropertyChanged(PropertyChangedEventArgs args);
     }
 
-    public class ReactiveObject : IReactiveObject
+    public class ReactiveObject :
+        IReactiveObject
     {
         void IReactiveObject.RaisePropertyChanged(PropertyChangedEventArgs args)
         {

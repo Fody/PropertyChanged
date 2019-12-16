@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -6,12 +7,12 @@ public partial class ModuleWeaver
     public MethodReference GetMethodReference(Stack<TypeDefinition> typeDefinitions, MethodDefinition methodDefinition)
     {
         var methodReference = ModuleDefinition.ImportReference(methodDefinition).GetGeneric();
-        typeDefinitions.Pop();
-        while (typeDefinitions.Count > 0)
+
+        if (methodReference.DeclaringType.IsGenericInstance && typeDefinitions.Count > 1)
         {
-            var definition = typeDefinitions.Pop();
-            methodReference = MakeGeneric(definition.BaseType, methodReference);
+            methodReference = MakeGeneric(typeDefinitions.Last().BaseType, methodReference);
         }
+
         return methodReference;
     }
 

@@ -57,25 +57,34 @@ public partial class ModuleWeaver
     public void EmitWarning(string message)
     {
         if (SuppressWarnings)
+        {
             return;
-        
+        }
+
         LogWarning?.Invoke(message);
     }
-    
+
     public void EmitConditionalWarning(ICustomAttributeProvider member, string message)
     {
         if (SuppressWarnings)
+        {
             return;
+        }
 
         const string suppressAttrName = "PropertyChanged.SuppressPropertyChangedWarningsAttribute";
 
-        if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute(suppressAttrName))
+        if (member.HasCustomAttributes &&
+            member.CustomAttributes.ContainsAttribute(suppressAttrName))
+        {
             return;
+        }
 
         if (member is IMemberDefinition memberDefinition &&
             memberDefinition.DeclaringType.HasCustomAttributes &&
             memberDefinition.DeclaringType.CustomAttributes.ContainsAttribute(suppressAttrName))
+        {
             return;
+        }
 
         // Get the first sequence point of the method to get an approximate location for the warning 
         var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
@@ -83,8 +92,10 @@ public partial class ModuleWeaver
             : null;
 
         if (!message.EndsWith("."))
-          message += ".";
+        {
+            message += ".";
+        }
 
         LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
-  }
+    }
 }

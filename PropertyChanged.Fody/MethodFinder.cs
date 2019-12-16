@@ -10,7 +10,7 @@ public partial class ModuleWeaver
         var childEventInvoker = FindEventInvokerMethod(node.TypeDefinition);
         if (childEventInvoker == null)
         {
-            if (node.TypeDefinition.BaseType.IsGenericInstance)
+            if (node.TypeDefinition.BaseType.IsGenericInstance && eventInvoker.MethodReference.DeclaringType.GetElementType() == node.TypeDefinition.BaseType.GetElementType())
             {
                 var methodReference = MakeGeneric(node.TypeDefinition.BaseType, eventInvoker.MethodReference);
                 eventInvoker = new EventInvokerMethod
@@ -31,7 +31,7 @@ public partial class ModuleWeaver
             var error = $"Cannot use '{eventInvoker.MethodReference.FullName}' in '{node.TypeDefinition.FullName}' since that method is not visible from the child class.";
             throw new WeavingException(error);
         }
-        
+
         node.EventInvoker = eventInvoker;
 
         foreach (var childNode in node.Nodes)
@@ -95,7 +95,9 @@ public partial class ModuleWeaver
         }
 
         if (methodDefinition == null)
+        {
             return null;
+        }
 
         var methodReference = ModuleDefinition.ImportReference(methodDefinition);
         return new EventInvokerMethod
@@ -113,15 +115,15 @@ public partial class ModuleWeaver
             .OrderByDescending(GetInvokerPriority)
             .FirstOrDefault(IsEventInvokerMethod);
 
-        if (methodDefinition == null)
+        if (methodDefinition != null)
         {
-            methodDefinition = type.Methods
-                .Where(x => EventInvokerNames.Contains(x.Name))
-                .OrderByDescending(GetInvokerPriority)
-                .FirstOrDefault(IsEventInvokerMethod);
+            return methodDefinition;
         }
 
-        return methodDefinition;
+        return type.Methods
+            .Where(x => EventInvokerNames.Contains(x.Name))
+            .OrderByDescending(GetInvokerPriority)
+            .FirstOrDefault(IsEventInvokerMethod);
     }
 
     MethodReference FindExplicitImplementation(TypeDefinition type)
@@ -137,19 +139,29 @@ public partial class ModuleWeaver
     static int GetInvokerPriority(MethodReference method)
     {
         if (IsBeforeAfterGenericMethod(method))
+        {
             return 5;
+        }
 
         if (IsBeforeAfterMethod(method))
+        {
             return 4;
+        }
 
         if (IsSenderPropertyChangedArgMethod(method))
+        {
             return 3;
+        }
 
         if (IsPropertyChangedArgMethod(method))
+        {
             return 2;
+        }
 
         if (IsSingleStringMethod(method))
+        {
             return 1;
+        }
 
         return 0;
     }

@@ -1,5 +1,8 @@
-﻿using AssemblyWithBase.BaseWithEquals;
+﻿using System.Linq;
+using AssemblyWithBase.BaseWithEquals;
 using Fody;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
 using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
@@ -151,6 +154,25 @@ public class AssemblyWithBaseInDifferentModuleTests :
         Assert.NotNull(instance.Property2);
         Assert.True(instance.Property2.StaticEqualsCalled);
         instance.Property2.StaticEqualsCalled = false;
+    }
+    
+    [Fact]
+    public void ClassWithGenericTypeInInheritanceChainUsesCorrectEventInvoker()
+    {
+        // Issue #477
+        
+        Weave(false);
+        
+        using (var module = ModuleDefinition.ReadModule(testResult.AssemblyPath))
+        {
+            var typeDef = module.GetType(nameof(ClassWithGenericMiddleChildInDifferentModule));
+            var setter = typeDef.Methods.Single(m => m.Name == "set_" + nameof(ClassWithGenericMiddleChildInDifferentModule.Property));
+            var callInstruction = setter.Body.Instructions.Single(i => i.OpCode == OpCodes.Callvirt);
+            Assert.Equal(nameof(BaseClassWithGenericMiddleBase), ((MethodReference)callInstruction.Operand).DeclaringType.FullName);
+        }
+
+        var instance = testResult.GetInstance(nameof(ClassWithGenericMiddleChildInDifferentModule));
+        EventTester.TestProperty(instance, nameof(ClassWithGenericMiddleChildInDifferentModule.Property), 42);
     }
 
     public AssemblyWithBaseInDifferentModuleTests(ITestOutputHelper output) : 
