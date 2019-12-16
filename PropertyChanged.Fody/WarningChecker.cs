@@ -67,7 +67,7 @@ public partial class ModuleWeaver
         if (SuppressWarnings)
             return;
 
-        var suppressAttrName = "PropertyChanged.SuppressPropertyChangedWarningsAttribute";
+        const string suppressAttrName = "PropertyChanged.SuppressPropertyChangedWarningsAttribute";
 
         if (member.HasCustomAttributes && member.CustomAttributes.ContainsAttribute(suppressAttrName))
             return;
