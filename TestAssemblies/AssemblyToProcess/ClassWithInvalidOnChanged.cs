@@ -47,7 +47,7 @@ public class ClassWithInvalidOnChanged :
 }
 
 [SuppressPropertyChangedWarnings]
-public class ClassWithSuppressedInvalidOnChanged 
+public class ClassWithSuppressedInvalidOnChanged
   : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
