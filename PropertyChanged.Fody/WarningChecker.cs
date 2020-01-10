@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 
 public partial class ModuleWeaver
 {
@@ -79,17 +80,27 @@ public partial class ModuleWeaver
             return;
         }
 
-        if (member is IMemberDefinition memberDefinition &&
-            memberDefinition.DeclaringType.HasCustomAttributes &&
-            memberDefinition.DeclaringType.CustomAttributes.ContainsAttribute(suppressAttrName))
+        if (member is IMemberDefinition memberDefinition)
         {
-            return;
+            var declaringType = memberDefinition.DeclaringType;
+            if (declaringType.HasCustomAttributes &&
+                declaringType.CustomAttributes.ContainsAttribute(suppressAttrName))
+            {
+                return;
+            }
         }
 
-        // Get the first sequence point of the method to get an approximate location for the warning 
-        var sequencePoint = member is MethodDefinition method && method.DebugInformation.HasSequencePoints
-            ? method.DebugInformation.SequencePoints.FirstOrDefault()
-            : null;
+        // Get the first sequence point of the method to get an approximate location for the warning
+        SequencePoint sequencePoint;
+        if (member is MethodDefinition method &&
+            method.DebugInformation.HasSequencePoints)
+        {
+            sequencePoint = method.DebugInformation.SequencePoints.FirstOrDefault();
+        }
+        else
+        {
+            sequencePoint = null;
+        }
 
         if (!message.EndsWith("."))
         {

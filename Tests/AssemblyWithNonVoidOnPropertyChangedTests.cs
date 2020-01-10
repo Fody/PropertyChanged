@@ -1,4 +1,6 @@
-﻿using Fody;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Fody;
 using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
@@ -7,14 +9,11 @@ public class AssemblyWithNonVoidOnPropertyChangedTests :
     VerifyBase
 {
     [Fact]
-    public void Simple()
+    public Task Simple()
     {
         var weavingTask = new ModuleWeaver();
-        var weavingException = Assert.Throws<WeavingException>(() =>
-        {
-            weavingTask.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll");
-        });
-        Assert.Equal("The type ClassWithNonVoidOnPropertyChanged has a On_PropertyName_Changed method (OnProperty1Changed) that has a non void return value. Ensure the return type void.", weavingException.Message);
+        var result = weavingTask.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll");
+        return Verify(result.Warnings.Single().Text);
     }
 
     public AssemblyWithNonVoidOnPropertyChangedTests(ITestOutputHelper output) :

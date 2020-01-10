@@ -1,32 +1,29 @@
-﻿using Fody;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Fody;
+using VerifyXunit;
 using Xunit;
+using Xunit.Abstractions;
 
-public class InjectOnPropertyNameChangedTests
+public class InjectOnPropertyNameChangedTests :
+    VerifyBase
 {
     [Fact]
-    public void ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_ThrowsWeavingExceptionForNonVoidMethods()
+    public Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_ThrowsWeavingExceptionForNonVoidMethods()
     {
-        var moduleWeaver = new ModuleWeaver { InjectOnPropertyNameChanged = true };
+        var moduleWeaver = new ModuleWeaver {InjectOnPropertyNameChanged = true};
 
-        var weavingException = Assert.Throws<WeavingException>(() =>
-        {
-            moduleWeaver.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll");
-        });
-
-        Assert.Equal("The type ClassWithNonVoidOnPropertyChanged has a On_PropertyName_Changed method (OnProperty1Changed) that has a non void return value. Ensure the return type void.", weavingException.Message);
+        var result = moduleWeaver.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll");
+        return Verify(result.Warnings.Single().Text);
     }
 
     [Fact]
-    public void ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_ThrowsWeavingExceptionForStaticMethods()
+    public Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_ThrowsWeavingExceptionForStaticMethods()
     {
-        var moduleWeaver = new ModuleWeaver { InjectOnPropertyNameChanged = true };
+        var moduleWeaver = new ModuleWeaver {InjectOnPropertyNameChanged = true};
 
-        var weavingException = Assert.Throws<WeavingException>(() =>
-        {
-            moduleWeaver.ExecuteTestRun("AssemblyWithStaticOnPropertyNameChanged.dll");
-        });
-
-        Assert.Equal("The type ClassWithStaticOnPropertyChanged has a On_PropertyName_Changed method (OnProperty1Changed) which is static.", weavingException.Message);
+        var result = moduleWeaver.ExecuteTestRun("AssemblyWithStaticOnPropertyNameChanged.dll");
+        return Verify(result.Warnings.Single().Text);
     }
 
     [Fact]
@@ -36,5 +33,10 @@ public class InjectOnPropertyNameChangedTests
 
         moduleWeaver.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll");
         moduleWeaver.ExecuteTestRun("AssemblyWithStaticOnPropertyNameChanged.dll");
+    }
+
+    public InjectOnPropertyNameChangedTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

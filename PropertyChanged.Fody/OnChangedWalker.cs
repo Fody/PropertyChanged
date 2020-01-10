@@ -115,14 +115,14 @@ public partial class ModuleWeaver
     {
         if (methodDefinition.IsStatic)
         {
-            var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.";
-            throw new WeavingException(message);
+            EmitConditionalWarning(methodDefinition, $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.");
+            return null;
         }
 
         if (methodDefinition.ReturnType.FullName != "System.Void")
         {
-            var message = $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.";
-            throw new WeavingException(message);
+            EmitConditionalWarning(methodDefinition, $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.");
+            return null;
         }
 
         var typeDefinitions = new Stack<TypeDefinition>();
