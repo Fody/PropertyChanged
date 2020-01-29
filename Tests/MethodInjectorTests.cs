@@ -60,13 +60,13 @@ public class MethodInjectorTests :
     }
 
     [Fact]
-    public void ShouldFindCorrectHandlerFieldInClassThatReimplementsInterface()
+    public void ShouldFindCorrectHandlerFieldInClassThatReImplementsInterface()
     {
-        var type = methodInjector.ModuleDefinition.GetType(typeof(ClassThatReimplementsInterface).FullName, true).Resolve();
+        var type = methodInjector.ModuleDefinition.GetType(typeof(ClassThatReImplementsInterface).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
         Assert.NotNull(field);
-        Assert.Equal(ClassThatReimplementsInterface.ExpectedFieldName, field.Name);
+        Assert.Equal(ClassThatReImplementsInterface.ExpectedFieldName, field.Name);
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public class MethodInjectorTests :
         PropertyChangedEventHandler Other;
     }
 
-    class ClassThatReimplementsInterface :
+    class ClassThatReImplementsInterface :
         ClassWithMultipleHandlerFieldsExplicitImpl,
         INotifyPropertyChanged
     {

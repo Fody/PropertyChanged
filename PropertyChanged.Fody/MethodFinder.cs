@@ -71,9 +71,12 @@ public partial class ModuleWeaver
                    };
     }
 
-    static bool IsVisibleFromChildren(MethodDefinition methodDefinition)
+    static bool IsVisibleFromChildren(MethodDefinition method)
     {
-        return methodDefinition.IsFamilyOrAssembly || methodDefinition.IsFamily || methodDefinition.IsFamilyAndAssembly || methodDefinition.IsPublic;
+        return method.IsFamilyOrAssembly || 
+               method.IsFamily ||
+               method.IsFamilyAndAssembly ||
+               method.IsPublic;
     }
 
     EventInvokerMethod FindEventInvokerMethod(TypeDefinition type)
@@ -111,7 +114,8 @@ public partial class ModuleWeaver
     MethodDefinition FindEventInvokerMethodDefinition(TypeDefinition type)
     {
         var methodDefinition = type.Methods
-            .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) && EventInvokerNames.Contains(x.Name))
+            .Where(x => (x.IsFamily || x.IsFamilyAndAssembly || x.IsPublic || x.IsFamilyOrAssembly) &&
+                        EventInvokerNames.Contains(x.Name))
             .OrderByDescending(GetInvokerPriority)
             .FirstOrDefault(IsEventInvokerMethod);
 
@@ -166,7 +170,7 @@ public partial class ModuleWeaver
         return 0;
     }
 
-    public static InvokerTypes ClassifyInvokerMethod(MethodReference method)
+    static InvokerTypes ClassifyInvokerMethod(MethodReference method)
     {
         if (IsSenderPropertyChangedArgMethod(method))
         {

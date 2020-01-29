@@ -40,46 +40,45 @@ public static class CecilExtensions
 
     public static bool IsCall(this OpCode opCode)
     {
-        return opCode.Code == Code.Call || opCode.Code == Code.Callvirt;
+        return opCode.Code == Code.Call || 
+               opCode.Code == Code.Callvirt;
     }
 
     public static FieldReference GetGeneric(this FieldDefinition definition)
     {
-        if (definition.DeclaringType.HasGenericParameters)
+        if (!definition.DeclaringType.HasGenericParameters)
         {
-            var declaringType = new GenericInstanceType(definition.DeclaringType);
-            foreach (var parameter in definition.DeclaringType.GenericParameters)
-            {
-                declaringType.GenericArguments.Add(parameter);
-            }
-
-            return new FieldReference(definition.Name, definition.FieldType, declaringType);
+            return definition;
+        }
+        var declaringType = new GenericInstanceType(definition.DeclaringType);
+        foreach (var parameter in definition.DeclaringType.GenericParameters)
+        {
+            declaringType.GenericArguments.Add(parameter);
         }
 
-        return definition;
+        return new FieldReference(definition.Name, definition.FieldType, declaringType);
     }
 
     public static MethodReference GetGeneric(this MethodReference reference)
     {
-        if (reference.DeclaringType.HasGenericParameters)
+        if (!reference.DeclaringType.HasGenericParameters)
         {
-            var declaringType = new GenericInstanceType(reference.DeclaringType);
-            foreach (var parameter in reference.DeclaringType.GenericParameters)
-            {
-                declaringType.GenericArguments.Add(parameter);
-            }
-
-            var methodReference = new MethodReference(reference.Name, reference.MethodReturnType.ReturnType, declaringType);
-            foreach (var parameterDefinition in reference.Parameters)
-            {
-                methodReference.Parameters.Add(parameterDefinition);
-            }
-
-            methodReference.HasThis = reference.HasThis;
-            return methodReference;
+            return reference;
+        }
+        var declaringType = new GenericInstanceType(reference.DeclaringType);
+        foreach (var parameter in reference.DeclaringType.GenericParameters)
+        {
+            declaringType.GenericArguments.Add(parameter);
         }
 
-        return reference;
+        var methodReference = new MethodReference(reference.Name, reference.MethodReturnType.ReturnType, declaringType);
+        foreach (var parameterDefinition in reference.Parameters)
+        {
+            methodReference.Parameters.Add(parameterDefinition);
+        }
+
+        methodReference.HasThis = reference.HasThis;
+        return methodReference;
     }
 
     public static MethodReference MakeGeneric(this MethodReference self, params TypeReference[] arguments)
@@ -93,10 +92,14 @@ public static class CecilExtensions
         };
 
         foreach (var parameter in self.Parameters)
+        {
             reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
+        }
 
         foreach (var genericParameter in self.GenericParameters)
+        {
             reference.GenericParameters.Add(new GenericParameter(genericParameter.Name, reference));
+        }
 
         return reference;
     }
