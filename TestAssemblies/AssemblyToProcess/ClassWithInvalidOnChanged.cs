@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using PropertyChanged;
 
@@ -12,6 +13,7 @@ public class ClassWithInvalidOnChanged :
     public const string IndexerName = "Item";
     [IndexerName(IndexerName)]
     [SuppressPropertyChangedWarnings]
+    [SuppressMessage("ReSharper", "ValueParameterNotUsed")]
     public string this[string index] { get => null; set { } }
 
     [DoNotNotify]

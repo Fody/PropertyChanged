@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using ComplexHierarchy;
 using Fody;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -310,15 +311,49 @@ public class AssemblyToProcessTests :
     }
 
     [Fact]
-    public void ClassWithGenericTypeInInheritanceChainUsesCorrectEventInvoker()
+    public void ClassWithIntermediateGenericBaseHandlesPropertyChanged()
     {
-        // Issue #477
+        var instance = testResult.GetInstance(nameof(ClassWithIntermediateGenericBase));
+        
+        var argsList = new List<PropertyChangedEventArgs>();
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) => argsList.Add(args);
+
+        instance.Property1 = "a";
+        instance.Property2 = "b";
+        instance.Property3 = "c";
+
+        Assert.Equal(3, argsList.Count);
+        Assert.Equal("Property1", argsList[0].PropertyName);
+        Assert.Equal("Property2", argsList[1].PropertyName);
+        Assert.Equal("Property3", argsList[2].PropertyName);
+    }
+    
+    [Fact]
+    public void EventInvokersUseCorrectMethodDeclaringType()
+    {
         using (var module = ModuleDefinition.ReadModule(testResult.AssemblyPath))
         {
-            var typeDef = module.GetType(nameof(ClassWithGenericMiddleChild));
-            var setter = typeDef.Methods.Single(m => m.Name == "set_" + nameof(ClassWithGenericMiddleChild.Property));
-            var callInstruction = setter.Body.Instructions.Single(i => i.OpCode == OpCodes.Callvirt);
-            Assert.Equal(nameof(ClassWithGenericMiddleBase), ((MethodReference)callInstruction.Operand).DeclaringType.FullName);
+            // Non generic
+            AssertInvoker(typeof(ClassChild1), nameof(ClassChild1.Property1), typeof(ClassParent).FullName);
+            AssertInvoker(typeof(ClassChild3), nameof(ClassChild3.Property2), typeof(ClassParent).FullName);
+            
+            // Issue #477
+            AssertInvoker(typeof(ClassWithGenericMiddleBase), nameof(ClassWithGenericMiddleBase.Property1), nameof(ClassWithGenericMiddleBase));
+            AssertInvoker(typeof(ClassWithGenericMiddle<>), nameof(ClassWithGenericMiddle<int>.Property2), nameof(ClassWithGenericMiddleBase));
+            AssertInvoker(typeof(ClassWithGenericMiddleChild), nameof(ClassWithGenericMiddleChild.Property3), nameof(ClassWithGenericMiddleBase));
+            
+            // Issue #516
+            AssertInvoker(typeof(ClassWithGenericParent<>), nameof(ClassWithGenericParent<int>.Property1), "ClassWithGenericParent`1<T>");
+            AssertInvoker(typeof(IntermediateGenericClass<>), nameof(IntermediateGenericClass<int>.Property2), "ClassWithGenericParent`1<T>");
+            AssertInvoker(typeof(ClassWithIntermediateGenericBase), nameof(ClassWithIntermediateGenericBase.Property3), "IntermediateGenericClass`1<System.String>");
+            
+            void AssertInvoker(Type type, string propertyName, string invokerDeclaringType)
+            {
+                var typeDef = module.GetType(type.FullName);
+                var setter = typeDef.Methods.Single(m => m.Name == "set_" + propertyName);
+                var callInstruction = setter.Body.Instructions.Single(i => i.OpCode == OpCodes.Callvirt);
+                Assert.Equal(invokerDeclaringType, ((MethodReference)callInstruction.Operand).DeclaringType.FullName);
+            }
         }
     }
 
