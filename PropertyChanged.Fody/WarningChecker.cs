@@ -62,7 +62,7 @@ public partial class ModuleWeaver
             return;
         }
 
-        LogWarning?.Invoke(message);
+        WriteWarning(message);
     }
 
     public void EmitConditionalWarning(ICustomAttributeProvider member, string message)
@@ -107,6 +107,6 @@ public partial class ModuleWeaver
             message += ".";
         }
 
-        LogWarningPoint?.Invoke($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
+        WriteWarning($"{message} You can suppress this warning with [SuppressPropertyChangedWarnings].", sequencePoint);
     }
 }

@@ -17,7 +17,7 @@ public partial class ModuleWeaver
                 continue;
             }
 
-            LogDebug("\t" + node.TypeDefinition.FullName);
+            WriteDebug("\t" + node.TypeDefinition.FullName);
 
             foreach (var propertyData in node.PropertyDatas)
             {

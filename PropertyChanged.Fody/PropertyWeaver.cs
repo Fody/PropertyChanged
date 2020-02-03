@@ -24,7 +24,7 @@ public class PropertyWeaver
 
     public void Execute()
     {
-        moduleWeaver.LogDebug("\t\t" + propertyData.PropertyDefinition.Name);
+        moduleWeaver.WriteDebug("\t\t" + propertyData.PropertyDefinition.Name);
         var property = propertyData.PropertyDefinition;
         setMethodBody = property.SetMethod.Body;
         instructions = property.SetMethod.Body.Instructions;
@@ -130,7 +130,7 @@ public class PropertyWeaver
         {
             return index;
         }
-        moduleWeaver.LogDebug("\t\t\tSet IsChanged");
+        moduleWeaver.WriteDebug("\t\t\tSet IsChanged");
         return instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldc_I4, 1),
@@ -143,11 +143,11 @@ public class PropertyWeaver
         index = AddOnChangedMethodCalls(index, onChangedMethods, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
-            moduleWeaver.LogDebug($"\t\t\t{property.Name} skipped since call already exists");
+            moduleWeaver.WriteDebug($"\t\t\t{property.Name} skipped since call already exists");
             return index;
         }
 
-        moduleWeaver.LogDebug($"\t\t\t{property.Name}");
+        moduleWeaver.WriteDebug($"\t\t\t{property.Name}");
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfterGeneric)
         {
             return AddBeforeAfterGenericInvokerCall(index, property);

@@ -47,7 +47,7 @@ public partial class ModuleWeaver
         var propertyDefinition = targetProperty.DeclaringType.Properties.FirstOrDefault(x => x.Name == isGeneratedUsingPropertyName);
         if (propertyDefinition == null)
         {
-            LogInfo($"Could not find property '{isGeneratedUsingPropertyName}' for DependsOnAttribute assigned to '{targetProperty.Name}'.");
+            WriteInfo($"Could not find property '{isGeneratedUsingPropertyName}' for DependsOnAttribute assigned to '{targetProperty.Name}'.");
             return;
         }
         var dependency = new PropertyDependency

@@ -43,13 +43,13 @@ public partial class ModuleWeaver
 
     public void FindCoreReferences()
     {
-        var objectDefinition = FindType("System.Object");
+        var objectDefinition = FindTypeDefinition("System.Object");
         var constructorDefinition = objectDefinition.Methods.First(x => x.IsConstructor);
         ObjectConstructor = ModuleDefinition.ImportReference(constructorDefinition);
         var objectEqualsMethodDefinition = objectDefinition.Methods.First(x => x.Name == "Equals" && x.Parameters.Count == 2);
         ObjectEqualsMethod = ModuleDefinition.ImportReference(objectEqualsMethodDefinition);
 
-        var stringEquals = FindType("System.String")
+        var stringEquals = FindTypeDefinition("System.String")
             .Methods
             .First(x => x.IsStatic &&
                         x.Name == "Equals" &&
@@ -59,27 +59,27 @@ public partial class ModuleWeaver
                         x.Parameters[2].ParameterType.Name == "StringComparison");
         StringEquals = ModuleDefinition.ImportReference(stringEquals);
 
-        var nullableDefinition = FindType("System.Nullable");
+        var nullableDefinition = FindTypeDefinition("System.Nullable");
         NullableEqualsMethod = ModuleDefinition.ImportReference(nullableDefinition).Resolve().Methods.First(x => x.Name == "Equals");
 
-        EqualityComparerTypeReference = FindType("System.Collections.Generic.EqualityComparer`1");
+        EqualityComparerTypeReference = FindTypeDefinition("System.Collections.Generic.EqualityComparer`1");
 
-        var actionDefinition = FindType("System.Action");
+        var actionDefinition = FindTypeDefinition("System.Action");
         ActionTypeReference = ModuleDefinition.ImportReference(actionDefinition);
 
         var actionConstructor = actionDefinition.Methods.First(x => x.IsConstructor);
         ActionConstructorReference = ModuleDefinition.ImportReference(actionConstructor);
 
-        var propChangedInterfaceDefinition = FindType("System.ComponentModel.INotifyPropertyChanged");
+        var propChangedInterfaceDefinition = FindTypeDefinition("System.ComponentModel.INotifyPropertyChanged");
         PropChangedInterfaceReference = ModuleDefinition.ImportReference(propChangedInterfaceDefinition);
-        var propChangedHandlerDefinition = FindType("System.ComponentModel.PropertyChangedEventHandler");
+        var propChangedHandlerDefinition = FindTypeDefinition("System.ComponentModel.PropertyChangedEventHandler");
         PropChangedHandlerReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition);
         PropertyChangedEventHandlerInvokeReference = ModuleDefinition.ImportReference(propChangedHandlerDefinition.Methods.First(x => x.Name == "Invoke"));
-        var propChangedArgsDefinition = FindType("System.ComponentModel.PropertyChangedEventArgs");
+        var propChangedArgsDefinition = FindTypeDefinition("System.ComponentModel.PropertyChangedEventArgs");
         PropertyChangedEventArgsReference = ModuleDefinition.ImportReference(propChangedArgsDefinition);
         PropertyChangedEventConstructorReference = ModuleDefinition.ImportReference(propChangedArgsDefinition.Methods.First(x => x.IsConstructor));
 
-        var delegateDefinition = FindType("System.Delegate");
+        var delegateDefinition = FindTypeDefinition("System.Delegate");
         var combineMethodDefinition = delegateDefinition.Methods
             .Single(x =>
                 x.Name == "Combine" &&
@@ -89,7 +89,7 @@ public partial class ModuleWeaver
         var removeMethodDefinition = delegateDefinition.Methods.First(x => x.Name == "Remove");
         DelegateRemoveMethodRef = ModuleDefinition.ImportReference(removeMethodDefinition);
 
-        var interlockedDefinition = FindType("System.Threading.Interlocked");
+        var interlockedDefinition = FindTypeDefinition("System.Threading.Interlocked");
         var genericCompareExchangeMethodDefinition = interlockedDefinition
             .Methods.First(x =>
                 x.IsStatic &&
@@ -102,7 +102,7 @@ public partial class ModuleWeaver
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
         Trigger = new Lazy<MethodReference>(() =>
         {
-            if (TryFindType("Microsoft.FSharp.Control.FSharpEvent`2", out var fSharpEvent))
+            if (TryFindTypeDefinition("Microsoft.FSharp.Control.FSharpEvent`2", out var fSharpEvent))
             {
                 var trigger = fSharpEvent.Methods.Single(x => x.Name == "Trigger");
                 return ModuleDefinition.ImportReference(trigger.MakeGeneric(PropChangedHandlerReference, propChangedArgsDefinition));
@@ -111,11 +111,11 @@ public partial class ModuleWeaver
             return null;
         });
 
-        var generatedCodeType = FindType("System.CodeDom.Compiler.GeneratedCodeAttribute");
+        var generatedCodeType = FindTypeDefinition("System.CodeDom.Compiler.GeneratedCodeAttribute");
         var generatedCodeAttributeConstructor = generatedCodeType.GetConstructors().Single(c => c.Parameters.Count == 2 && c.Parameters.All(p => p.ParameterType.Name == "String"));
         GeneratedCodeAttributeConstructor = ModuleDefinition.ImportReference(generatedCodeAttributeConstructor);
 
-        var debuggerNonUserCodeType = FindType("System.Diagnostics.DebuggerNonUserCodeAttribute");
+        var debuggerNonUserCodeType = FindTypeDefinition("System.Diagnostics.DebuggerNonUserCodeAttribute");
         var debuggerNonUserCodeConstructor = debuggerNonUserCodeType.GetConstructors().Single(c => !c.HasParameters);
         DebuggerNonUserCodeAttributeConstructor = ModuleDefinition.ImportReference(debuggerNonUserCodeConstructor);
     }

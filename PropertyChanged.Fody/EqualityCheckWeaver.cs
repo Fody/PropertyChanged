@@ -54,7 +54,7 @@ public class EqualityCheckWeaver
     {
         if (ShouldSkipEqualityCheck())
         {
-            typeEqualityFinder.LogDebug($"\t\t\tEquality Check Skipped for {targetType.Name}");
+            typeEqualityFinder.WriteDebug($"\t\t\tEquality Check Skipped for {targetType.Name}");
             return;
         }
         var nopInstruction = instructions.First();
