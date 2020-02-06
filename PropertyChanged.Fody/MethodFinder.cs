@@ -124,10 +124,22 @@ public partial class ModuleWeaver
             return methodDefinition;
         }
 
-        return type.Methods
+        methodDefinition = type.Methods
             .Where(x => EventInvokerNames.Contains(x.Name))
             .OrderByDescending(GetInvokerPriority)
             .FirstOrDefault(IsEventInvokerMethod);
+
+        if (methodDefinition != null &&
+            methodDefinition.IsPrivate &&
+            methodDefinition.IsFinal &&
+            methodDefinition.IsVirtual &&
+            methodDefinition.Overrides.Count == 1)
+        {
+            // Explicitly implemented interfaces should call the interface method instead
+            return methodDefinition.Overrides[0].Resolve();
+        }
+
+        return methodDefinition;
     }
 
     MethodReference FindExplicitImplementation(TypeDefinition type)
