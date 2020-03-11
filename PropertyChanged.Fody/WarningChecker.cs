@@ -67,7 +67,7 @@ public partial class ModuleWeaver
 
     public void EmitConditionalWarning(ICustomAttributeProvider member, string message)
     {
-        if (SuppressWarnings || SuppressOnPropertyNameChangedWarning)
+        if (SuppressWarnings)
         {
             return;
         }

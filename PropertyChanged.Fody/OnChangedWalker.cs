@@ -98,7 +98,8 @@ public partial class ModuleWeaver
 
             if (foundMethod != null)
             {
-                throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has multiple valid overloads of a On_PropertyName_Changed method named {methodName}).");}
+                throw new WeavingException($"The type {notifyNode.TypeDefinition.FullName} has multiple valid overloads of a On_PropertyName_Changed method named {methodName}).");
+            }
 
             foundMethod = method;
         }
@@ -115,13 +116,19 @@ public partial class ModuleWeaver
     {
         if (methodDefinition.IsStatic)
         {
-            EmitConditionalWarning(methodDefinition, $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.");
+            if (!SuppressOnPropertyNameChangedWarning)
+            {
+                EmitConditionalWarning(methodDefinition, $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) which is static.");
+            }
             return null;
         }
 
         if (methodDefinition.ReturnType.FullName != "System.Void")
         {
-            EmitConditionalWarning(methodDefinition, $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.");
+            if (!SuppressOnPropertyNameChangedWarning)
+            {
+                EmitConditionalWarning(methodDefinition, $"The type {notifyNode.TypeDefinition.FullName} has a On_PropertyName_Changed method ({methodDefinition.Name}) that has a non void return value. Ensure the return type void.");
+            }
             return null;
         }
 
@@ -151,7 +158,7 @@ public partial class ModuleWeaver
             };
         }
 
-        if (!EventInvokerNames.Contains(methodDefinition.Name))
+        if (!EventInvokerNames.Contains(methodDefinition.Name) && !SuppressOnPropertyNameChangedWarning)
         {
             EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
         }
@@ -190,6 +197,9 @@ public partial class ModuleWeaver
         {
             return;
         }
-        EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
+        if (!SuppressOnPropertyNameChangedWarning)
+        {
+            EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
+        }
     }
 }
