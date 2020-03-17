@@ -9,6 +9,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
         ResolveCheckForEqualityUsingBaseEqualsConfig();
         ResolveUseStaticEqualsFromBaseConfig();
         ResolveSuppressWarningsConfig();
+        ResolveSuppressOnPropertyNameChangedWarningConfig();
         ResolveEventInvokerName();
         FindCoreReferences();
         FindInterceptor();
