@@ -23,6 +23,11 @@ public partial class ModuleWeaver
 
     public void ReadDependsOnData(PropertyDefinition property, TypeNode node)
     {
+        if (property.HasParameters)
+        {
+            return;
+        }
+
         var dependsOnAttribute = property.CustomAttributes.GetAttribute("PropertyChanged.DependsOnAttribute");
         if (dependsOnAttribute == null)
         {

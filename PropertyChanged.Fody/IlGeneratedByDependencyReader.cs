@@ -57,6 +57,12 @@ public class IlGeneratedByDependencyReader
 
     void ProcessGet(PropertyDefinition property)
     {
+        //Exclude indexers
+        if (property.HasParameters)
+        {
+            return;
+        }
+
         var getMethod = property.GetMethod;
 
         //Exclude when no get

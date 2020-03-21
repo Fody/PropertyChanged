@@ -108,6 +108,20 @@ public class AssemblyToProcessTests :
     }
 
     [Fact]
+    public void ClassWithIndexerReferencingPropertyAndBeforeAfter()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithIndexerReferencingPropertyAndBeforeAfter));
+        EventTester.TestProperty(instance, false);
+    }
+
+    [Fact]
+    public void ClassWithIndexerDependsOnAndBeforeAfter()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithIndexerDependsOnAndBeforeAfter));
+        EventTester.TestProperty(instance, false);
+    }
+
+    [Fact]
     public void UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
