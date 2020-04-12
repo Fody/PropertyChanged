@@ -371,6 +371,26 @@ public class AssemblyToProcessTests :
         }
     }
 
+    [Fact]
+    public void ClassWithNullableBackingField()
+    {
+        var instance = testResult.GetInstance("ClassWithNullableBackingField");
+        var isFlagEventCalled = false;
+        ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == "IsFlag")
+            {
+                isFlagEventCalled = true;
+            }
+        };
+        instance.IsFlag = true;
+        Assert.True(isFlagEventCalled);
+
+        isFlagEventCalled = false;
+        instance.IsFlag = true;
+        Assert.False(isFlagEventCalled);
+    }
+
     public AssemblyToProcessTests(ITestOutputHelper output) :
         base(output)
     {
