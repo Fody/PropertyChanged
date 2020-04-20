@@ -10,7 +10,7 @@
     <PackageReference Include="XunitContext" Version="1.9.3" />
     <PackageReference Include="Verify.Xunit" Version="1.33.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.0" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
