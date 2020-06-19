@@ -5,6 +5,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
     public override void Execute()
     {
         ResolveOnPropertyNameChangedConfig();
+        ResolveEnableIsChangedPropertyConfig();
         ResolveTriggerDependentPropertiesConfig();
         ResolveCheckForEqualityConfig();
         ResolveCheckForEqualityUsingBaseEqualsConfig();
