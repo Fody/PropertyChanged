@@ -12,7 +12,7 @@ public partial class ModuleWeaver
             .SingleOrDefault();
         if (value != null)
         {
-            TriggerDependentProperties = XmlConvert.ToBoolean(value.ToLowerInvariant());
+            EnableIsChangedProperty = XmlConvert.ToBoolean(value.ToLowerInvariant());
         }
     }
 }
