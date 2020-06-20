@@ -124,7 +124,7 @@ public class PropertyWeaver
 
     int AddIsChangedSetterCall(int index)
     {
-        if (typeNode.IsChangedInvoker == null ||
+        if (!moduleWeaver.EnableIsChangedProperty || typeNode.IsChangedInvoker == null ||
             propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotSetChangedAttribute") ||
             propertyData.PropertyDefinition.Name == "IsChanged")
         {

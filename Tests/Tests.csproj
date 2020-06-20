@@ -25,6 +25,8 @@
     <ProjectReference Include="..\TestAssemblies\AssemblyWithBeforeAfterInterceptor\AssemblyWithBeforeAfterInterceptor.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithBlockingClass\AssemblyWithBlockingClass.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithDisabledInjectOnPropertyNameChanged\AssemblyWithDisabledInjectOnPropertyNameChanged.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithDisabledIsChangedProperty\AssemblyWithDisabledIsChangedProperty.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithDisabledTriggerDependentProperties\AssemblyWithDisabledTriggerDependentProperties.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithInterceptor\AssemblyWithInterceptor.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithNonVoidOnPropertyNameChanged\AssemblyWithNonVoidOnPropertyNameChanged.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithStackOverflow\AssemblyWithStackOverflow.csproj" />

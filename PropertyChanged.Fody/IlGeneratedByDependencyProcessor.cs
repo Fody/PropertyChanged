@@ -9,6 +9,11 @@ public partial class ModuleWeaver
 
     void DetectIlGeneratedByDependency(List<TypeNode> notifyNodes)
     {
+        if(!TriggerDependentProperties)
+        {
+            return;
+        }
+
         foreach (var node in notifyNodes)
         {
             var ilGeneratedByDependencyReader = new IlGeneratedByDependencyReader(node);
