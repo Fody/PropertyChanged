@@ -1,10 +1,7 @@
 ﻿using System.Xml.Linq;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class TriggerDependentPropertiesConfigTests :
-    VerifyBase
+public class TriggerDependentPropertiesConfigTests
 {
     [Fact]
     public void False()
@@ -30,10 +27,5 @@ public class TriggerDependentPropertiesConfigTests :
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveOnPropertyNameChangedConfig();
         Assert.True(moduleWeaver.TriggerDependentProperties);
-    }    
-
-    public TriggerDependentPropertiesConfigTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

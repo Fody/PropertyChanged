@@ -1,10 +1,7 @@
 ﻿using System.Xml.Linq;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class CheckForEqualityUsingBaseEqualsConfigTests :
-    VerifyBase
+public class CheckForEqualityUsingBaseEqualsConfigTests
 {
     [Fact]
     public void False()
@@ -48,10 +45,5 @@ public class CheckForEqualityUsingBaseEqualsConfigTests :
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
         Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
-    }
-
-    public CheckForEqualityUsingBaseEqualsConfigTests(ITestOutputHelper output) : 
-        base(output)
-    {
     }
 }

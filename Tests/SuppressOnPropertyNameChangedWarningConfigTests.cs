@@ -1,10 +1,7 @@
 ﻿using System.Xml.Linq;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class SuppressOnPropertyNameChangedWarningConfigTests :
-    VerifyBase
+public class SuppressOnPropertyNameChangedWarningConfigTests
 {
     [Fact]
     public void False()
@@ -48,10 +45,5 @@ public class SuppressOnPropertyNameChangedWarningConfigTests :
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveSuppressOnPropertyNameChangedWarningConfig();
         Assert.False(moduleWeaver.SuppressOnPropertyNameChangedWarning);
-    }
-
-    public SuppressOnPropertyNameChangedWarningConfigTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

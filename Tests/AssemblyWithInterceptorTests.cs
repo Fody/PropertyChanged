@@ -1,11 +1,8 @@
 ﻿using System.Reflection;
 using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class AssemblyWithInterceptorTests :
-    VerifyBase
+public class AssemblyWithInterceptorTests
 {
     [Fact]
     public void Simple()
@@ -34,10 +31,5 @@ public class AssemblyWithInterceptorTests :
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public);
         var value = (bool)propertyInfo.GetValue(null, null);
         Assert.True(value);
-    }
-
-    public AssemblyWithInterceptorTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

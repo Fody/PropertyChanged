@@ -1,17 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Mono.Cecil;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 [SuppressMessage("ReSharper", "NotAccessedField.Local")]
 [SuppressMessage("ReSharper", "DelegateSubtraction")]
-public class MethodInjectorTests :
-    VerifyBase
+public class MethodInjectorTests
 {
-    public MethodInjectorTests(ITestOutputHelper output) :
-        base(output)
+    public MethodInjectorTests()
     {
         methodInjector = new ModuleWeaver
         {

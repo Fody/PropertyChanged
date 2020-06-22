@@ -3,18 +3,18 @@ using AssemblyWithBase.BaseWithEquals;
 using Fody;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class AssemblyWithBaseInDifferentModuleTests :
-    VerifyBase
+public class AssemblyWithBaseInDifferentModuleTests
 {
     TestResult testResult;
 
     void Weave(bool useStaticEqualsFromBase)
     {
-        var weavingTask = new ModuleWeaver { UseStaticEqualsFromBase = useStaticEqualsFromBase };
+        var weavingTask = new ModuleWeaver
+        {
+            UseStaticEqualsFromBase = useStaticEqualsFromBase
+        };
         testResult = weavingTask.ExecuteTestRun("AssemblyWithBaseInDifferentModule.dll", ignoreCodes:new []{ "0x80131869" });
     }
 
@@ -173,10 +173,5 @@ public class AssemblyWithBaseInDifferentModuleTests :
 
         var instance = testResult.GetInstance(nameof(ClassWithGenericMiddleChildInDifferentModule));
         EventTester.TestProperty(instance, nameof(ClassWithGenericMiddleChildInDifferentModule.Property), 42);
-    }
-
-    public AssemblyWithBaseInDifferentModuleTests(ITestOutputHelper output) : 
-        base(output)
-    {
     }
 }

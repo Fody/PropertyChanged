@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using PropertyChanged;
 
 [SuppressMessage("ReSharper", "NotAccessedField.Global")]
 public class DependentPropertiesClassToTest :

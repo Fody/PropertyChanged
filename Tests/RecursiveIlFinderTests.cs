@@ -1,11 +1,8 @@
 using System.Diagnostics;
 using System.Linq;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class RecursiveIlFinderTests :
-    VerifyBase
+public class RecursiveIlFinderTests
 {
     [Fact]
     public void Run()
@@ -45,10 +42,5 @@ public class RecursiveIlFinderTests :
         }
 
         public string Property { get; set; }
-    }
-
-    public RecursiveIlFinderTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

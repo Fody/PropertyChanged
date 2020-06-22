@@ -1,10 +1,7 @@
 ﻿using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class AssemblyWithBlockingClassTests :
-    VerifyBase
+public class AssemblyWithBlockingClassTests
 {
     [Fact]
     public void TestClassIsNotBlocked()
@@ -13,10 +10,5 @@ public class AssemblyWithBlockingClassTests :
         var testResult = weavingTask.ExecuteTestRun("AssemblyWithBlockingClass.dll");
         var instance = testResult.GetInstance("B");
         EventTester.TestProperty(instance, false);
-    }
-
-    public AssemblyWithBlockingClassTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

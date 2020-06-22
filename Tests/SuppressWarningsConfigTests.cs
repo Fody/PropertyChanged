@@ -1,10 +1,7 @@
 ﻿using System.Xml.Linq;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class SuppressWarningsConfigTests :
-    VerifyBase
+public class SuppressWarningsConfigTests
 {
     [Fact]
     public void False()
@@ -48,10 +45,5 @@ public class SuppressWarningsConfigTests :
         var moduleWeaver = new ModuleWeaver();
         moduleWeaver.ResolveSuppressWarningsConfig();
         Assert.False(moduleWeaver.SuppressWarnings);
-    }
-
-    public SuppressWarningsConfigTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

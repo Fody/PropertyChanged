@@ -7,12 +7,9 @@ using ComplexHierarchy;
 using Fody;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class AssemblyToProcessTests :
-    VerifyBase
+public class AssemblyToProcessTests
 {
     static TestResult testResult;
 
@@ -389,10 +386,5 @@ public class AssemblyToProcessTests :
         isFlagEventCalled = false;
         instance.IsFlag = true;
         Assert.False(isFlagEventCalled);
-    }
-
-    public AssemblyToProcessTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

@@ -1,15 +1,11 @@
 ﻿using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class TypeFilterTests :
-    VerifyBase
+public class TypeFilterTests
 {
     TestResult testResult;
 
-    public TypeFilterTests(ITestOutputHelper output) :
-        base(output)
+    public TypeFilterTests()
     {
         var weavingTask = new ModuleWeaver();
         testResult = weavingTask.ExecuteTestRun("AssemblyWithTypeFilter.dll");

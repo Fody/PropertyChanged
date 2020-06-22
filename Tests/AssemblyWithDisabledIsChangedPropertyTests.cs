@@ -1,5 +1,4 @@
 using Fody;
-using System;
 using Xunit;
 
 public class AssemblyWithDisabledIsChangedPropertyTests

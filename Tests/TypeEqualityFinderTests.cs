@@ -1,10 +1,7 @@
 using System.Data.SqlTypes;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class TypeEqualityFinderTests :
-    VerifyBase
+public class TypeEqualityFinderTests
 {
     [Fact]
     public void TestSqlGuid()
@@ -28,10 +25,5 @@ public class TypeEqualityFinderTests :
         var typeDefinition = DefinitionFinder.FindType<string>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
         Assert.Equal("System.Boolean System.String::Equals(System.String,System.String)", findNamedMethod.FullName);
-    }
-
-    public TypeEqualityFinderTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }
