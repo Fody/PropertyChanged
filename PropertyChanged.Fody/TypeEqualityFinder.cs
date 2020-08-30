@@ -76,8 +76,10 @@ public partial class ModuleWeaver
         {
             return GetStaticEquality(typeDefinition);
         }
+
         var genericInstanceMethod = new GenericInstanceMethod(NullableEqualsMethod);
-        var typeWrappedByNullable = ((GenericInstanceType) typeDefinition).GenericArguments.First();
+        var typeWrappedByNullable = ((GenericInstanceType)typeDefinition).GenericArguments.First();
+
         genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
 
         if (typeWrappedByNullable.IsGenericParameter)
