@@ -80,6 +80,10 @@ public partial class ModuleWeaver
         var genericInstanceMethod = new GenericInstanceMethod(NullableEqualsMethod);
         var typeWrappedByNullable = ((GenericInstanceType)typeDefinition).GenericArguments.First();
 
+        if (typeWrappedByNullable.IsGenericInstance)
+        {
+            return null;
+        }
         genericInstanceMethod.GenericArguments.Add(typeWrappedByNullable);
 
         if (typeWrappedByNullable.IsGenericParameter)
