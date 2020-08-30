@@ -13,7 +13,7 @@ public partial class ModuleWeaver
     {
         methodCache = new Dictionary<string, MethodReference>();
 
-        OrdinalStringComparison = (int) StringEquals
+        OrdinalStringComparison = (int)StringEquals
             .Parameters[2]
             .ParameterType
             .Resolve()
@@ -56,10 +56,12 @@ public partial class ModuleWeaver
         {
             return null;
         }
+
         if (typeDefinition.IsGenericParameter)
         {
             return null;
         }
+
         if (typeDefinition.Namespace.StartsWith("System.Collections"))
         {
             return null;
@@ -82,8 +84,8 @@ public partial class ModuleWeaver
         {
             return ModuleDefinition.ImportReference(genericInstanceMethod, typeWrappedByNullable.DeclaringType);
         }
-        return ModuleDefinition.ImportReference(genericInstanceMethod);
 
+        return ModuleDefinition.ImportReference(genericInstanceMethod);
     }
 
     MethodReference GetStaticEquality(TypeReference typeReference)
@@ -198,11 +200,13 @@ public partial class ModuleWeaver
         {
             return equalsMethod;
         }
+
         var genericType = new GenericInstanceType(equalsMethod.DeclaringType);
-        foreach (var argument in ((GenericInstanceType) typeReference).GenericArguments)
+        foreach (var argument in ((GenericInstanceType)typeReference).GenericArguments)
         {
             genericType.GenericArguments.Add(argument);
         }
+
         return MakeGeneric(genericType, equalsMethod);
     }
 
@@ -236,6 +240,7 @@ public partial class ModuleWeaver
         {
             return false;
         }
+
         return parameter.ParameterType.Resolve() == typeMatch.Resolve();
     }
 }
