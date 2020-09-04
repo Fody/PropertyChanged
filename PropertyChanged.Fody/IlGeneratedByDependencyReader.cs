@@ -85,7 +85,7 @@ public class IlGeneratedByDependencyReader
 
     void ProcessInstructionForGet(PropertyDefinition property, Instruction instruction)
     {
-        if (IsPropertyGetInstruction(instruction, out var usedProperty) ||
+        if (IsPropertyGetInstruction(instruction, out var usedProperty, out var isCallVirt) ||
             IsFieldGetInstruction(instruction, out usedProperty))
         {
             if (usedProperty == property)
@@ -93,6 +93,16 @@ public class IlGeneratedByDependencyReader
                 //skip where self reference
                 return;
             }
+            if (usedProperty.DeclaringType != property.DeclaringType && isCallVirt)
+            {
+                usedProperty = property.DeclaringType.Properties.SingleOrDefault(p => p.Name == usedProperty.Name);
+                if (usedProperty == null)
+                {
+                    //Skip if the called property is not present in the current class
+                    return;
+                }
+            }
+
             var dependency = new PropertyDependency
             {
                 ShouldAlsoNotifyFor = property,
@@ -102,7 +112,7 @@ public class IlGeneratedByDependencyReader
         }
     }
 
-    public bool IsPropertyGetInstruction(Instruction instruction, out PropertyDefinition propertyDefinition)
+    public bool IsPropertyGetInstruction(Instruction instruction, out PropertyDefinition propertyDefinition, out bool isCallVirt)
     {
         if (instruction.OpCode.IsCall())
         {
@@ -112,11 +122,13 @@ public class IlGeneratedByDependencyReader
                 if (mapping != null)
                 {
                     propertyDefinition = mapping.PropertyDefinition;
+                    isCallVirt = instruction.OpCode.Code == Code.Callvirt;
                     return true;
                 }
             }
         }
         propertyDefinition = null;
+        isCallVirt = false;
         return false;
     }
 

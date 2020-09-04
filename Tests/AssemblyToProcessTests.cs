@@ -119,6 +119,288 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void DerivedClassNoneEmptyForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneEmptyForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNoneOverrideForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneOverrideForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNoneNewForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneNewForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNoneNewVirtualForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneNewVirtualForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyEmptyForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyEmptyForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyOverrideForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyOverrideForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyNewForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyNewForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyNewVirtualForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyNewVirtualForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideEmptyForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideEmptyForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideOverrideForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideOverrideForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideNewForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideNewForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideNewVirtualForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideNewVirtualForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNewEmptyForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewEmptyForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    // Not a valid combination of property declarations
+    //[Fact]
+    //public void DerivedClassNewOverrideForInferredShouldAlsoNotifyFor()
+    //{
+    //    var instance = testResult.GetInstance("DerivedClassNewOverrideForInferredShouldAlsoNotifyFor");
+    //    EventTester.TestProperty(instance, true, property2called: true);
+    //}
+
+    [Fact]
+    public void DerivedClassNewNewForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewNewForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNewNewVirtualForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewNewVirtualForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualEmptyForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualEmptyForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualOverrideForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualOverrideForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualNewForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualNewForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualNewVirtualForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualNewVirtualForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+
+    [Fact]
+    public void DerivedClassNoneEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNoneOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNoneNewExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneNewExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNoneNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNoneNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyNewExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyNewExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassEmptyNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassEmptyNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideNewExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideNewExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassOverrideNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassOverrideNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    // Not a valid combination of property declarations
+    //[Fact]
+    //public void DerivedClassNewOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    //{
+    //    var instance = testResult.GetInstance("DerivedClassNewOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor");
+    //    EventTester.TestProperty(instance, true, property2called: false);
+    //}
+
+    [Fact]
+    public void DerivedClassNewNewExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewNewExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualEmptyExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualOverrideExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualNewExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualNewExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
+    public void DerivedClassNewVirtualNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNewVirtualNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
     public void UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");

@@ -21,7 +21,7 @@ public static class EventTester
         Assert.False(property1EventCalled);
     }
 
-    internal static void TestProperty(dynamic instance, bool checkProperty2, bool delayAfterSetProperty1 = false)
+    internal static void TestProperty(dynamic instance, bool checkProperty2, bool delayAfterSetProperty1 = false, bool property2called = true)
     {
         var property1EventCalled = false;
         var property2EventCalled = false;
@@ -45,9 +45,13 @@ public static class EventTester
         }
 
         Assert.True(property1EventCalled);
-        if (checkProperty2)
+        if (checkProperty2 && property2called)
         {
             Assert.True(property2EventCalled);
+        }
+        else if (checkProperty2 && !property2called)
+        {
+            Assert.False(property2EventCalled);
         }
 
         property1EventCalled = false;
