@@ -26,6 +26,14 @@ public partial class ModuleWeaver
                                  FieldDefinition = fieldDefinition
                              };
         }
+
+        if (typeDefinition.BaseType != null)
+        {
+            foreach (var mapping in GetMappings(typeDefinition.BaseType.Resolve()))
+            {
+                yield return mapping;
+            }
+        }
     }
 
     static FieldDefinition TryGetField(TypeDefinition typeDefinition, PropertyDefinition property)
