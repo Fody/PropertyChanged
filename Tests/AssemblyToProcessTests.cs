@@ -401,6 +401,43 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void DerivedClassNonvirtualBaseNoneForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNonvirtualBaseNoneForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+    [Fact]
+    public void DerivedClassNonvirtualBaseNewForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNonvirtualBaseNewForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+    [Fact]
+    public void DerivedClassNonvirtualBaseNewVirtualNonvirtualBaseForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNonvirtualBaseNewVirtualNonvirtualBaseForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: true);
+    }
+    [Fact]
+    public void DerivedClassNonvirtualBaseNoneExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNonvirtualBaseNoneExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+    [Fact]
+    public void DerivedClassNonvirtualBaseNewExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNonvirtualBaseNewExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+    [Fact]
+    public void DerivedClassNonvirtualBaseNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor()
+    {
+        var instance = testResult.GetInstance("DerivedClassNonvirtualBaseNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor");
+        EventTester.TestProperty(instance, true, property2called: false);
+    }
+
+    [Fact]
     public void UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
