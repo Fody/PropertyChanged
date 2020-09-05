@@ -78,27 +78,27 @@ public class DerivedClassNewVirtualNewForInferredShouldAlsoNotifyFor : MiddleCla
 // Derived classes with new virtual Property1 (should notify for Property2)
 public class DerivedClassNoneNewVirtualForInferredShouldAlsoNotifyFor : BaseClassForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => Property1;
 }
 public class DerivedClassEmptyNewVirtualForInferredShouldAlsoNotifyFor : MiddleClassEmptyForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => Property1;
 }
 public class DerivedClassOverrideNewVirtualForInferredShouldAlsoNotifyFor : MiddleClassOverrideForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => Property1;
 }
 public class DerivedClassNewNewVirtualForInferredShouldAlsoNotifyFor : MiddleClassNewForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => Property1;
 }
 public class DerivedClassNewVirtualNewVirtualForInferredShouldAlsoNotifyFor : MiddleClassNewVirtualForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => Property1;
 }
 
@@ -176,26 +176,26 @@ public class DerivedClassNewVirtualNewExplicitBaseCallForInferredShouldAlsoNotif
 }
 public class DerivedClassNoneNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor : BaseClassForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => base.Property1;
 }
 public class DerivedClassEmptyNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor : MiddleClassEmptyForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => base.Property1;
 }
 public class DerivedClassOverrideNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor : MiddleClassOverrideForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => base.Property1;
 }
 public class DerivedClassNewNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor : MiddleClassNewForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => base.Property1;
 }
 public class DerivedClassNewVirtualNewVirtualExplicitBaseCallForInferredShouldAlsoNotifyFor : MiddleClassNewVirtualForInferredShouldAlsoNotifyFor
 {
-    public new string Property1 { get; set; }
+    public new virtual string Property1 { get; set; }
     public string Property2 => base.Property1;
 }
