@@ -72,6 +72,10 @@ public class PropertyWeaver
             }
         }
 
+        var setMethod = propertyData.PropertyDefinition.SetMethod;
+        if (setMethod.GetNonAbstractBaseMethod(out _))
+            return;
+
         AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyData.PropertyDefinition);
     }
 
