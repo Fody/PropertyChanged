@@ -40,7 +40,7 @@ public static class CecilExtensions
 
     public static bool IsCall(this OpCode opCode)
     {
-        return opCode.Code == Code.Call || 
+        return opCode.Code == Code.Call ||
                opCode.Code == Code.Callvirt;
     }
 
@@ -151,5 +151,14 @@ public static class CecilExtensions
 
             type = type.BaseType?.Resolve();
         }
+    }
+
+    public static bool GetNonAbstractBaseMethod(this MethodDefinition method, out MethodDefinition baseMethod)
+    {
+        baseMethod = method.GetBaseMethod();
+        return baseMethod != null 
+            && !baseMethod.IsAbstract 
+            && baseMethod.HasBody 
+            && baseMethod != method; // cecil's GetBaseMethod() returns self if the method has no base method...
     }
 }
