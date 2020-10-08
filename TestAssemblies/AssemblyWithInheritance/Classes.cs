@@ -8,8 +8,9 @@ public abstract class BaseClass : INotifyPropertyChanged
 
     public virtual int Property1 { get; set; }
     public virtual int Property4 { get; set; }
-    public int Property2 => Property1 + Property4;
     public abstract int Property5 { get; set; }
+
+    public int Property2 => Property1 - Property5 + Property4;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
