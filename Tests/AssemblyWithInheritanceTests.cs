@@ -16,9 +16,9 @@ public class AssemblyWithInheritanceTests
 
         var testResults = new[]
         {
-                weavingTask.ExecuteTestRun("AssemblyWithInheritance.dll"),
-                weavingTask.ExecuteTestRun("AssemblyWithExternalInheritance.dll")
-            };
+            weavingTask.ExecuteTestRun("AssemblyWithInheritance.dll"),
+            weavingTask.ExecuteTestRun("AssemblyWithExternalInheritance.dll")
+        };
 
         // Must use Assembly.LoadFrom, else the non-woven assemblies will be loaded as dependencies!
         assemblies = testResults
