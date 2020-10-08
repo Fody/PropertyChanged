@@ -11,6 +11,26 @@ public static class CecilExtensions
         return $"{propertyDefinition.DeclaringType.FullName}.{propertyDefinition.Name}";
     }
 
+    public static bool IsCallToMethod(this Instruction instruction, MethodDefinition method)
+    {
+        if (!instruction.OpCode.IsCall())
+        {
+            return false;
+        }
+
+        if (!(instruction.Operand is MethodReference methodReference))
+        {
+            return false;
+        }
+
+        if (methodReference.Resolve() != method)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public static bool IsCallToMethod(this Instruction instruction, string methodName, out int propertyNameIndex)
     {
         propertyNameIndex = 1;
@@ -153,12 +173,12 @@ public static class CecilExtensions
         }
     }
 
-    public static bool GetNonAbstractBaseMethod(this MethodDefinition method, out MethodDefinition baseMethod)
+    public static bool GetBaseMethod(this MethodDefinition method, out MethodDefinition baseMethod)
     {
         baseMethod = method.GetBaseMethod();
         return baseMethod != null 
-            && !baseMethod.IsAbstract 
-            && baseMethod.HasBody 
             && baseMethod != method; // cecil's GetBaseMethod() returns self if the method has no base method...
     }
+
+
 }
