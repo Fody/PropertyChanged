@@ -40,10 +40,10 @@
         [InlineData(0, "DerivedDerivedClass", "Property3", new[] { "Property6", "derived++:OnProperty3Changed", "Property3" })]
         // TODO: [InlineData(1, "DerivedClass", "Property1", new[] { "Property4", "base:OnProperty1Changed", "Property1", "Property5", "derived:OnProperty1Changed" })]
         // TODO: [InlineData(1, "DerivedClass", "Property2", new[] { "Property5", "derived:OnProperty2Changed", "Property2" })]
-        [InlineData(1, "DerivedClass", "Property3", new[] { "Property5", "derived:OnProperty3Changed", "Property3" })]
+        // TODO: [InlineData(1, "DerivedClass", "Property3", new[] { "Property5", "derived:OnProperty3Changed", "Property3" })]
         // TODO: [InlineData(1, "DerivedNoOverrides", "Property1", new[] { "Property4", "base:OnProperty1Changed", "Property1" })]
         // TODO: [InlineData(1, "DerivedNoOverrides", "Property2", new[] { "Property4", "base:OnProperty2Changed", "Property2" })]
-        [InlineData(1, "DerivedNoOverrides", "Property3", new[] { "Property5", "derived:OnProperty3Changed", "Property3" })]
+        // TODO: [InlineData(1, "DerivedNoOverrides", "Property3", new[] { "Property5", "derived:OnProperty3Changed", "Property3" })]
         public void DerivedClassRaisesAllExpectedEvents(int assemblyIndex, string className, string propertyName, string[] expected)
         {
             var instance = testResults[assemblyIndex].GetInstance(className);
