@@ -8,7 +8,7 @@ public abstract class BaseClass : INotifyPropertyChanged
 
     public virtual int Property1 { get; set; }
     public virtual int Property4 { get; set; }
-    public int Property2 => Property1 + 1;
+    public int Property2 => Property1 + Property4;
     public abstract int Property5 { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -59,6 +59,43 @@ public class DerivedClass : BaseClass
     }
 
     public override int Property4 { get; set; }
+    public override int Property5 { get; set; }
+
+    public int Property3 => Property1 - Property5 + Property4;
+
+    void OnProperty1Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty2Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty3Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty4Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty5Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void ReportOnChanged([CallerMemberName] string callerMemberName = null)
+    {
+        Notifications.Add("derived:" + callerMemberName);
+    }
+}
+
+public class DerivedNoOverrides : BaseClass
+{
     public override int Property5 { get; set; }
 
     public int Property3 => Property1 - Property5 + Property4;
