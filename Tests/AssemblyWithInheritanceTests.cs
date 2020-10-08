@@ -26,6 +26,7 @@
 
             Assert.Equal(expected, actual);
         }
+
         [Fact]
         public void DerivedClassRaisesAllExpectedEventsForProperty4AndNoDuplicates()
         {
@@ -38,10 +39,50 @@
 
             Assert.Equal(expected, actual);
         }
+
         [Fact]
         public void DerivedClassRaisesAllExpectedEventsForProperty5AndNoDuplicates()
         {
             var instance = testResult.GetInstance("DerivedClass");
+            var actual = (IList<string>)instance.Notifications;
+
+            instance.Property5 = 42;
+
+            var expected = new[] { "Property3", "derived:OnProperty5Changed", "Property5" };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DerivedNoOverridesRaisesAllExpectedEventsForProperty1AndNoDuplicates()
+        {
+            var instance = testResult.GetInstance("DerivedNoOverrides");
+            var actual = (IList<string>)instance.Notifications;
+
+            instance.Property1 = 42;
+
+            var expected = new[] { "Property2", "base:OnProperty1Changed", "Property1" };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DerivedNoOverridesRaisesAllExpectedEventsForProperty4AndNoDuplicates()
+        {
+            var instance = testResult.GetInstance("DerivedNoOverrides");
+            var actual = (IList<string>)instance.Notifications;
+
+            instance.Property4 = 42;
+
+            var expected = new[] { "Property2", "base:OnProperty4Changed", "Property4" };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DerivedNoOverridesRaisesAllExpectedEventsForProperty5AndNoDuplicates()
+        {
+            var instance = testResult.GetInstance("DerivedNoOverrides");
             var actual = (IList<string>)instance.Notifications;
 
             instance.Property5 = 42;
