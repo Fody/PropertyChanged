@@ -37,14 +37,13 @@ public class IlGeneratedByDependencyReader
 
     static bool GenericMethodComparer(MethodReference methodReference, MethodDefinition methodDefinition)
     {
-        return methodDefinition == methodReference.Resolve()
-            || methodDefinition.GetNonAbstractBaseMethod(out var baseMethod) && GenericMethodComparer(methodReference, baseMethod);
+        return NonGenericMethodComparer(methodReference.Resolve(), methodDefinition);
     }
 
     static bool NonGenericMethodComparer(MethodReference methodReference, MethodDefinition methodDefinition)
     {
         return methodDefinition == methodReference
-            || methodDefinition.GetNonAbstractBaseMethod(out var baseMethod) && NonGenericMethodComparer(methodReference, baseMethod);
+            || methodDefinition.GetBaseMethod(out var baseMethod) && NonGenericMethodComparer(methodReference, baseMethod);
     }
 
     static bool GenericFieldComparer(FieldReference fieldReference, FieldDefinition fieldDefinition)

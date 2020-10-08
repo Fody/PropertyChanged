@@ -42,13 +42,13 @@ public class PropertyWeaver
     {
         if (propertyData.BackingFieldReference == null)
         {
-            return new List<int> {instructions.Count - 1};
+            return new List<int> { instructions.Count - 1 };
         }
 
         var setFieldInstructions = FindSetFieldInstructions().ToList();
         if (setFieldInstructions.Count == 0)
         {
-            return new List<int> {instructions.Count - 1};
+            return new List<int> { instructions.Count - 1 };
         }
 
         return setFieldInstructions;
@@ -58,25 +58,24 @@ public class PropertyWeaver
     {
         index = AddIsChangedSetterCall(index);
 
-        foreach (var propertyDefinition in propertyData.AlsoNotifyFor
-            .Distinct())
+        foreach (var alsoNotifyForDefinition in propertyData.AlsoNotifyFor.Distinct())
         {
-            var data = propertyData.ParentType.PropertyDatas.SingleOrDefault(p => p.PropertyDefinition == propertyDefinition);
-            if (data == null)
+            var data = propertyData.ParentType.PropertyDatas.SingleOrDefault(p => p.PropertyDefinition == alsoNotifyForDefinition);
+            var onChangedMethods = data?.OnChangedMethods ?? new List<OnChangedMethod>();
+            index = AddEventInvokeCall(index, onChangedMethods, alsoNotifyForDefinition);
+        }
+
+        var propertyDefinition = propertyData.PropertyDefinition;
+        var setMethod = propertyDefinition.SetMethod;
+        if (setMethod.GetBaseMethod(out var baseMethod))
+        {
+            if (baseMethod.HasBody && setMethod.Body.Instructions.Any(instruction => instruction.IsCallToMethod(baseMethod)))
             {
-                index = AddEventInvokeCall(index, new List<OnChangedMethod>(), propertyDefinition);
-            }
-            else
-            {
-                index = AddEventInvokeCall(index, data.OnChangedMethods, propertyDefinition);
+                propertyData.AlreadyNotifies.Add(propertyDefinition.Name);
             }
         }
 
-        var setMethod = propertyData.PropertyDefinition.SetMethod;
-        if (setMethod.GetNonAbstractBaseMethod(out _))
-            return;
-
-        AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyData.PropertyDefinition);
+        AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyDefinition);
     }
 
     IEnumerable<int> FindSetFieldInstructions()
@@ -344,7 +343,7 @@ public class PropertyWeaver
             method = genericMethod;
         }
 
-        var instructionList = new List<Instruction> {Instruction.Create(OpCodes.Callvirt, method)};
+        var instructionList = new List<Instruction> { Instruction.Create(OpCodes.Callvirt, method) };
 
         if (method.ReturnType.FullName != typeSystem.VoidReference.FullName)
         {
