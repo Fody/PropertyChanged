@@ -180,5 +180,15 @@ public static class CecilExtensions
             && baseMethod != method; // cecil's GetBaseMethod() returns self if the method has no base method...
     }
 
+    public static IEnumerable<MethodDefinition> GetSelfAndBaseMethods(this MethodDefinition method)
+    {
+        yield return method;
+
+        while (method.GetBaseMethod(out method))
+        {
+            yield return method;
+        }
+    }
+
 
 }
