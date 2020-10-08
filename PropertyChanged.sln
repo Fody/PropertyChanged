@@ -58,7 +58,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithDisabledTrigger
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithDisabledIsChangedProperty", "TestAssemblies\AssemblyWithDisabledIsChangedProperty\AssemblyWithDisabledIsChangedProperty.csproj", "{89CC72A8-43A9-4593-9FA5-61091C989B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithInheritance", "TestAssemblies\AssemblyWithInheritance\AssemblyWithInheritance.csproj", "{9D3B5C35-6523-45D9-B11D-0FBB67C0866A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithInheritance", "TestAssemblies\AssemblyWithInheritance\AssemblyWithInheritance.csproj", "{9D3B5C35-6523-45D9-B11D-0FBB67C0866A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithExternalInheritance", "TestAssemblies\AssemblyWithExternalInheritance\AssemblyWithExternalInheritance.csproj", "{10BDE166-0BFC-41D9-9326-805717A054B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -294,6 +296,18 @@ Global
 		{9D3B5C35-6523-45D9-B11D-0FBB67C0866A}.Release|ARM.Build.0 = Release|Any CPU
 		{9D3B5C35-6523-45D9-B11D-0FBB67C0866A}.Release|x86.ActiveCfg = Release|Any CPU
 		{9D3B5C35-6523-45D9-B11D-0FBB67C0866A}.Release|x86.Build.0 = Release|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Debug|ARM.Build.0 = Debug|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Debug|x86.Build.0 = Debug|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|ARM.ActiveCfg = Release|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|ARM.Build.0 = Release|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -318,6 +332,7 @@ Global
 		{E001A600-05B4-4B9B-B35C-5F8A1B302ACD} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{89CC72A8-43A9-4593-9FA5-61091C989B40} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{9D3B5C35-6523-45D9-B11D-0FBB67C0866A} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
+		{10BDE166-0BFC-41D9-9326-805717A054B3} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ABD5CA78-3690-4D62-8642-3463D9FAE144}
