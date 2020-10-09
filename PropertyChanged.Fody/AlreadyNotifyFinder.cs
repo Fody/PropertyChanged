@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -6,11 +8,22 @@ public partial class ModuleWeaver
 {
     public IEnumerable<string> GetAlreadyNotifies(PropertyDefinition propertyDefinition)
     {
-        if (propertyDefinition.SetMethod.IsAbstract)
+        var setMethod = propertyDefinition.SetMethod;
+        if (setMethod.IsAbstract)
         {
             yield break;
         }
-        var instructions = propertyDefinition.SetMethod.Body.Instructions;
+
+        var instructions = setMethod.Body.Instructions;
+
+        if (setMethod.GetBaseMethod(out var baseMethod))
+        {
+            if (baseMethod.HasBody && instructions.Any(instruction => instruction.IsCallToMethod(baseMethod)))
+            {
+                yield return propertyDefinition.Name;
+            }
+        }
+
         for (var index = 0; index < instructions.Count; index++)
         {
             var instruction = instructions[index];
