@@ -65,17 +65,7 @@ public class PropertyWeaver
             index = AddEventInvokeCall(index, onChangedMethods, alsoNotifyForDefinition);
         }
 
-        var propertyDefinition = propertyData.PropertyDefinition;
-        var setMethod = propertyDefinition.SetMethod;
-        if (setMethod.GetBaseMethod(out var baseMethod))
-        {
-            if (baseMethod.HasBody && setMethod.Body.Instructions.Any(instruction => instruction.IsCallToMethod(baseMethod)))
-            {
-                propertyData.AlreadyNotifies.Add(propertyDefinition.Name);
-            }
-        }
-
-        AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyDefinition);
+        AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyData.PropertyDefinition);
     }
 
     IEnumerable<int> FindSetFieldInstructions()
