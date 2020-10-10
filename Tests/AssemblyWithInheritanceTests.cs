@@ -48,6 +48,8 @@ public class AssemblyWithInheritanceTests
     [InlineData(1, "DerivedNoOverrides", "Property1", new[] { "Property4", "base:OnProperty1Changed", "Property1" })]
     [InlineData(1, "DerivedNoOverrides", "Property2", new[] { "Property4", "base:OnProperty2Changed", "Property2" })]
     [InlineData(1, "DerivedNoOverrides", "Property3", new[] { "Property5", "derived:OnProperty3Changed", "Property3" })]
+    [InlineData(0, "PocoBase", "Property1", new string[0])]
+    [InlineData(0, "DerivedFromPoco", "Property1", new[] { "Property4", "derived:OnProperty1Changed", "Property1" })]
     public void DerivedClassRaisesAllExpectedEvents(int assemblyIndex, string className, string propertyName, string[] expected)
     {
         var assembly = assemblies[assemblyIndex];

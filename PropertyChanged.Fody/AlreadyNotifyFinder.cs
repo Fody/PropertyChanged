@@ -18,7 +18,7 @@ public partial class ModuleWeaver
 
         if (setMethod.GetBaseMethod(out var baseMethod))
         {
-            if (baseMethod.HasBody && instructions.Any(instruction => instruction.IsCallToMethod(baseMethod)))
+            if (baseMethod.HasBody && HierarchyImplementsINotify(baseMethod.DeclaringType) && instructions.Any(instruction => instruction.IsCallToMethod(baseMethod)) )
             {
                 yield return propertyDefinition.Name;
             }

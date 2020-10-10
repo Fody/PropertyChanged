@@ -181,3 +181,58 @@ public class DerivedDerivedClass : DerivedClass
     }
 }
 
+public class PocoBase
+{
+    public IList<string> Notifications = new List<string>();
+
+    public virtual int Property1 { get; set; }
+}
+
+public class DerivedFromPoco : PocoBase, INotifyPropertyChanged
+{
+    public override int Property1
+    {
+        get => base.Property1;
+        set => base.Property1 = value;
+    }
+
+    public int Property4 => Property1 + 1;
+
+    void OnProperty1Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty2Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty3Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty4Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty5Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void ReportOnChanged([CallerMemberName] string callerMemberName = null)
+    {
+        Notifications.Add("derived:" + callerMemberName);
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        Notifications.Add(propertyName);
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
