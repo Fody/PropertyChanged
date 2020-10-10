@@ -8,6 +8,7 @@ public partial class ModuleWeaver
     {
         targetType.Interfaces.Add(new InterfaceImplementation(PropChangedInterfaceReference));
         WeaveEvent(targetType);
+        typesImplementingINotify[targetType.FullName] = true;
     }
 
     void WeaveEvent(TypeDefinition type)
