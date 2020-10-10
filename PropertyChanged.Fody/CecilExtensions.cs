@@ -23,6 +23,11 @@ public static class CecilExtensions
             return false;
         }
 
+        if (methodReference.Name != method.Name)
+        {
+            return false;
+        }
+
         if (methodReference.Resolve() != method)
         {
             return false;

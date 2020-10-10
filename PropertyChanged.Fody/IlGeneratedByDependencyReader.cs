@@ -1,13 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
 public class IlGeneratedByDependencyReader
 {
     TypeNode node;
-    Func<MethodReference, MethodDefinition, bool> methodComparer;
-    Func<FieldReference, FieldDefinition, bool> fieldComparer;
 
     public IlGeneratedByDependencyReader(TypeNode node)
     {
@@ -16,10 +13,6 @@ public class IlGeneratedByDependencyReader
 
     public void Process()
     {
-        methodComparer = MethodComparer;
-
-        fieldComparer = node.TypeDefinition.HasGenericParameters ? (Func<FieldReference, FieldDefinition, bool>)GenericFieldComparer : NonGenericFieldComparer;
-
         foreach (var property in node.TypeDefinition.Properties)
         {
             if (!property.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotNotifyAttribute"))
@@ -31,8 +24,8 @@ public class IlGeneratedByDependencyReader
 
     static bool MethodComparer(MethodReference methodReference, MethodDefinition methodDefinition)
     {
-        return methodReference.Name == methodDefinition.Name 
-               && CoreMethodComparer(methodReference.Resolve(), methodDefinition);
+        return methodReference.Name == methodDefinition?.Name
+            && CoreMethodComparer(methodReference.Resolve(), methodDefinition);
     }
 
     static bool CoreMethodComparer(MethodReference methodReference, MethodDefinition methodDefinition)
@@ -40,14 +33,10 @@ public class IlGeneratedByDependencyReader
         return methodDefinition.GetSelfAndBaseMethods().Any(item => item == methodReference);
     }
 
-    static bool GenericFieldComparer(FieldReference fieldReference, FieldDefinition fieldDefinition)
+    static bool FieldComparer(FieldReference fieldReference, FieldDefinition fieldDefinition)
     {
-        return fieldDefinition == fieldReference.Resolve();
-    }
-
-    static bool NonGenericFieldComparer(FieldReference fieldReference, FieldDefinition fieldDefinition)
-    {
-        return fieldDefinition == fieldReference;
+        return fieldReference.Name == fieldDefinition?.Name
+            && fieldReference.Resolve() == fieldDefinition;
     }
 
     void ProcessGet(PropertyDefinition property)
@@ -103,7 +92,7 @@ public class IlGeneratedByDependencyReader
         {
             if (instruction.Operand is MethodReference methodReference)
             {
-                var mapping = node.Mappings.FirstOrDefault(x => methodComparer(methodReference, x.PropertyDefinition.GetMethod));
+                var mapping = node.Mappings.FirstOrDefault(x => MethodComparer(methodReference, x.PropertyDefinition.GetMethod));
                 if (mapping != null)
                 {
                     propertyDefinition = mapping.PropertyDefinition;
@@ -121,7 +110,7 @@ public class IlGeneratedByDependencyReader
         {
             if (instruction.Operand is FieldReference fieldReference)
             {
-                var mapping = node.Mappings.FirstOrDefault(x => fieldComparer(fieldReference, x.FieldDefinition));
+                var mapping = node.Mappings.FirstOrDefault(x => FieldComparer(fieldReference, x.FieldDefinition));
                 if (mapping != null)
                 {
                     propertyDefinition = mapping.PropertyDefinition;
