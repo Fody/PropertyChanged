@@ -132,6 +132,44 @@ public class DerivedNoOverrides : BaseClass
     }
 }
 
+public class DerivedNewProperties : BaseClass
+{
+    public new int Property1 { get; set; }
+    public override int Property3 { get; set; }
+
+    public int Property5 => Property1 - Property3 + Property2;
+
+    void OnProperty1Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty2Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty3Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty4Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void OnProperty5Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void ReportOnChanged([CallerMemberName] string callerMemberName = null)
+    {
+        Notifications.Add("derived:" + callerMemberName);
+    }
+}
+
 public class DerivedDerivedClass : DerivedClass
 {
     public override int Property1
