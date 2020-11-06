@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -9,6 +10,11 @@ public static class CecilExtensions
     public static string GetName(this PropertyDefinition propertyDefinition)
     {
         return $"{propertyDefinition.DeclaringType.FullName}.{propertyDefinition.Name}";
+    }
+
+    public static bool IsCallToBaseMethod(this Instruction instruction, MethodDefinition method)
+    {
+        return instruction.OpCode == OpCodes.Call && instruction.IsCallToMethod(method);
     }
 
     public static bool IsCallToMethod(this Instruction instruction, MethodDefinition method)
@@ -181,7 +187,7 @@ public static class CecilExtensions
     public static bool GetBaseMethod(this MethodDefinition method, out MethodDefinition baseMethod)
     {
         baseMethod = method.GetBaseMethod();
-        return baseMethod != null 
+        return baseMethod != null
             && baseMethod != method; // cecil's GetBaseMethod() returns self if the method has no base method...
     }
 

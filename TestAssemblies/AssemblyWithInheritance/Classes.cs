@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -272,5 +273,37 @@ public class DerivedFromPoco : PocoBase, INotifyPropertyChanged
     {
         Notifications.Add(propertyName);
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+
+public class DerivedCallingChild : BaseClass
+{
+    IList<DerivedCallingChild> someChildren = Array.Empty<DerivedCallingChild>();
+    int property2;
+
+    public override int Property1
+    {
+        get => base.Property1;
+        set => base.Property1 = value > 0 ? value : DoSomeDummyStuff(value, 0, 0);
+    }
+
+    public override int Property2
+    {
+        get => property2;
+        set
+        {
+            property2 = value;
+            foreach (var child in someChildren)
+            {
+                child.Property2 = value;
+            }
+        }
+    }
+
+    public override int Property3 { get; set; }
+
+    int DoSomeDummyStuff(int a, int b, int c)
+    {
+        return a + b + c;
     }
 }

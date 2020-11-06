@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+#if NETCOREAPP
+using System.Runtime.Loader;
+#endif
 
 using Fody;
 
@@ -20,11 +24,18 @@ public class AssemblyWithInheritanceTests
             weavingTask.ExecuteTestRun("AssemblyWithExternalInheritance.dll")
         };
 
-        // Must use Assembly.LoadFrom, else the non-woven assemblies will be loaded as dependencies!
+#if NETFRAMEWORK
         assemblies = testResults
-            .Select(result => result.AssemblyPath)
-            .Select(path => Assembly.LoadFrom(path))
+            // Must use Assembly.LoadFrom, else the non-woven assemblies will be loaded as dependencies!
+            .Select(result => Assembly.LoadFrom(result.AssemblyPath))
             .ToArray();
+#else
+        var folder = Path.GetDirectoryName(testResults.First().AssemblyPath);
+        var loadContext = new PluginLoadContext(folder);
+        assemblies = testResults
+            .Select(result => loadContext.LoadFromAssemblyPath(result.AssemblyPath))
+            .ToArray();
+#endif
     }
 
     public AssemblyWithInheritanceTests(ITestOutputHelper outputHelper)
@@ -53,6 +64,8 @@ public class AssemblyWithInheritanceTests
     [InlineData(0, "DerivedNewProperties", "Property1", new[] { "Property5", "derived:OnProperty1Changed", "Property1" })]
     [InlineData(0, "DerivedNewProperties", "Property2", new[] { "Property4", "base:OnProperty2Changed", "Property2" })]
     [InlineData(0, "DerivedNewProperties", "Property3", new[] { "Property5", "derived:OnProperty3Changed", "Property3" })]
+    [InlineData(0, "DerivedCallingChild", "Property1", new[] { "Property4", "base:OnProperty1Changed", "Property1" })]
+    [InlineData(0, "DerivedCallingChild", "Property2", new[] { "Property2" })]
     public void DerivedClassRaisesAllExpectedEvents(int assemblyIndex, string className, string propertyName, string[] expected)
     {
         var assembly = assemblies[assemblyIndex];
@@ -72,3 +85,38 @@ public class AssemblyWithInheritanceTests
     readonly ITestOutputHelper outputHelper;
     static Assembly[] assemblies;
 }
+
+#if NETCOREAPP
+class PluginLoadContext : AssemblyLoadContext
+{
+    AssemblyDependencyResolver _resolver;
+
+    public PluginLoadContext(string pluginPath)
+    {
+        _resolver = new AssemblyDependencyResolver(pluginPath);
+    }
+
+    protected override Assembly Load(AssemblyName assemblyName)
+    {
+        var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
+
+        if (assemblyPath != null)
+        {
+            return LoadFromAssemblyPath(assemblyPath);
+        }
+
+        return null;
+    }
+
+    protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+    {
+        var libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
+        if (libraryPath != null)
+        {
+            return LoadUnmanagedDllFromPath(libraryPath);
+        }
+
+        return IntPtr.Zero;
+    }
+}
+#endif
