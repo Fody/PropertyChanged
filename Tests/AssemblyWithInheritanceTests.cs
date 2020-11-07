@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 #if NETCOREAPP
@@ -30,8 +29,7 @@ public class AssemblyWithInheritanceTests
             .Select(result => Assembly.LoadFrom(result.AssemblyPath))
             .ToArray();
 #else
-        var folder = Path.GetDirectoryName(testResults.First().AssemblyPath);
-        var loadContext = new PluginLoadContext(folder);
+        var loadContext = new AssemblyLoadContext(null);
         assemblies = testResults
             .Select(result => loadContext.LoadFromAssemblyPath(result.AssemblyPath))
             .ToArray();
@@ -85,38 +83,3 @@ public class AssemblyWithInheritanceTests
     readonly ITestOutputHelper outputHelper;
     static Assembly[] assemblies;
 }
-
-#if NETCOREAPP
-class PluginLoadContext : AssemblyLoadContext
-{
-    AssemblyDependencyResolver _resolver;
-
-    public PluginLoadContext(string pluginPath)
-    {
-        _resolver = new AssemblyDependencyResolver(pluginPath);
-    }
-
-    protected override Assembly Load(AssemblyName assemblyName)
-    {
-        var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
-
-        if (assemblyPath != null)
-        {
-            return LoadFromAssemblyPath(assemblyPath);
-        }
-
-        return null;
-    }
-
-    protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
-    {
-        var libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
-        if (libraryPath != null)
-        {
-            return LoadUnmanagedDllFromPath(libraryPath);
-        }
-
-        return IntPtr.Zero;
-    }
-}
-#endif
