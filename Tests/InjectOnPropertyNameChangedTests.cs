@@ -15,7 +15,10 @@ public class InjectOnPropertyNameChangedTests
             InjectOnPropertyNameChanged = true
         };
 
-        var result = moduleWeaver.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll", assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_Warn");
+        var result = moduleWeaver.ExecuteTestRun(
+            "AssemblyWithNonVoidOnPropertyNameChanged.dll", 
+            assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_Warn",
+            ignoreCodes: new[] {"0x80131869"});
         return Verifier.Verify(result.Warnings.Single().Text);
     }
 
@@ -27,7 +30,10 @@ public class InjectOnPropertyNameChangedTests
             InjectOnPropertyNameChanged = true
         };
 
-        var result = moduleWeaver.ExecuteTestRun("AssemblyWithStaticOnPropertyNameChanged.dll", assemblyName: "AssemblyWithStaticOnPropertyNameChanged_Warn");
+        var result = moduleWeaver.ExecuteTestRun(
+            "AssemblyWithStaticOnPropertyNameChanged.dll",
+            assemblyName: "AssemblyWithStaticOnPropertyNameChanged_Warn",
+            ignoreCodes: new[] {"0x80131869"});
         return Verifier.Verify(result.Warnings.Single().Text);
     }
 
@@ -41,8 +47,14 @@ public class InjectOnPropertyNameChangedTests
 
         var results = new[]
         {
-            moduleWeaver.ExecuteTestRun("AssemblyWithNonVoidOnPropertyNameChanged.dll", assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_NoWarn"),
-            moduleWeaver.ExecuteTestRun("AssemblyWithStaticOnPropertyNameChanged.dll", assemblyName: "AssemblyWithStaticOnPropertyNameChanged_NoWarn")
+            moduleWeaver.ExecuteTestRun(
+                "AssemblyWithNonVoidOnPropertyNameChanged.dll",
+                assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_NoWarn",
+                ignoreCodes: new[] {"0x80131869"}),
+            moduleWeaver.ExecuteTestRun(
+                "AssemblyWithStaticOnPropertyNameChanged.dll",
+                assemblyName: "AssemblyWithStaticOnPropertyNameChanged_NoWarn",
+                ignoreCodes: new[] {"0x80131869"})
         };
 
         foreach (var result in results)

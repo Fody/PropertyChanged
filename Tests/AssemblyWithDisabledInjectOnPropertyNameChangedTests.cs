@@ -7,8 +7,13 @@ public class AssemblyWithDisabledInjectOnPropertyNameChangedTests
 
     static AssemblyWithDisabledInjectOnPropertyNameChangedTests()
     {
-        var weavingTask = new ModuleWeaver { InjectOnPropertyNameChanged = false };
-        testResult = weavingTask.ExecuteTestRun("AssemblyWithDisabledInjectOnPropertyNameChanged.dll");
+        var weavingTask = new ModuleWeaver
+        {
+            InjectOnPropertyNameChanged = false
+        };
+        testResult = weavingTask.ExecuteTestRun(
+            "AssemblyWithDisabledInjectOnPropertyNameChanged.dll",
+            ignoreCodes: new[] {"0x80131869"});
     }
 
     [Fact]
@@ -19,7 +24,7 @@ public class AssemblyWithDisabledInjectOnPropertyNameChangedTests
 
         Assert.Equal(0, instance.OnProperty1ChangedCallCount);
     }
-    
+
     [Fact]
     public void CustomMethodCallsAreInjected()
     {

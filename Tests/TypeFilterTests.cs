@@ -8,7 +8,9 @@ public class TypeFilterTests
     public TypeFilterTests()
     {
         var weavingTask = new ModuleWeaver();
-        testResult = weavingTask.ExecuteTestRun("AssemblyWithTypeFilter.dll");
+        testResult = weavingTask.ExecuteTestRun(
+            "AssemblyWithTypeFilter.dll",
+            ignoreCodes: new[] {"0x80131869"});
     }
 
     [Fact]

@@ -7,8 +7,13 @@ public class AssemblyWithDisabledTriggerDependentPropertiesTests
 
     static AssemblyWithDisabledTriggerDependentPropertiesTests()
     {
-        var weavingTaskFalse = new ModuleWeaver { TriggerDependentProperties = false };
-        testResult = weavingTaskFalse.ExecuteTestRun("AssemblyWithDisabledTriggerDependentProperties.dll");
+        var weavingTaskFalse = new ModuleWeaver
+        {
+            TriggerDependentProperties = false
+        };
+        testResult = weavingTaskFalse.ExecuteTestRun(
+            "AssemblyWithDisabledTriggerDependentProperties.dll",
+            ignoreCodes: new[] {"0x80131869"});
     }
 
     [Fact]
