@@ -43,7 +43,11 @@ public class ClassWithInvalidOnChanged :
 
     public void OnIgnoredPropertyChanged()
     {
+        OnIgnorePropertyChangedCalled = true;
     }
+
+
+    public bool OnIgnorePropertyChangedCalled = false;
 
     public event PropertyChangedEventHandler PropertyChanged;
 }

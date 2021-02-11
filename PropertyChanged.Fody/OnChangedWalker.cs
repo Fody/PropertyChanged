@@ -78,6 +78,12 @@ public partial class ModuleWeaver
             }
         }
 
+        foreach (var method in methods.Values)
+        {
+            ValidateOnChangedMethod(notifyNode, method);
+
+        }
+
         return methods.Values.ToList();
     }
 
@@ -150,11 +156,10 @@ public partial class ModuleWeaver
 
         if (onChangedType != OnChangedTypes.None)
         {
-            ValidateOnChangedMethod(notifyNode, methodDefinition, isDefaultMethod);
-
             return new OnChangedMethod
             {
                 OnChangedType = onChangedType,
+                MethodDefinition = methodDefinition,
                 MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
                 IsDefaultMethod = isDefaultMethod
             };
@@ -182,26 +187,29 @@ public partial class ModuleWeaver
                && parameters[1].ParameterType.FullName == "System.Object";
     }
 
-    void ValidateOnChangedMethod(TypeNode notifyNode, MethodDefinition method, bool isDefaultMethod)
+    void ValidateOnChangedMethod(TypeNode notifyNode, OnChangedMethod onChangedMethod)
     {
+        var method = onChangedMethod.MethodDefinition;
+
         if (method.IsVirtual && !method.IsNewSlot)
         {
             return;
         }
 
-        if (!isDefaultMethod)
+        if (!onChangedMethod.IsDefaultMethod)
         {
             return;
         }
-        var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
 
-        if (notifyNode.PropertyDatas.Any(i => i.PropertyDefinition.Name == propertyName))
+        if (onChangedMethod.Properties.Any())
         {
             return;
         }
+        
         if (!SuppressOnPropertyNameChangedWarning)
         {
-            EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} does not contain a {propertyName} property with an injected change notification, and therefore the {method.Name} method will not be called.");
+            // var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
+            EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} contains a method {method.Name} which will not be called.");
         }
     }
 }
