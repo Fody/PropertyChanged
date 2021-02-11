@@ -11,7 +11,10 @@ public enum OnChangedTypes
 public class OnChangedMethod
 {
     public MethodReference MethodReference;
+    public MethodDefinition MethodDefinition;
     public OnChangedTypes OnChangedType;
     public bool IsDefaultMethod;
     public List<PropertyDefinition> Properties = new();
 }
+
+
