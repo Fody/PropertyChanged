@@ -19,4 +19,5 @@ public class TypeNode
     public MethodReference IsChangedInvoker;
     public List<PropertyData> PropertyDatas;
     public List<PropertyDefinition> AllProperties;
+    public List<OnChangedMethod> OnChangedMethods;
 }

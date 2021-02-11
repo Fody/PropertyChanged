@@ -60,12 +60,21 @@ public class PropertyWeaver
 
         foreach (var alsoNotifyForDefinition in propertyData.AlsoNotifyFor.Distinct())
         {
-            var data = propertyData.ParentType.PropertyDatas.SingleOrDefault(p => p.PropertyDefinition == alsoNotifyForDefinition);
-            var onChangedMethods = data?.OnChangedMethods ?? new List<OnChangedMethod>();
-            index = AddEventInvokeCall(index, onChangedMethods, alsoNotifyForDefinition);
+            var alsoNotifyMethods = GetMethodsForProperty(propertyData.ParentType, alsoNotifyForDefinition);
+            
+            index = AddEventInvokeCall(index, alsoNotifyMethods, alsoNotifyForDefinition);
         }
 
-        AddEventInvokeCall(index, propertyData.OnChangedMethods, propertyData.PropertyDefinition);
+        var onChangedMethods = GetMethodsForProperty(propertyData.ParentType, propertyData.PropertyDefinition);
+        AddEventInvokeCall(index, onChangedMethods, propertyData.PropertyDefinition);
+    }
+
+    List<OnChangedMethod> GetMethodsForProperty(TypeNode typeNode, PropertyDefinition property)
+    {
+        return (from m in typeNode.OnChangedMethods
+            from p in m.Properties
+            where p == property
+            select m).ToList();
     }
 
     IEnumerable<int> FindSetFieldInstructions()
