@@ -14,12 +14,12 @@ public partial class ModuleWeaver
     {
         foreach (var notifyNode in notifyNodes)
         {
-            ProcessOnChangedMethods(notifyNode);
+            notifyNode.OnChangedMethods = GetOnChangedMethods(notifyNode);
             ProcessOnChangedMethods(notifyNode.Nodes);
         }
     }
 
-    void ProcessOnChangedMethods(TypeNode notifyNode)
+    List<OnChangedMethod> GetOnChangedMethods(TypeNode notifyNode)
     {
         var methods = new Dictionary<string, OnChangedMethod>();
 
@@ -49,11 +49,11 @@ public partial class ModuleWeaver
             }
         }
 
-        foreach (var propertyData in notifyNode.PropertyDatas)
+        foreach (var propertyDefinition in notifyNode.AllProperties)
         {
             var hasCustomMethods = false;
 
-            foreach (var attribute in propertyData.PropertyDefinition.CustomAttributes.GetAttributes("PropertyChanged.OnChangedMethodAttribute"))
+            foreach (var attribute in propertyDefinition.CustomAttributes.GetAttributes("PropertyChanged.OnChangedMethodAttribute"))
             {
                 hasCustomMethods = true;
                 var methodName = (string)attribute.ConstructorArguments[0].Value;
@@ -69,14 +69,16 @@ public partial class ModuleWeaver
                     methods.Add(methodName, onChangedMethod);
                 }
 
-                propertyData.OnChangedMethods.Add(onChangedMethod);
+                onChangedMethod.Properties.Add(propertyDefinition);
             }
 
-            if (InjectOnPropertyNameChanged && !hasCustomMethods && methods.TryGetValue("On" + propertyData.PropertyDefinition.Name + "Changed", out var defaultMethod))
+            if (InjectOnPropertyNameChanged && !hasCustomMethods && methods.TryGetValue("On" + propertyDefinition.Name + "Changed", out var defaultMethod))
             {
-                propertyData.OnChangedMethods.Add(defaultMethod);
+                defaultMethod.Properties.Add(propertyDefinition);
             }
         }
+
+        return methods.Values.ToList();
     }
 
     OnChangedMethod FindOnChangedMethod(TypeNode notifyNode, string methodName)

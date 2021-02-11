@@ -9,5 +9,4 @@ public class PropertyData
     public PropertyDefinition PropertyDefinition;
     public MethodReference EqualsMethod;
     public List<string> AlreadyNotifies = new List<string>();
-    public List<OnChangedMethod> OnChangedMethods = new List<OnChangedMethod>();
 }
