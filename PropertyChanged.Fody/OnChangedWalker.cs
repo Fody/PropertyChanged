@@ -201,7 +201,13 @@ public partial class ModuleWeaver
             return;
         }
 
-        if (onChangedMethod.Properties.Any())
+        bool PropertyWillBeNotified(PropertyDefinition p)
+        {
+            return notifyNode.PropertyDatas
+                .Any(pd => pd.PropertyDefinition == p || pd.AlsoNotifyFor.Contains(p));
+        }
+
+        if (onChangedMethod.Properties.Any(PropertyWillBeNotified))
         {
             return;
         }

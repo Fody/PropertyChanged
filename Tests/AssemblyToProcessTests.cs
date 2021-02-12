@@ -313,7 +313,7 @@ public class AssemblyToProcessTests
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty));
         instance.Property1 = "foo";
 
-        DumpWarnings();
+        DumpWarnings(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty));
 
         Assert.Equal("From 0 to 3", instance.Property2ChangeValue);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty)));
