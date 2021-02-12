@@ -14,5 +14,4 @@ public class ClassWithOnChangedBeforeAfterCalculatedProperty
     {
         Property2ChangeValue = $"From {before} to {after}";
     }
-
 }

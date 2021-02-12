@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 #if NETCOREAPP
@@ -44,64 +43,64 @@ public class AssemblyWithInheritanceTests
 
     [Theory]
     [InlineData(0, "DerivedClass", "Property1", 
-        new[] { "Property4", "base:OnProperty1Changed", "Property1", "Property5", "derived:OnProperty1Changed" },
+        new[] {                            "Property4", "base:OnProperty1Changed", "Property1",                               "Property5", "derived:OnProperty1Changed" },
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed" })]
     
     [InlineData(0, "DerivedClass", "Property2", 
-        new[] { "Property5", "derived:OnProperty2Changed", "Property2" }, 
+        new[] {                               "Property5", "derived:OnProperty2Changed", "Property2" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty2Changed", "Property2" })]
     
     [InlineData(0, "DerivedClass", "Property3", 
-        new[] { "Property5", "derived:OnProperty3Changed", "Property3" }, 
+        new[] {                               "Property5", "derived:OnProperty3Changed", "Property3" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
     
     [InlineData(0, "DerivedNoOverrides", "Property1", 
-        new[] { "Property4", "base:OnProperty1Changed", "Property1" }, 
+        new[] {                            "Property4", "base:OnProperty1Changed", "Property1" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1" })]
     
     [InlineData(0, "DerivedNoOverrides", "Property2", 
-        new[] { "Property4", "base:OnProperty2Changed", "Property2" }, 
+        new[] {                            "Property4", "base:OnProperty2Changed", "Property2" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty2Changed", "Property2" })]
     
     [InlineData(0, "DerivedNoOverrides", "Property3", 
-        new[] { "Property5", "derived:OnProperty3Changed", "Property3" }, 
+        new[] {                               "Property5", "derived:OnProperty3Changed", "Property3" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
    
     [InlineData(0, "DerivedDerivedClass", "Property1",
-        new[] { "Property4", "base:OnProperty1Changed", "Property1", "Property5", "derived:OnProperty1Changed", "Property6", "derived++:OnProperty1Changed" }, 
+        new[] {                            "Property4", "base:OnProperty1Changed", "Property1",                               "Property5", "derived:OnProperty1Changed",                                 "Property6", "derived++:OnProperty1Changed" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed", "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty1Changed"
         })]
     
     [InlineData(0, "DerivedDerivedClass", "Property2", 
-        new[] { "Property6", "derived++:OnProperty2Changed", "Property2" }, 
+        new[] {                                 "Property6", "derived++:OnProperty2Changed", "Property2" }, 
         new[] { "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty2Changed", "Property2" })]
     
     [InlineData(0, "DerivedDerivedClass", "Property3", 
-        new[] { "Property6", "derived++:OnProperty3Changed", "Property3" }, 
+        new[] {                                 "Property6", "derived++:OnProperty3Changed", "Property3" }, 
         new[] { "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty3Changed", "Property3" })]
     
     [InlineData(1, "DerivedClass", "Property1", 
-        new[] { "Property4", "base:OnProperty1Changed", "Property1", "Property5", "derived:OnProperty1Changed" }, 
+        new[] {                            "Property4", "base:OnProperty1Changed", "Property1",                               "Property5", "derived:OnProperty1Changed" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed" })]
     
     [InlineData(1, "DerivedClass", "Property2", 
-        new[] { "Property5", "derived:OnProperty2Changed", "Property2" }, 
+        new[] {                               "Property5", "derived:OnProperty2Changed", "Property2" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty2Changed", "Property2" })]
     
     [InlineData(1, "DerivedClass", "Property3", 
-        new[] { "Property5", "derived:OnProperty3Changed", "Property3" }, 
+        new[] {                               "Property5", "derived:OnProperty3Changed", "Property3" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
     
     [InlineData(1, "DerivedNoOverrides", "Property1",
-        new[] { "Property4", "base:OnProperty1Changed", "Property1" }, 
+        new[] {                            "Property4", "base:OnProperty1Changed", "Property1" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1" })]
    
     [InlineData(1, "DerivedNoOverrides", "Property2", 
-        new[] { "Property4", "base:OnProperty2Changed", "Property2" }, 
+        new[] {                            "Property4", "base:OnProperty2Changed", "Property2" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty2Changed", "Property2" })]
     
     [InlineData(1, "DerivedNoOverrides", "Property3", 
-        new[] { "Property5", "derived:OnProperty3Changed", "Property3" }, 
+        new[] {                               "Property5", "derived:OnProperty3Changed", "Property3" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
     
     [InlineData(0, "PocoBase", "Property1", 
@@ -109,23 +108,23 @@ public class AssemblyWithInheritanceTests
         new string[0])]
     
     [InlineData(0, "DerivedFromPoco", "Property1", 
-        new[] { "Property4", "derived:OnProperty1Changed", "Property1" }, 
+        new[] {                               "Property4", "derived:OnProperty1Changed", "Property1" }, 
         new[] { "derived:OnProperty4Changed", "Property4", "derived:OnProperty1Changed", "Property1" })]
     
     [InlineData(0, "DerivedNewProperties", "Property1", 
-        new[] { "Property5", "derived:OnProperty1Changed", "Property1" }, 
+        new[] {                               "Property5", "derived:OnProperty1Changed", "Property1" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed", "Property1" })]
     
     [InlineData(0, "DerivedNewProperties", "Property2", 
-        new[] { "Property4", "base:OnProperty2Changed", "Property2" }, 
+        new[] {                            "Property4", "base:OnProperty2Changed", "Property2" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty2Changed", "Property2" })]
     
     [InlineData(0, "DerivedNewProperties", "Property3", 
-        new[] { "Property5", "derived:OnProperty3Changed", "Property3" }, 
+        new[] {                               "Property5", "derived:OnProperty3Changed", "Property3" }, 
         new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
    
     [InlineData(0, "DerivedCallingChild", "Property1", 
-        new[] { "Property4", "base:OnProperty1Changed", "Property1" }, 
+        new[] {                            "Property4", "base:OnProperty1Changed", "Property1" }, 
         new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1" })]
    
     [InlineData(0, "DerivedCallingChild", "Property2", 
@@ -158,4 +157,6 @@ public class AssemblyWithInheritanceTests
 
     readonly ITestOutputHelper outputHelper;
     static Assembly[] assemblies;
+    
+    
 }
