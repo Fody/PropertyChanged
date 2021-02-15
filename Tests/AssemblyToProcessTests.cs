@@ -294,7 +294,8 @@ public class AssemblyToProcessTests
         instance.Property1 = "foo";
 
         Assert.True(instance.OnProperty2ChangedCalled);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChanged)));
+        Assert.True(instance.OnProperty3ChangedCalled);
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCalculatedProperty)));
     }
 
     [Fact]
@@ -347,13 +348,14 @@ public class AssemblyToProcessTests
     [Fact]
     public void ClassWithOnChangedCustomizedWarnings()
     {
-        DumpWarnings(nameof(ClassWithOnChangedCustomized));
-        
-        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized))
-                                                  && w.Text.Contains(nameof(ClassWithOnChangedCustomized.OnProperty1Changed)));
+        var warnings = testResult.Warnings
+            .Where(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized)))
+            .ToArray();
 
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized))
-                                                        && !w.Text.Contains(nameof(ClassWithOnChangedCustomized.Property1)));
+        Assert.Contains(warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized))
+                                       && w.Text.Contains(nameof(ClassWithOnChangedCustomized.OnProperty1Changed)));
+
+        Assert.True(warnings.Length == 1);
     }
 
 
