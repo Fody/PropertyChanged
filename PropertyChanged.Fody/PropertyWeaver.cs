@@ -71,10 +71,10 @@ public class PropertyWeaver
 
     List<OnChangedMethod> GetMethodsForProperty(TypeNode typeNode, PropertyDefinition property)
     {
-        return (from m in typeNode.OnChangedMethods
-            from p in m.Properties
-            where p == property
-            select m).ToList();
+        return (from method in typeNode.OnChangedMethods
+                from prop in method.Properties
+                where prop == property
+                select method).ToList();
     }
 
     IEnumerable<int> FindSetFieldInstructions()

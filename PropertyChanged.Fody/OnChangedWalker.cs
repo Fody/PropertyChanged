@@ -19,7 +19,7 @@ public partial class ModuleWeaver
         }
     }
 
-    List<OnChangedMethod> GetOnChangedMethods(TypeNode notifyNode)
+    ICollection<OnChangedMethod> GetOnChangedMethods(TypeNode notifyNode)
     {
         var methods = new Dictionary<string, OnChangedMethod>();
 
@@ -84,7 +84,7 @@ public partial class ModuleWeaver
 
         }
 
-        return methods.Values.ToList();
+        return methods.Values;
     }
 
     OnChangedMethod FindOnChangedMethod(TypeNode notifyNode, string methodName)
@@ -214,8 +214,49 @@ public partial class ModuleWeaver
         
         if (!SuppressOnPropertyNameChangedWarning)
         {
-            // var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
-            EmitConditionalWarning(method, $"Type {method.DeclaringType.FullName} contains a method {method.Name} which will not be called.");
+            EmitConditionalWarning(method, GetMethodWarning(notifyNode, onChangedMethod));
         }
     }
+
+
+    string GetMethodWarning(TypeNode notifyNode, OnChangedMethod onChangedMethod)
+    {
+        var method = onChangedMethod.MethodDefinition;
+        var methodRef = onChangedMethod.MethodReference;
+        
+        var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
+
+        var baseMessage = $"Type {method.DeclaringType.FullName} contains a method {method.Name} which will not be called";
+
+        var foundProperty = GetProperty(methodRef, propertyName);
+
+        if (foundProperty == null)
+            return $"{baseMessage} as {propertyName} is not found.";
+
+        if (foundProperty.DeclaringType != method.DeclaringType)
+            return $"{baseMessage} as {propertyName} is declared on base class {foundProperty.DeclaringType.Name}.";
+
+        if (foundProperty.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotNotifyAttribute"))
+            return $"{baseMessage} as {propertyName} is attributed with [DoNotNotify].";
+
+        if (foundProperty.CustomAttributes.ContainsAttribute("PropertyChanged.OnChangedMethodAttribute"))
+            return $"{baseMessage} as {propertyName} is attributed with an alternative [OnChangedMethod].";
+
+        return $"{baseMessage}.";
+    }
+
+    PropertyDefinition GetProperty(MethodReference methodRef, string propertyName)
+    {
+        var type = methodRef.DeclaringType;
+        while (type != null)
+        {
+            var found = type.Resolve().Properties.FirstOrDefault(p => p.Name == propertyName);
+            if (found != null)
+                return found;
+            type = type.Resolve().BaseType;
+        }
+
+        return null;
+    }
+    
 }

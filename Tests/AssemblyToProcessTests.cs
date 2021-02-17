@@ -240,6 +240,28 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void ClassWithWarnings()
+    {
+        var instance = testResult.GetInstance("ClassWithWarnings");
+        instance.Property1 = "foo";
+
+        var warnings = testResult.Warnings
+            .Where(w => w.Text.ContainsWholeWord("ClassWithWarnings"))
+            .Select(w => w.Text.Replace(" You can suppress this warning with [SuppressPropertyChangedWarnings].", ""))
+            .ToArray();
+
+        outputHelper.WriteLine(string.Join(Environment.NewLine, warnings.Select(w => $"\"{w}\"")));
+
+        Assert.Equal(warnings, new[]
+        {
+            "Type ClassWithWarnings contains a method OnProperty1Changed which will not be called as Property1 is attributed with [DoNotNotify].",
+            "Type ClassWithWarnings contains a method OnProperty2Changed which will not be called as Property2 is attributed with an alternative [OnChangedMethod].",
+            "Type ClassWithWarnings contains a method OnPropertyXChanged which will not be called as PropertyX is not found.",
+            "Type ClassWithWarnings contains a method OnBaseClassPropertyChanged which will not be called as BaseClassProperty is declared on base class ClassWithWarningsBase."
+        });
+    }
+
+    [Fact]
     public void OnPropertyNameChangedMethodWithoutMatchingPropertyEmitsWarning()
     {
         const string className = nameof(ClassWithInvalidOnChanged);
