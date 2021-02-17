@@ -228,19 +228,27 @@ public partial class ModuleWeaver
 
         var baseMessage = $"Type {method.DeclaringType.FullName} contains a method {method.Name} which will not be called";
 
+        // var foundProperty = method.DeclaringType.Properties.FirstOrDefault(p => p.Name == propertyName);
+
         var foundProperty = GetProperty(methodRef, propertyName);
+
+
 
         if (foundProperty == null)
             return $"{baseMessage} as {propertyName} is not found.";
 
+
         if (foundProperty.DeclaringType != method.DeclaringType)
             return $"{baseMessage} as {propertyName} is declared on base class {foundProperty.DeclaringType.Name}.";
+
 
         if (foundProperty.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotNotifyAttribute"))
             return $"{baseMessage} as {propertyName} is attributed with [DoNotNotify].";
 
+
         if (foundProperty.CustomAttributes.ContainsAttribute("PropertyChanged.OnChangedMethodAttribute"))
             return $"{baseMessage} as {propertyName} is attributed with an alternative [OnChangedMethod].";
+
 
         return $"{baseMessage}.";
     }
