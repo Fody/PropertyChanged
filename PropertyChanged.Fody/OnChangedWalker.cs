@@ -49,7 +49,7 @@ public partial class ModuleWeaver
             }
         }
 
-        foreach (var propertyDefinition in notifyNode.AllProperties)
+        foreach (var propertyDefinition in notifyNode.DeclaredProperties)
         {
             var hasCustomMethods = false;
 

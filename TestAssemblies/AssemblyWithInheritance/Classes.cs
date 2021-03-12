@@ -15,6 +15,9 @@ public abstract class BaseClass : INotifyPropertyChanged
 
     public int Property4 => Property1 - Property3 + Property2;
 
+    [OnChangedMethod(nameof(On_Property9_Changed))]
+    public object Property9 { get; set; }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged(string propertyName)
@@ -44,6 +47,11 @@ public abstract class BaseClass : INotifyPropertyChanged
     }
 
     void OnProperty5Changed()
+    {
+        ReportOnChanged();
+    }
+
+    void On_Property9_Changed()
     {
         ReportOnChanged();
     }
