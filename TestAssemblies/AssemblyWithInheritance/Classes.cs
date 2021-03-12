@@ -70,6 +70,7 @@ public class DerivedClass : BaseClass
         set => base.Property1 = value;
     }
 
+    [OnChangedMethod(nameof(On_Property2_Changed))]
     public override int Property2 { get; set; }
     public override int Property3 { get; set; }
 
@@ -80,7 +81,7 @@ public class DerivedClass : BaseClass
         ReportOnChanged();
     }
 
-    void OnProperty2Changed()
+    void On_Property2_Changed()
     {
         ReportOnChanged();
     }
