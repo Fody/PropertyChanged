@@ -19,8 +19,8 @@ public class AssemblyWithInheritanceTests
 
         var testResults = new[]
         {
-            weavingTask.ExecuteTestRun("AssemblyWithInheritance.dll"),
-            weavingTask.ExecuteTestRun("AssemblyWithExternalInheritance.dll")
+            weavingTask.ExecuteTestRun("AssemblyWithInheritance.dll", ignoreCodes: peVerifyIgnoreCodes),
+            weavingTask.ExecuteTestRun("AssemblyWithExternalInheritance.dll", ignoreCodes: peVerifyIgnoreCodes)
         };
 
 #if NETFRAMEWORK
@@ -48,7 +48,7 @@ public class AssemblyWithInheritanceTests
     [InlineData(0, "DerivedNoOverrides", "Property1", new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1" })]
     [InlineData(0, "DerivedNoOverrides", "Property2", new[] { "base:OnProperty4Changed", "Property4", "base:On_Property2_Changed", "Property2" })]
     [InlineData(0, "DerivedNoOverrides", "Property3", new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
-    [InlineData(0, "DerivedDerivedClass", "Property1", new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed", "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty1Changed"})]
+    [InlineData(0, "DerivedDerivedClass", "Property1", new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed", "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty1Changed" })]
     [InlineData(0, "DerivedDerivedClass", "Property2", new[] { "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty2Changed", "Property2" })]
     [InlineData(0, "DerivedDerivedClass", "Property3", new[] { "derived++:OnProperty6Changed", "Property6", "derived++:OnProperty3Changed", "Property3" })]
     [InlineData(1, "DerivedClass", "Property1", new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed" })]
@@ -71,11 +71,11 @@ public class AssemblyWithInheritanceTests
         var instanceType = assembly.GetType(className);
         var instance = (dynamic)Activator.CreateInstance(instanceType);
 
-        
+
         instanceType.GetProperty(propertyName)?.SetValue(instance, 42);
 
         var actual = (IList<string>)instance.Notifications;
-        
+
         var act = string.Join(", ", actual.Select(item => $"\"{item}\""));
         var exp = string.Join(", ", expected.Select(item => $"\"{item}\""));
 
@@ -90,6 +90,10 @@ public class AssemblyWithInheritanceTests
 
     readonly ITestOutputHelper outputHelper;
     static Assembly[] assemblies;
-    
-    
+    static readonly string[] peVerifyIgnoreCodes =
+    {
+#if NETCOREAPP
+        "0x80131869"
+#endif
+    };
 }
