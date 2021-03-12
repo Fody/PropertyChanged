@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mono.Cecil;
 
 public class TypeNode
@@ -20,4 +21,5 @@ public class TypeNode
     public List<PropertyData> PropertyDatas;
     public List<PropertyDefinition> AllProperties;
     public ICollection<OnChangedMethod> OnChangedMethods;
+    public IEnumerable<PropertyDefinition> DeclaredProperties => AllProperties.Where(prop => prop.DeclaringType == TypeDefinition);
 }
