@@ -43,7 +43,7 @@ public class AssemblyWithInheritanceTests
 
     [Theory]
     [InlineData(0, "DerivedClass", "Property1", new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1", "derived:OnProperty5Changed", "Property5", "derived:OnProperty1Changed" })]
-    [InlineData(0, "DerivedClass", "Property2", new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty2Changed", "Property2" })]
+    [InlineData(0, "DerivedClass", "Property2", new[] { "derived:OnProperty5Changed", "Property5", "derived:On_Property2_Changed", "Property2" })]
     [InlineData(0, "DerivedClass", "Property3", new[] { "derived:OnProperty5Changed", "Property5", "derived:OnProperty3Changed", "Property3" })]
     [InlineData(0, "DerivedNoOverrides", "Property1", new[] { "base:OnProperty4Changed", "Property4", "base:OnProperty1Changed", "Property1" })]
     [InlineData(0, "DerivedNoOverrides", "Property2", new[] { "base:OnProperty4Changed", "Property4", "base:On_Property2_Changed", "Property2" })]
