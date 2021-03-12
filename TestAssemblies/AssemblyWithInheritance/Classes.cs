@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using PropertyChanged;
 
 public abstract class BaseClass : INotifyPropertyChanged
 {
     public IList<string> Notifications = new List<string>();
 
     public virtual int Property1 { get; set; }
+    [OnChangedMethod(nameof(On_Property2_Changed))]
     public virtual int Property2 { get; set; }
     public abstract int Property3 { get; set; }
 
@@ -26,7 +28,7 @@ public abstract class BaseClass : INotifyPropertyChanged
         ReportOnChanged();
     }
 
-    void OnProperty2Changed()
+    void On_Property2_Changed()
     {
         ReportOnChanged();
     }
