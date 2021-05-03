@@ -5,10 +5,3 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: Verify.Xunit
-    versions:
-    - 10.9.0
-  - dependency-name: FSharp.Core
-    versions:
-    - 5.0.0
