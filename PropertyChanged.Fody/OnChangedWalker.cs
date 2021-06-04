@@ -69,6 +69,17 @@ public partial class ModuleWeaver
                     methods.Add(methodName, onChangedMethod);
                 }
 
+                if (onChangedMethod.OnChangedType == OnChangedTypes.BeforeAfterTyped && onChangedMethod.ArgumentTypeFullName != propertyDefinition.PropertyType.FullName)
+                {
+                    if (!SuppressOnPropertyNameChangedWarning)
+                    {
+                        var methodDefinition = onChangedMethod.MethodDefinition;
+                        EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
+                    }
+
+                    continue;
+                }
+
                 onChangedMethod.Properties.Add(propertyDefinition);
             }
 
@@ -81,7 +92,6 @@ public partial class ModuleWeaver
         foreach (var method in methods.Values)
         {
             ValidateOnChangedMethod(notifyNode, method);
-
         }
 
         return methods.Values;
@@ -143,16 +153,7 @@ public partial class ModuleWeaver
         var typeDefinitions = new Stack<TypeDefinition>();
         typeDefinitions.Push(notifyNode.TypeDefinition);
 
-        var onChangedType = OnChangedTypes.None;
-
-        if (IsNoArgOnChangedMethod(methodDefinition))
-        {
-            onChangedType = OnChangedTypes.NoArg;
-        }
-        else if (IsBeforeAfterOnChangedMethod(methodDefinition))
-        {
-            onChangedType = OnChangedTypes.BeforeAfter;
-        }
+        var onChangedType = GetBeforeAfterOnChangedMethodType(methodDefinition, out var argumentTypeFullName);
 
         if (onChangedType != OnChangedTypes.None)
         {
@@ -161,7 +162,8 @@ public partial class ModuleWeaver
                 OnChangedType = onChangedType,
                 MethodDefinition = methodDefinition,
                 MethodReference = GetMethodReference(typeDefinitions, methodDefinition),
-                IsDefaultMethod = isDefaultMethod
+                IsDefaultMethod = isDefaultMethod,
+                ArgumentTypeFullName = argumentTypeFullName
             };
         }
 
@@ -173,18 +175,30 @@ public partial class ModuleWeaver
         return null;
     }
 
-    public static bool IsNoArgOnChangedMethod(MethodDefinition method)
+    static OnChangedTypes GetBeforeAfterOnChangedMethodType(MethodDefinition method, out string argumentTypeFullName)
     {
-        var parameters = method.Parameters;
-        return parameters.Count == 0;
-    }
+        argumentTypeFullName = null;
 
-    public static bool IsBeforeAfterOnChangedMethod(MethodDefinition method)
-    {
         var parameters = method.Parameters;
-        return parameters.Count == 2
-               && parameters[0].ParameterType.FullName == "System.Object"
-               && parameters[1].ParameterType.FullName == "System.Object";
+
+        if (parameters.Count == 0)
+            return OnChangedTypes.NoArg;
+
+        if (parameters.Count != 2)
+            return OnChangedTypes.None;
+
+        argumentTypeFullName = parameters[0].ParameterType.FullName;
+
+        if (argumentTypeFullName != parameters[1].ParameterType.FullName)
+            return OnChangedTypes.None;
+
+        if (argumentTypeFullName == "System.Object")
+        {
+            argumentTypeFullName = null;
+            return OnChangedTypes.BeforeAfter;
+        }
+
+        return OnChangedTypes.BeforeAfterTyped;
     }
 
     void ValidateOnChangedMethod(TypeNode notifyNode, OnChangedMethod onChangedMethod)
@@ -211,7 +225,7 @@ public partial class ModuleWeaver
         {
             return;
         }
-        
+
         if (!SuppressOnPropertyNameChangedWarning)
         {
             EmitConditionalWarning(method, GetMethodWarning(notifyNode, onChangedMethod));
@@ -223,7 +237,7 @@ public partial class ModuleWeaver
     {
         var method = onChangedMethod.MethodDefinition;
         var methodRef = onChangedMethod.MethodReference;
-        
+
         var propertyName = method.Name.Substring("On".Length, method.Name.Length - "On".Length - "Changed".Length);
 
         var baseMessage = $"Type {method.DeclaringType.FullName} contains a method {method.Name} which will not be called";
@@ -258,5 +272,5 @@ public partial class ModuleWeaver
 
         return null;
     }
-    
+
 }

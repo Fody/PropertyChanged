@@ -199,6 +199,13 @@ public class PropertyWeaver
                 case OnChangedTypes.BeforeAfter:
                     index = AddBeforeAfterOnChangedCall(index, propertyDefinition, onChangedMethod.MethodReference);
                     break;
+
+                case OnChangedTypes.BeforeAfterTyped:
+                    if (propertyDefinition.PropertyType.FullName == onChangedMethod.ArgumentTypeFullName)
+                    {
+                        index = AddBeforeAfterOnChangedCall(index, propertyDefinition, onChangedMethod.MethodReference, true);
+                    }
+                    break;
             }
         }
 
@@ -287,11 +294,13 @@ public class PropertyWeaver
             CreateCall(methodReference));
     }
 
-    int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference)
+    int AddBeforeAfterOnChangedCall(int index, PropertyDefinition property, MethodReference methodReference, bool useTypedParameters = false)
     {
-        var beforeVariable = new VariableDefinition(typeSystem.ObjectReference);
+        var variableType = useTypedParameters ? property.PropertyType : typeSystem.ObjectReference;
+
+        var beforeVariable = new VariableDefinition(variableType);
         setMethodBody.Variables.Add(beforeVariable);
-        var afterVariable = new VariableDefinition(typeSystem.ObjectReference);
+        var afterVariable = new VariableDefinition(variableType);
         setMethodBody.Variables.Add(afterVariable);
         index = InsertVariableAssignmentFromCurrentValue(index, property, afterVariable);
 
@@ -305,30 +314,33 @@ public class PropertyWeaver
         return AddBeforeVariableAssignment(index, property, beforeVariable);
     }
 
-    int AddBeforeVariableAssignment(int index, PropertyDefinition property, VariableDefinition beforeVariable)
+    IEnumerable<Instruction> BuildVariableAssignmentInstructions(PropertyDefinition property, VariableDefinition variable)
     {
         var getMethod = property.GetMethod.GetGeneric();
 
-        instructions.Prepend(
-            Instruction.Create(OpCodes.Ldarg_0),
-            CreateCall(getMethod),
-            Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
-            Instruction.Create(OpCodes.Stloc, beforeVariable));
+        yield return Instruction.Create(OpCodes.Ldarg_0);
+        yield return CreateCall(getMethod);
 
-        return index + 4;
+        var returnType = property.GetMethod.ReturnType;
+        if (returnType.FullName != variable.VariableType.FullName)
+        {
+            yield return Instruction.Create(OpCodes.Box, returnType);
+        }
+        yield return Instruction.Create(OpCodes.Stloc, variable);
+    }
+
+    int AddBeforeVariableAssignment(int index, PropertyDefinition property, VariableDefinition variable)
+    {
+        var i = BuildVariableAssignmentInstructions(property, variable).ToArray();
+        instructions.Prepend(i);
+        return index + i.Length;
     }
 
     int InsertVariableAssignmentFromCurrentValue(int index, PropertyDefinition property, VariableDefinition variable)
     {
-        var getMethod = property.GetMethod.GetGeneric();
-
-        instructions.Insert(index,
-            Instruction.Create(OpCodes.Ldarg_0),
-            CreateCall(getMethod),
-            Instruction.Create(OpCodes.Box, property.GetMethod.ReturnType),
-            Instruction.Create(OpCodes.Stloc, variable));
-
-        return index + 4;
+        var i = BuildVariableAssignmentInstructions(property, variable).ToArray();
+        instructions.Insert(index, i);
+        return index + i.Length;
     }
 
     public IEnumerable<Instruction> CallEventInvoker(PropertyDefinition propertyDefinition)
