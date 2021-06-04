@@ -331,6 +331,81 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedIsCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTyped));
+        instance.Property1 = "foo";
+        instance.Property2 = 1;
+
+        Assert.Equal("-foo", instance.OnProperty1ChangedCalled);
+        Assert.Equal("0-1", instance.OnProperty2ChangedCalled);
+
+        instance.Property1 = "bar";
+        instance.Property2 = 2;
+
+        Assert.Equal("foo-bar", instance.OnProperty1ChangedCalled);
+        Assert.Equal("1-2", instance.OnProperty2ChangedCalled);
+
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTyped)));
+    }
+
+    [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureDefaultIsNotCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault));
+        instance.Property1 = "foo";
+
+        Assert.Null(instance.OnProperty1ChangedCalled);
+
+        instance.Property1 = "bar";
+
+        Assert.Null(instance.OnProperty1ChangedCalled);
+
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault)));
+    }
+
+    [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedGenericIntegerIsCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedGenericInteger));
+        instance.Property1 = 1;
+
+        Assert.Equal("0-1", instance.OnProperty1ChangedCalled);
+
+        instance.Property1 = 2;
+
+        Assert.Equal("1-2", instance.OnProperty1ChangedCalled);
+    }
+
+    [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedGenericStringIsCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedGenericString));
+        instance.Property1 = "foo";
+
+        Assert.Equal("-foo", instance.OnProperty1ChangedCalled);
+
+        instance.Property1 = "bar";
+
+        Assert.Equal("foo-bar", instance.OnProperty1ChangedCalled);
+    }
+
+    [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureExplicitIsNotCalledAndAWarningIsGenerated()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureExplicit));
+        instance.Property1 = "foo";
+
+        Assert.Null(instance.OnProperty1ChangedCalled);
+
+        instance.Property1 = "bar";
+
+        Assert.Null(instance.OnProperty1ChangedCalled);
+
+        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureExplicit)));
+    }
+
+    [Fact]
     public void OnPropertyNameChangedMethodWithBeforeAfterCalculatedPropertyIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty));
@@ -341,7 +416,6 @@ public class AssemblyToProcessTests
         Assert.Equal("From 0 to 3", instance.Property2ChangeValue);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty)));
     }
-
 
     [Fact]
     public void OnPropertyNameChangedMethodCallInOriginalCodePreventsInsertingAdditionalCall()
