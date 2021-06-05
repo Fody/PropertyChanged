@@ -61,7 +61,7 @@ public class PropertyWeaver
         foreach (var alsoNotifyForDefinition in propertyData.AlsoNotifyFor.Distinct())
         {
             var alsoNotifyMethods = GetMethodsForProperty(propertyData.ParentType, alsoNotifyForDefinition);
-            
+
             index = AddEventInvokeCall(index, alsoNotifyMethods, alsoNotifyForDefinition);
         }
 
@@ -201,10 +201,13 @@ public class PropertyWeaver
                     break;
 
                 case OnChangedTypes.BeforeAfterTyped:
-                    if (propertyDefinition.PropertyType.FullName == onChangedMethod.ArgumentTypeFullName)
+                    if (propertyDefinition.PropertyType.FullName != onChangedMethod.ArgumentTypeFullName)
                     {
-                        index = AddBeforeAfterOnChangedCall(index, propertyDefinition, onChangedMethod.MethodReference, true);
+                        var methodDefinition = onChangedMethod.MethodDefinition;
+                        moduleWeaver.EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
+                        break;
                     }
+                    index = AddBeforeAfterOnChangedCall(index, propertyDefinition, onChangedMethod.MethodReference, true);
                     break;
             }
         }

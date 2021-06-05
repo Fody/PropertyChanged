@@ -391,7 +391,7 @@ public class AssemblyToProcessTests
 
         Assert.Null(instance.OnProperty1ChangedCalled);
 
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault)));
+        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault)));
     }
 
     [Fact]
