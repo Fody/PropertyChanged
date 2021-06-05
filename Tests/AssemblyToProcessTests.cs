@@ -365,6 +365,21 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithWithGenericObjectIsCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedWithGenericObject));
+        instance.Property1 = new List<int> { 1, 2 };
+
+        Assert.Equal("-1,2", instance.OnProperty1ChangedCalled);
+
+        instance.Property1 = new List<int> { 3, 4 };
+
+        Assert.Equal("1,2-3,4", instance.OnProperty1ChangedCalled);
+
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedWithGenericObject)));
+    }
+
+    [Fact]
     public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureDefaultIsNotCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault));

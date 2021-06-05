@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using PropertyChanged;
 
@@ -34,6 +36,26 @@ public class ClassWithOnChangedBeforeAfterTypedWithNullableValueType :
     public void OnProperty1Changed(int? before, int? after)
     {
         OnProperty1ChangedCalled = before + "-" + after;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+}
+
+public class ClassWithOnChangedBeforeAfterTypedWithGenericObject :
+    INotifyPropertyChanged
+{
+    public string OnProperty1ChangedCalled;
+
+    public IList<int> Property1 { get; set; }
+
+    public void OnProperty1Changed(IList<int> before, IList<int> after)
+    {
+        OnProperty1ChangedCalled = ToString(before) + "-" + ToString(after);
+    }
+
+    static string ToString<T>(IEnumerable<T> value)
+    {
+        return string.Join(",", value ?? Enumerable.Empty<T>());
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
