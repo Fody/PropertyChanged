@@ -24,6 +24,21 @@ public class ClassWithOnChangedBeforeAfterTyped :
     public event PropertyChangedEventHandler PropertyChanged;
 }
 
+public class ClassWithOnChangedBeforeAfterTypedWithNullableValueType :
+    INotifyPropertyChanged
+{
+    public string OnProperty1ChangedCalled;
+
+    public int? Property1 { get; set; }
+
+    public void OnProperty1Changed(int? before, int? after)
+    {
+        OnProperty1ChangedCalled = before + "-" + after;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+}
+
 public class ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault :
     INotifyPropertyChanged
 {

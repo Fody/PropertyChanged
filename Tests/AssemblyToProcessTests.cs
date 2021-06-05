@@ -350,6 +350,21 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithNullableValueTypeIsCalled()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedWithNullableValueType));
+        instance.Property1 = 1;
+
+        Assert.Equal("-1", instance.OnProperty1ChangedCalled);
+
+        instance.Property1 = 2;
+
+        Assert.Equal("1-2", instance.OnProperty1ChangedCalled);
+
+        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedWithNullableValueType)));
+    }
+
+    [Fact]
     public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureDefaultIsNotCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault));
