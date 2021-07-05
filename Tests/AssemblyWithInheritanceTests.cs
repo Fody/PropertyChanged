@@ -79,7 +79,7 @@ public class AssemblyWithInheritanceTests
         var act = string.Join(", ", actual.Select(item => $"\"{item}\""));
         var exp = string.Join(", ", expected.Select(item => $"\"{item}\""));
 
-        outputHelper.WriteLine(assembly.CodeBase);
+        outputHelper.WriteLine(assembly.Location);
         outputHelper.WriteLine("");
         outputHelper.WriteLine($"EXPECTED {exp}");
         outputHelper.WriteLine($"ACTUAL       {act}");

@@ -44,7 +44,7 @@ public static class DefinitionFinder
 
     static TypeDefinition FindType(Type typeToFind)
     {
-        var targetPath = typeToFind.Assembly.CodeBase.Replace("file:///","");
+        var targetPath = typeToFind.Assembly.Location;
         var parameters = new ReaderParameters
         {
             AssemblyResolver = new TestAssemblyResolver()
