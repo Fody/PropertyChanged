@@ -13,6 +13,7 @@ public class PropertyWeaver
     TypeSystem typeSystem;
     MethodBody setMethodBody;
     Collection<Instruction> instructions;
+    VariableDefinition resultEquals;
 
     public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem)
     {
@@ -20,6 +21,11 @@ public class PropertyWeaver
         this.propertyData = propertyData;
         this.typeNode = typeNode;
         this.typeSystem = typeSystem;
+    }
+    public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem, VariableDefinition variableDefinition) 
+        : this(moduleWeaver, propertyData, typeNode, typeSystem)
+    {
+        resultEquals = variableDefinition;
     }
 
     public void Execute()
@@ -29,12 +35,18 @@ public class PropertyWeaver
         setMethodBody = property.SetMethod.Body;
         instructions = property.SetMethod.Body.Instructions;
 
-
         var indexes = GetIndexes();
         indexes.Reverse();
         foreach (var index in indexes)
         {
-            InjectAtIndex(index);
+            var endIndex = InjectAtIndex(index);
+            if (index != endIndex)
+            {
+                instructions.Insert(index,
+                    Instruction.Create(OpCodes.Ldloc, resultEquals),
+                    Instruction.Create(OpCodes.Ldc_I4_1),
+                    Instruction.Create(OpCodes.Beq, instructions.ElementAt(endIndex)));
+            }
         }
     }
 
@@ -54,7 +66,7 @@ public class PropertyWeaver
         return setFieldInstructions;
     }
 
-    void InjectAtIndex(int index)
+    int InjectAtIndex(int index)
     {
         index = AddIsChangedSetterCall(index);
 
@@ -66,7 +78,7 @@ public class PropertyWeaver
         }
 
         var onChangedMethods = GetMethodsForProperty(propertyData.ParentType, propertyData.PropertyDefinition);
-        AddEventInvokeCall(index, onChangedMethods, propertyData.PropertyDefinition);
+        return AddEventInvokeCall(index, onChangedMethods, propertyData.PropertyDefinition);
     }
 
     List<OnChangedMethod> GetMethodsForProperty(TypeNode typeNode, PropertyDefinition property)

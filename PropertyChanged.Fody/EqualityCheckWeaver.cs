@@ -11,12 +11,18 @@ public class EqualityCheckWeaver
     TypeDefinition typeDefinition;
     ModuleWeaver typeEqualityFinder;
     Collection<Instruction> instructions;
+    VariableDefinition resultEquals;
 
     public EqualityCheckWeaver(PropertyData propertyData, TypeDefinition typeDefinition, ModuleWeaver typeEqualityFinder)
     {
         this.propertyData = propertyData;
         this.typeDefinition = typeDefinition;
         this.typeEqualityFinder = typeEqualityFinder;
+    }
+    public EqualityCheckWeaver(PropertyData propertyData, TypeDefinition typeDefinition, ModuleWeaver typeEqualityFinder, VariableDefinition variableDefinition)
+        : this(propertyData, typeDefinition, typeEqualityFinder)
+    {
+        resultEquals = variableDefinition;
     }
 
     public void Execute()
@@ -57,12 +63,8 @@ public class EqualityCheckWeaver
             typeEqualityFinder.WriteDebug($"\t\t\tEquality Check Skipped for {targetType.Name}");
             return;
         }
+
         var nopInstruction = instructions.First();
-        if (nopInstruction.OpCode != OpCodes.Nop)
-        {
-            nopInstruction = Instruction.Create(OpCodes.Nop);
-            instructions.Insert(0, nopInstruction);
-        }
         if (targetType.Name == "String")
         {
             instructions.Prepend(
@@ -71,8 +73,7 @@ public class EqualityCheckWeaver
                 Instruction.Create(OpCodes.Ldarg_1),
                 Instruction.Create(OpCodes.Ldc_I4, typeEqualityFinder.OrdinalStringComparison),
                 Instruction.Create(OpCodes.Call, typeEqualityFinder.StringEquals),
-                Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                Instruction.Create(OpCodes.Ret));
+                Instruction.Create(OpCodes.Stloc, resultEquals));
             return;
         }
         var typeEqualityMethod = propertyData.EqualsMethod;
@@ -96,8 +97,7 @@ public class EqualityCheckWeaver
                     targetInstruction,
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Ceq),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
+                    Instruction.Create(OpCodes.Stloc, resultEquals));
             }
             else if (targetType.IsValueType && typeEqualityFinder.EqualityComparerTypeReference != null)
             {
@@ -117,8 +117,7 @@ public class EqualityCheckWeaver
                     targetInstruction,
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Callvirt, equalsMethod),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
+                    Instruction.Create(OpCodes.Stloc, resultEquals));
             }
             else if (targetType.IsValueType || targetType.IsGenericParameter)
             {
@@ -129,8 +128,7 @@ public class EqualityCheckWeaver
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Box, targetType),
                     Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
+                    Instruction.Create(OpCodes.Stloc, resultEquals));
             }
             else
             {
@@ -139,8 +137,7 @@ public class EqualityCheckWeaver
                     targetInstruction,
                     Instruction.Create(OpCodes.Ldarg_1),
                     Instruction.Create(OpCodes.Call, typeEqualityFinder.ObjectEqualsMethod),
-                    Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                    Instruction.Create(OpCodes.Ret));
+                    Instruction.Create(OpCodes.Stloc, resultEquals));
             }
         }
         else
@@ -150,8 +147,7 @@ public class EqualityCheckWeaver
                 targetInstruction,
                 Instruction.Create(OpCodes.Ldarg_1),
                 Instruction.Create(OpCodes.Call, typeEqualityMethod),
-                Instruction.Create(OpCodes.Brfalse_S, nopInstruction),
-                Instruction.Create(OpCodes.Ret));
+                Instruction.Create(OpCodes.Stloc, resultEquals));
         }
     }
 

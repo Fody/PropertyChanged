@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 
 public partial class ModuleWeaver
@@ -22,21 +23,22 @@ public partial class ModuleWeaver
             foreach (var propertyData in node.PropertyDatas)
             {
                 var body = propertyData.PropertyDefinition.SetMethod.Body;
-
                 var alreadyHasEquality = HasEqualityChecker.AlreadyHasEquality(propertyData.PropertyDefinition, propertyData.BackingFieldReference);
 
                 body.SimplifyMacros();
-
                 body.MakeLastStatementReturn();
 
-                var propertyWeaver = new PropertyWeaver(this, propertyData, node, TypeSystem);
-                propertyWeaver.Execute();
+                var resultEquals = new VariableDefinition(TypeSystem.BooleanReference);
+                propertyData.PropertyDefinition.SetMethod.Body.Variables.Add(resultEquals);
 
                 if (!alreadyHasEquality)
                 {
-                    var equalityCheckWeaver = new EqualityCheckWeaver(propertyData, node.TypeDefinition, this);
+                    var equalityCheckWeaver = new EqualityCheckWeaver(propertyData, node.TypeDefinition, this, resultEquals);
                     equalityCheckWeaver.Execute();
                 }
+
+                var propertyWeaver = new PropertyWeaver(this, propertyData, node, TypeSystem, resultEquals);
+                propertyWeaver.Execute();
 
                 body.InitLocals = true;
                 body.OptimizeMacros();

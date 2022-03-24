@@ -13,6 +13,7 @@
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
+    <ProjectReference Include="..\SmokeTest\SmokeTest.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyExplicitPropertyChanged\AssemblyExplicitPropertyChanged.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyInheritingBadNamedInvoker\AssemblyInheritingBadNamedInvoker.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyToProcess\AssemblyToProcess.csproj" />
