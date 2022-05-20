@@ -40,6 +40,12 @@ public partial class ModuleWeaver
             .Select(x => x.ShouldAlsoNotifyFor);
 
         var backingFieldReference = node.Mappings.First(x => x.PropertyDefinition == propertyDefinition).FieldDefinition;
+
+        if (backingFieldReference?.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotNotifyAttribute") == true)
+        {
+            return;
+        }
+
         if (notifyPropertyData == null)
         {
             if (node.EventInvoker == null)
