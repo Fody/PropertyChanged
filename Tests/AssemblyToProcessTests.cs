@@ -136,6 +136,13 @@ public class AssemblyToProcessTests
     }
 
     [Fact]
+    public void ClassWithDoNotNotifyField()
+    {
+        var instance = testResult.GetInstance(nameof(ClassWithDoNotNotifyField));
+        EventTester.TestPropertyNotCalled(instance);
+    }
+
+    [Fact]
     public void UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
