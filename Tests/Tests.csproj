@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="FodyHelpers" Version="6.6.2" />
     <PackageReference Include="Xunit" Version="2.4.1" />
-    <PackageReference Include="Verify.Xunit" Version="16.8.1" />
+    <PackageReference Include="Verify.Xunit" Version="17.1.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <Reference Include="Microsoft.CSharp" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" />
