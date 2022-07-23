@@ -84,7 +84,7 @@ public class SourceGenerator : IIncrementalGenerator
             var containingTypeSymbol = typeSymbol.ContainingType;
             var fullName = containingTypeSymbol.ToDisplayString();
 
-            if (fullName == " System.ComponentModel.INotifyPropertyChanged")
+            if (fullName == "System.ComponentModel.INotifyPropertyChanged")
             {
                 return classDeclarationSyntax;
             }
