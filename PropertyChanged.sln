@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29201.188
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 16.0.29201.188
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAssemblies", "TestAssemblies", "{546A6338-E25E-4796-AF08-A4742E3BDF7B}"
 EndProject
@@ -61,6 +61,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithInheritance", "TestAssemblies\AssemblyWithInheritance\AssemblyWithInheritance.csproj", "{9D3B5C35-6523-45D9-B11D-0FBB67C0866A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithExternalInheritance", "TestAssemblies\AssemblyWithExternalInheritance\AssemblyWithExternalInheritance.csproj", "{10BDE166-0BFC-41D9-9326-805717A054B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged.Fody.Analyzer", "PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj", "{A4CB5608-0F39-4C8F-A3C4-206654278288}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -308,6 +310,18 @@ Global
 		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|ARM.Build.0 = Release|Any CPU
 		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|x86.ActiveCfg = Release|Any CPU
 		{10BDE166-0BFC-41D9-9326-805717A054B3}.Release|x86.Build.0 = Release|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Debug|x86.Build.0 = Debug|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Release|ARM.Build.0 = Release|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Release|x86.ActiveCfg = Release|Any CPU
+		{A4CB5608-0F39-4C8F-A3C4-206654278288}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
