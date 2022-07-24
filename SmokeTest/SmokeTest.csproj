@@ -17,7 +17,7 @@
 
   <PropertyGroup>
     <PropertyChanged_GeneratorConfiguration>
-      <Disabled>true</Disabled>
+      <IsDisabled>false</IsDisabled>
     </PropertyChanged_GeneratorConfiguration>
   </PropertyGroup>
 
