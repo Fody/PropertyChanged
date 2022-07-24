@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis;
@@ -11,90 +12,72 @@ public class SourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var classesWithAttributeProvider = context.SyntaxProvider.CreateSyntaxProvider(IsClassWithAttribute, GetSyntaxForClassWithAttribute).Where(IsNotNull);
-        var classesWithInterfaceProvider = context.SyntaxProvider.CreateSyntaxProvider(IsClassWithInterface, GetSyntaxForClassWithInterface).Where(IsNotNull);
+        var classesProvider = context.SyntaxProvider.CreateSyntaxProvider(IsCandidateForGenerator, GetSyntaxForCandidate).ExceptNullItems();
 
-        var compilationAndClasses = context.CompilationProvider
+        var input = context.CompilationProvider
             .Combine(context.AnalyzerConfigOptionsProvider)
-            .Combine(classesWithAttributeProvider.Collect())
-            .Combine(classesWithInterfaceProvider.Collect())
-            .Select(((((Compilation, AnalyzerConfigOptionsProvider), ImmutableArray<ClassDeclarationSyntax>), ImmutableArray<ClassDeclarationSyntax>) args, CancellationToken _) =>
+            .Combine(classesProvider.Collect())
+            .Select((((Compilation, AnalyzerConfigOptionsProvider), ImmutableArray<ClassDeclarationSyntax>) args, CancellationToken _) =>
             {
-                var (((compilation, options), classesWithAttributes), classesWithInterfaces) = args;
+                var ((compilation, options), classes) = args;
 
-                options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configuration);
+                options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource);
 
-                return (compilation, configuration, classesWithAttributes, classesWithInterfaces);
+                var configuration = Configuration.Read(configurationSource);
+
+                return (compilation, configuration, classes);
             });
 
-        context.RegisterSourceOutput(compilationAndClasses, GenerateSource);
+        context.RegisterSourceOutput(input, GenerateSource);
     }
 
-    void GenerateSource(SourceProductionContext context, (Compilation compilation, string configuration, ImmutableArray<ClassDeclarationSyntax> classesWithAttributes, ImmutableArray<ClassDeclarationSyntax> classesWithInterfaces) parameters)
+    static void GenerateSource(SourceProductionContext context, (Compilation compilation, Configuration configuration, ImmutableArray<ClassDeclarationSyntax> classes) parameters)
     {
+        var (compilation, configuration, classes) = parameters;
+
+        SourceGeneratorEngine.GenerateSource(context, compilation, configuration, classes);
     }
 
-    static bool IsClassWithAttribute(SyntaxNode syntaxNode, CancellationToken token)
+    static bool IsCandidateForGenerator(SyntaxNode syntaxNode, CancellationToken token)
     {
-        return syntaxNode is ClassDeclarationSyntax { AttributeLists.Count: > 0 };
+        return syntaxNode is ClassDeclarationSyntax { Parent: not ClassDeclarationSyntax } classDeclaration 
+               && classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword) 
+               && classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged") 
+               && (classDeclaration.BaseList.GetInterfaceTypeCandidates("INotifyPropertyChanged").Any()
+                   || classDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface")));
     }
 
-    static ClassDeclarationSyntax GetSyntaxForClassWithAttribute(GeneratorSyntaxContext context, CancellationToken token)
+    static ClassDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken token)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
-        foreach (var attributeListSyntax in classDeclarationSyntax.AttributeLists)
+        foreach (var attributeSyntax in classDeclarationSyntax.AttributeLists.SelectMany(attributeListSyntax => attributeListSyntax.Attributes))
         {
-            foreach (var attributeSyntax in attributeListSyntax.Attributes)
-            {
-                if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
-                {
-                    continue;
-                }
+            if (!attributeSyntax.Name.ToString().Contains("AddINotifyPropertyChangedInterface"))
+                continue;
 
-                var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
-                var fullName = attributeContainingTypeSymbol.ToDisplayString();
+            if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
+                continue;
 
-                if (fullName == "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute")
-                {
-                    return classDeclarationSyntax;
-                }
-            }
+            var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
+            var fullName = attributeContainingTypeSymbol.ToDisplayString();
+
+            if (fullName == "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute")
+                return classDeclarationSyntax;
         }
 
-        return null;
-    }
-
-    static bool IsClassWithInterface(SyntaxNode syntaxNode, CancellationToken token)
-    {
-        return syntaxNode is ClassDeclarationSyntax { BaseList.Types.Count: > 0 };
-    }
-
-    static ClassDeclarationSyntax GetSyntaxForClassWithInterface(GeneratorSyntaxContext context, CancellationToken token)
-    {
-        var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
-
-        foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList!.Types.OfType<SimpleBaseTypeSyntax>())
+        foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList.GetInterfaceTypeCandidates("INotifyPropertyChanged"))
         {
             if (context.SemanticModel.GetSymbolInfo(baseTypeSyntax).Symbol is not ITypeSymbol typeSymbol)
-            {
                 continue;
-            }
 
             var containingTypeSymbol = typeSymbol.ContainingType;
             var fullName = containingTypeSymbol.ToDisplayString();
 
             if (fullName == "System.ComponentModel.INotifyPropertyChanged")
-            {
                 return classDeclarationSyntax;
-            }
         }
 
         return null;
-    }
-
-    static bool IsNotNull<T>(T item)
-    {
-        return item is not null;
     }
 }
