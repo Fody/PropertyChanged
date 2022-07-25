@@ -12,6 +12,8 @@ public class Configuration
 
     public bool IsDisabled { get; set; }
 
+    public string? EventInvokerName { get; set; }
+
     public static Configuration Read(string? configuration)
     {
         try
