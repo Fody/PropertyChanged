@@ -50,7 +50,7 @@ public class SourceGenerator : IIncrementalGenerator
         }
         catch (Exception ex)
         {
-            Log("IsCandidateForGenerator: " + ex.Message);
+            Log("IsCandidateForGenerator: " + ex);
             return false;
         }
     }
@@ -69,8 +69,8 @@ public class SourceGenerator : IIncrementalGenerator
                 if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
                     continue;
 
-                var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
-                var fullName = attributeContainingTypeSymbol.ToDisplayString();
+                var containingType = attributeSymbol.ContainingType;
+                var fullName = containingType.ToDisplayString();
 
                 if (fullName == "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute")
                     return classDeclarationSyntax;
@@ -78,22 +78,18 @@ public class SourceGenerator : IIncrementalGenerator
 
             foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList.GetInterfaceTypeCandidates())
             {
-                /* GetSymbolInfo does not return a symbol here, just assume it's the right interface without checking the full name
-                if (context.SemanticModel.GetSymbolInfo(baseTypeSyntax).Symbol is not ITypeSymbol typeSymbol)
-                    continue;
-
-                var containingTypeSymbol = typeSymbol.ContainingType;
-                var fullName = containingTypeSymbol.ToDisplayString();
+                var typeSymbol = context.SemanticModel.GetTypeInfo(baseTypeSyntax.Type).Type;
+                var fullName = typeSymbol?.ToDisplayString();
 
                 if (fullName == "System.ComponentModel.INotifyPropertyChanged")
-                */
-                return classDeclarationSyntax;
+                    return classDeclarationSyntax;
             }
+
             return null;
         }
         catch (Exception ex)
         {
-            Log("GetSyntaxForCandidate: " + ex.Message);
+            Log("GetSyntaxForCandidate: " + ex);
             return null;
         }
     }
