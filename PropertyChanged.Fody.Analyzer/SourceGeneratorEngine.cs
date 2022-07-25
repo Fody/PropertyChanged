@@ -1,6 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -20,6 +18,8 @@ static class SourceGeneratorEngine
             return;
         }
 
+        var eventInvokerName = configuration.EventInvokerName.NullIfEmpty() ?? "OnPropertyChanged";
+
         var codeBuilder = new CodeBuilder();
 
         try
@@ -33,11 +33,10 @@ static class SourceGeneratorEngine
 
             var classesByNamespace = classes.GroupBy(item => item.SyntaxTree)
                 .Select(group => new { SemanticModel = compilation.GetSemanticModel(group.Key), Items = group })
-                .SelectMany(group => group.Items.Select(classDeclaration => new { TypeSymbol = group.SemanticModel.GetDeclaredSymbol(classDeclaration) as ITypeSymbol, ClassDeclaration = classDeclaration }))
+                .SelectMany(group => group.Items.Select(classDeclaration => new { TypeSymbol = group.SemanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as ITypeSymbol, ClassDeclaration = classDeclaration }))
                 .GroupBy(item => item.TypeSymbol?.ContainingNamespace?.Name);
 
             foreach (var group in classesByNamespace)
-            {
                 using (codeBuilder.AddBlock("namespace {0}", group.Key))
                 {
                     foreach (var item in group)
@@ -45,7 +44,7 @@ static class SourceGeneratorEngine
                         var typeSymbol = item.TypeSymbol;
                         if (typeSymbol == null)
                             continue;
-                        
+
                         var classDeclaration = item.ClassDeclaration;
 
                         var isSealed = classDeclaration.Modifiers.Any(token => token.IsKind(SyntaxKind.SealedKeyword));
@@ -59,21 +58,20 @@ static class SourceGeneratorEngine
 
                             var modifiers1 = isSealed ? "private" : "protected";
 
-                            using (codeBuilder.AddBlock($"{modifiers1} void OnPropertyChanged([CallerMemberName] string? propertyName = null)"))
+                            using (codeBuilder.AddBlock($"{modifiers1} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
                             {
                                 codeBuilder.Add("OnPropertyChanged(new PropertyChangedEventArgs(propertyName));");
                             }
 
                             var modifiers2 = isSealed ? "private" : "protected virtual";
 
-                            using (codeBuilder.AddBlock($"{modifiers2} void OnPropertyChanged(PropertyChangedEventArgs eventArgs)"))
+                            using (codeBuilder.AddBlock($"{modifiers2} void {eventInvokerName}(PropertyChangedEventArgs eventArgs)"))
                             {
                                 codeBuilder.Add("PropertyChanged?.Invoke(this, eventArgs);");
                             }
                         }
                     }
                 }
-            }
         }
         catch (Exception ex)
         {

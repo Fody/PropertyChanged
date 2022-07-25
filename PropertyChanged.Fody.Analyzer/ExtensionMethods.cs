@@ -12,4 +12,17 @@ static class ExtensionMethods
     {
         return baseListSyntax == null ? Enumerable.Empty<BaseTypeSyntax>() : baseListSyntax.Types.Where(type => type.ToString().Equals(name));
     }
+
+    public static string? NullIfEmpty(this string? value)
+    {
+        if (value == null)
+            return null;
+
+        value = value.Trim();
+
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        return value;
+    }
 }
