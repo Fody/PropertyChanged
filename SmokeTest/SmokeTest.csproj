@@ -18,6 +18,7 @@
   <PropertyGroup>
     <PropertyChanged_GeneratorConfiguration>
       <IsDisabled>false</IsDisabled>
+      <EventInvokerName>OnPropertyChanged</EventInvokerName>
     </PropertyChanged_GeneratorConfiguration>
   </PropertyGroup>
 

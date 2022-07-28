@@ -111,9 +111,39 @@ internal static class InternalEventArgsCache
 
 (the actual injected type and method names are different)
 
+
+## Code Generator
+Starting with version 4 PropertyChanged.Fody ships with a C# code generator that can even more simplify your code by generating 
+the boilerplate of the basic `INotifyPropertyChanged` implementation for you directly as source code. 
+
+Simply mark a class implementing `INotifyPropertyChanged` or having the `[AddINotifyPropertyChangedInterface]` attribute as `partial` and the 
+generator will add the necessary event and event-invokers:
+
+e.g. a class like this:
+```c#
+public partial class Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+```
+will be complemented by the generator with this:
+```c#
+public partial class Class1
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+    }
+    protected virtual void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+    {
+        PropertyChanged?.Invoke(this, eventArgs);
+    }
+}
+```
+
 ---
-
-
 ## Notes
 
 * **Dependent properties** — In the above sample, the getter for `FullName` depends on the getters for `GivenName` and `FamilyName`. Therefore, when either `GivenName` or `FamilyName` is set, `PropertyChanged` is raised for `FullName` as well.   This behavior can be configured manually using the [`AlsoNotifyFor` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#alsonotifyforattribute) on the source property, or the [`DependsOn` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#dependsonattribute) on the target property).

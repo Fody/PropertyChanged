@@ -43,7 +43,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19A5180B-ADE5-426B-AD51-27B443F9C400}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		appveyor.yml = appveyor.yml
 		Directory.Build.props = Directory.Build.props
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithAttributeAndEvent", "TestAssemblies\AssemblyWithAttributeAndEvent\AssemblyWithAttributeAndEvent.csproj", "{B28F547A-87F9-4F65-96DC-7911DEAB07AA}"
@@ -64,7 +66,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithExternalInherit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyChanged.Fody.Analyzer", "PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj", "{A4CB5608-0F39-4C8F-A3C4-206654278288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyChanged.Fody.Analyzer.Tests", "PropertyChanged.Fody.Analyzer.Tests\PropertyChanged.Fody.Analyzer.Tests.csproj", "{35A8A625-B010-4F9D-A901-9B07D9E13A16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyChanged.Fody.Analyzer.Tests", "PropertyChanged.Fody.Analyzer.Tests\PropertyChanged.Fody.Analyzer.Tests.csproj", "{35A8A625-B010-4F9D-A901-9B07D9E13A16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
