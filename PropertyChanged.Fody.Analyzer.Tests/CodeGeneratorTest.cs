@@ -83,6 +83,25 @@ public partial class Class1
     }
 
     [Fact]
+    public async Task NoneVirtualCodeIsGeneratedForSealedPartialClassWithAttribute()
+    {
+        const string source = @"
+using PropertyChanged;
+
+[AddINotifyPropertyChangedInterface]
+public sealed partial class Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(generated);
+    }
+
+    [Fact]
     public async Task CodeIsGeneratedForClassesInMultipleNamespaces()
     {
         const string source = @"
