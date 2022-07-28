@@ -20,9 +20,6 @@ static class ExtensionMethods
 
         value = value.Trim();
 
-        if (string.IsNullOrEmpty(value))
-            return null;
-
-        return value;
+        return string.IsNullOrEmpty(value) ? null : value;
     }
 }
