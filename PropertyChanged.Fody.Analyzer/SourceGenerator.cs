@@ -10,39 +10,42 @@ public class SourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var classesProvider = context.SyntaxProvider.CreateSyntaxProvider(IsCandidateForGenerator, GetSyntaxForCandidate).ExceptNullItems();
+        var classesProvider = context.SyntaxProvider.CreateSyntaxProvider(IsCandidateForGenerator, GetClassContextForCandidate).ExceptNullItems();
 
-        var input = context.CompilationProvider
-            .Combine(context.AnalyzerConfigOptionsProvider)
+        //var x = classesProvider
+        //    .Combine(context.AnalyzerConfigOptionsProvider)
+        //    .Select()
+
+        var input = context.AnalyzerConfigOptionsProvider
             .Combine(classesProvider.Collect())
-            .Select((((Compilation, AnalyzerConfigOptionsProvider), ImmutableArray<ClassDeclarationSyntax>) args, CancellationToken _) =>
+            .Select(((AnalyzerConfigOptionsProvider, ImmutableArray<ClassContext>) args, CancellationToken _) =>
             {
-                var ((compilation, options), classes) = args;
+                var (options, classes) = args;
 
                 options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource);
 
                 var configuration = Configuration.Read(configurationSource);
 
-                return (compilation, configuration, classes);
+                return (configuration, classes);
             });
 
         context.RegisterSourceOutput(input, GenerateSource);
     }
 
-    static void GenerateSource(SourceProductionContext context, (Compilation compilation, Configuration configuration, ImmutableArray<ClassDeclarationSyntax> classes) parameters)
+    static void GenerateSource(SourceProductionContext context, (Configuration configuration, ImmutableArray<ClassContext> classes) parameters)
     {
-        var (compilation, configuration, classes) = parameters;
+        var (configuration, classes) = parameters;
 
         // Log("GenerateSource: " + string.Join(", ", classes.Select(c => c.Identifier.Text)));
 
-        SourceGeneratorEngine.GenerateSource(context, compilation, configuration, classes);
+        SourceGeneratorEngine.GenerateSource(context, configuration, classes);
     }
 
     static bool IsCandidateForGenerator(SyntaxNode syntaxNode, CancellationToken token)
     {
         try
         {
-            return syntaxNode is ClassDeclarationSyntax { Parent: not ClassDeclarationSyntax } classDeclaration
+            return syntaxNode is ClassDeclarationSyntax { Parent: NamespaceDeclarationSyntax or CompilationUnitSyntax } classDeclaration
                    && classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword)
                    && classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged")
                    && (classDeclaration.BaseList.GetInterfaceTypeCandidates().Any()
@@ -53,6 +56,22 @@ public class SourceGenerator : IIncrementalGenerator
             Log("IsCandidateForGenerator: " + ex);
             return false;
         }
+    }
+
+    static ClassContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken token)
+    {
+        var syntax = GetSyntaxForCandidate(context, token);
+        if (syntax == null)
+            return null;
+
+        var typeSymbol = context.SemanticModel.GetDeclaredSymbol(syntax, token);
+        if (typeSymbol == null)
+            return null;
+
+        if (typeSymbol.MemberNames.Contains("PropertyChanged"))
+            return null;
+
+        return new ClassContext(syntax, typeSymbol);
     }
 
     static ClassDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken token)
