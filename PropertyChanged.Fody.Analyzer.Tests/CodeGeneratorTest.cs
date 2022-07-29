@@ -63,7 +63,7 @@ public partial class Class1 : INotifyPropertyChanged
         await Verify(generated);
     }
 
-    // [Fact]
+    [Fact]
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPart()
     {
         const string source = @"
@@ -82,6 +82,32 @@ public partial class Class1
         var generated = await RunGenerator(source);
 
         await VerifyCompilation(source, generated);
+        await Verify(generated);
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPartAndDifferentSource()
+    {
+        const string source1 = @"
+using System.ComponentModel;
+
+public partial class Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        const string source2 = @"
+using System.ComponentModel;
+
+public partial class Class1
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+}
+";
+        var generated = await RunGenerator(source1, source2);
+
+        await VerifyCompilation(source1, source2, generated);
         await Verify(generated);
     }
 
@@ -180,10 +206,13 @@ namespace Namespace2
         public int Property1 { get; set; }
         public int Property2 { get; set; }
     }
-    public partial class Class2 : INotifyPropertyChanged
+    namespace Namespace3 
     {
-        public int Property1 { get; set; }
-        public int Property2 { get; set; }
+        public partial class Class2a : INotifyPropertyChanged
+        {
+            public int Property1 { get; set; }
+            public int Property2 { get; set; }
+        }
     }
 }
 ";
