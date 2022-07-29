@@ -13,17 +13,15 @@
     <PackageProjectUrl>https://github.com/Fody/PropertyChanged</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+  <PropertyGroup>
+    <WeaverPropsFile>$(MSBuildThisFileDirectory)Weaver.props</WeaverPropsFile>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="6.6.2" PrivateAssets="none" />
     <PackageReference Include="FodyPackaging" Version="6.6.2" PrivateAssets="All" />
   </ItemGroup>
-  <PropertyGroup>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzerToOutput</TargetsForTfmSpecificContentInPackage>
-    <WeaverPropsFile>$(MSBuildThisFileDirectory)Weaver.props</WeaverPropsFile>
-  </PropertyGroup>
-  <Target Name="_AddAnalyzerToOutput">
-    <ItemGroup>
-      <TfmSpecificPackageFile Include="$(SolutionDir)PropertyChanged.Fody.Analyzer\bin\$(Configuration)\netstandard2.0\PropertyChanged.Fody.Analyzer.dll" PackagePath="analyzers/dotnet/cs" />
-    </ItemGroup>
-  </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\PropertyChanged.Fody.Analyzer/PropertyChanged.Fody.Analyzer.csproj" ReferenceOutputAssembly="false" />
+    <None Include="..\PropertyChanged.Fody.Analyzer\bin\$(Configuration)\netstandard2.0\PropertyChanged.Fody.Analyzer.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
 </Project>

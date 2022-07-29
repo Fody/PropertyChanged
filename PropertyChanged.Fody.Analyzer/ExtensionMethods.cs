@@ -15,11 +15,6 @@ static class ExtensionMethods
 
     public static string? NullIfEmpty(this string? value)
     {
-        if (value == null)
-            return null;
-
-        value = value.Trim();
-
         return string.IsNullOrEmpty(value) ? null : value;
     }
 }

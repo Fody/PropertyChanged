@@ -1,10 +1,10 @@
 ﻿using System.Text;
 
-internal class CodeBuilder
+class CodeBuilder
 {
-    private readonly StringBuilder _stringBuilder = new();
+    readonly StringBuilder _stringBuilder = new();
 
-    private int _indent;
+    int _indent;
 
     public CodeBuilder Add(string line = "")
     {

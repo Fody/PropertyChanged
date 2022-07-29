@@ -18,7 +18,7 @@ static class SourceGeneratorEngine
             return;
         }
 
-        var eventInvokerName = configuration.EventInvokerName.NullIfEmpty() ?? "OnPropertyChanged";
+        var eventInvokerName = configuration.EventInvokerName?.Trim().NullIfEmpty() ?? "OnPropertyChanged";
 
         var codeBuilder = new CodeBuilder();
 
@@ -52,7 +52,7 @@ static class SourceGeneratorEngine
 
                         var baseDefinition = hasBase ? string.Empty : " : INotifyPropertyChanged";
 
-                        using (codeBuilder.AddBlock($"{classDeclaration.Modifiers} class {typeSymbol.Name}{baseDefinition}"))
+                        using (codeBuilder.AddBlock($"partial class {typeSymbol.Name}{baseDefinition}"))
                         {
                             codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
 
@@ -60,7 +60,14 @@ static class SourceGeneratorEngine
 
                             using (codeBuilder.AddBlock($"{modifiers1} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
                             {
-                                codeBuilder.Add("OnPropertyChanged(new PropertyChangedEventArgs(propertyName));");
+                                if (isSealed)
+                                {
+                                    codeBuilder.Add("PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));");
+                                }
+                                else
+                                {
+                                    codeBuilder.Add("OnPropertyChanged(new PropertyChangedEventArgs(propertyName));");
+                                }
                             }
 
                             var modifiers2 = isSealed ? "private" : "protected virtual";
