@@ -63,6 +63,45 @@ public partial class Class1 : INotifyPropertyChanged
         await Verify(generated);
     }
 
+    // [Fact]
+    public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPart()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial class Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+public partial class Class1
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(generated);
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForPartialStructWithoutEventHandler()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial struct Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await Verify(generated);
+    }
+
     [Fact]
     public async Task CodeIsGeneratedForPartialClassWithAttribute()
     {

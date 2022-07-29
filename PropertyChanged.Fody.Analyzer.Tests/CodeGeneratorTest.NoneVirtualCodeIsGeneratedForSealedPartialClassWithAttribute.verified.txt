@@ -3,7 +3,7 @@
 #pragma warning disable CS0067
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-public sealed partial class Class1 : INotifyPropertyChanged
+partial class Class1 : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

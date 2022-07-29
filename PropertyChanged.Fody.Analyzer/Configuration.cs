@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
 
-[Serializable]
 public class Configuration
 {
     static readonly XmlSerializer Serializer = new(typeof(Configuration));
-
-    public static Configuration Default => new();
 
     public bool IsDisabled { get; set; }
 
@@ -18,7 +13,7 @@ public class Configuration
     {
         try
         {
-            if (!string.IsNullOrEmpty(configuration))
+            if (configuration != null)
             {
                 return Deserialize(configuration);
             }
@@ -28,7 +23,7 @@ public class Configuration
             // just go with default options
         }
 
-        return Default;
+        return new();
     }
 
     static Configuration Deserialize(string configuration)
@@ -41,7 +36,9 @@ public class Configuration
 
     class CaseInsensitiveXmlReader : XmlTextReader
     {
-        public CaseInsensitiveXmlReader(TextReader reader) : base(reader) { }
+        public CaseInsensitiveXmlReader(TextReader reader) : base(reader)
+        {
+        }
 
         public override string ReadElementString()
         {
