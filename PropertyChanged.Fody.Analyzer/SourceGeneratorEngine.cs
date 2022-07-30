@@ -64,7 +64,6 @@ static class SourceGeneratorEngine
             foreach (var classContext in classes.Distinct(ClassContext.FullNameComparer))
             {
                 GenerateCodeForClass(classContext, codeBuilder, eventInvokerName);
-
             }
         }
         catch (Exception ex)
