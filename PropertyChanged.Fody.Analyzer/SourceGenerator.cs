@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,11 +11,21 @@ public class SourceGenerator : IIncrementalGenerator
     {
         var classesProvider = context.SyntaxProvider.CreateSyntaxProvider(IsCandidateForGenerator, GetClassContextForCandidate).ExceptNullItems();
 
-        //var x = classesProvider
-        //    .Combine(context.AnalyzerConfigOptionsProvider)
-        //    .Select()
+        //*
+        var source = classesProvider
+            .Combine(context.AnalyzerConfigOptionsProvider)
+            .Select(((ClassContext, AnalyzerConfigOptionsProvider) args, CancellationToken _) =>
+            {
+                var (classContext, options) = args;
 
-        var input = context.AnalyzerConfigOptionsProvider
+                options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource);
+
+                var configuration = Configuration.Read(configurationSource);
+
+                return (configuration, classContext);
+            });
+        /*/
+        var source = context.AnalyzerConfigOptionsProvider
             .Combine(classesProvider.Collect())
             .Select(((AnalyzerConfigOptionsProvider, ImmutableArray<ClassContext>) args, CancellationToken _) =>
             {
@@ -28,15 +37,21 @@ public class SourceGenerator : IIncrementalGenerator
 
                 return (configuration, classes);
             });
+        //*/
 
-        context.RegisterSourceOutput(input, GenerateSource);
+        context.RegisterSourceOutput(source, GenerateSource);
     }
 
     static void GenerateSource(SourceProductionContext context, (Configuration configuration, ImmutableArray<ClassContext> classes) parameters)
     {
         var (configuration, classes) = parameters;
 
-        // Log("GenerateSource: " + string.Join(", ", classes.Select(c => c.Identifier.Text)));
+        SourceGeneratorEngine.GenerateSource(context, configuration, classes);
+    }
+
+    static void GenerateSource(SourceProductionContext context, (Configuration configuration, ClassContext classContext) parameters)
+    {
+        var (configuration, classes) = parameters;
 
         SourceGeneratorEngine.GenerateSource(context, configuration, classes);
     }
@@ -70,6 +85,17 @@ public class SourceGenerator : IIncrementalGenerator
 
         if (typeSymbol.MemberNames.Contains("PropertyChanged"))
             return null;
+
+        var syntaxReferences = typeSymbol.DeclaringSyntaxReferences;
+        if ((syntaxReferences.Length > 1) && ((syntax.SyntaxTree != syntaxReferences[0].SyntaxTree) || syntaxReferences[0].Span != syntax.Span))
+        {
+            // We must not generate code twice for the same class; if there are multiple partial candidates, only allow the first to pass through.
+            // This is a very simple check; if the first one is not a candidate, no code will be generated at all, but that's a very weird edge case
+            // and we should not spend too much efforts to support it.
+            return null;
+        }
+
+        Log($"GetClassContextForCandidate: {syntax.Identifier.Text}");
 
         return new ClassContext(syntax, typeSymbol);
     }
@@ -111,11 +137,5 @@ public class SourceGenerator : IIncrementalGenerator
             Log("GetSyntaxForCandidate: " + ex);
             return null;
         }
-    }
-
-    [Conditional("DEBUG")]
-    static void Log(string message)
-    {
-        // File.AppendAllText(@"c:\temp\generator.log", message + "\r\n");
     }
 }

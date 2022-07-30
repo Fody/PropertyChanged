@@ -1,5 +1,7 @@
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Reflection;
+using Microsoft.CodeAnalysis;
 using PropertyChanged;
 
 [UsesVerify]
@@ -23,7 +25,7 @@ public class Class1 : INotifyPropertyChanged
 ";
         var generated = await RunGenerator(source);
 
-        await Verify(generated);
+        Assert.Empty(generated);
     }
 
     [Fact]
@@ -42,7 +44,7 @@ public partial class Class1 : INotifyPropertyChanged
 ";
         var generated = await RunGenerator(source);
 
-        await Verify(generated);
+        Assert.Empty(generated);
     }
 
     [Fact]
@@ -60,7 +62,7 @@ public partial class Class1 : INotifyPropertyChanged
         var generated = await RunGenerator(source);
 
         await VerifyCompilation(source, generated);
-        await Verify(generated);
+        await Verify(JoinResults(generated));
     }
 
     [Fact]
@@ -82,7 +84,7 @@ public partial class Class1
         var generated = await RunGenerator(source);
 
         await VerifyCompilation(source, generated);
-        await Verify(generated);
+        Assert.Empty(generated);
     }
 
     [Fact]
@@ -107,8 +109,60 @@ public partial class Class1
 ";
         var generated = await RunGenerator(source1, source2);
 
+        Assert.Empty(generated);
+    }
+
+    [Fact]
+    public async Task CodeIsGeneratedForPartialClassWithRedundantInterfaceImplementation()
+    {
+        const string source1 = @"
+using System.ComponentModel;
+
+public partial class Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+}
+";
+        const string source2 = @"
+using System.ComponentModel;
+
+public partial class Class1 : INotifyPropertyChanged
+{
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source1, source2);
+
         await VerifyCompilation(source1, source2, generated);
-        await Verify(generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForPartialClassWithRedundantInterfaceImplementationAndAttributeButNotOnTheFirstPart()
+    {
+        const string source = @"
+using System.ComponentModel;
+using PropertyChanged;
+
+public partial class Class1234
+{
+    public string? P1 { get; set; }
+}
+
+public partial class Class1234 : INotifyPropertyChanged
+{
+    public string? P2 { get; set; }
+}
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1234
+{
+    public string? P3 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        Assert.Empty(generated);
     }
 
     [Fact]
@@ -125,7 +179,7 @@ public partial struct Class1 : INotifyPropertyChanged
 ";
         var generated = await RunGenerator(source);
 
-        await Verify(generated);
+        Assert.Empty(generated);
     }
 
     [Fact]
@@ -144,7 +198,7 @@ public partial class Class1
         var generated = await RunGenerator(source);
 
         await VerifyCompilation(source, generated);
-        await Verify(generated);
+        await Verify(JoinResults(generated));
     }
 
     [Fact]
@@ -163,7 +217,7 @@ public sealed partial class Class1
         var generated = await RunGenerator(source);
 
         await VerifyCompilation(source, generated);
-        await Verify(generated);
+        await Verify(JoinResults(generated));
     }
 
     [Fact]
@@ -219,19 +273,23 @@ namespace Namespace2
         var generated = await RunGenerator(source);
 
         await VerifyCompilation(source, generated);
-        await Verify(generated);
+        await Verify(JoinResults(generated));
     }
 
-    /// <summary>
-    /// Verifies the sources compile with no errors.
-    /// </summary>
-    /// <param name="sources">The sources.</param>
-    static async Task VerifyCompilation(params string[] sources)
+    static async Task VerifyCompilation(string source, IEnumerable<GeneratedSourceResult> generated)
     {
+        var sources = new[] { source }.Concat(generated.Select(item => item.SourceText.ToString()));
+
+        await SourceGenerators.Tests.RoslynTestUtils.VerifyCompilation(references, sources);
+    }
+    static async Task VerifyCompilation(string source1, string source2, IEnumerable<GeneratedSourceResult> generated)
+    {
+        var sources = new[] { source1, source2 }.Concat(generated.Select(item => item.SourceText.ToString()));
+
         await SourceGenerators.Tests.RoslynTestUtils.VerifyCompilation(references, sources);
     }
 
-    static async Task<string> RunGenerator(params string[] sources)
+    static async Task<ImmutableArray<GeneratedSourceResult>> RunGenerator(params string[] sources)
     {
         var (diagnostics, results) = await SourceGenerators.Tests.RoslynTestUtils.RunGenerator(
             new SourceGenerator(),
@@ -240,11 +298,12 @@ namespace Namespace2
             new[] { "CS0535" });
 
         Assert.Empty(diagnostics);
-        Assert.Single(results);
 
-        var generated = results[0].SourceText.ToString();
+        return results;
+    }
 
-
-        return generated;
+    static string JoinResults(ImmutableArray<GeneratedSourceResult> results)
+    {
+        return string.Join("\r\n", results.Select(result => $"// {result.HintName}\r\n{result.SourceText}"));
     }
 }
