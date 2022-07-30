@@ -283,7 +283,7 @@ namespace SourceGenerators.Tests
                 for (int i = 0; i < count; i++)
                 {
                     SourceText s = await proj.FindDocument(l[i]).GetTextAsync().ConfigureAwait(false);
-                    results.Add(s.ToString().Replace("\r\n", "\n", StringComparison.Ordinal));
+                    results.Add(s.ToString().Replace("\r\n", "\n"));
                 }
             }
             else
@@ -291,14 +291,14 @@ namespace SourceGenerators.Tests
                 for (int i = 0; i < count; i++)
                 {
                     SourceText s = await proj.FindDocument($"src-{i}.cs").GetTextAsync().ConfigureAwait(false);
-                    results.Add(s.ToString().Replace("\r\n", "\n", StringComparison.Ordinal));
+                    results.Add(s.ToString().Replace("\r\n", "\n"));
                 }
             }
 
             if (extraFile != null)
             {
                 SourceText s = await proj.FindDocument(extraFile).GetTextAsync().ConfigureAwait(false);
-                results.Add(s.ToString().Replace("\r\n", "\n", StringComparison.Ordinal));
+                results.Add(s.ToString().Replace("\r\n", "\n"));
             }
 
             return results;
