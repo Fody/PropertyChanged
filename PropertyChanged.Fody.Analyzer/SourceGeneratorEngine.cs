@@ -35,15 +35,7 @@ static class SourceGeneratorEngine
             codeBuilder.Add("*/");
         }
 
-        try
-        {
-            context.AddSource(hintName, codeBuilder.ToString());
-        }
-        catch (ArgumentException)
-        {
-            // A class with multiple parts that all derive from INPC or have the attribute will result in multiple syntax nodes that all appear to need the generated part.
-            // Just skip the duplicate generations.
-        }
+        context.AddSource(hintName, codeBuilder.ToString());
     }
 
 
