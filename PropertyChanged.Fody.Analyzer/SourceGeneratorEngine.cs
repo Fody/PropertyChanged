@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.CSharp;
 #pragma warning disable CS0067
 static class SourceGeneratorEngine
 {
-    static readonly SymbolDisplayFormat fullNameDisplayFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
-
     public static void GenerateSource(SourceProductionContext context, Configuration configuration, ClassContext classContext)
     {
         if (configuration.IsDisabled)
@@ -14,7 +12,7 @@ static class SourceGeneratorEngine
             return;
         }
 
-        var hintName = classContext.TypeSymbol.ToDisplayString(fullNameDisplayFormat) + ".g.cs";
+        var hintName = classContext.FullName + ".g.cs";
 
         Log($"Generate source for: {hintName}");
 
@@ -35,6 +33,9 @@ static class SourceGeneratorEngine
             codeBuilder.Add("*/");
         }
 
+        // Tracing changes:
+        // codeBuilder.Add($"// {DateTime.Now.ToLongTimeString()}");
+
         context.AddSource(hintName, codeBuilder.ToString());
     }
 
@@ -49,6 +50,9 @@ static class SourceGeneratorEngine
             return;
         }
 
+        if (!classes.Any())
+            return;
+
         var eventInvokerName = configuration.EventInvokerName?.Trim().NullIfEmpty() ?? "OnPropertyChanged";
 
         var codeBuilder = new CodeBuilder();
@@ -57,9 +61,10 @@ static class SourceGeneratorEngine
         {
             codeBuilder.AddPreamble();
 
-            foreach (var classContext in classes)
+            foreach (var classContext in classes.Distinct(ClassContext.FullNameComparer))
             {
                 GenerateCodeForClass(classContext, codeBuilder, eventInvokerName);
+
             }
         }
         catch (Exception ex)
@@ -88,7 +93,7 @@ static class SourceGeneratorEngine
         var typeSymbol = classContext.TypeSymbol;
         var classDeclaration = classContext.SyntaxDeclaration;
 
-        using (codeBuilder.AddBlock("namespace {0}", typeSymbol.ContainingNamespace?.ToDisplayString(fullNameDisplayFormat)))
+        using (codeBuilder.AddBlock("namespace {0}", typeSymbol.ContainingNamespace?.ToDisplayString(FullNameDisplayFormat)))
         {
             var isSealed = classDeclaration.Modifiers.Any(token => token.IsKind(SyntaxKind.SealedKeyword));
             var hasBase = classDeclaration.BaseList.GetInterfaceTypeCandidates().Any();

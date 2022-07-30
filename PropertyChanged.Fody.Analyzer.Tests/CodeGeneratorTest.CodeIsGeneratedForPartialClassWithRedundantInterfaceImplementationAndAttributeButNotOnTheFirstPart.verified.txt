@@ -5,7 +5,7 @@
 #pragma warning disable CS8019
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-partial class Class1
+partial class Class1234
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

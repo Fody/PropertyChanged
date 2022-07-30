@@ -138,7 +138,7 @@ public partial class Class1 : INotifyPropertyChanged
     }
 
     [Fact]
-    public async Task NoCodeIsGeneratedForPartialClassWithRedundantInterfaceImplementationAndAttributeButNotOnTheFirstPart()
+    public async Task CodeIsGeneratedForPartialClassWithRedundantInterfaceImplementationAndAttributeButNotOnTheFirstPart()
     {
         const string source = @"
 using System.ComponentModel;
@@ -162,7 +162,8 @@ public partial class Class1234
 ";
         var generated = await RunGenerator(source);
 
-        Assert.Empty(generated);
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
     }
 
     [Fact]
