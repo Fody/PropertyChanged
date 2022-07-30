@@ -6,7 +6,7 @@
 Injects code which raises the [`PropertyChanged` event](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.propertychanged.aspx), into property setters of classes which implement [INotifyPropertyChanged](https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx).
 
 
-### This is an add-in for [Fody](https://github.com/Fody/Home/).
+## This is an add-in for [Fody](https://github.com/Fody/Home/).
 
 **It is expected that all developers using Fody [become a Patron on OpenCollective](https://opencollective.com/fody/contribute/patron-3059). [See Licensing/Patron FAQ](https://github.com/Fody/Home/blob/master/pages/licensing-patron-faq.md) for more information.**
 
@@ -142,6 +142,7 @@ public partial class Class1
     }
 }
 ```
+Actually records and nested classes are not supported.
 
 ---
 ## Notes
@@ -157,6 +158,7 @@ public partial class Class1
 * To prevent a specific class from having the notification call injection, use the [`DoNotNotify` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#donotnotifyattribute).
 * To scope the rewriting only to specific classes, and not the whole Assembly, you can use the [`FilterType` attribute](https://github.com/Fody/PropertyChanged/blob/f4905b4f04335e393c8350cc5f06f02614241483/PropertyChanged.Fody/TypeNodeBuilder.cs#L18). This changes the general behavior from from opt-out to opt-in. Example: `[assembly: PropertyChanged.FilterType("My.Specific.OptIn.Namespace.")]`. The string is interpreted as a Regex, and you can use multiple filters. A class will be weaved, if _any_ filter matches.
 * The `INotifyPropertyChanged` interface can be automatically implemented for a specific class using the [`AddINotifyPropertyChangedInterfaceAttribute` attribute](https://github.com/Fody/PropertyChanged/wiki/Attributes#addinotifypropertychangedinterfaceattribute). **Raising an issue about "this attribute does not behave as expected" will result in a RTFM and the issue being closed.**
+  - for partial methods this will be done via the code generator, so the implementation is available at compile time. 
 * Behavior is configured via [attributes](https://github.com/Fody/PropertyChanged/wiki/Attributes), or via [options in the `Weavers.xml` file](https://github.com/Fody/PropertyChanged/wiki/Options).
 
 For more information, see the [wiki pages](https://github.com/Fody/PropertyChanged/wiki).

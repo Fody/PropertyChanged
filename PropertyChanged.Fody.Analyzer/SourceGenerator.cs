@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿// #define ONE_FILE_PER_CLASS
+
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,36 +12,39 @@ public class SourceGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classesProvider = context.SyntaxProvider.CreateSyntaxProvider(IsCandidateForGenerator, GetClassContextForCandidate).ExceptNullItems();
+        var configProvider = context.AnalyzerConfigOptionsProvider.Select(ReadConfigurationSource);
 
-        //*
+#if ONE_FILE_PER_CLASS
+        
         var source = classesProvider
-            .Combine(context.AnalyzerConfigOptionsProvider)
-            .Select(((ClassContext, AnalyzerConfigOptionsProvider) args, CancellationToken _) =>
+            .Combine(configProvider)
+            .Select(((ClassContext, string?) args, CancellationToken _) =>
             {
-                var (classContext, options) = args;
-
-                options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource);
+                var (classContext, configurationSource) = args;
 
                 var configuration = Configuration.Read(configurationSource);
 
                 return (configuration, classContext);
             });
-        /*/
-        var source = context.AnalyzerConfigOptionsProvider
-            .Combine(classesProvider.Collect())
-            .Select(((AnalyzerConfigOptionsProvider, ImmutableArray<ClassContext>) args, CancellationToken _) =>
+#else        
+        var source = classesProvider.Collect()
+            .Combine(configProvider)
+            .Select(((ImmutableArray<ClassContext>, string?) args, CancellationToken _) =>
             {
-                var (options, classes) = args;
-
-                options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource);
+                var (classes, configurationSource) = args;
 
                 var configuration = Configuration.Read(configurationSource);
 
                 return (configuration, classes);
             });
-        //*/
+#endif
 
         context.RegisterSourceOutput(source, GenerateSource);
+    }
+
+    string? ReadConfigurationSource(AnalyzerConfigOptionsProvider options, CancellationToken cancellationToken)
+    {
+        return options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource) ? configurationSource : null;
     }
 
     static void GenerateSource(SourceProductionContext context, (Configuration configuration, ImmutableArray<ClassContext> classes) parameters)
@@ -51,9 +56,9 @@ public class SourceGenerator : IIncrementalGenerator
 
     static void GenerateSource(SourceProductionContext context, (Configuration configuration, ClassContext classContext) parameters)
     {
-        var (configuration, classes) = parameters;
+        var (configuration, classContext) = parameters;
 
-        SourceGeneratorEngine.GenerateSource(context, configuration, classes);
+        SourceGeneratorEngine.GenerateSource(context, configuration, classContext);
     }
 
     static bool IsCandidateForGenerator(SyntaxNode syntaxNode, CancellationToken token)
@@ -73,34 +78,38 @@ public class SourceGenerator : IIncrementalGenerator
         }
     }
 
-    static ClassContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken token)
+    static ClassContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
-        var syntax = GetSyntaxForCandidate(context, token);
+        var syntax = GetSyntaxForCandidate(context, cancellationToken);
         if (syntax == null)
             return null;
 
-        var typeSymbol = context.SemanticModel.GetDeclaredSymbol(syntax, token);
+        var typeSymbol = context.SemanticModel.GetDeclaredSymbol(syntax, cancellationToken);
         if (typeSymbol == null)
             return null;
 
         if (typeSymbol.MemberNames.Contains("PropertyChanged"))
             return null;
 
+#if ONE_FILE_PER_CLASS
         var syntaxReferences = typeSymbol.DeclaringSyntaxReferences;
-        if ((syntaxReferences.Length > 1) && ((syntax.SyntaxTree != syntaxReferences[0].SyntaxTree) || syntaxReferences[0].Span != syntax.Span))
+        if (syntaxReferences.Length > 1)
         {
             // We must not generate code twice for the same class; if there are multiple partial candidates, only allow the first to pass through.
             // This is a very simple check; if the first one is not a candidate, no code will be generated at all, but that's a very weird edge case
             // and we should not spend too much efforts to support it.
-            return null;
+            var first = syntaxReferences[0];
+            if ((first.SyntaxTree != syntax.SyntaxTree) || (first.Span != syntax.Span))
+                return null;
         }
+#endif
 
         Log($"GetClassContextForCandidate: {syntax.Identifier.Text}");
 
         return new ClassContext(syntax, typeSymbol);
     }
 
-    static ClassDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken token)
+    static ClassDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
         try
         {
@@ -111,7 +120,7 @@ public class SourceGenerator : IIncrementalGenerator
                 if (!attributeSyntax.Name.ToString().Contains("AddINotifyPropertyChangedInterface"))
                     continue;
 
-                if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
+                if (context.SemanticModel.GetSymbolInfo(attributeSyntax, cancellationToken).Symbol is not IMethodSymbol attributeSymbol)
                     continue;
 
                 var containingType = attributeSymbol.ContainingType;
@@ -123,7 +132,7 @@ public class SourceGenerator : IIncrementalGenerator
 
             foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList.GetInterfaceTypeCandidates())
             {
-                var typeSymbol = context.SemanticModel.GetTypeInfo(baseTypeSyntax.Type).Type;
+                var typeSymbol = context.SemanticModel.GetTypeInfo(baseTypeSyntax.Type, cancellationToken).Type;
                 var fullName = typeSymbol?.ToDisplayString();
 
                 if (fullName == "System.ComponentModel.INotifyPropertyChanged")
