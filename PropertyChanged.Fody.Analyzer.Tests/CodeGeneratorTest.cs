@@ -203,7 +203,7 @@ public partial class Class1
     }
 
     [Fact]
-    public async Task NoneVirtualCodeIsGeneratedForSealedPartialClassWithAttribute()
+    public async Task CodeIsGeneratedNoneVirtualForSealedPartialClassWithAttribute()
     {
         const string source = @"
 using PropertyChanged;
