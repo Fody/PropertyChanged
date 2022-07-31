@@ -97,31 +97,34 @@ static class SourceGeneratorEngine
             var isSealed = classDeclaration.Modifiers.Any(token => token.IsKind(SyntaxKind.SealedKeyword));
             var hasBase = classDeclaration.BaseList.GetInterfaceTypeCandidates().Any();
 
-            var baseDefinition = hasBase ? string.Empty : " : INotifyPropertyChanged";
-
-            using (codeBuilder.AddBlock($"partial class {typeSymbol.Name}{baseDefinition}"))
+            using (codeBuilder.AddBlock("partial class {0}", typeSymbol.EnumerateContainingTypeNames().Reverse().ToArray()))
             {
-                codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
+                var baseDefinition = hasBase ? string.Empty : " : INotifyPropertyChanged";
 
-                var modifiers1 = isSealed ? "private" : "protected";
-
-                using (codeBuilder.AddBlock($"{modifiers1} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
+                using (codeBuilder.AddBlock($"partial class {typeSymbol.Name}{baseDefinition}"))
                 {
-                    if (isSealed)
-                    {
-                        codeBuilder.Add("PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));");
-                    }
-                    else
-                    {
-                        codeBuilder.Add("OnPropertyChanged(new PropertyChangedEventArgs(propertyName));");
-                    }
-                }
+                    codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
 
-                var modifiers2 = isSealed ? "private" : "protected virtual";
+                    var modifiers1 = isSealed ? "private" : "protected";
 
-                using (codeBuilder.AddBlock($"{modifiers2} void {eventInvokerName}(PropertyChangedEventArgs eventArgs)"))
-                {
-                    codeBuilder.Add("PropertyChanged?.Invoke(this, eventArgs);");
+                    using (codeBuilder.AddBlock($"{modifiers1} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
+                    {
+                        if (isSealed)
+                        {
+                            codeBuilder.Add("PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));");
+                        }
+                        else
+                        {
+                            codeBuilder.Add("OnPropertyChanged(new PropertyChangedEventArgs(propertyName));");
+                        }
+                    }
+
+                    var modifiers2 = isSealed ? "private" : "protected virtual";
+
+                    using (codeBuilder.AddBlock($"{modifiers2} void {eventInvokerName}(PropertyChangedEventArgs eventArgs)"))
+                    {
+                        codeBuilder.Add("PropertyChanged?.Invoke(this, eventArgs);");
+                    }
                 }
             }
         }

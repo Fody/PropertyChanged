@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [assembly: InternalsVisibleTo("PropertyChanged.Fody.Ananlyzer.Tests")]
@@ -25,6 +26,30 @@ static class ExtensionMethods
     public static string? NullIfEmpty(this string? value)
     {
         return string.IsNullOrEmpty(value) ? null : value;
+    }
+
+    public static IEnumerable<string> EnumerateContainingTypeNames(this INamedTypeSymbol? type)
+    {
+        while ((type = type?.ContainingType) != null)
+        {
+            yield return type.Name;
+        }
+    }
+
+    public static bool AreAllBaseTypesPartialClasses(this ClassDeclarationSyntax classDeclaration)
+    {
+        while (classDeclaration?.Parent is { } parent)
+        {
+            if (parent is NamespaceDeclarationSyntax or CompilationUnitSyntax)
+                return true;
+
+            if (parent is not ClassDeclarationSyntax parentClass || !parentClass.Modifiers.Any(SyntaxKind.PartialKeyword))
+                return false;
+
+            classDeclaration = parentClass;
+        }
+
+        return false;
     }
 
     [Conditional("DEBUG")]

@@ -142,7 +142,8 @@ public partial class Class1
     }
 }
 ```
-Actually records and nested classes are not supported.
+- Only classes are supported, no records.
+- For nested classes, all containing classes must be partial, too.
 
 ---
 ## Notes

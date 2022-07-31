@@ -2,6 +2,16 @@
 
 static class CodeBlock
 {
+    public static IDisposable AddBlock(this CodeBuilder codeBuilder, string template, params string?[] parameters)
+    {
+        return new DisposableItemCollection(parameters.Select(parameter => new CodeBlockHandler(codeBuilder, template, parameter)).ToArray());
+    }
+
+    public static IDisposable AddBlock(this CodeBuilder codeBuilder, string line)
+    {
+        return new CodeBlockHandler(codeBuilder, line);
+    }
+
     sealed class CodeBlockHandler : IDisposable
     {
         private readonly CodeBuilder? _codeBuilder;
@@ -29,14 +39,21 @@ static class CodeBlock
         }
     }
 
-    public static IDisposable AddBlock(this CodeBuilder codeBuilder, string template, string? parameter)
+    sealed class DisposableItemCollection : IDisposable
     {
-        return new CodeBlockHandler(codeBuilder, template, parameter);
-    }
+        readonly IReadOnlyCollection<IDisposable> _items;
 
-    public static IDisposable AddBlock(this CodeBuilder codeBuilder, string line)
-    {
-        return new CodeBlockHandler(codeBuilder, line);
-    }
+        public DisposableItemCollection(IReadOnlyCollection<IDisposable> items)
+        {
+            _items = items;
+        }
 
+        public void Dispose()
+        {
+            foreach (var item in _items)
+            {
+                item.Dispose();
+            }
+        }
+    }
 }

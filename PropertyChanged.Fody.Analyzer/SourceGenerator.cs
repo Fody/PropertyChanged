@@ -65,11 +65,14 @@ public class SourceGenerator : IIncrementalGenerator
     {
         try
         {
-            return syntaxNode is ClassDeclarationSyntax { Parent: NamespaceDeclarationSyntax or CompilationUnitSyntax } classDeclaration
-                   && classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword)
-                   && classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged")
-                   && (classDeclaration.BaseList.GetInterfaceTypeCandidates().Any()
-                       || classDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface")));
+            if (syntaxNode is not ClassDeclarationSyntax classDeclaration)
+                return false;
+
+            return classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword)
+                && classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged")
+                && classDeclaration.AreAllBaseTypesPartialClasses()
+                && (classDeclaration.BaseList.GetInterfaceTypeCandidates().Any()
+                   || classDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface")));
         }
         catch (Exception ex)
         {
