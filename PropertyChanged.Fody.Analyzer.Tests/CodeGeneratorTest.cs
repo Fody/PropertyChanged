@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using PropertyChanged;
 
 [UsesVerify]
-public class CodeGeneratorTest
+public partial class CodeGeneratorTest
 {
     static readonly Assembly[] references = { typeof(AddINotifyPropertyChangedInterfaceAttribute).Assembly, typeof(INotifyPropertyChanged).Assembly };
 
@@ -277,6 +277,71 @@ namespace Namespace2
         await Verify(JoinResults(generated));
     }
 
+    [Fact]
+    public async Task CodeIsGeneratedForNestedPartialClasses()
+    {
+        const string source = @"
+using System.ComponentModel;
+using PropertyChanged;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+
+    public partial class Class2
+    {
+        public int Property1 { get; set; }
+        public int Property2 { get; set; }
+
+        public partial class Class3 : INotifyPropertyChanged
+        {
+            public int Property1 { get; set; }
+            public int Property2 { get; set; }
+        }
+    }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForNestedPartialClassIfNotAllContainingClassesArePartial()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial class Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+
+    public class Class2
+    {
+        public int Property1 { get; set; }
+        public int Property2 { get; set; }
+
+        public partial class Class3 : INotifyPropertyChanged
+        {
+            public int Property1 { get; set; }
+            public int Property2 { get; set; }
+        }
+    }
+}
+";
+        var generated = await RunGenerator(source);
+
+        Assert.Empty(generated);
+    }
+}
+
+// Test utils
+partial class CodeGeneratorTest
+{
     static async Task VerifyCompilation(string source, IEnumerable<GeneratedSourceResult> generated)
     {
         var sources = new[] { source }.Concat(generated.Select(item => item.SourceText.ToString()));
