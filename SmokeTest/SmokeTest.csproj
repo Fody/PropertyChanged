@@ -12,14 +12,14 @@
                       ReferenceOutputAssembly="false"
                       OutputItemType="Analyzer" />
     <WeaverFiles Include="$(SolutionDir)$(SolutionName).Fody\bin\$(Configuration)\netstandard2.0\$(SolutionName).Fody.dll" />
-    <CompilerVisibleProperty Include="PropertyChanged_GeneratorConfiguration" />
+    <CompilerVisibleProperty Include="PropertyChangedAnalyzerConfiguration" />
   </ItemGroup>
 
   <PropertyGroup>
-    <PropertyChanged_GeneratorConfiguration>
-      <IsDisabled>false</IsDisabled>
+    <PropertyChangedAnalyzerConfiguration>
+      <IsCodeGeneratorDisabled>false</IsCodeGeneratorDisabled>
       <EventInvokerName>OnPropertyChanged</EventInvokerName>
-    </PropertyChanged_GeneratorConfiguration>
+    </PropertyChangedAnalyzerConfiguration>
   </PropertyGroup>
 
 </Project>

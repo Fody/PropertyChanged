@@ -26,7 +26,7 @@ public class SourceGenerator : IIncrementalGenerator
 
     static string? ReadConfigurationSource(AnalyzerConfigOptionsProvider options, CancellationToken cancellationToken)
     {
-        return options.GlobalOptions.TryGetValue("build_property.PropertyChanged_GeneratorConfiguration", out var configurationSource) ? configurationSource : null;
+        return options.GlobalOptions.TryGetValue("build_property.PropertyChangedAnalyzerConfiguration", out var configurationSource) ? configurationSource : null;
     }
 
     static Configuration ReadConfiguration(string? configuration, CancellationToken cancellationToken)
