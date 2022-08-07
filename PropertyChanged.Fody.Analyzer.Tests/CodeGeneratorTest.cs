@@ -66,6 +66,22 @@ public partial class Class1 : INotifyPropertyChanged
     }
 
     [Fact]
+    public async Task CodeIsGeneratedForPartialClassWithFullNameInterface()
+    {
+        const string source = @"
+public partial class Class1 : System.ComponentModel.INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
     public async Task CodeIsGeneratedForPartialGenericClassWithoutEventHandler()
     {
         const string source = @"
