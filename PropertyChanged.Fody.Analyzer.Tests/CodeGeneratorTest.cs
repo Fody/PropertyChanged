@@ -4,14 +4,6 @@ using System.Reflection;
 using Microsoft.CodeAnalysis;
 using PropertyChanged;
 
-[AddINotifyPropertyChangedInterface]
-public partial class Class1<T>
-{
-    public T Property1 { get; set; } = default!;
-    public int Property2 { get; set; }
-}
-
-
 [UsesVerify]
 public partial class CodeGeneratorTest
 {
@@ -352,6 +344,54 @@ public partial class Class1
 
         await VerifyCompilation(source, generated);
         await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForClassesNestedInStruct()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial struct Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+
+    public partial class Class2 : INotifyPropertyChanged
+    {
+        public int Property1 { get; set; }
+        public int Property2 { get; set; }
+    }
+
+}
+";
+        var generated = await RunGenerator(source);
+
+        Assert.Empty(generated);
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForClassesNestedInRecord()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial record Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+
+    public partial class Class2 : INotifyPropertyChanged
+    {
+        public int Property1 { get; set; }
+        public int Property2 { get; set; }
+    }
+
+}
+";
+        var generated = await RunGenerator(source);
+
+        Assert.Empty(generated);
     }
 
     [Fact]
