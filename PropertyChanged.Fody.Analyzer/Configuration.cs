@@ -5,7 +5,7 @@ public record Configuration
 {
     static readonly XmlSerializer Serializer = new(typeof(Configuration));
 
-    public bool IsDisabled { get; set; }
+    public bool IsCodeGeneratorDisabled { get; set; }
 
     public string? EventInvokerName { get; set; }
 

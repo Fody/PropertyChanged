@@ -8,7 +8,7 @@ static class SourceGeneratorEngine
     {
         const string sourceFileHintName = "PropertyChanged.g.cs";
 
-        if (configuration.IsDisabled)
+        if (configuration.IsCodeGeneratorDisabled)
         {
             context.AddSource(sourceFileHintName, @"// Source generator is disabled by configuration.");
             return;
@@ -55,6 +55,8 @@ static class SourceGeneratorEngine
     {
         DebugBeep();
 
+        codeBuilder.Add();
+
         using (codeBuilder.AddBlock("namespace {0}", classContext.ContainingNamespace))
         {
             var isSealed = classContext.IsSealed;
@@ -67,6 +69,7 @@ static class SourceGeneratorEngine
                 using (codeBuilder.AddBlock($"partial class {classContext.Name}{baseDefinition}"))
                 {
                     codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
+                    codeBuilder.Add();
 
                     var modifiers1 = isSealed ? "private" : "protected";
 
@@ -81,6 +84,8 @@ static class SourceGeneratorEngine
                             codeBuilder.Add($"{eventInvokerName}(new PropertyChangedEventArgs(propertyName));");
                         }
                     }
+
+                    codeBuilder.Add();
 
                     var modifiers2 = isSealed ? "private" : "protected virtual";
 

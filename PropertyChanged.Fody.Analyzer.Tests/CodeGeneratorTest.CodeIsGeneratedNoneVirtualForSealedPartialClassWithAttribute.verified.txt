@@ -5,13 +5,16 @@
 #pragma warning disable CS8019
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
 partial class Class1 : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
+
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
     private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
     {
         PropertyChanged?.Invoke(this, eventArgs);

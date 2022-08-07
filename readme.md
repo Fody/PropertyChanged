@@ -150,14 +150,14 @@ You can configure the code generator via properties in your project file:
 
 ```xml
 <PropertyGroup>
-  <PropertyChanged_GeneratorConfiguration>
-    <IsDisabled>false</IsDisabled>
+  <PropertyChangedAnalyzerConfiguration>
+    <IsCodeGeneratorDisabled>false</IsCodeGeneratorDisabled>
     <EventInvokerName>OnPropertyChanged</EventInvokerName>
-  </PropertyChanged_GeneratorConfiguration>
+  </PropertyChangedAnalyzerConfiguration>
 </PropertyGroup>
 ```
 
-- *IsDisabled*: Set to `true` to switch off the code generator.
+- *IsCodeGeneratorDisabled*: Set to `true` to switch off the code generator.
 - *EventInvokerName*: Change the name of the event invoker method from `OnPropertyChanged` to your favorite name.
 ---
 ## Notes
