@@ -145,6 +145,20 @@ public partial class Class1
 - Only classes are supported, no records.
 - For nested classes, all containing classes must be partial, too.
 
+### Code Generator Configuration
+You can configure the code generator via properties in your project file:
+
+```xml
+<PropertyGroup>
+  <PropertyChanged_GeneratorConfiguration>
+    <IsDisabled>false</IsDisabled>
+    <EventInvokerName>OnPropertyChanged</EventInvokerName>
+  </PropertyChanged_GeneratorConfiguration>
+</PropertyGroup>
+```
+
+- *IsDisabled*: Set to `true` to switch off the code generator.
+- *EventInvokerName*: Change the name of the event invoker method from `OnPropertyChanged` to your favorite name.
 ---
 ## Notes
 
