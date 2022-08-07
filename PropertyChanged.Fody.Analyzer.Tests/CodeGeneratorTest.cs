@@ -4,6 +4,14 @@ using System.Reflection;
 using Microsoft.CodeAnalysis;
 using PropertyChanged;
 
+[AddINotifyPropertyChangedInterface]
+public partial class Class1<T>
+{
+    public T Property1 { get; set; } = default!;
+    public int Property2 { get; set; }
+}
+
+
 [UsesVerify]
 public partial class CodeGeneratorTest
 {
@@ -57,6 +65,24 @@ public partial class Class1 : INotifyPropertyChanged
 {
     public int Property1 { get; set; }
     public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task CodeIsGeneratedForPartialGenericClassWithoutEventHandler()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial class Class1<T1, T2> : INotifyPropertyChanged
+{
+    public T1 Property1 { get; set; } = default!;
+    public T2 Property2 { get; set; } = default!;
 }
 ";
         var generated = await RunGenerator(source);
@@ -193,6 +219,25 @@ using PropertyChanged;
 public partial class Class1
 {
     public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task CodeIsGeneratedForPartialGenericClassWithAttribute()
+    {
+        const string source = @"
+using PropertyChanged;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1<T>
+{
+    public T Property1 { get; set; } = default!;
     public int Property2 { get; set; }
 }
 ";

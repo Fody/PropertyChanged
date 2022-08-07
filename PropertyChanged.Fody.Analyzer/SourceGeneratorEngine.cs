@@ -1,45 +1,9 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 #pragma warning disable CS0067
 static class SourceGeneratorEngine
 {
-    public static void GenerateSource(SourceProductionContext context, Configuration configuration, ClassContext classContext)
-    {
-        if (configuration.IsDisabled)
-        {
-            return;
-        }
-
-        var hintName = classContext.FullName + ".g.cs";
-
-        Log($"Generate source for: {hintName}");
-
-        var eventInvokerName = configuration.EventInvokerName?.Trim().NullIfEmpty() ?? "OnPropertyChanged";
-
-        var codeBuilder = new CodeBuilder();
-
-        try
-        {
-            codeBuilder.AddPreamble();
-
-            GenerateCodeForClass(classContext, codeBuilder, eventInvokerName);
-        }
-        catch (Exception ex)
-        {
-            codeBuilder.Add("/*");
-            codeBuilder.Add($"GenerateSource failed: {ex}");
-            codeBuilder.Add("*/");
-        }
-
-        // Tracing changes:
-        // codeBuilder.Add($"// {DateTime.Now.ToLongTimeString()}");
-
-        context.AddSource(hintName, codeBuilder.ToString());
-    }
-
-
     public static void GenerateSource(SourceProductionContext context, Configuration configuration, ImmutableArray<ClassContext> classes)
     {
         const string sourceFileHintName = "PropertyChanged.g.cs";
@@ -89,19 +53,18 @@ static class SourceGeneratorEngine
 
     static void GenerateCodeForClass(ClassContext classContext, CodeBuilder codeBuilder, string eventInvokerName)
     {
-        var typeSymbol = classContext.TypeSymbol;
-        var classDeclaration = classContext.SyntaxDeclaration;
+        DebugBeep();
 
-        using (codeBuilder.AddBlock("namespace {0}", typeSymbol.ContainingNamespace?.ToDisplayString(FullNameDisplayFormat)))
+        using (codeBuilder.AddBlock("namespace {0}", classContext.ContainingNamespace))
         {
-            var isSealed = classDeclaration.Modifiers.Any(token => token.IsKind(SyntaxKind.SealedKeyword));
-            var hasBase = classDeclaration.BaseList.GetInterfaceTypeCandidates().Any();
+            var isSealed = classContext.IsSealed;
+            var hasBase = classContext.HasBase;
 
-            using (codeBuilder.AddBlock("partial class {0}", typeSymbol.EnumerateContainingTypeNames().Reverse().ToArray()))
+            using (codeBuilder.AddBlock("partial class {0}", classContext.ContainingTypeNames.Split('|')))
             {
                 var baseDefinition = hasBase ? string.Empty : " : INotifyPropertyChanged";
 
-                using (codeBuilder.AddBlock($"partial class {typeSymbol.Name}{baseDefinition}"))
+                using (codeBuilder.AddBlock($"partial class {classContext.Name}{baseDefinition}"))
                 {
                     codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
 
@@ -115,7 +78,7 @@ static class SourceGeneratorEngine
                         }
                         else
                         {
-                            codeBuilder.Add("OnPropertyChanged(new PropertyChangedEventArgs(propertyName));");
+                            codeBuilder.Add($"{eventInvokerName}(new PropertyChangedEventArgs(propertyName));");
                         }
                     }
 

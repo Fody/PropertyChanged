@@ -19,8 +19,7 @@ class CodeBuilder
             --_indent;
         }
 
-        _stringBuilder.Append(new string(' ', 4 * _indent));
-        _stringBuilder.AppendLine(line);
+        _stringBuilder.Append(' ', 4 * _indent).AppendLine(line);
 
         if (line.StartsWith("{"))
         {

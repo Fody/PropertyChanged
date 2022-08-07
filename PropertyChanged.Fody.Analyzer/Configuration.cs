@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
 
-public class Configuration
+public record Configuration
 {
     static readonly XmlSerializer Serializer = new(typeof(Configuration));
 

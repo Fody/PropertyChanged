@@ -1,15 +1,35 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-record ClassContext(ClassDeclarationSyntax SyntaxDeclaration, INamedTypeSymbol TypeSymbol)
+record ClassContext
 {
     public static readonly IEqualityComparer<ClassContext> FullNameComparer = new FullNameOfClassContextComparer();
 
-    public ClassDeclarationSyntax SyntaxDeclaration { get; } = SyntaxDeclaration;
+    public ClassContext(INamedTypeSymbol typeSymbol)
+    {
+        ContainingNamespace = typeSymbol.ContainingNamespace?.ToDisplayString(FullNameDisplayFormat);
 
-    public INamedTypeSymbol TypeSymbol { get; } = TypeSymbol;
+        ContainingTypeNames = string.Join("|", typeSymbol.EnumerateContainingTypeNames().Reverse().ToArray());
 
-    public string FullName = TypeSymbol.ToDisplayString(FullNameDisplayFormat);
+        FullName = typeSymbol.ToDisplayString(FullNameDisplayFormat);
+
+        Name = typeSymbol.ToDisplayString(NameDisplayFormat);
+
+        IsSealed = typeSymbol.IsSealed;
+
+        HasBase = typeSymbol.Interfaces.Any(item => item.ToDisplayString() == "System.ComponentModel.INotifyPropertyChanged");
+    }
+
+    public string? ContainingNamespace { get; }
+
+    public string ContainingTypeNames { get; }
+
+    string FullName { get; }
+
+    public string Name { get; }
+
+    public bool IsSealed { get; }
+
+    public bool HasBase { get; }
 
     class FullNameOfClassContextComparer : IEqualityComparer<ClassContext>
     {
