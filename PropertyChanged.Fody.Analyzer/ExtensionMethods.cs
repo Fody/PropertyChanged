@@ -10,7 +10,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 static class ExtensionMethods
 {
-    public static readonly SymbolDisplayFormat FullNameDisplayFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
+    public static readonly SymbolDisplayFormat FullNameDisplayFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, SymbolDisplayGenericsOptions.IncludeTypeParameters);
+    public static readonly SymbolDisplayFormat NameDisplayFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameOnly, SymbolDisplayGenericsOptions.IncludeTypeParameters);
 
     public static IncrementalValuesProvider<TSource> ExceptNullItems<TSource>(this IncrementalValuesProvider<TSource?> source)
     {
@@ -20,7 +21,7 @@ static class ExtensionMethods
 
     public static IEnumerable<BaseTypeSyntax> GetInterfaceTypeCandidates(this BaseListSyntax? baseListSyntax, string name = "INotifyPropertyChanged")
     {
-        return baseListSyntax == null ? Enumerable.Empty<BaseTypeSyntax>() : baseListSyntax.Types.Where(type => type.ToString().Equals(name));
+        return baseListSyntax == null ? Enumerable.Empty<BaseTypeSyntax>() : baseListSyntax.Types.Where(type => type.ToString().EndsWith(name));
     }
 
     public static string? NullIfEmpty(this string? value)
@@ -32,15 +33,25 @@ static class ExtensionMethods
     {
         while ((type = type?.ContainingType) != null)
         {
-            yield return type.Name;
+            yield return type.ToDisplayString(NameDisplayFormat);
         }
     }
 
-    public static bool AreAllBaseTypesPartialClasses(this ClassDeclarationSyntax classDeclaration)
+    public static bool HasImplementationAttribute(this ClassDeclarationSyntax classDeclaration)
+    {
+        return classDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface"));
+    }
+
+    public static bool HasNoPropertyChangedEvent(this ClassDeclarationSyntax classDeclaration)
+    {
+        return classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged");
+    }
+
+    public static bool AreAllContainingTypesPartialClasses(this ClassDeclarationSyntax classDeclaration)
     {
         while (classDeclaration?.Parent is { } parent)
         {
-            if (parent is NamespaceDeclarationSyntax or CompilationUnitSyntax)
+            if (parent.IsKind(SyntaxKind.NamespaceDeclaration) || parent.IsKind(SyntaxKind.CompilationUnit))
                 return true;
 
             if (parent is not ClassDeclarationSyntax parentClass || !parentClass.Modifiers.Any(SyntaxKind.PartialKeyword))
@@ -53,8 +64,8 @@ static class ExtensionMethods
     }
 
     [Conditional("DEBUG")]
-    public static void Log(string message)
+    public static void DebugBeep()
     {
-        // File.AppendAllText(@"c:\temp\generator.log", $"{DateTime.Now}: {message}\r\n");
+        Task.Run(Console.Beep);
     }
 }
