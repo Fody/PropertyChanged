@@ -19,9 +19,9 @@ static class ExtensionMethods
         return source.Where(static item => item is not null)!;
     }
 
-    public static IEnumerable<BaseTypeSyntax> GetInterfaceTypeCandidates(this BaseListSyntax? baseListSyntax, string name = "INotifyPropertyChanged")
+    public static IEnumerable<BaseTypeSyntax> GetInterfaceTypeCandidates(this BaseListSyntax? baseListSyntax)
     {
-        return baseListSyntax == null ? Enumerable.Empty<BaseTypeSyntax>() : baseListSyntax.Types.Where(type => type.ToString().EndsWith(name));
+        return baseListSyntax == null ? Enumerable.Empty<BaseTypeSyntax>() : baseListSyntax.Types.Where(type => type.ToString().EndsWith("INotifyPropertyChanged"));
     }
 
     public static string? NullIfEmpty(this string? value)
