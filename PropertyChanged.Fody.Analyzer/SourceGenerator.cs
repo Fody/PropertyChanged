@@ -49,9 +49,9 @@ public class SourceGenerator : IIncrementalGenerator
         var classDeclaration = (ClassDeclarationSyntax)syntaxNode;
 
         return classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword)
-            && classDeclaration.HasNoPropertyChangedEvent()
             && classDeclaration.AreAllContainingTypesPartialClasses()
-            && (classDeclaration.BaseList.GetInterfaceTypeCandidates().Any() || classDeclaration.HasImplementationAttribute());
+            && (classDeclaration.BaseList.GetInterfaceTypeCandidates().Any() || classDeclaration.HasImplementationAttribute())
+            && classDeclaration.HasNoPropertyChangedEvent();
     }
 
     static ClassContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
