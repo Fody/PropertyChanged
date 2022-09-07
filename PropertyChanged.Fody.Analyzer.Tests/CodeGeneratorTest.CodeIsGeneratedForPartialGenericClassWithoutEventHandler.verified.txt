@@ -3,6 +3,7 @@
 #nullable enable
 #pragma warning disable CS0067
 #pragma warning disable CS8019
+using System.Diagnostics;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,13 +13,13 @@ partial class Class1<T1, T2>
     [GeneratedCode("PropertyChanged.Fody", "TEST")]
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    [GeneratedCode("PropertyChanged.Fody", "TEST")]
+    [GeneratedCode("PropertyChanged.Fody", "TEST"), DebuggerNonUserCode]
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
     }
 
-    [GeneratedCode("PropertyChanged.Fody", "TEST")]
+    [GeneratedCode("PropertyChanged.Fody", "TEST"), DebuggerNonUserCode]
     protected virtual void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
     {
         PropertyChanged?.Invoke(this, eventArgs);
