@@ -8,7 +8,7 @@ public partial class ModuleWeaver
 
     public void MarkAsGeneratedCode(Collection<CustomAttribute> customAttributes)
     {
-        AddCustomAttributeArgument(customAttributes);
+        AddGeneratedCodeAttribute(customAttributes);
         AddDebuggerNonUserCodeAttribute(customAttributes);
     }
 
@@ -18,7 +18,7 @@ public partial class ModuleWeaver
         customAttributes.Add(debuggerAttribute);
     }
 
-    void AddCustomAttributeArgument(Collection<CustomAttribute> customAttributes)
+    void AddGeneratedCodeAttribute(Collection<CustomAttribute> customAttributes)
     {
         var attribute = new CustomAttribute(GeneratedCodeAttributeConstructor);
         attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, AssemblyName));
