@@ -49,6 +49,7 @@ static class SourceGeneratorEngine
             .Add("#nullable enable")
             .Add("#pragma warning disable CS0067")
             .Add("#pragma warning disable CS8019")
+            .Add("using System.Diagnostics;")
             .Add("using System.CodeDom.Compiler;")
             .Add("using System.ComponentModel;")
             .Add("using System.Runtime.CompilerServices;");
@@ -71,11 +72,11 @@ static class SourceGeneratorEngine
 
                 using (codeBuilder.AddBlock($"partial class {classContext.Name}{baseDefinition}"))
                 {
-                    AddGeneratedCodeAttribute(codeBuilder);
+                    AddGeneratedCodeAttribute(codeBuilder, false);
                     codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
                     codeBuilder.Add();
 
-                    AddGeneratedCodeAttribute(codeBuilder);
+                    AddGeneratedCodeAttribute(codeBuilder, true);
                     using (codeBuilder.AddBlock($"{(isSealed ? "private" : "protected")} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
                     {
                         if (isSealed)
@@ -90,7 +91,7 @@ static class SourceGeneratorEngine
 
                     codeBuilder.Add();
 
-                    AddGeneratedCodeAttribute(codeBuilder);
+                    AddGeneratedCodeAttribute(codeBuilder, true);
                     using (codeBuilder.AddBlock($"{(isSealed ? "private" : "protected virtual")} void {eventInvokerName}(PropertyChangedEventArgs eventArgs)"))
                     {
                         codeBuilder.Add("PropertyChanged?.Invoke(this, eventArgs);");
@@ -100,8 +101,8 @@ static class SourceGeneratorEngine
         }
     }
 
-    static void AddGeneratedCodeAttribute(CodeBuilder codeBuilder)
+    static void AddGeneratedCodeAttribute(CodeBuilder codeBuilder, bool isMethod)
     {
-        codeBuilder.Add($@"[GeneratedCode(""PropertyChanged.Fody"", ""{GeneratorVersion}"")]");
+        codeBuilder.Add($@"[GeneratedCode(""PropertyChanged.Fody"", ""{GeneratorVersion}""){(isMethod ? ", DebuggerNonUserCode" : "")}]");
     }
 }
