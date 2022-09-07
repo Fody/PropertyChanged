@@ -237,6 +237,27 @@ public partial class Class1
     }
 
     [Fact]
+    public async Task CodeIsGeneratedForPartialClassWithAttributeInFileScopedNamespace()
+    {
+        const string source = @"
+using PropertyChanged;
+
+namespace Whatever;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
     public async Task CodeIsGeneratedForPartialGenericClassWithAttribute()
     {
         const string source = @"
