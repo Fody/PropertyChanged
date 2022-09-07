@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis;
 #pragma warning disable CS0067
 static class SourceGeneratorEngine
 {
+    internal static string GeneratorVersion = typeof(SourceGenerator).Assembly.GetName().Version.ToString();
+
     public static void GenerateSource(SourceProductionContext context, Configuration configuration, ImmutableArray<ClassContext> classes)
     {
         const string sourceFileHintName = "PropertyChanged.g.cs";
@@ -47,6 +49,7 @@ static class SourceGeneratorEngine
             .Add("#nullable enable")
             .Add("#pragma warning disable CS0067")
             .Add("#pragma warning disable CS8019")
+            .Add("using System.CodeDom.Compiler;")
             .Add("using System.ComponentModel;")
             .Add("using System.Runtime.CompilerServices;");
     }
@@ -68,12 +71,12 @@ static class SourceGeneratorEngine
 
                 using (codeBuilder.AddBlock($"partial class {classContext.Name}{baseDefinition}"))
                 {
+                    AddGeneratedCodeAttribute(codeBuilder);
                     codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");
                     codeBuilder.Add();
 
-                    var modifiers1 = isSealed ? "private" : "protected";
-
-                    using (codeBuilder.AddBlock($"{modifiers1} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
+                    AddGeneratedCodeAttribute(codeBuilder);
+                    using (codeBuilder.AddBlock($"{(isSealed ? "private" : "protected")} void {eventInvokerName}([CallerMemberName] string? propertyName = null)"))
                     {
                         if (isSealed)
                         {
@@ -87,14 +90,18 @@ static class SourceGeneratorEngine
 
                     codeBuilder.Add();
 
-                    var modifiers2 = isSealed ? "private" : "protected virtual";
-
-                    using (codeBuilder.AddBlock($"{modifiers2} void {eventInvokerName}(PropertyChangedEventArgs eventArgs)"))
+                    AddGeneratedCodeAttribute(codeBuilder);
+                    using (codeBuilder.AddBlock($"{(isSealed ? "private" : "protected virtual")} void {eventInvokerName}(PropertyChangedEventArgs eventArgs)"))
                     {
                         codeBuilder.Add("PropertyChanged?.Invoke(this, eventArgs);");
                     }
                 }
             }
         }
+    }
+
+    static void AddGeneratedCodeAttribute(CodeBuilder codeBuilder)
+    {
+        codeBuilder.Add($@"[GeneratedCode(""PropertyChanged.Fody"", ""{GeneratorVersion}"")]");
     }
 }
