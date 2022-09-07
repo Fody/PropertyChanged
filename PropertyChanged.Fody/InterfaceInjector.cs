@@ -26,6 +26,8 @@ public partial class ModuleWeaver
         type.Methods.Add(eventDefinition.AddMethod);
         type.Methods.Add(eventDefinition.RemoveMethod);
         type.Events.Add(eventDefinition);
+
+        AddGeneratedCodeAttribute(eventDefinition.CustomAttributes);
     }
 
     MethodDefinition CreateEventMethod(string methodName, MethodReference delegateMethodReference, FieldReference propertyChangedField)
