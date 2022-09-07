@@ -599,6 +599,13 @@ public class AssemblyToProcessTests
         Assert.False(isFlagEventCalled);
     }
 
+    [Fact]
+    public void ClassWithGeneratedPropertyChanged()
+    {
+        var instance = testResult.GetInstance("ClassWithGeneratedPropertyChanged");
+        EventTester.TestProperty(instance, false);
+    }
+
     void DumpWarnings(string containingWord = null)
     {
         foreach (var warning in testResult.Warnings.Where(w => containingWord == null || w.Text.ContainsWholeWord(containingWord)))

@@ -59,6 +59,12 @@ public partial class ModuleWeaver
             {
                 if (HierarchyImplementsINotify(node.TypeDefinition))
                 {
+                    if (HasGeneratedPropertyChangedEvent(node.TypeDefinition))
+                    {
+                        // The source generator handled the attribute, this is not an error.
+                        continue;
+                    }
+
                     throw new WeavingException($"The type '{node.TypeDefinition.FullName}' already implements INotifyPropertyChanged so [AddINotifyPropertyChangedInterfaceAttribute] is redundant.");
                 }
                 if (node.TypeDefinition.GetPropertyChangedAddMethods().Any())

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -51,5 +52,16 @@ public partial class ModuleWeaver
         var baseTypeImplementsINotify = HierarchyImplementsINotify(baseType);
         typesImplementingINotify[fullName] = baseTypeImplementsINotify;
         return baseTypeImplementsINotify;
+    }
+
+    static bool HasGeneratedPropertyChangedEvent(TypeDefinition typeDefinition)
+    {
+        if (!typeDefinition.HasEvents)
+        {
+            return false;
+        }
+
+        var evt = typeDefinition.Events.FirstOrDefault(i => i.Name == "PropertyChanged");
+        return evt?.CustomAttributes.ContainsAttribute("System.CodeDom.Compiler.GeneratedCodeAttribute") is true;
     }
 }
