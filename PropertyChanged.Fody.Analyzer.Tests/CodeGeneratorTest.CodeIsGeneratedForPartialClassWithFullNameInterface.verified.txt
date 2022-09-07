@@ -3,18 +3,22 @@
 #nullable enable
 #pragma warning disable CS0067
 #pragma warning disable CS8019
+using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 partial class Class1
 {
+    [GeneratedCode("PropertyChanged.Fody", "TEST")]
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    [GeneratedCode("PropertyChanged.Fody", "TEST")]
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
     }
 
+    [GeneratedCode("PropertyChanged.Fody", "TEST")]
     protected virtual void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
     {
         PropertyChanged?.Invoke(this, eventArgs);

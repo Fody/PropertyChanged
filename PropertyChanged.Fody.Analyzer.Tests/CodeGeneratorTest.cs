@@ -9,6 +9,11 @@ public partial class CodeGeneratorTest
 {
     static readonly Assembly[] references = { typeof(AddINotifyPropertyChangedInterfaceAttribute).Assembly, typeof(INotifyPropertyChanged).Assembly };
 
+    static CodeGeneratorTest()
+    {
+        SourceGeneratorEngine.GeneratorVersion = "TEST";
+    }
+
     [Fact]
     public async Task NoCodeIsGeneratedForNonPartialClass()
     {
