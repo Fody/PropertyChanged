@@ -47,11 +47,11 @@ static class ExtensionMethods
         return classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged");
     }
 
-    public static bool AreAllContainingTypesPartialClasses(this ClassDeclarationSyntax classDeclaration)
+    public static bool AreAllContainingTypesPartialClasses(this ClassDeclarationSyntax? classDeclaration)
     {
         while (classDeclaration?.Parent is { } parent)
         {
-            if (parent.IsKind(SyntaxKind.NamespaceDeclaration) || parent.IsKind(SyntaxKind.CompilationUnit))
+            if ((SyntaxKind)parent.RawKind is SyntaxKind.NamespaceDeclaration or SyntaxKind.FileScopedNamespaceDeclaration or SyntaxKind.CompilationUnit)
                 return true;
 
             if (parent is not ClassDeclarationSyntax parentClass || !parentClass.Modifiers.Any(SyntaxKind.PartialKeyword))
