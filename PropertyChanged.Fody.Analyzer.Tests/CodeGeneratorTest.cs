@@ -242,6 +242,46 @@ public partial class Class1
     }
 
     [Fact]
+    public async Task CodeIsGeneratedForPartialClassWithAttributeAndInterfaceAndBaseClass()
+    {
+        const string source = @"
+using PropertyChanged;
+using System;
+using System.ComponentModel;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1 : Attribute, INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForPartialClassWithAttributeAndBaseClass()
+    {
+        const string source = @"
+using PropertyChanged;
+using System;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1 : Attribute
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        Assert.Empty(generated);
+    }
+
+    [Fact]
     public async Task CodeIsGeneratedForPartialClassWithAttributeInFileScopedNamespace()
     {
         const string source = @"

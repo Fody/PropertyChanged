@@ -56,20 +56,27 @@ public class SourceGenerator : IIncrementalGenerator
 
     static ClassContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
-        var syntax = GetSyntaxForCandidate(context, cancellationToken);
-        if (syntax == null)
-            return null;
-
-        var typeSymbol = context.SemanticModel.GetDeclaredSymbol(syntax, cancellationToken);
+        var typeSymbol = GetTypeSymbolForCandidate(context, cancellationToken);
         if (typeSymbol == null)
             return null;
 
         return typeSymbol.MemberNames.Contains("PropertyChanged") ? null : new ClassContext(typeSymbol);
     }
 
-    static ClassDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    static INamedTypeSymbol? GetTypeSymbolForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
+
+        foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList.GetInterfaceTypeCandidates())
+        {
+            var typeSymbol = context.SemanticModel.GetTypeInfo(baseTypeSyntax.Type, cancellationToken).Type;
+            var fullName = typeSymbol?.ToDisplayString();
+
+            if (fullName == "System.ComponentModel.INotifyPropertyChanged")
+            {
+                return context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, cancellationToken);
+            }
+        }
 
         foreach (var attributeSyntax in classDeclarationSyntax.AttributeLists.SelectMany(attributeListSyntax => attributeListSyntax.Attributes))
         {
@@ -83,16 +90,10 @@ public class SourceGenerator : IIncrementalGenerator
             var fullName = containingType.ToDisplayString();
 
             if (fullName == "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute")
-                return classDeclarationSyntax;
-        }
-
-        foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList.GetInterfaceTypeCandidates())
-        {
-            var typeSymbol = context.SemanticModel.GetTypeInfo(baseTypeSyntax.Type, cancellationToken).Type;
-            var fullName = typeSymbol?.ToDisplayString();
-
-            if (fullName == "System.ComponentModel.INotifyPropertyChanged")
-                return classDeclarationSyntax;
+            {
+                var typeSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, cancellationToken);
+                return typeSymbol?.BaseType?.ToDisplayString(FullNameDisplayFormat) != "System.Object" ? null : typeSymbol;
+            }
         }
 
         return null;
