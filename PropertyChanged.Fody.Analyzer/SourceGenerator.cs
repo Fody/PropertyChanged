@@ -64,6 +64,9 @@ public class SourceGenerator : IIncrementalGenerator
         if (typeSymbol == null)
             return null;
 
+        if (typeSymbol.EnumerateBaseTypes().Any(baseType => baseType.HasImplementationAttribute() || baseType.ImplementsINotifyPropertyChanged()))
+            return null;
+
         return typeSymbol.MemberNames.Contains("PropertyChanged") ? null : new ClassContext(typeSymbol);
     }
 
