@@ -42,6 +42,16 @@ static class ExtensionMethods
         return classDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface"));
     }
 
+    public static bool HasImplementationAttribute(this INamedTypeSymbol type)
+    {
+        return type.GetAttributes().Any(attr => attr.AttributeClass?.ToDisplayString(FullNameDisplayFormat) == "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute");
+    }
+
+    public static bool ImplementsINotifyPropertyChanged(this INamedTypeSymbol type)
+    {
+        return type.Interfaces.Any(item => item.ToDisplayString(FullNameDisplayFormat) == "System.ComponentModel.INotifyPropertyChanged");
+    }
+
     public static bool HasNoPropertyChangedEvent(this ClassDeclarationSyntax classDeclaration)
     {
         return classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged");
@@ -62,6 +72,16 @@ static class ExtensionMethods
 
         return false;
     }
+
+    public static IEnumerable<INamedTypeSymbol> EnumerateBaseTypes(this INamedTypeSymbol? type)
+    {
+        while ((type = type?.BaseType) != null)
+        {
+            yield return type;
+        }
+    }
+
+
 
     [Conditional("DEBUG")]
     public static void DebugBeep()

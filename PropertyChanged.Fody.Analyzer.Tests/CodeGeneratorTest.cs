@@ -242,6 +242,75 @@ public partial class Class1
     }
 
     [Fact]
+    public async Task CodeIsGeneratedForPartialClassWithAttributeAndInterfaceAndBaseClass()
+    {
+        const string source = @"
+using PropertyChanged;
+using System;
+using System.ComponentModel;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1 : Attribute, INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForPartialClass2WithAttributeAndAttributedBaseClass()
+    {
+        const string source = @"
+using PropertyChanged;
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class1
+{
+    public int Property1 { get; set; }
+}
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class2 : Class1
+{
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task NoCodeIsGeneratedForPartialClass2WithAttributeAndInterfaceImplementationInBaseClass()
+    {
+        const string source = @"
+using PropertyChanged;
+using System.ComponentModel;
+
+public partial class Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+}
+
+[AddINotifyPropertyChangedInterface]
+public partial class Class2 : Class1
+{
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
     public async Task CodeIsGeneratedForPartialClassWithAttributeInFileScopedNamespace()
     {
         const string source = @"
