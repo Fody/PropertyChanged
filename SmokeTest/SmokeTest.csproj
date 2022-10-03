@@ -1,16 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net48;net6.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Verify.Xunit" Version="17.10.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="Fody" Version="6.6.3" PrivateAssets="all" />
+    <PackageReference Include="FodyHelpers" Version="6.6.3" />
+    <PackageReference Include="PropertyChanging.Fody" Version="1.30.2" PrivateAssets="all" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
-    <ProjectReference Include="..\PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj"
-                      PrivateAssets="all"
-                      ReferenceOutputAssembly="false"
-                      OutputItemType="Analyzer" />
+    <ProjectReference Include="..\PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     <WeaverFiles Include="$(SolutionDir)$(SolutionName).Fody\bin\$(Configuration)\netstandard2.0\$(SolutionName).Fody.dll" />
     <CompilerVisibleProperty Include="PropertyChangedAnalyzerConfiguration" />
   </ItemGroup>
