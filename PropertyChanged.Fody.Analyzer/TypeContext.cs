@@ -12,7 +12,7 @@ record TypeContext
 
         FullName = typeSymbol.ToDisplayString(FullNameDisplayFormat);
 
-        Declaration = $"{typeSymbol.GetTypeKeyword()} {typeSymbol.ToDisplayString(NameDisplayFormat)}";
+        Declaration = typeSymbol.GetTypeDeclaration();
 
         IsSealed = typeSymbol.IsSealed;
 

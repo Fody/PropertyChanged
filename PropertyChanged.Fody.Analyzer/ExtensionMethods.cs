@@ -33,11 +33,17 @@ static class ExtensionMethods
     {
         while ((type = type?.ContainingType) != null)
         {
-            yield return $"{type.GetTypeKeyword()} {type.ToDisplayString(NameDisplayFormat)}";
+            yield return type.GetTypeDeclaration();
         }
     }
 
-    public static string GetTypeKeyword(this INamedTypeSymbol type)
+    public static string GetTypeDeclaration(this INamedTypeSymbol type)
+    {
+        return $"{type.GetTypeKeyword()} {type.ToDisplayString(NameDisplayFormat)}";
+    }
+
+
+    static string GetTypeKeyword(this INamedTypeSymbol type)
     {
         return type.IsValueType ? "struct" : type.IsRecord ? "record" : "class";
     }
