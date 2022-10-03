@@ -18,7 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="6.6.3" PrivateAssets="none" />
-    <PackageReference Include="FodyPackaging" Version="6.6.3" PrivateAssets="All" />
+    <PackageReference Include="FodyPackaging" Version="6.6.4" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer/PropertyChanged.Fody.Analyzer.csproj" ReferenceOutputAssembly="false" Condition="'$(TargetFrameworkIdentifier)'!='.NetFramework'"/>
