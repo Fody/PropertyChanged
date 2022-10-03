@@ -6,7 +6,7 @@ static class SourceGeneratorEngine
 {
     internal static string GeneratorVersion = typeof(SourceGenerator).Assembly.GetName().Version.ToString();
 
-    public static void GenerateSource(SourceProductionContext context, Configuration configuration, ImmutableArray<ClassContext> classes)
+    public static void GenerateSource(SourceProductionContext context, Configuration configuration, ImmutableArray<TypeContext> types)
     {
         const string sourceFileHintName = "PropertyChanged.g.cs";
 
@@ -16,7 +16,7 @@ static class SourceGeneratorEngine
             return;
         }
 
-        if (!classes.Any())
+        if (!types.Any())
             return;
 
         var eventInvokerName = configuration.EventInvokerName?.Trim().NullIfEmpty() ?? "OnPropertyChanged";
@@ -27,7 +27,7 @@ static class SourceGeneratorEngine
         {
             codeBuilder.AddPreamble();
 
-            foreach (var classContext in classes.Distinct(ClassContext.FullNameComparer))
+            foreach (var classContext in types.Distinct(TypeContext.FullNameComparer))
             {
                 GenerateCodeForClass(classContext, codeBuilder, eventInvokerName);
             }
@@ -55,22 +55,22 @@ static class SourceGeneratorEngine
             .Add("using System.Runtime.CompilerServices;");
     }
 
-    static void GenerateCodeForClass(ClassContext classContext, CodeBuilder codeBuilder, string eventInvokerName)
+    static void GenerateCodeForClass(TypeContext typeContext, CodeBuilder codeBuilder, string eventInvokerName)
     {
         DebugBeep();
 
         codeBuilder.Add();
 
-        using (codeBuilder.AddBlock("namespace {0}", classContext.ContainingNamespace))
+        using (codeBuilder.AddBlock("namespace {0}", typeContext.ContainingNamespace))
         {
-            var isSealed = classContext.IsSealed;
-            var hasBase = classContext.HasBase;
+            var isSealed = typeContext.IsSealed;
+            var hasBase = typeContext.HasBase;
 
-            using (codeBuilder.AddBlock("partial class {0}", classContext.ContainingTypeNames.Split('|')))
+            using (codeBuilder.AddBlock("partial {0}", typeContext.ContainingTypeDeclarations.Split('|')))
             {
                 var baseDefinition = hasBase ? string.Empty : " : INotifyPropertyChanged";
 
-                using (codeBuilder.AddBlock($"partial class {classContext.Name}{baseDefinition}"))
+                using (codeBuilder.AddBlock($"partial {typeContext.Declaration}{baseDefinition}"))
                 {
                     AddGeneratedCodeAttribute(codeBuilder, false);
                     codeBuilder.Add("public event PropertyChangedEventHandler? PropertyChanged;");

@@ -71,6 +71,24 @@ public partial class Class1 : INotifyPropertyChanged
     }
 
     [Fact]
+    public async Task CodeIsGeneratedForPartialRecordWithoutEventHandler()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+public partial record Class1 : INotifyPropertyChanged
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
     public async Task CodeIsGeneratedForPartialClassWithFullNameInterface()
     {
         const string source = @"
@@ -230,6 +248,25 @@ using PropertyChanged;
 
 [AddINotifyPropertyChangedInterface]
 public partial class Class1
+{
+    public int Property1 { get; set; }
+    public int Property2 { get; set; }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
+    public async Task CodeIsGeneratedForPartialRecordWithAttribute()
+    {
+        const string source = @"
+using PropertyChanged;
+
+[AddINotifyPropertyChangedInterface]
+public partial record Class1
 {
     public int Property1 { get; set; }
     public int Property2 { get; set; }
@@ -458,7 +495,7 @@ public partial class Class1
     }
 
     [Fact]
-    public async Task NoCodeIsGeneratedForClassesNestedInStruct()
+    public async Task CodeIsGeneratedForClassesNestedInStruct()
     {
         const string source = @"
 using System.ComponentModel;
@@ -478,11 +515,12 @@ public partial struct Class1
 ";
         var generated = await RunGenerator(source);
 
-        Assert.Empty(generated);
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
     }
 
     [Fact]
-    public async Task NoCodeIsGeneratedForClassesNestedInRecord()
+    public async Task CodeIsGeneratedForClassesNestedInRecord()
     {
         const string source = @"
 using System.ComponentModel;
@@ -502,7 +540,8 @@ public partial record Class1
 ";
         var generated = await RunGenerator(source);
 
-        Assert.Empty(generated);
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
     }
 
     [Fact]

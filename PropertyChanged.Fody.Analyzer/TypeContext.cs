@@ -1,18 +1,18 @@
 ﻿using Microsoft.CodeAnalysis;
 
-record ClassContext
+record TypeContext
 {
-    public static readonly IEqualityComparer<ClassContext> FullNameComparer = new FullNameOfClassContextComparer();
+    public static readonly IEqualityComparer<TypeContext> FullNameComparer = new FullNameOfTypeContextComparer();
 
-    public ClassContext(INamedTypeSymbol typeSymbol)
+    public TypeContext(INamedTypeSymbol typeSymbol)
     {
         ContainingNamespace = typeSymbol.ContainingNamespace?.ToDisplayString(FullNameDisplayFormat);
 
-        ContainingTypeNames = string.Join("|", typeSymbol.EnumerateContainingTypeNames().Reverse().ToArray());
+        ContainingTypeDeclarations = string.Join("|", typeSymbol.EnumerateContainingTypeDeclarations().Reverse().ToArray());
 
         FullName = typeSymbol.ToDisplayString(FullNameDisplayFormat);
 
-        Name = typeSymbol.ToDisplayString(NameDisplayFormat);
+        Declaration = $"{typeSymbol.GetTypeKeyword()} {typeSymbol.ToDisplayString(NameDisplayFormat)}";
 
         IsSealed = typeSymbol.IsSealed;
 
@@ -21,24 +21,24 @@ record ClassContext
 
     public string? ContainingNamespace { get; }
 
-    public string ContainingTypeNames { get; }
+    public string ContainingTypeDeclarations { get; }
 
     string FullName { get; }
 
-    public string Name { get; }
+    public string Declaration { get; }
 
     public bool IsSealed { get; }
 
     public bool HasBase { get; }
 
-    class FullNameOfClassContextComparer : IEqualityComparer<ClassContext>
+    class FullNameOfTypeContextComparer : IEqualityComparer<TypeContext>
     {
-        public bool Equals(ClassContext? x, ClassContext? y)
+        public bool Equals(TypeContext? x, TypeContext? y)
         {
             return string.Equals(x?.FullName, y?.FullName);
         }
 
-        public int GetHashCode(ClassContext? obj)
+        public int GetHashCode(TypeContext? obj)
         {
             return obj?.FullName.GetHashCode() ?? 0;
         }

@@ -14,7 +14,7 @@ public class SourceGenerator : IIncrementalGenerator
 
         var source = classesProvider.Collect()
             .Combine(configProvider)
-            .Select(((ImmutableArray<ClassContext>, Configuration) args, CancellationToken _) =>
+            .Select(((ImmutableArray<TypeContext>, Configuration) args, CancellationToken _) =>
             {
                 var (classes, configuration) = args;
 
@@ -34,7 +34,7 @@ public class SourceGenerator : IIncrementalGenerator
         return Configuration.Read(configuration);
     }
 
-    static void GenerateSource(SourceProductionContext context, (Configuration configuration, ImmutableArray<ClassContext> classes) parameters)
+    static void GenerateSource(SourceProductionContext context, (Configuration configuration, ImmutableArray<TypeContext> classes) parameters)
     {
         var (configuration, classes) = parameters;
 
@@ -43,18 +43,18 @@ public class SourceGenerator : IIncrementalGenerator
 
     static bool IsCandidateForGenerator(SyntaxNode syntaxNode, CancellationToken token)
     {
-        if (!syntaxNode.IsKind(SyntaxKind.ClassDeclaration))
+        if ((SyntaxKind)syntaxNode.RawKind is not (SyntaxKind.ClassDeclaration or SyntaxKind.RecordDeclaration))
             return false;
 
-        var classDeclaration = (ClassDeclarationSyntax)syntaxNode;
+        var classDeclaration = (TypeDeclarationSyntax)syntaxNode;
 
         return classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword)
-            && classDeclaration.AreAllContainingTypesPartialClasses()
+            && classDeclaration.AreAllContainingTypesPartialTypes()
             && (classDeclaration.BaseList.GetInterfaceTypeCandidates().Any() || classDeclaration.HasImplementationAttribute())
             && classDeclaration.HasNoPropertyChangedEvent();
     }
 
-    static ClassContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    static TypeContext? GetClassContextForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
         var syntax = GetSyntaxForCandidate(context, cancellationToken);
         if (syntax == null)
@@ -67,14 +67,14 @@ public class SourceGenerator : IIncrementalGenerator
         if (typeSymbol.EnumerateBaseTypes().Any(baseType => baseType.HasImplementationAttribute() || baseType.ImplementsINotifyPropertyChanged()))
             return null;
 
-        return typeSymbol.MemberNames.Contains("PropertyChanged") ? null : new ClassContext(typeSymbol);
+        return typeSymbol.MemberNames.Contains("PropertyChanged") ? null : new TypeContext(typeSymbol);
     }
 
-    static ClassDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    static TypeDeclarationSyntax? GetSyntaxForCandidate(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
-        var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
+        var typeDeclarationSyntax = (TypeDeclarationSyntax)context.Node;
 
-        foreach (var attributeSyntax in classDeclarationSyntax.AttributeLists.SelectMany(attributeListSyntax => attributeListSyntax.Attributes))
+        foreach (var attributeSyntax in typeDeclarationSyntax.AttributeLists.SelectMany(attributeListSyntax => attributeListSyntax.Attributes))
         {
             if (!attributeSyntax.Name.ToString().Contains("AddINotifyPropertyChangedInterface"))
                 continue;
@@ -83,19 +83,19 @@ public class SourceGenerator : IIncrementalGenerator
                 continue;
 
             var containingType = attributeSymbol.ContainingType;
-            var fullName = containingType.ToDisplayString();
+            var fullName = containingType.ToDisplayString(FullNameDisplayFormat);
 
             if (fullName == "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute")
-                return classDeclarationSyntax;
+                return typeDeclarationSyntax;
         }
 
-        foreach (var baseTypeSyntax in classDeclarationSyntax.BaseList.GetInterfaceTypeCandidates())
+        foreach (var baseTypeSyntax in typeDeclarationSyntax.BaseList.GetInterfaceTypeCandidates())
         {
             var typeSymbol = context.SemanticModel.GetTypeInfo(baseTypeSyntax.Type, cancellationToken).Type;
-            var fullName = typeSymbol?.ToDisplayString();
+            var fullName = typeSymbol?.ToDisplayString(FullNameDisplayFormat);
 
             if (fullName == "System.ComponentModel.INotifyPropertyChanged")
-                return classDeclarationSyntax;
+                return typeDeclarationSyntax;
         }
 
         return null;
