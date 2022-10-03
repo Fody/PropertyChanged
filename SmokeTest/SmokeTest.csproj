@@ -10,7 +10,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="Fody" Version="6.6.3" PrivateAssets="all" />
-    <PackageReference Include="FodyHelpers" Version="6.6.3" />
+    <PackageReference Include="FodyHelpers" Version="6.6.4" />
     <PackageReference Include="PropertyChanging.Fody" Version="1.30.2" PrivateAssets="all" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
