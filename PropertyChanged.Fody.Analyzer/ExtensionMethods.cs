@@ -29,17 +29,22 @@ static class ExtensionMethods
         return string.IsNullOrEmpty(value) ? null : value;
     }
 
-    public static IEnumerable<string> EnumerateContainingTypeNames(this INamedTypeSymbol? type)
+    public static IEnumerable<string> EnumerateContainingTypeDeclarations(this INamedTypeSymbol? type)
     {
         while ((type = type?.ContainingType) != null)
         {
-            yield return type.ToDisplayString(NameDisplayFormat);
+            yield return $"{type.GetTypeKeyword()} {type.ToDisplayString(NameDisplayFormat)}";
         }
     }
 
-    public static bool HasImplementationAttribute(this ClassDeclarationSyntax classDeclaration)
+    public static string GetTypeKeyword(this INamedTypeSymbol type)
     {
-        return classDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface"));
+        return type.IsValueType ? "struct" : type.IsRecord ? "record" : "class";
+    }
+
+    public static bool HasImplementationAttribute(this TypeDeclarationSyntax typeDeclaration)
+    {
+        return typeDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString().Contains("AddINotifyPropertyChangedInterface"));
     }
 
     public static bool HasImplementationAttribute(this INamedTypeSymbol type)
@@ -52,22 +57,22 @@ static class ExtensionMethods
         return type.Interfaces.Any(item => item.ToDisplayString(FullNameDisplayFormat) == "System.ComponentModel.INotifyPropertyChanged");
     }
 
-    public static bool HasNoPropertyChangedEvent(this ClassDeclarationSyntax classDeclaration)
+    public static bool HasNoPropertyChangedEvent(this TypeDeclarationSyntax typeDeclaration)
     {
-        return classDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged");
+        return typeDeclaration.Members.OfType<EventFieldDeclarationSyntax>().SelectMany(member => member.Declaration.Variables).All(variable => variable.Identifier.Text != "PropertyChanged");
     }
 
-    public static bool AreAllContainingTypesPartialClasses(this ClassDeclarationSyntax? classDeclaration)
+    public static bool AreAllContainingTypesPartialTypes(this TypeDeclarationSyntax? typeDeclaration)
     {
-        while (classDeclaration?.Parent is { } parent)
+        while (typeDeclaration?.Parent is { } parent)
         {
             if ((SyntaxKind)parent.RawKind is SyntaxKind.NamespaceDeclaration or SyntaxKind.FileScopedNamespaceDeclaration or SyntaxKind.CompilationUnit)
                 return true;
 
-            if (parent is not ClassDeclarationSyntax parentClass || !parentClass.Modifiers.Any(SyntaxKind.PartialKeyword))
+            if (parent is not TypeDeclarationSyntax parentType || !parentType.Modifiers.Any(SyntaxKind.PartialKeyword))
                 return false;
 
-            classDeclaration = parentClass;
+            typeDeclaration = parentType;
         }
 
         return false;
@@ -80,8 +85,6 @@ static class ExtensionMethods
             yield return type;
         }
     }
-
-
 
     [Conditional("DEBUG")]
     public static void DebugBeep()
