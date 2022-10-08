@@ -45,7 +45,13 @@ static class ExtensionMethods
 
     static string GetTypeKeyword(this INamedTypeSymbol type)
     {
-        return type.IsValueType ? "struct" : type.IsRecord ? "record" : "class";
+        return type.TypeKind switch
+        {
+            TypeKind.Interface => "interface",
+            TypeKind.Class => type.IsRecord ? "record" : "class",
+            TypeKind.Struct => type.IsRecord ? "record struct" : "struct",
+            _ => throw new InvalidOperationException($"Unsupported type: {type.ToDisplayString(FullNameDisplayFormat)}")
+        };
     }
 
     public static bool HasImplementationAttribute(this TypeDeclarationSyntax typeDeclaration)

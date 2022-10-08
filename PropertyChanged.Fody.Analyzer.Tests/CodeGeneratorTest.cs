@@ -545,6 +545,44 @@ public partial record Class1
     }
 
     [Fact]
+    public async Task CodeIsGeneratedForDeepNestedItems()
+    {
+        const string source = @"
+using System.ComponentModel;
+
+partial record Level1
+{
+    partial struct Level2 
+    {
+        partial interface Level3
+        {
+            partial record struct Level4
+            {
+                partial class Level5
+                {
+                    partial class Class : INotifyPropertyChanged
+                    {
+                        public int Property1 { get; set; }
+                        public int Property2 { get; set; }
+                    }
+                    partial record Record : INotifyPropertyChanged
+                    {
+                        public int Property1 { get; set; }
+                        public int Property2 { get; set; }
+                    }
+                }
+            }
+        }
+    }
+}
+";
+        var generated = await RunGenerator(source);
+
+        await VerifyCompilation(source, generated);
+        await Verify(JoinResults(generated));
+    }
+
+    [Fact]
     public async Task NoCodeIsGeneratedForNestedPartialClassIfNotAllContainingClassesArePartial()
     {
         const string source = @"
