@@ -21,7 +21,7 @@
     <PackageReference Include="FodyPackaging" Version="6.6.4" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.2" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer/PropertyChanged.Fody.Analyzer.csproj" ReferenceOutputAssembly="false" Condition="'$(TargetFrameworkIdentifier)'!='.NetFramework'" />
