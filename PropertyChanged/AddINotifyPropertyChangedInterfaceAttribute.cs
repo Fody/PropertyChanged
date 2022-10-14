@@ -9,7 +9,7 @@ namespace PropertyChanged
     /// injected irrespective of the use of this attribute.
     /// Raising an issue about "this attribute does not behave as expected" will result in a RTFM and the issue being closed.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
     public class AddINotifyPropertyChangedInterfaceAttribute : Attribute
     {
     }
