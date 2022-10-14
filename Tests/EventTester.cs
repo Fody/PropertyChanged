@@ -87,6 +87,26 @@ public static class EventTester
         Assert.False(eventCalled);
     }
 
+    internal static void TestValueTypeProperty(dynamic instance)
+    {
+        var property1EventCalled = false;
+
+        instance.PropertyChanged += new PropertyChangedEventHandler((_, args) =>
+        {
+            if (args.PropertyName == "Property1")
+            {
+                property1EventCalled = true;
+            }
+        });
+
+        instance.Property1 = "a";
+        Assert.True(property1EventCalled);
+
+        property1EventCalled = false;
+        instance.Property1 = "a";
+        Assert.False(property1EventCalled);
+    }
+
     public static dynamic GetInstance(this Assembly assembly, string className, params object[] args)
     {
         var type = assembly.GetType(className, true);

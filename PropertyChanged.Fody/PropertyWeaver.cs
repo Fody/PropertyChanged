@@ -357,7 +357,10 @@ public class PropertyWeaver
             method = genericMethod;
         }
 
-        var instructionList = new List<Instruction> { Instruction.Create(OpCodes.Callvirt, method) };
+        var instructionList = new List<Instruction>
+        {
+            Instruction.Create(typeNode.TypeDefinition.GetCallOpCode(), method)
+        };
 
         if (method.ReturnType.FullName != typeSystem.VoidReference.FullName)
         {
@@ -369,11 +372,11 @@ public class PropertyWeaver
 
     public Instruction CreateIsChangedInvoker()
     {
-        return Instruction.Create(OpCodes.Callvirt, typeNode.IsChangedInvoker);
+        return Instruction.Create(typeNode.TypeDefinition.GetCallOpCode(), typeNode.IsChangedInvoker);
     }
 
     public Instruction CreateCall(MethodReference methodReference)
     {
-        return Instruction.Create(OpCodes.Callvirt, methodReference);
+        return Instruction.Create(typeNode.TypeDefinition.GetCallOpCode(), methodReference);
     }
 }
