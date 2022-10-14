@@ -75,12 +75,29 @@ public static class CecilExtensions
                opCode.Code == Code.Callvirt;
     }
 
+    public static TypeReference GetGeneric(this TypeReference reference)
+    {
+        if (!reference.HasGenericParameters)
+        {
+            return reference;
+        }
+
+        var genericType = new GenericInstanceType(reference);
+        foreach (var parameter in reference.GenericParameters)
+        {
+            genericType.GenericArguments.Add(parameter);
+        }
+
+        return genericType;
+    }
+
     public static FieldReference GetGeneric(this FieldDefinition definition)
     {
         if (!definition.DeclaringType.HasGenericParameters)
         {
             return definition;
         }
+
         var declaringType = new GenericInstanceType(definition.DeclaringType);
         foreach (var parameter in definition.DeclaringType.GenericParameters)
         {
@@ -96,6 +113,7 @@ public static class CecilExtensions
         {
             return reference;
         }
+
         var declaringType = new GenericInstanceType(reference.DeclaringType);
         foreach (var parameter in reference.DeclaringType.GenericParameters)
         {
@@ -201,5 +219,16 @@ public static class CecilExtensions
         }
     }
 
+    public static OpCode GetCallOpCode(this TypeReference type)
+        => type.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
 
+    public static void AddConditionalBoxInstructions(this ICollection<Instruction> instructions, TypeReference type)
+    {
+        if (type.IsValueType)
+        {
+            var genericType = type.GetGeneric();
+            instructions.Add(Instruction.Create(OpCodes.Ldobj, genericType));
+            instructions.Add(Instruction.Create(OpCodes.Box, genericType));
+        }
+    }
 }

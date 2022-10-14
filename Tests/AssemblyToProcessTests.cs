@@ -606,10 +606,23 @@ public class AssemblyToProcessTests
         EventTester.TestProperty(instance, false);
     }
 
+    [Fact]
+    public void StructWithNotify()
+    {
+        var instance = testResult.GetInstance("StructWithNotify");
+        EventTester.TestValueTypeProperty(instance);
+    }
+
+    [Fact]
+    public void StructWithNotifyGeneric()
+    {
+        var instance = testResult.GetGenericInstance("StructWithNotify`1", typeof(string));
+        EventTester.TestValueTypeProperty(instance);
+    }
+
     void DumpWarnings(string containingWord = null)
     {
         foreach (var warning in testResult.Warnings.Where(w => containingWord == null || w.Text.ContainsWholeWord(containingWord)))
             outputHelper.WriteLine($"WARNING: {warning.Text}");
     }
-
 }
