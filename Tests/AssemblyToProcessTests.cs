@@ -620,6 +620,20 @@ public class AssemblyToProcessTests
         EventTester.TestValueTypeProperty(instance);
     }
 
+    [Fact]
+    public void StructWithNotifyAttribute()
+    {
+        var instance = testResult.GetInstance("StructWithNotifyAttribute");
+        EventTester.TestValueTypeProperty(instance);
+    }
+
+    [Fact]
+    public void StructWithNotifyAttributeGeneric()
+    {
+        var instance = testResult.GetGenericInstance("StructWithNotifyAttribute`1", typeof(string));
+        EventTester.TestValueTypeProperty(instance);
+    }
+
     void DumpWarnings(string containingWord = null)
     {
         foreach (var warning in testResult.Warnings.Where(w => containingWord == null || w.Text.ContainsWholeWord(containingWord)))
