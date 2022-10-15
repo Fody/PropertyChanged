@@ -8,6 +8,8 @@ static class SourceGeneratorEngine
 
     public static void GenerateSource(SourceProductionContext context, Configuration configuration, ImmutableArray<TypeContext> types)
     {
+        // DebugBeep();
+
         const string sourceFileHintName = "PropertyChanged.g.cs";
 
         if (configuration.IsCodeGeneratorDisabled)
@@ -57,8 +59,6 @@ static class SourceGeneratorEngine
 
     static void GenerateCodeForClass(TypeContext typeContext, CodeBuilder codeBuilder, string eventInvokerName)
     {
-        DebugBeep();
-
         codeBuilder.Add();
 
         using (codeBuilder.AddBlock("namespace {0}", typeContext.ContainingNamespace))
