@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Fody" Version="6.6.4" PrivateAssets="all" />
     <PackageReference Include="FodyHelpers" Version="6.6.4" />
-    <PackageReference Include="PropertyChanging.Fody" Version="1.30.2" PrivateAssets="all" />
+    <PackageReference Include="PropertyChanging.Fody" Version="1.30.3" PrivateAssets="all" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     <WeaverFiles Include="$(SolutionDir)$(SolutionName).Fody\bin\$(Configuration)\netstandard2.0\$(SolutionName).Fody.dll" />
