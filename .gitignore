@@ -304,3 +304,7 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+
+# Verify
+*.received.txt
+*.received.cs

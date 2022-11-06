@@ -43,7 +43,7 @@ public class SourceGenerator : IIncrementalGenerator
 
     static bool IsCandidateForGenerator(SyntaxNode syntaxNode, CancellationToken token)
     {
-        if ((SyntaxKind)syntaxNode.RawKind is not (SyntaxKind.ClassDeclaration or SyntaxKind.RecordDeclaration))
+        if (!syntaxNode.IsKind(SyntaxKind.ClassDeclaration))
             return false;
 
         var classDeclaration = (TypeDeclarationSyntax)syntaxNode;
