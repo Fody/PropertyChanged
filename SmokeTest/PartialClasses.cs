@@ -1,6 +1,7 @@
 ﻿namespace SmokeTest1
 {
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using PropertyChanged;
     using SmokeTest;
     
@@ -36,12 +37,15 @@
     }
 
     [AddINotifyPropertyChangedInterface]
+    [SuppressMessage("ReSharper", "PartialTypeWithSinglePart")]
     public partial class WithBase2 : Class2
     {
         public string P1 { get; set; }
     }
 
     [AddINotifyPropertyChangedInterface]
+    [SuppressMessage("ReSharper", "PartialTypeWithSinglePart")]
+    [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
     public partial class WithBase3 : Class3, INotifyPropertyChanged
     {
         public string P1 { get; set; }
