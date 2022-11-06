@@ -40,36 +40,3 @@ partial record Level1
         }
     }
 }
-
-partial record Level1
-{
-    partial struct Level2
-    {
-        partial interface Level3
-        {
-            partial record struct Level4
-            {
-                partial class Level5
-                {
-                    partial record Record
-                    {
-                        [GeneratedCode("PropertyChanged.Fody", "TEST")]
-                        public event PropertyChangedEventHandler? PropertyChanged;
-
-                        [GeneratedCode("PropertyChanged.Fody", "TEST"), DebuggerNonUserCode]
-                        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-                        {
-                            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-                        }
-
-                        [GeneratedCode("PropertyChanged.Fody", "TEST"), DebuggerNonUserCode]
-                        protected virtual void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
-                        {
-                            PropertyChanged?.Invoke(this, eventArgs);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
