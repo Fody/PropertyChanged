@@ -9,7 +9,7 @@
     <PackageReference Include="Verify.Xunit" Version="19.3.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <Reference Include="Microsoft.CSharp" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
