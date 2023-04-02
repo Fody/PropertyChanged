@@ -1,13 +1,11 @@
-using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Reflection;
 using Microsoft.CodeAnalysis;
-using PropertyChanged;
+using Microsoft.CodeAnalysis.Testing;
+using Test = SourceGeneratorTest<SourceGeneratorAdapter<SourceGenerator>>;
 
 [UsesVerify]
-public partial class CodeGeneratorTest
+public class CodeGeneratorTest
 {
-    static readonly Assembly[] references = { typeof(AddINotifyPropertyChangedInterfaceAttribute).Assembly, typeof(INotifyPropertyChanged).Assembly };
+    static readonly DiagnosticResult CS0535 = new DiagnosticResult("CS0535", DiagnosticSeverity.Error).WithLocation(0);
 
     static CodeGeneratorTest()
     {
@@ -28,7 +26,7 @@ public class Class1 : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
         Assert.Empty(generated);
     }
@@ -47,7 +45,7 @@ public partial class Class1 : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
         Assert.Empty(generated);
     }
@@ -64,10 +62,8 @@ public partial class Class1 : INotifyPropertyChanged
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
-
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        var generated = await new Test(source).RunAsync();
+        await Verify(generated);
     }
 
     [Fact]
@@ -76,13 +72,18 @@ public partial class Class1 : INotifyPropertyChanged
         const string source = @"
 using System.ComponentModel;
 
-public partial record Class1 : INotifyPropertyChanged
+public partial record Class1 : {|#0:INotifyPropertyChanged|}
 {
     public int Property1 { get; set; }
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var test = new Test(source)
+        {
+            ExpectedDiagnostics = {CS0535.WithArguments("Class1", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged")}
+        };
+
+        var generated = await test.RunAsync();
 
         Assert.Empty(generated);
     }
@@ -97,10 +98,9 @@ public partial class Class1 : System.ComponentModel.INotifyPropertyChanged
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -115,10 +115,9 @@ public partial class Class1<T1, T2> : INotifyPropertyChanged
     public T2 Property2 { get; set; } = default!;
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -137,9 +136,8 @@ public partial class Class1
     public event PropertyChangedEventHandler? PropertyChanged;
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
         Assert.Empty(generated);
     }
 
@@ -163,7 +161,7 @@ public partial class Class1
     public event PropertyChangedEventHandler? PropertyChanged;
 }
 ";
-        var generated = await RunGenerator(source1, source2);
+        var generated = await new Test(source1, source2).RunAsync();
 
         Assert.Empty(generated);
     }
@@ -187,10 +185,9 @@ public partial class Class1 : INotifyPropertyChanged
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source1, source2);
+        var generated = await new Test(source1, source2).RunAsync();
 
-        await VerifyCompilation(source1, source2, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -216,10 +213,9 @@ public partial class Class1234
     public string? P3 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -228,13 +224,18 @@ public partial class Class1234
         const string source = @"
 using System.ComponentModel;
 
-public partial struct Class1 : INotifyPropertyChanged
+public partial struct Class1 : {|#0:INotifyPropertyChanged|}
 {
     public int Property1 { get; set; }
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var test = new Test(source)
+        {
+            ExpectedDiagnostics = {CS0535.WithArguments("Class1", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged")}
+        };
+
+        var generated = await test.RunAsync();
 
         Assert.Empty(generated);
     }
@@ -252,10 +253,9 @@ public partial class Class1
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -271,7 +271,7 @@ public partial record Class1
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
         Assert.Empty(generated);
     }
@@ -291,10 +291,9 @@ public partial class Class1 : Attribute, INotifyPropertyChanged
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -315,10 +314,9 @@ public partial class Class2 : Class1
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -339,10 +337,9 @@ public partial class Class2 : Class1
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -360,10 +357,9 @@ public partial class Class1
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -379,10 +375,9 @@ public partial class Class1<T>
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -398,10 +393,9 @@ public sealed partial class Class1
     public int Property2 { get; set; }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -454,10 +448,9 @@ namespace Namespace2
     }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -486,10 +479,9 @@ public partial class Class1
     }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -511,10 +503,9 @@ public partial struct Class1
 
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -536,10 +527,9 @@ public partial record Class1
 
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -569,10 +559,9 @@ partial record Level1
     }
 }
 ";
-        var generated = await RunGenerator(source);
+        var generated = await new Test(source).RunAsync();
 
-        await VerifyCompilation(source, generated);
-        await Verify(JoinResults(generated));
+        await Verify(generated);
     }
 
     [Fact]
@@ -591,7 +580,7 @@ public partial class Class1
         public int Property1 { get; set; }
         public int Property2 { get; set; }
 
-        public partial class Class3 : INotifyPropertyChanged
+        public partial class Class3 : {|#0:INotifyPropertyChanged|}
         {
             public int Property1 { get; set; }
             public int Property2 { get; set; }
@@ -599,43 +588,13 @@ public partial class Class1
     }
 }
 ";
-        var generated = await RunGenerator(source);
+        var test = new Test(source)
+        {
+            ExpectedDiagnostics = {CS0535.WithArguments("Class1.Class2.Class3", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged")}
+        };
+
+        var generated = await test.RunAsync();
 
         Assert.Empty(generated);
-    }
-}
-
-// Test utils
-partial class CodeGeneratorTest
-{
-    static async Task VerifyCompilation(string source, IEnumerable<GeneratedSourceResult> generated)
-    {
-        var sources = new[] { source }.Concat(generated.Select(item => item.SourceText.ToString()));
-
-        await SourceGenerators.Tests.RoslynTestUtils.VerifyCompilation(references, sources);
-    }
-    static async Task VerifyCompilation(string source1, string source2, IEnumerable<GeneratedSourceResult> generated)
-    {
-        var sources = new[] { source1, source2 }.Concat(generated.Select(item => item.SourceText.ToString()));
-
-        await SourceGenerators.Tests.RoslynTestUtils.VerifyCompilation(references, sources);
-    }
-
-    static async Task<ImmutableArray<GeneratedSourceResult>> RunGenerator(params string[] sources)
-    {
-        var (diagnostics, results) = await SourceGenerators.Tests.RoslynTestUtils.RunGenerator(
-            new SourceGenerator(),
-            references,
-            sources,
-            new[] { "CS0535" });
-
-        Assert.Empty(diagnostics);
-
-        return results;
-    }
-
-    static string JoinResults(ImmutableArray<GeneratedSourceResult> results)
-    {
-        return string.Join("\r\n", results.Select(result => $"// {result.HintName}\r\n{result.SourceText}"));
     }
 }
