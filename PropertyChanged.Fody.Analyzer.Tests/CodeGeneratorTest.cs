@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
-using Test = SourceGeneratorTest<SourceGeneratorAdapter<SourceGenerator>>;
+using Test = SourceGeneratorTest<SourceGenerator>;
 
 [UsesVerify]
 public class CodeGeneratorTest
