@@ -13,7 +13,7 @@ using VerifyXunit;
 [UsesVerify]
 public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
 {
-    PEFile file = new(typeof(Testee).Assembly.Location);
+    PEFile _file = new(typeof(Testee).Assembly.Location);
 
     static CombinedChangingAndChangedWeaverTests()
     {
@@ -22,12 +22,12 @@ public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
 
     MethodToDisassemble GetPropertySetter(string propertyName)
     {
-        var setter = file.FindTypeDefinition("SmokeTest.Testee")
+        var setter = _file.FindTypeDefinition("SmokeTest.Testee")
             .Properties.Where(p => p.Name == propertyName)
             .Select(pr => pr.Setter?.MetadataToken)
             .FirstOrDefault() ?? throw new InvalidOperationException("Property does not exist");
 
-        return new MethodToDisassemble(file, (MethodDefinitionHandle)setter);
+        return new MethodToDisassemble(_file, (MethodDefinitionHandle)setter);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
 
     public void Dispose()
     {
-        file.Dispose();
+        _file.Dispose();
     }
 }
 
