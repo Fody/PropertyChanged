@@ -17,8 +17,8 @@
     <WeaverPropsFile>$(MSBuildThisFileDirectory)Weaver.props</WeaverPropsFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.6.4" PrivateAssets="none" />
-    <PackageReference Include="FodyPackaging" Version="6.6.4" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.7.0" PrivateAssets="none" />
+    <PackageReference Include="FodyPackaging" Version="6.7.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>

@@ -2,38 +2,55 @@
 
 namespace SmokeTest;
 
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using Fody;
+using ICSharpCode.Decompiler.Metadata;
 using PropertyChanged;
 using PropertyChanging;
+using VerifyTests.ICSharpCode.Decompiler;
 using VerifyXunit;
 
-
 [UsesVerify]
-public class CombinedChangingAndChangedWeaverTests
+public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
 {
+    PEFile file = new(typeof(Testee).Assembly.Location);
+
+    static CombinedChangingAndChangedWeaverTests()
+    {
+        VerifyICSharpCodeDecompiler.Initialize();
+    }
+
+    MethodToDisassemble GetPropertySetter(string propertyName)
+    {
+        var setter = file.FindTypeDefinition("SmokeTest.Testee")
+            .Properties.Where(p => p.Name == propertyName)
+            .Select(pr => pr.Setter?.MetadataToken)
+            .FirstOrDefault() ?? throw new InvalidOperationException("Property does not exist");
+
+        return new MethodToDisassemble(file, (MethodDefinitionHandle)setter);
+    }
+
     [Fact]
     public async Task ReferenceTypeProperty()
     {
-        var result = Ildasm.Decompile(typeof(Testee).Assembly.Location, "SmokeTest.Testee::set_Property1");
-
-        await Verify(result).UniqueForAssemblyConfiguration();
+        await Verify(GetPropertySetter("Property1")).UniqueForAssemblyConfiguration();
     }
 
     [Fact]
     public async Task ValueTypeProperty()
     {
-        var result = Ildasm.Decompile(typeof(Testee).Assembly.Location, "SmokeTest.Testee::set_Property2");
-
-        await Verify(result).UniqueForAssemblyConfiguration();
+        await Verify(GetPropertySetter("Property2")).UniqueForAssemblyConfiguration();
     }
 
     [Fact]
     public async Task NullableValueTypeProperty()
     {
-        var result = Ildasm.Decompile(typeof(Testee).Assembly.Location, "SmokeTest.Testee::set_Property3");
+        await Verify(GetPropertySetter("Property3")).UniqueForAssemblyConfiguration();
+    }
 
-        await Verify(result).UniqueForAssemblyConfiguration();
+    public void Dispose()
+    {
+        file.Dispose();
     }
 }
 
