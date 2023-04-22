@@ -1,6 +1,6 @@
 image: Visual Studio 2022
-  DOTNET_NOLOGO: true
 environment:
+  DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 skip_commits:
