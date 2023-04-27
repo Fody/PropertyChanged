@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net48;net6.0</TargetFrameworks>
@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.4.0" />
-    <PackageReference Include="Verify.Xunit" Version="19.13.0" />
+    <PackageReference Include="Verify.Xunit" Version="19.13.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
