@@ -10,7 +10,7 @@
     <PackageReference Include="Verify.Xunit" Version="19.14.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageReference Include="Fody" Version="6.7.0" PrivateAssets="all" />
     <PackageReference Include="FodyHelpers" Version="6.7.0" />
     <PackageReference Include="PropertyChanging.Fody" Version="1.30.3" PrivateAssets="all" />
