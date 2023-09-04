@@ -9,8 +9,6 @@
   <ItemGroup>
     <Compile Include="ClassWithNoOnPropertyChanged.fs" />
     <Compile Include="ClassWithProperties.fs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\PropertyChanged\PropertyChanged.csproj" />
     <PackageReference Update="FSharp.Core" Version="7.0.400" />
     <PackageReference Update="System.ValueTuple" Version="4.5.0" />
