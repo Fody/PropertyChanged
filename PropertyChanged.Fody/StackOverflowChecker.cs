@@ -66,7 +66,7 @@ public partial class ModuleWeaver
                         continue;
                     }
 
-                    if (!(instruction.Operand is MethodReference operand))
+                    if (instruction.Operand is not MethodReference operand)
                     {
                         continue;
                     }

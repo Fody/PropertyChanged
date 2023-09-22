@@ -98,9 +98,9 @@ public partial class ModuleWeaver
                 x.Parameters.Count == 3);
         var genericCompareExchangeMethod = ModuleDefinition.ImportReference(genericCompareExchangeMethodDefinition);
 
-        InterlockedCompareExchangeForPropChangedHandler = new GenericInstanceMethod(genericCompareExchangeMethod);
+        InterlockedCompareExchangeForPropChangedHandler = new(genericCompareExchangeMethod);
         InterlockedCompareExchangeForPropChangedHandler.GenericArguments.Add(PropChangedHandlerReference);
-        Trigger = new Lazy<MethodReference>(() =>
+        Trigger = new(() =>
         {
             if (TryFindTypeDefinition("Microsoft.FSharp.Control.FSharpEvent`2", out var fSharpEvent))
             {

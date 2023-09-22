@@ -5,22 +5,14 @@ using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
 using TypeSystem = Fody.TypeSystem;
 
-public class PropertyWeaver
+public class PropertyWeaver(
+    ModuleWeaver moduleWeaver,
+    PropertyData propertyData,
+    TypeNode typeNode,
+    TypeSystem typeSystem)
 {
-    ModuleWeaver moduleWeaver;
-    PropertyData propertyData;
-    TypeNode typeNode;
-    TypeSystem typeSystem;
     MethodBody setMethodBody;
     Collection<Instruction> instructions;
-
-    public PropertyWeaver(ModuleWeaver moduleWeaver, PropertyData propertyData, TypeNode typeNode, TypeSystem typeSystem)
-    {
-        this.moduleWeaver = moduleWeaver;
-        this.propertyData = propertyData;
-        this.typeNode = typeNode;
-        this.typeSystem = typeSystem;
-    }
 
     public void Execute()
     {
@@ -42,13 +34,19 @@ public class PropertyWeaver
     {
         if (propertyData.BackingFieldReference == null)
         {
-            return new List<int> { instructions.Count - 1 };
+            return new()
+            {
+                instructions.Count - 1
+            };
         }
 
         var setFieldInstructions = FindSetFieldInstructions().ToList();
         if (setFieldInstructions.Count == 0)
         {
-            return new List<int> { instructions.Count - 1 };
+            return new()
+            {
+                instructions.Count - 1
+            };
         }
 
         return setFieldInstructions;
@@ -69,7 +67,7 @@ public class PropertyWeaver
         AddEventInvokeCall(index, onChangedMethods, propertyData.PropertyDefinition);
     }
 
-    List<OnChangedMethod> GetMethodsForProperty(TypeNode typeNode, PropertyDefinition property)
+    static List<OnChangedMethod> GetMethodsForProperty(TypeNode typeNode, PropertyDefinition property)
     {
         return (from method in typeNode.OnChangedMethods
                 from prop in method.Properties
@@ -84,7 +82,7 @@ public class PropertyWeaver
             var instruction = instructions[index];
             if (instruction.OpCode == OpCodes.Stfld)
             {
-                if (!(instruction.Operand is FieldReference fieldReference1))
+                if (instruction.Operand is not FieldReference fieldReference1)
                 {
                     continue;
                 }
@@ -112,7 +110,7 @@ public class PropertyWeaver
                 continue;
             }
 
-            if (!(instruction.Operand is FieldReference fieldReference2))
+            if (instruction.Operand is not FieldReference fieldReference2)
             {
                 continue;
             }

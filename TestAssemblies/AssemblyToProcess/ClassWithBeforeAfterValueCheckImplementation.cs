@@ -29,6 +29,6 @@ public class ClassWithBeforeAfterValueCheckImplementation :
             BeforeValue2 = (string)before;
         }
 
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 }

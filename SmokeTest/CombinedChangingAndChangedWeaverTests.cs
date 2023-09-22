@@ -1,8 +1,7 @@
-﻿using ICSharpCode.Decompiler.Metadata;
+﻿#if NETFRAMEWORK
+using ICSharpCode.Decompiler.Metadata;
 using PropertyChanged;
 using PropertyChanging;
-
-#if NETFRAMEWORK
 
 namespace SmokeTest;
 [UsesVerify]

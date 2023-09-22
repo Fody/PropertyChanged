@@ -12,15 +12,16 @@ public partial class ModuleWeaver
         {
             return null;
         }
+
         var propertyNamesToNotify = GetPropertyNamesToNotify(notifyAttribute, property, allProperties);
 
-        return new NotifyPropertyData
-                   {
-                       AlsoNotifyFor = propertyNamesToNotify.ToList(),
-                   };
+        return new()
+        {
+            AlsoNotifyFor = propertyNamesToNotify.ToList(),
+        };
     }
 
-    IEnumerable<PropertyDefinition> GetPropertyNamesToNotify(CustomAttribute notifyAttribute, PropertyDefinition property, List<PropertyDefinition> allProperties)
+    static IEnumerable<PropertyDefinition> GetPropertyNamesToNotify(CustomAttribute notifyAttribute, PropertyDefinition property, List<PropertyDefinition> allProperties)
     {
         var customAttributeArguments = notifyAttribute.ConstructorArguments.ToList();
         var value = (string)customAttributeArguments[0].Value;

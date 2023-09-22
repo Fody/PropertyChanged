@@ -52,33 +52,40 @@ public partial class ModuleWeaver
             {
                 return;
             }
-            node.PropertyDatas.Add(new PropertyData
-            {
-                ParentType = node,
-                BackingFieldReference = backingFieldReference,
-                PropertyDefinition = propertyDefinition,
-                // Compute full dependencies for the current property
-                AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node),
-                AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
-            });
+
+            node.PropertyDatas.Add(
+                new()
+                {
+                    ParentType = node,
+                    BackingFieldReference = backingFieldReference,
+                    PropertyDefinition = propertyDefinition,
+                    // Compute full dependencies for the current property
+                    AlsoNotifyFor = GetFullDependencies(propertyDefinition, dependenciesForProperty, node),
+                    AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
+                });
             return;
         }
 
         if (node.EventInvoker == null)
         {
-            throw new WeavingException($@"Could not find field for PropertyChanged event on type '{node.TypeDefinition.FullName}'.
-Looked for 'PropertyChanged', 'propertyChanged', '_PropertyChanged' and '_propertyChanged'.
-The most likely cause is that you have implemented a custom event accessor for the PropertyChanged event and have called the PropertyChangedEventHandler something stupid.");
+            throw new WeavingException(
+                $"""
+                 Could not find field for PropertyChanged event on type '{node.TypeDefinition.FullName}'.
+                 Looked for 'PropertyChanged', 'propertyChanged', '_PropertyChanged' and '_propertyChanged'.
+                 The most likely cause is that you have implemented a custom event accessor for the PropertyChanged event and have called the PropertyChangedEventHandler something stupid.
+                 """);
         }
-        node.PropertyDatas.Add(new PropertyData
-        {
-            ParentType = node,
-            BackingFieldReference = backingFieldReference,
-            PropertyDefinition = propertyDefinition,
-            // Compute full dependencies for the current property
-            AlsoNotifyFor = GetFullDependencies(propertyDefinition, notifyPropertyData.AlsoNotifyFor.Union(dependenciesForProperty), node),
-            AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
-        });
+
+        node.PropertyDatas.Add(
+            new()
+            {
+                ParentType = node,
+                BackingFieldReference = backingFieldReference,
+                PropertyDefinition = propertyDefinition,
+                // Compute full dependencies for the current property
+                AlsoNotifyFor = GetFullDependencies(propertyDefinition, notifyPropertyData.AlsoNotifyFor.Union(dependenciesForProperty), node),
+                AlreadyNotifies = GetAlreadyNotifies(propertyDefinition).ToList()
+            });
     }
 
     List<PropertyDefinition> GetFullDependencies(PropertyDefinition propertyDefinition, IEnumerable<PropertyDefinition> dependenciesForProperty, TypeNode node)
@@ -102,7 +109,7 @@ The most likely cause is that you have implemented a custom event accessor for t
         return fullDependencies.ToList();
     }
 
-    void ComputeDependenciesRecursively(PropertyDefinition propertyDefinition, HashSet<PropertyDefinition> fullDependencies, TypeNode node)
+    static void ComputeDependenciesRecursively(PropertyDefinition propertyDefinition, HashSet<PropertyDefinition> fullDependencies, TypeNode node)
     {
         // TODO: An optimization could be done to avoid the multiple computation of one property for each property of the type
         // By keeping the in memory the full dependencies of each property of the type

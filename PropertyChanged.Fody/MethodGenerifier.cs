@@ -28,7 +28,7 @@ public partial class ModuleWeaver
 
         foreach (var parameter in self.Parameters)
         {
-            reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
+            reference.Parameters.Add(new(parameter.ParameterType));
         }
 
         return reference;

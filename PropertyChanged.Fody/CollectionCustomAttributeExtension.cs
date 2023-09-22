@@ -21,8 +21,8 @@ public partial class ModuleWeaver
     void AddGeneratedCodeAttribute(Collection<CustomAttribute> customAttributes)
     {
         var attribute = new CustomAttribute(GeneratedCodeAttributeConstructor);
-        attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, AssemblyName));
-        attribute.ConstructorArguments.Add(new CustomAttributeArgument(TypeSystem.StringReference, AssemblyVersion));
+        attribute.ConstructorArguments.Add(new(TypeSystem.StringReference, AssemblyName));
+        attribute.ConstructorArguments.Add(new(TypeSystem.StringReference, AssemblyVersion));
         customAttributes.Add(attribute);
     }
 }

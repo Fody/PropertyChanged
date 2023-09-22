@@ -1,6 +1,6 @@
 ﻿using PropertyChanged;
 
-[AddINotifyPropertyChangedInterfaceAttribute]
+[AddINotifyPropertyChangedInterface]
 public class ClassWithNotifyPropertyChangedAttributeChild : ClassWithNotifyPropertyChangedAttributeChildParent
 {
     public string Property1 { get; set; }

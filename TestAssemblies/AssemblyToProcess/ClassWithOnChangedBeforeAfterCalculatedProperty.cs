@@ -8,7 +8,6 @@ public class ClassWithOnChangedBeforeAfterCalculatedProperty
     public int Property2 => Property1?.Length ?? 0;
 
     public string Property2ChangeValue;
-    
 
     public void OnProperty2Changed(object before, object after)
     {

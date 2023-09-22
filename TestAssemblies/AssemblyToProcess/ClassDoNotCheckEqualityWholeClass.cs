@@ -25,7 +25,4 @@ public class ClassDoNotCheckEqualityWholeClass :
 }
 
 public class ClassDoNotCheckEqualityWholeClassInherited :
-    ClassDoNotCheckEqualityWholeClass
-{
-
-}
+    ClassDoNotCheckEqualityWholeClass;

@@ -17,6 +17,4 @@ public class ClassWithGenericAndLambda<T> :
 }
 
 public class ClassWithGenericAndLambdaImp :
-    ClassWithGenericAndLambda<object>
-{
-}
+    ClassWithGenericAndLambda<object>;

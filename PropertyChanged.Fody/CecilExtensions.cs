@@ -24,7 +24,7 @@ public static class CecilExtensions
             return false;
         }
 
-        if (!(instruction.Operand is MethodReference methodReference))
+        if (instruction.Operand is not MethodReference methodReference)
         {
             return false;
         }
@@ -50,7 +50,7 @@ public static class CecilExtensions
             return false;
         }
 
-        if (!(instruction.Operand is MethodReference methodReference))
+        if (instruction.Operand is not MethodReference methodReference)
         {
             return false;
         }
@@ -71,8 +71,7 @@ public static class CecilExtensions
 
     public static bool IsCall(this OpCode opCode)
     {
-        return opCode.Code == Code.Call ||
-               opCode.Code == Code.Callvirt;
+        return opCode.Code is Code.Call or Code.Callvirt;
     }
 
     public static TypeReference GetGeneric(this TypeReference reference)
@@ -104,7 +103,7 @@ public static class CecilExtensions
             declaringType.GenericArguments.Add(parameter);
         }
 
-        return new FieldReference(definition.Name, definition.FieldType, declaringType);
+        return new(definition.Name, definition.FieldType, declaringType);
     }
 
     public static MethodReference GetGeneric(this MethodReference reference)
@@ -142,12 +141,12 @@ public static class CecilExtensions
 
         foreach (var parameter in self.Parameters)
         {
-            reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
+            reference.Parameters.Add(new(parameter.ParameterType));
         }
 
         foreach (var genericParameter in self.GenericParameters)
         {
-            reference.GenericParameters.Add(new GenericParameter(genericParameter.Name, reference));
+            reference.GenericParameters.Add(new(genericParameter.Name, reference));
         }
 
         return reference;
@@ -160,7 +159,7 @@ public static class CecilExtensions
             yield return attribute;
         }
 
-        if (!(typeDefinition.BaseType is TypeDefinition baseDefinition))
+        if (typeDefinition.BaseType is not TypeDefinition baseDefinition)
         {
             yield break;
         }

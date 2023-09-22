@@ -157,7 +157,7 @@ public partial class ModuleWeaver
 
         if (onChangedType != OnChangedTypes.None)
         {
-            return new OnChangedMethod
+            return new()
             {
                 OnChangedType = onChangedType,
                 MethodDefinition = methodDefinition,
@@ -259,14 +259,16 @@ public partial class ModuleWeaver
         return $"{baseMessage}.";
     }
 
-    PropertyDefinition GetProperty(MethodReference methodRef, string propertyName)
+    static PropertyDefinition GetProperty(MethodReference methodRef, string propertyName)
     {
         var type = methodRef.DeclaringType;
         while (type != null)
         {
             var found = type.Resolve().Properties.FirstOrDefault(p => p.Name == propertyName);
             if (found != null)
+            {
                 return found;
+            }
             type = type.Resolve().BaseType;
         }
 

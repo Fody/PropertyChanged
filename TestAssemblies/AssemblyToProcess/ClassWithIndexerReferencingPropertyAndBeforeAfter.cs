@@ -12,7 +12,7 @@ public class ClassWithIndexerReferencingPropertyAndBeforeAfter :
 
     public void OnPropertyChanged(string propertyName, object before, object after)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

@@ -1,3 +1,1 @@
-﻿public class ClassWithGenericStructPropImpl : ClassWithGenericStructProp<int>
-{
-}
+﻿public class ClassWithGenericStructPropImpl : ClassWithGenericStructProp<int>;

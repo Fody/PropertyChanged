@@ -10,11 +10,11 @@ static class SourceGeneratorEngine
     {
         // DebugBeep();
 
-        const string sourceFileHintName = "PropertyChanged.g.cs";
+        var sourceFileHintName = "PropertyChanged.g.cs";
 
         if (configuration.IsCodeGeneratorDisabled)
         {
-            context.AddSource(sourceFileHintName, @"// Source generator is disabled by configuration.");
+            context.AddSource(sourceFileHintName, "// Source generator is disabled by configuration.");
             return;
         }
 
@@ -103,6 +103,6 @@ static class SourceGeneratorEngine
 
     static void AddGeneratedCodeAttribute(CodeBuilder codeBuilder, bool isMethod)
     {
-        codeBuilder.Add($@"[GeneratedCode(""PropertyChanged.Fody"", ""{GeneratorVersion}""){(isMethod ? ", DebuggerNonUserCode" : "")}]");
+        codeBuilder.Add($"""[GeneratedCode("PropertyChanged.Fody", "{GeneratorVersion}"){(isMethod ? ", DebuggerNonUserCode" : "")}]""");
     }
 }

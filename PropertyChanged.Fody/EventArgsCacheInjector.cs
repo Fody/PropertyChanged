@@ -2,10 +2,10 @@
 {
     public void InitEventArgsCache()
     {
-        EventArgsCache = new EventArgsCache(this);
+        EventArgsCache = new(this);
     }
 
-    public void InjectEventArgsCache() 
+    public void InjectEventArgsCache()
         => EventArgsCache.InjectType();
 
     public EventArgsCache EventArgsCache;

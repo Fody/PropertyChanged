@@ -2,18 +2,10 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public class RecursiveIlFinder
+public class RecursiveIlFinder(TypeDefinition typeDefinition)
 {
-    TypeDefinition typeDefinition;
-    List<MethodDefinition> processedMethods;
-    public List<Instruction> Instructions;
-
-    public RecursiveIlFinder(TypeDefinition typeDefinition)
-    {
-        this.typeDefinition = typeDefinition;
-        Instructions = new List<Instruction>();
-        processedMethods = new List<MethodDefinition>();
-    }
+    List<MethodDefinition> processedMethods = new();
+    public List<Instruction> Instructions = new();
 
     public void Execute(MethodDefinition getMethod)
     {
@@ -30,7 +22,7 @@ public class RecursiveIlFinder
                 continue;
             }
 
-            if (!(instruction.Operand is MethodDefinition methodDefinition))
+            if (instruction.Operand is not MethodDefinition methodDefinition)
             {
                 continue;
             }

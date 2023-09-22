@@ -2,9 +2,7 @@
 using System.ComponentModel;
 using PropertyChanged;
 
-public class ClassWithGeneratedPropertyChangedBase
-{
-}
+public class ClassWithGeneratedPropertyChangedBase;
 
 [AddINotifyPropertyChangedInterface]
 public class ClassWithGeneratedPropertyChanged : ClassWithGeneratedPropertyChangedBase, INotifyPropertyChanged

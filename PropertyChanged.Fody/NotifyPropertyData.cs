@@ -3,10 +3,5 @@ using Mono.Cecil;
 
 public class NotifyPropertyData
 {
-    public NotifyPropertyData()
-    {
-        AlsoNotifyFor = new List<PropertyDefinition>();
-    }
-
-    public List<PropertyDefinition> AlsoNotifyFor;
+    public List<PropertyDefinition> AlsoNotifyFor = new();
 }

@@ -8,8 +8,8 @@ public static class SupportsCeqChecker
 
     static SupportsCeqChecker()
     {
-        ceqStructNames = new List<string>
-                             {
+        ceqStructNames = new()
+        {
                                  typeof (int).Name,
                                  typeof (uint).Name,
                                  typeof (long).Name,
@@ -42,7 +42,7 @@ public static class SupportsCeqChecker
         var typeDefinition = typeReference.Resolve();
         if (typeDefinition == null)
         {
-            throw new Exception($"Could not resolve '{typeReference.FullName}'.");
+            throw new($"Could not resolve '{typeReference.FullName}'.");
         }
         if (typeDefinition.IsEnum)
         {

@@ -6,7 +6,7 @@ public class TypeNode
 {
     public TypeNode()
     {
-        Nodes = new List<TypeNode>();
+        Nodes = new();
         PropertyDependencies = new List<PropertyDependency>();
         Mappings = new List<MemberMapping>();
         PropertyDatas = new List<PropertyData>();

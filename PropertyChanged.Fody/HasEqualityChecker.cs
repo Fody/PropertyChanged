@@ -48,11 +48,11 @@ public static class HasEqualityChecker
         {
             return true;
         }
-        if (!(instruction.Operand is MemberReference memberReference))
+        if (instruction.Operand is not MemberReference memberReference)
         {
             return false;
         }
-        return memberReference.Name == "Equals" || memberReference.Name == "op_Inequality" || memberReference.Name == "op_Equality";
+        return memberReference.Name is "Equals" or "op_Inequality" or "op_Equality";
     }
 
     static bool IsNotNop(this Instruction instruction)

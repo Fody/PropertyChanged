@@ -11,7 +11,7 @@ public partial class ModuleWeaver
 
     public void FindComparisonMethods()
     {
-        methodCache = new Dictionary<string, MethodReference>();
+        methodCache = new();
 
         OrdinalStringComparison = (int)StringEquals
             .Parameters[2]
@@ -145,7 +145,7 @@ public partial class ModuleWeaver
         return equality;
     }
 
-    TypeReference GetBaseType(TypeReference typeReference)
+    static TypeReference GetBaseType(TypeReference typeReference)
     {
         var typeDef = typeReference as TypeDefinition ?? typeReference.Resolve();
         var baseType = typeDef?.BaseType;

@@ -6,7 +6,7 @@ public partial class ModuleWeaver
 {
     public void InjectINotifyPropertyChangedInterface(TypeDefinition targetType)
     {
-        targetType.Interfaces.Add(new InterfaceImplementation(PropChangedInterfaceReference));
+        targetType.Interfaces.Add(new(PropChangedInterfaceReference));
         WeaveEvent(targetType);
         typesImplementingINotify[targetType.FullName] = true;
     }
@@ -41,7 +41,7 @@ public partial class ModuleWeaver
 
         var method = new MethodDefinition(methodName, Attributes, TypeSystem.VoidReference);
 
-        method.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, PropChangedHandlerReference));
+        method.Parameters.Add(new("value", ParameterAttributes.None, PropChangedHandlerReference));
         var handlerVariable0 = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable0);
         var handlerVariable1 = new VariableDefinition(PropChangedHandlerReference);

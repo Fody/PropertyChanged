@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    Dictionary<string, bool> typesImplementingINotify = new Dictionary<string, bool>();
+    Dictionary<string, bool> typesImplementingINotify = new();
 
     public bool HierarchyImplementsINotify(TypeReference typeReference)
     {

@@ -17,7 +17,7 @@ public partial class ModuleWeaver
 
             var methodDefinition = GetMethodDefinition(targetType, out _);
 
-            return new EventInvokerMethod
+            return new()
             {
                 MethodReference = InjectInterceptedMethod(targetType, methodDefinition).GetGeneric(),
                 InvokerType = InterceptorType,
@@ -25,7 +25,7 @@ public partial class ModuleWeaver
             };
         }
 
-        return new EventInvokerMethod
+        return new()
         {
             MethodReference = InjectMethod(targetType, out var invokerType).GetGeneric(),
             InvokerType = invokerType,
@@ -112,7 +112,7 @@ public partial class ModuleWeaver
     {
         var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
         MarkAsGeneratedCode(method.CustomAttributes);
-        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
+        method.Parameters.Add(new("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
 
         var instructions = method.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
@@ -133,7 +133,7 @@ public partial class ModuleWeaver
     {
         var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
         MarkAsGeneratedCode(method.CustomAttributes);
-        method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
+        method.Parameters.Add(new("propertyName", ParameterAttributes.None, TypeSystem.StringReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable);
@@ -164,7 +164,7 @@ public partial class ModuleWeaver
     {
         var method = new MethodDefinition(injectedEventInvokerName, GetMethodAttributes(targetType), TypeSystem.VoidReference);
         MarkAsGeneratedCode(method.CustomAttributes);
-        method.Parameters.Add(new ParameterDefinition("eventArgs", ParameterAttributes.None, PropertyChangedEventArgsReference));
+        method.Parameters.Add(new("eventArgs", ParameterAttributes.None, PropertyChangedEventArgsReference));
 
         var handlerVariable = new VariableDefinition(PropChangedHandlerReference);
         method.Body.Variables.Add(handlerVariable);
@@ -202,9 +202,10 @@ public partial class ModuleWeaver
 
     static bool IsPropertyChangedEventHandler(TypeReference type)
     {
-        return type.FullName == "System.ComponentModel.PropertyChangedEventHandler"
-               || type.FullName == "Windows.UI.Xaml.Data.PropertyChangedEventHandler"
-               || type.FullName == "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
+        return type.FullName is
+            "System.ComponentModel.PropertyChangedEventHandler" or
+            "Windows.UI.Xaml.Data.PropertyChangedEventHandler" or
+            "System.Runtime.InteropServices.WindowsRuntime.EventRegistrationTokenTable`1<Windows.UI.Xaml.Data.PropertyChangedEventHandler>";
     }
 
     static bool IsFsharpEventHandler(TypeReference type)

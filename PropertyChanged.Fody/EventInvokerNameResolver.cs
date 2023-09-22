@@ -5,7 +5,7 @@ using Fody;
 
 public partial class ModuleWeaver
 {
-    public List<string> EventInvokerNames = new List<string>
+    public List<string> EventInvokerNames = new()
     {
         "OnPropertyChanged",
         "SetProperty",

@@ -5,8 +5,10 @@ public class ClassAlreadyHasNotification :
 {
     string property1;
 
-    public string Property1    {
-        get => property1;        set
+    public string Property1
+    {
+        get => property1;
+        set
         {
             property1 = value;
             OnPropertyChanged("Property1");
@@ -16,7 +18,7 @@ public class ClassAlreadyHasNotification :
 
     public virtual void OnPropertyChanged(string propertyName)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

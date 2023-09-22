@@ -17,17 +17,17 @@ public class ClassWithBeforeAfterImplementation :
         ValidateIsString(after);
         ValidateIsString(before);
 
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 
-    void ValidateIsString(object value)
+    static void ValidateIsString(object value)
     {
         if (value != null)
         {
             var name = value.GetType().Name;
             if (name != "String")
             {
-                throw new Exception($"Value should be string but is '{name}'.");
+                throw new($"Value should be string but is '{name}'.");
             }
         }
     }

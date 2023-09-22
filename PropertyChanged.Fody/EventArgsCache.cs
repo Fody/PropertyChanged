@@ -9,7 +9,7 @@ public class EventArgsCache
     {
         this.moduleWeaver = moduleWeaver;
         var attributes = TypeAttributes.AutoClass | TypeAttributes.AutoLayout | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.NotPublic;
-        cacheTypeDefinition = new TypeDefinition(moduleWeaver.ModuleDefinition.Assembly.Name.Name, "<>PropertyChangedEventArgs", attributes, moduleWeaver.TypeSystem.ObjectReference);
+        cacheTypeDefinition = new(moduleWeaver.ModuleDefinition.Assembly.Name.Name, "<>PropertyChangedEventArgs", attributes, moduleWeaver.TypeSystem.ObjectReference);
         moduleWeaver.MarkAsGeneratedCode(cacheTypeDefinition.CustomAttributes);
     }
 
@@ -18,7 +18,7 @@ public class EventArgsCache
         if (!properties.TryGetValue(propertyName, out var field))
         {
             var attributes = FieldAttributes.Assembly | FieldAttributes.Static | FieldAttributes.InitOnly;
-            field = new FieldDefinition(propertyName, attributes, moduleWeaver.PropertyChangedEventArgsReference);
+            field = new(propertyName, attributes, moduleWeaver.PropertyChangedEventArgsReference);
             properties.Add(propertyName, field);
         }
 
@@ -59,5 +59,5 @@ public class EventArgsCache
 
     ModuleWeaver moduleWeaver;
     TypeDefinition cacheTypeDefinition;
-    Dictionary<string, FieldDefinition> properties = new Dictionary<string, FieldDefinition>();
+    Dictionary<string, FieldDefinition> properties = new();
 }

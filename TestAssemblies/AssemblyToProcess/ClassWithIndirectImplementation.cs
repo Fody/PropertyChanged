@@ -9,6 +9,4 @@ public class ClassWithIndirectImplementation :
 }
 
 public interface Indirect :
-    INotifyPropertyChanged
-{
-}
+    INotifyPropertyChanged;
