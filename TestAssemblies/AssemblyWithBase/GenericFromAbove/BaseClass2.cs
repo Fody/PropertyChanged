@@ -1,16 +1,14 @@
 ﻿using System.ComponentModel;
 
-namespace AssemblyWithBase.GenericFromAbove
+namespace AssemblyWithBase.GenericFromAbove;
+
+public class BaseClass2 : BaseClass1<object>;
+
+public class BaseClass3 : BaseClass2, INotifyPropertyChanged
 {
-    public class BaseClass2 : BaseClass1<object>
+    public event PropertyChangedEventHandler PropertyChanged;
+    public virtual void OnPropertyChanged(string propertyName)
     {
-    }
-    public class BaseClass3 : BaseClass2, INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 }

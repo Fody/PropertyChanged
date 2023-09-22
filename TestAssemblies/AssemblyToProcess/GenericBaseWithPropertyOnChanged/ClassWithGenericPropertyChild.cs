@@ -1,6 +1,3 @@
-namespace GenericBaseWithPropertyOnChanged
-{
-    public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>
-    {
-    }
-}
+namespace GenericBaseWithPropertyOnChanged;
+
+public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>;

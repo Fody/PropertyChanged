@@ -10,7 +10,7 @@ public class ClassWithOnChangedBeforeAfterGeneric :
     public void OnPropertyChanged<T>(string propertyName, T before, T after)
     {
         GenericOnPropertyChangedCalled = true;
-        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged(this, new(propertyName));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

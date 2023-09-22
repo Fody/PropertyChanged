@@ -1,10 +1,5 @@
-﻿namespace GenericBaseWithProperty
-{
-    public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>
-    {
-    }
+﻿namespace GenericBaseWithProperty;
 
-    public class ClassWithGenericPropertyDouble : ClassWithGenericPropertyParent<double>
-    {
-    }
-}
+public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>;
+
+public class ClassWithGenericPropertyDouble : ClassWithGenericPropertyParent<double>;

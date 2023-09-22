@@ -500,29 +500,31 @@ public class CodeGeneratorTest
     [Fact]
     public async Task CodeIsGeneratedForNestedPartialClasses()
     {
-        var source = @"
-using System.ComponentModel;
-using PropertyChanged;
+        var source = """
 
-[AddINotifyPropertyChangedInterface]
-public partial class Class1
-{
-    public int Property1 { get; set; }
-    public int Property2 { get; set; }
+                     using System.ComponentModel;
+                     using PropertyChanged;
 
-    public partial class Class2
-    {
-        public int Property1 { get; set; }
-        public int Property2 { get; set; }
+                     [AddINotifyPropertyChangedInterface]
+                     public partial class Class1
+                     {
+                         public int Property1 { get; set; }
+                         public int Property2 { get; set; }
+                     
+                         public partial class Class2
+                         {
+                             public int Property1 { get; set; }
+                             public int Property2 { get; set; }
+                     
+                             public partial class Class3 : INotifyPropertyChanged
+                             {
+                                 public int Property1 { get; set; }
+                                 public int Property2 { get; set; }
+                             }
+                         }
+                     }
 
-        public partial class Class3 : INotifyPropertyChanged
-        {
-            public int Property1 { get; set; }
-            public int Property2 { get; set; }
-        }
-    }
-}
-";
+                     """;
         var generated = await new Test(source).RunAsync();
 
         await Verify(generated);

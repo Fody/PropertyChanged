@@ -108,10 +108,6 @@ public class ClassWithOnChangedBeforeAfterTypedGeneric<T> :
     public event PropertyChangedEventHandler PropertyChanged;
 }
 
-public class ClassWithOnChangedBeforeAfterTypedGenericString : ClassWithOnChangedBeforeAfterTypedGeneric<string>
-{
-}
+public class ClassWithOnChangedBeforeAfterTypedGenericString : ClassWithOnChangedBeforeAfterTypedGeneric<string>;
 
-public class ClassWithOnChangedBeforeAfterTypedGenericInteger : ClassWithOnChangedBeforeAfterTypedGeneric<int>
-{
-}
+public class ClassWithOnChangedBeforeAfterTypedGenericInteger : ClassWithOnChangedBeforeAfterTypedGeneric<int>;

@@ -3,12 +3,7 @@
 public class ClassWithFieldFromOtherClass :
     INotifyPropertyChanged
 {
-    OtherClass otherClass;
-
-    public ClassWithFieldFromOtherClass()
-    {
-        otherClass = new OtherClass();
-    }
+    OtherClass otherClass = new();
 
     public string Property1
     {

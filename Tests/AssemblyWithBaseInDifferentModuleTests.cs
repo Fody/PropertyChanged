@@ -155,14 +155,14 @@ public class AssemblyWithBaseInDifferentModuleTests
         Assert.True(instance.Property2.StaticEqualsCalled);
         instance.Property2.StaticEqualsCalled = false;
     }
-    
+
     [Fact]
     public void ClassWithGenericTypeInInheritanceChainUsesCorrectEventInvoker()
     {
         // Issue #477
-        
+
         Weave(false);
-        
+
         using (var module = ModuleDefinition.ReadModule(testResult.AssemblyPath))
         {
             var typeDef = module.GetType(nameof(ClassWithGenericMiddleChildInDifferentModule));

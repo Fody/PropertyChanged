@@ -25,6 +25,6 @@ public class DependentPropertiesClassToTest :
                 break;
         }
 
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 }

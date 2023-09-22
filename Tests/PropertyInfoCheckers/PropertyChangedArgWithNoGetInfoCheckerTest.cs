@@ -8,28 +8,32 @@ public class PropertyChangedArgWithNoGetInfoCheckerTest
     [Fact]
     public void WithGet()
     {
-        var checker = new ModuleWeaver();
+        var weaver = new ModuleWeaver();
 
         var propertyDefinition = DefinitionFinder.FindProperty<PropertyChangedArgWithNoGetInfoCheckerTest>("PropertyWithGet");
 
-        var message = checker.CheckForWarning(new PropertyData
-                                                {
-                                                    PropertyDefinition = propertyDefinition,
-                                                }, InvokerTypes.PropertyChangedArg);
+        var message = weaver.CheckForWarning(
+            new()
+            {
+                PropertyDefinition = propertyDefinition,
+            },
+            InvokerTypes.PropertyChangedArg);
         Assert.Null(message);
     }
 
     [Fact]
     public void NoGet()
     {
-        var checker = new ModuleWeaver();
+        var weaver = new ModuleWeaver();
 
         var propertyDefinition = DefinitionFinder.FindProperty<PropertyChangedArgWithNoGetInfoCheckerTest>("PropertyNoGet");
 
-        var message = checker.CheckForWarning(new PropertyData
-                                                {
-                                                    PropertyDefinition = propertyDefinition,
-                                                }, InvokerTypes.PropertyChangedArg);
+        var message = weaver.CheckForWarning(
+            new()
+            {
+                PropertyDefinition = propertyDefinition,
+            },
+            InvokerTypes.PropertyChangedArg);
         Assert.NotNull(message);
     }
 

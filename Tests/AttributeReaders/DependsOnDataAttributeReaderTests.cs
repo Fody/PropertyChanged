@@ -33,12 +33,12 @@ public class DependsOnDataAttributeReaderTests
     [Fact]
     public void PropertyThatDoesNotExist()
     {
-        var reader = new ModuleWeaver();
+        var weaver = new ModuleWeaver();
         var node = new TypeNode
         {
             TypeDefinition = DefinitionFinder.FindType<ClassWithInvalidDepends>(),
         };
-        reader.ProcessDependsOnAttributes(node);
+        weaver.ProcessDependsOnAttributes(node);
         //TODO: should raise an exception
         //logger.Received().LogError("Could not find property 'NotAProperty2' for DependsOnAttribute assigned to 'FullName'.");
         //logger.Received().LogError("Could not find property 'NotAProperty1' for DependsOnAttribute assigned to 'FullName'.");

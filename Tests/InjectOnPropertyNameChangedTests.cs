@@ -16,7 +16,7 @@ public class InjectOnPropertyNameChangedTests
         };
 
         var result = moduleWeaver.ExecuteTestRun(
-            "AssemblyWithNonVoidOnPropertyNameChanged.dll", 
+            "AssemblyWithNonVoidOnPropertyNameChanged.dll",
             assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_Warn",
             ignoreCodes: new[] {"0x80131869"});
         return Verifier.Verify(result.Warnings.Single().Text);

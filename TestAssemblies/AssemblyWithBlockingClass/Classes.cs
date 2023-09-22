@@ -2,9 +2,7 @@
 using System.ComponentModel;
 
 public class A :
-    ObservableCollection<string>
-{
-}
+    ObservableCollection<string>;
 
 public class B :
     INotifyPropertyChanged
@@ -15,6 +13,6 @@ public class B :
 
     public void OnPropertyChanged(string propertyName)
     {
-        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged(this, new(propertyName));
     }
 }

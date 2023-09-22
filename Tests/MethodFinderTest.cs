@@ -12,10 +12,10 @@ public class MethodFinderTest
     {
         var location = typeof(MethodFinderTest).Assembly.Location;
         var module = ModuleDefinition.ReadModule(location);
-        methodFinder = new ModuleWeaver
-                               {
-                                   ModuleDefinition = module
-                               };
+        methodFinder = new()
+        {
+            ModuleDefinition = module
+        };
 
         typeDefinition = module.Types.First(x => x.Name.EndsWith("MethodFinderTest"));
     }
@@ -95,9 +95,8 @@ public class MethodFinderTest
         Assert.Null(methodFinder.RecursiveFindEventInvoker(definitionToProcess));
     }
 
-    public class NoMethod
-    {
-    }
+    public class NoMethod;
+
     [Fact]
     public void NoParamsTest()
     {

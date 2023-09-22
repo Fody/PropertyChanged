@@ -1,3 +1,1 @@
-public class BaseClassWithGenericMiddle<T> : BaseClassWithGenericMiddleBase
-{
-}
+public class BaseClassWithGenericMiddle<T> : BaseClassWithGenericMiddleBase;

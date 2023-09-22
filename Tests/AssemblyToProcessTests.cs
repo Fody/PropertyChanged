@@ -10,9 +10,8 @@ using Mono.Cecil.Cil;
 using Xunit;
 using Xunit.Abstractions;
 
-public class AssemblyToProcessTests
+public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
 {
-    readonly ITestOutputHelper outputHelper;
     static TestResult testResult;
 
     static AssemblyToProcessTests()
@@ -25,11 +24,6 @@ public class AssemblyToProcessTests
             , runPeVerify:false
 #endif
         );
-    }
-
-    public AssemblyToProcessTests(ITestOutputHelper outputHelper)
-    {
-        this.outputHelper = outputHelper;
     }
 
     [Theory]
@@ -302,7 +296,7 @@ public class AssemblyToProcessTests
     [Fact]
     public void IgnoreSuppressedClasses()
     {
-        const string className = nameof(ClassWithSuppressedInvalidOnChanged);        
+        const string className = nameof(ClassWithSuppressedInvalidOnChanged);
         Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithSuppressedInvalidOnChanged.OnNonExistingPropertyChanged)));
     }
 
@@ -527,7 +521,7 @@ public class AssemblyToProcessTests
 
         Assert.False(instance.OnProperty1ChangedCalled);
         Assert.False(instance.OnProperty2ChangedCalled);
-        
+
         Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)) && w.Text.Contains(nameof(ClassWithOnChangedSuppressed.Property1)));
         Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)) && w.Text.Contains(nameof(ClassWithOnChangedSuppressed.Property2)));
     }
@@ -536,7 +530,7 @@ public class AssemblyToProcessTests
     public void ClassWithIntermediateGenericBaseHandlesPropertyChanged()
     {
         var instance = testResult.GetInstance(nameof(ClassWithIntermediateGenericBase));
-        
+
         var argsList = new List<PropertyChangedEventArgs>();
         ((INotifyPropertyChanged)instance).PropertyChanged += (sender, args) => argsList.Add(args);
 
@@ -549,7 +543,7 @@ public class AssemblyToProcessTests
         Assert.Equal("Property2", argsList[1].PropertyName);
         Assert.Equal("Property3", argsList[2].PropertyName);
     }
-    
+
     [Fact]
     public void EventInvokersUseCorrectMethodDeclaringType()
     {
@@ -558,17 +552,17 @@ public class AssemblyToProcessTests
             // Non generic
             AssertInvoker(typeof(ClassChild1), nameof(ClassChild1.Property1), typeof(ClassParent).FullName);
             AssertInvoker(typeof(ClassChild3), nameof(ClassChild3.Property2), typeof(ClassParent).FullName);
-            
+
             // Issue #477
             AssertInvoker(typeof(ClassWithGenericMiddleBase), nameof(ClassWithGenericMiddleBase.Property1), nameof(ClassWithGenericMiddleBase));
             AssertInvoker(typeof(ClassWithGenericMiddle<>), nameof(ClassWithGenericMiddle<int>.Property2), nameof(ClassWithGenericMiddleBase));
             AssertInvoker(typeof(ClassWithGenericMiddleChild), nameof(ClassWithGenericMiddleChild.Property3), nameof(ClassWithGenericMiddleBase));
-            
+
             // Issue #516
             AssertInvoker(typeof(ClassWithGenericParent<>), nameof(ClassWithGenericParent<int>.Property1), "ClassWithGenericParent`1<T>");
             AssertInvoker(typeof(IntermediateGenericClass<>), nameof(IntermediateGenericClass<int>.Property2), "ClassWithGenericParent`1<T>");
             AssertInvoker(typeof(ClassWithIntermediateGenericBase), nameof(ClassWithIntermediateGenericBase.Property3), "IntermediateGenericClass`1<System.String>");
-            
+
             void AssertInvoker(Type type, string propertyName, string invokerDeclaringType)
             {
                 var typeDef = module.GetType(type.FullName);

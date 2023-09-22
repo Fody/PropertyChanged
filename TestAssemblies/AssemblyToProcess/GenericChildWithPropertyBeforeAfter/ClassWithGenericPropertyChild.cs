@@ -1,7 +1,6 @@
-﻿namespace GenericChildWithPropertyBeforeAfter
+﻿namespace GenericChildWithPropertyBeforeAfter;
+
+public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>
 {
-    public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>
-    {
-        public string Property1 { get; set; }
-    }
+    public string Property1 { get; set; }
 }

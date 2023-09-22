@@ -7,25 +7,31 @@ public class TriggerDependentPropertiesConfigTests
     public void False()
     {
         var xElement = XElement.Parse("<PropertyChanged TriggerDependentProperties='false'/>");
-        var moduleWeaver = new ModuleWeaver {Config = xElement};
-        moduleWeaver.ResolveTriggerDependentPropertiesConfig();
-        Assert.False(moduleWeaver.TriggerDependentProperties);
+        var weaver = new ModuleWeaver
+        {
+            Config = xElement
+        };
+        weaver.ResolveTriggerDependentPropertiesConfig();
+        Assert.False(weaver.TriggerDependentProperties);
     }
 
     [Fact]
     public void True()
     {
         var xElement = XElement.Parse("<PropertyChanged TriggerDependentProperties='true'/>");
-        var moduleWeaver = new ModuleWeaver {Config = xElement};
-        moduleWeaver.ResolveTriggerDependentPropertiesConfig();
-        Assert.True(moduleWeaver.TriggerDependentProperties);
+        var weaver = new ModuleWeaver
+        {
+            Config = xElement
+        };
+        weaver.ResolveTriggerDependentPropertiesConfig();
+        Assert.True(weaver.TriggerDependentProperties);
     }
 
     [Fact]
     public void Default()
     {
-        var moduleWeaver = new ModuleWeaver();
-        moduleWeaver.ResolveOnPropertyNameChangedConfig();
-        Assert.True(moduleWeaver.TriggerDependentProperties);
+        var weaver = new ModuleWeaver();
+        weaver.ResolveOnPropertyNameChangedConfig();
+        Assert.True(weaver.TriggerDependentProperties);
     }
 }

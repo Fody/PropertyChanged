@@ -23,7 +23,7 @@ public abstract class BaseClass : INotifyPropertyChanged
     protected void OnPropertyChanged(string propertyName)
     {
         Notifications.Add(propertyName);
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 
     void OnProperty1Changed()
@@ -283,7 +283,7 @@ public class DerivedFromPoco : PocoBase, INotifyPropertyChanged
     protected void OnPropertyChanged(string propertyName)
     {
         Notifications.Add(propertyName);
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 }
 

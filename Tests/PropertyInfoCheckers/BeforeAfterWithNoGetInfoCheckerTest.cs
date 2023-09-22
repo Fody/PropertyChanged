@@ -11,10 +11,12 @@ public class BeforeAfterWithNoGetInfoCheckerTest
 
         var propertyDefinition = DefinitionFinder.FindProperty<BeforeAfterWithNoGetInfoCheckerTest>("PropertyWithGet");
 
-        var message = checker.CheckForWarning(new PropertyData
-                                                {
-                                                    PropertyDefinition = propertyDefinition,
-                                                }, InvokerTypes.BeforeAfter);
+        var message = checker.CheckForWarning(
+            new()
+            {
+                PropertyDefinition = propertyDefinition,
+            },
+            InvokerTypes.BeforeAfter);
         Assert.Null(message);
     }
 
@@ -25,10 +27,12 @@ public class BeforeAfterWithNoGetInfoCheckerTest
 
         var propertyDefinition = DefinitionFinder.FindProperty<BeforeAfterWithNoGetInfoCheckerTest>("PropertyNoGet");
 
-        var message = checker.CheckForWarning(new PropertyData
-                                                {
-                                                    PropertyDefinition = propertyDefinition,
-                                                }, InvokerTypes.BeforeAfter);
+        var message = checker.CheckForWarning(
+            new()
+            {
+                PropertyDefinition = propertyDefinition,
+            },
+            InvokerTypes.BeforeAfter);
         Assert.NotNull(message);
     }
 

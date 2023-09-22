@@ -65,6 +65,6 @@ public static class DefinitionFinder
                 }
             }
         }
-        throw new Exception();
+        throw new();
     }
 }

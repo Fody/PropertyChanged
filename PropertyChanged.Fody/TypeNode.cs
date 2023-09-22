@@ -4,21 +4,13 @@ using Mono.Cecil;
 
 public class TypeNode
 {
-    public TypeNode()
-    {
-        Nodes = new();
-        PropertyDependencies = new List<PropertyDependency>();
-        Mappings = new List<MemberMapping>();
-        PropertyDatas = new List<PropertyData>();
-    }
-
     public TypeDefinition TypeDefinition;
-    public List<TypeNode> Nodes;
-    public List<PropertyDependency> PropertyDependencies;
-    public List<MemberMapping> Mappings;
+    public List<TypeNode> Nodes = new();
+    public List<PropertyDependency> PropertyDependencies = new();
+    public List<MemberMapping> Mappings = new();
     public EventInvokerMethod EventInvoker;
     public MethodReference IsChangedInvoker;
-    public List<PropertyData> PropertyDatas;
+    public List<PropertyData> PropertyDatas = new();
     public List<PropertyDefinition> AllProperties;
     public ICollection<OnChangedMethod> OnChangedMethods;
     public IEnumerable<PropertyDefinition> DeclaredProperties => AllProperties.Where(prop => prop.DeclaringType == TypeDefinition);

@@ -1,7 +1,6 @@
-﻿namespace ComplexHierarchy
+﻿namespace ComplexHierarchy;
+
+public class ClassChild1 : ClassParent
 {
-    public class ClassChild1 : ClassParent
-    {
-        public string Property1 { get; set; }
-    }
+    public string Property1 { get; set; }
 }

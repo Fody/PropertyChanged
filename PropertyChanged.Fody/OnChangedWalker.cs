@@ -232,8 +232,7 @@ public partial class ModuleWeaver
         }
     }
 
-
-    string GetMethodWarning(TypeNode notifyNode, OnChangedMethod onChangedMethod)
+    static string GetMethodWarning(TypeNode notifyNode, OnChangedMethod onChangedMethod)
     {
         var method = onChangedMethod.MethodDefinition;
         var methodRef = onChangedMethod.MethodReference;

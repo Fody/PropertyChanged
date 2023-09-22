@@ -9,6 +9,6 @@ public class BaseClass :
 
     protected void OnPropertyChanged(string propertyName, object before, object after)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 }

@@ -1,9 +1,8 @@
 ﻿using AssemblyWithBase.DirectGeneric;
 
-namespace AssemblyWithBaseInDifferentModule.DirectGeneric
+namespace AssemblyWithBaseInDifferentModule.DirectGeneric;
+
+public class ChildClass : BaseClass<object>
 {
-    public class ChildClass : BaseClass<object>
-    {
-        public string Property1 { get; set; }
-    }
+    public string Property1 { get; set; }
 }

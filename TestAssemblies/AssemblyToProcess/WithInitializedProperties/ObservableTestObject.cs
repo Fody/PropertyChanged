@@ -14,6 +14,6 @@ public abstract class ObservableTestObject :
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChangedCalls.Add(propertyName);
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new(propertyName));
     }
 }

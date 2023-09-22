@@ -1,9 +1,8 @@
 ﻿using AssemblyWithBase.GenericFromAbove;
 
-namespace AssemblyWithBaseInDifferentModule.GenericFromAbove
+namespace AssemblyWithBaseInDifferentModule.GenericFromAbove;
+
+public class ChildClass : BaseClass3
 {
-    public class ChildClass : BaseClass3
-    {
-        public string Property1 { get; set; }
-    }
+    public string Property1 { get; set; }
 }

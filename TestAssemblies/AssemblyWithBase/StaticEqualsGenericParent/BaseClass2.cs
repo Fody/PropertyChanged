@@ -1,7 +1,6 @@
-﻿namespace AssemblyWithBase.StaticEqualsGenericParent
+﻿namespace AssemblyWithBase.StaticEqualsGenericParent;
+
+public class BaseClass2<T, TSomething> : BaseClass<TSomething>
 {
-    public class BaseClass2<T, TSomething> : BaseClass<TSomething>
-    {
-        public T SomeProperty { get; set; }
-    }
+    public T SomeProperty { get; set; }
 }

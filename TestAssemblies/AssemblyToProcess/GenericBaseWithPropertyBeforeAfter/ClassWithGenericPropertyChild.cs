@@ -1,6 +1,3 @@
-﻿namespace GenericBaseWithPropertyBeforeAfter
-{
-    public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>
-    {
-    }
-}
+﻿namespace GenericBaseWithPropertyBeforeAfter;
+
+public class ClassWithGenericPropertyChild : ClassWithGenericPropertyParent<string>;

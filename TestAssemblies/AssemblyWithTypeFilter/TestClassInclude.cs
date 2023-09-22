@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
 
-namespace PropertyChangedTest
-{
-    public class TestClassInclude :
-    INotifyPropertyChanged    {
-        public string Property1 { get; set; }
+namespace PropertyChangedTest;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-    }
+public class TestClassInclude :
+    INotifyPropertyChanged    {
+    public string Property1 { get; set; }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }

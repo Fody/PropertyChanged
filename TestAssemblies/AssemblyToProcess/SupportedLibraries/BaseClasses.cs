@@ -11,7 +11,7 @@ namespace Caliburn.Micro
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
     }
 }
@@ -27,7 +27,7 @@ namespace Catel.Data
         protected void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
     }
 }
@@ -43,7 +43,7 @@ namespace Telerik.Windows.Controls
         void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -63,7 +63,7 @@ namespace Magellan.Framework
         protected void NotifyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
         protected void NotifyChanged(string propertyName, params string[] otherProperties)
         {
@@ -83,7 +83,7 @@ namespace Cinch
         public virtual void NotifyPropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
     }
 }
@@ -91,9 +91,7 @@ namespace Cinch
 namespace GalaSoft.MvvmLight
 {
     public class ViewModelBase :
-        ObservableObject
-    {
-    }
+        ObservableObject;
 
     public class ObservableObject :
         INotifyPropertyChanged
@@ -104,7 +102,7 @@ namespace GalaSoft.MvvmLight
         public virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
     }
 }
@@ -120,7 +118,7 @@ namespace Caliburn.PresentationFramework
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
     }
 }
@@ -136,7 +134,7 @@ namespace Jounce.Core.Model
         protected virtual void RaisePropertyChanged(string propertyName)
         {
             BaseNotifyCalled = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
     }
 }
@@ -144,9 +142,7 @@ namespace Jounce.Core.Model
 namespace Jounce.Core.ViewModel
 {
     public abstract class BaseViewModel :
-        BaseNotify
-    {
-    }
+        BaseNotify;
 }
 
 namespace ReactiveUI

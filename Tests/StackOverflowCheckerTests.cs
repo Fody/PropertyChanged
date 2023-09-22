@@ -4,12 +4,7 @@ using Xunit;
 
 public class StackOverflowCheckerTests
 {
-    ModuleWeaver stackOverflowChecker;
-
-    public StackOverflowCheckerTests()
-    {
-        stackOverflowChecker = new ModuleWeaver();
-    }
+    ModuleWeaver stackOverflowChecker = new();
 
     [Fact]
     public void CanDetectStackOverflow()

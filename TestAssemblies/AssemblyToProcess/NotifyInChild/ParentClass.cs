@@ -1,3 +1,1 @@
-﻿public class ParentClass
-{
-}
+﻿public class ParentClass;

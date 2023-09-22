@@ -88,7 +88,7 @@ public partial class ModuleWeaver
             });
     }
 
-    List<PropertyDefinition> GetFullDependencies(PropertyDefinition propertyDefinition, IEnumerable<PropertyDefinition> dependenciesForProperty, TypeNode node)
+    static List<PropertyDefinition> GetFullDependencies(PropertyDefinition propertyDefinition, IEnumerable<PropertyDefinition> dependenciesForProperty, TypeNode node)
     {
         // Create an HashSet to contain all dependent properties (direct or transitive)
         // Add the initial Property to stop the recursion if this property is a dependency of another property

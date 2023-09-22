@@ -9,7 +9,7 @@ public class ClassWithOnChangedCalculatedProperty :
     public string Property1 { get; set; }
     public string Property2 => $"{Property1}!";
     public string Property3 => $"{Property2}!";
-    
+
     public void OnProperty2Changed()
     {
         OnProperty2ChangedCalled = true;
