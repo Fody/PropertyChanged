@@ -131,10 +131,7 @@ public partial class ModuleWeaver
             .OrderByDescending(GetInvokerPriority)
             .FirstOrDefault(IsEventInvokerMethod);
 
-        if (methodDefinition != null &&
-            methodDefinition.IsPrivate &&
-            methodDefinition.IsFinal &&
-            methodDefinition.IsVirtual &&
+        if (methodDefinition is {IsPrivate: true, IsFinal: true, IsVirtual: true} &&
             methodDefinition.Overrides.Count == 1)
         {
             // Explicitly implemented interfaces should call the interface method instead
@@ -148,7 +145,7 @@ public partial class ModuleWeaver
     {
         return type.GetAllInterfaces()
             .Select(i => i.Resolve())
-            .Where(i => i != null && i.IsPublic)
+            .Where(i => i is {IsPublic: true})
             .SelectMany(i => i.Methods.Where(m => EventInvokerNames.Contains($"{i.FullName}.{m.Name}")))
             .OrderByDescending(GetInvokerPriority)
             .FirstOrDefault(IsEventInvokerMethod);

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Xunit;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 // ReSharper disable ValueParameterNotUsed
 // ReSharper disable UnusedParameter.Local

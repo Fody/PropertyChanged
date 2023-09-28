@@ -313,6 +313,7 @@ public class DerivedCallingChild : BaseClass
 
     public override int Property3 { get; set; }
 
+    // ReSharper disable once MemberCanBeMadeStatic.Local
     int DoSomeDummyStuff(int a, int b, int c)
     {
         return a + b + c;

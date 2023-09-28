@@ -36,6 +36,7 @@ public class RecursiveIlFinderTests
             Method1();
         }
 
+        // ReSharper disable once MemberCanBeMadeStatic.Local
         void Method3()
         {
             Debug.WriteLine("a");

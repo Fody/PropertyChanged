@@ -75,8 +75,7 @@ public partial class ModuleWeaver
         var propertyDefinition = type.Properties
             .FirstOrDefault(x =>
                             x.Name == isChangedPropertyName &&
-                            x.SetMethod != null &&
-                            x.SetMethod.IsPublic
+                            x.SetMethod is {IsPublic: true}
             );
 
         if (propertyDefinition != null)

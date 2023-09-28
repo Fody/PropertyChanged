@@ -10,6 +10,7 @@ public class ClassWithNullableBackingField : INotifyPropertyChanged
         set => _isFlag = value;
     }
 
+    // ReSharper disable once MemberCanBeMadeStatic.Local
     bool GetFlag() => false;
 
     public event PropertyChangedEventHandler PropertyChanged;
