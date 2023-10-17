@@ -4,7 +4,7 @@
 root = true
 
 [*]
-indent_style = space:error
+indent_style = space
 
 [*.cs]
 indent_size = 4:error
