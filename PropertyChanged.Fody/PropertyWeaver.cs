@@ -34,19 +34,13 @@ public class PropertyWeaver(
     {
         if (propertyData.BackingFieldReference == null)
         {
-            return new()
-            {
-                instructions.Count - 1
-            };
+            return [instructions.Count - 1];
         }
 
         var setFieldInstructions = FindSetFieldInstructions().ToList();
         if (setFieldInstructions.Count == 0)
         {
-            return new()
-            {
-                instructions.Count - 1
-            };
+            return [instructions.Count - 1];
         }
 
         return setFieldInstructions;

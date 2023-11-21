@@ -57,7 +57,7 @@ public class MethodFinderTest
     [Fact]
     public void WithPropertyChangedArgTest()
     {
-        var definitionToProcess = typeDefinition.NestedTypes.First(x => x.Name == "WithPropertyChangedArg");
+        var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "WithPropertyChangedArg");
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
         Assert.NotNull(methodReference);
         Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);

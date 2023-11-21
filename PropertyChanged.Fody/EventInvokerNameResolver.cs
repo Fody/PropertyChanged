@@ -5,8 +5,8 @@ using Fody;
 
 public partial class ModuleWeaver
 {
-    public List<string> EventInvokerNames = new()
-    {
+    public List<string> EventInvokerNames =
+    [
         "OnPropertyChanged",
         "SetProperty",
         "NotifyOfPropertyChange",
@@ -15,7 +15,7 @@ public partial class ModuleWeaver
         "NotifyChanged",
         "ReactiveUI.IReactiveObject.RaisePropertyChanged",
         injectedEventInvokerName
-    };
+    ];
 
     public void ResolveEventInvokerName()
     {

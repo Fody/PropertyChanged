@@ -4,8 +4,8 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    HashSet<string> typeLevelAttributeNames = new()
-    {
+    HashSet<string> typeLevelAttributeNames =
+    [
         "PropertyChanged.DoNotCheckEqualityAttribute",
         "PropertyChanged.DoNotNotifyAttribute",
         "PropertyChanged.DoNotSetChangedAttribute",
@@ -14,12 +14,9 @@ public partial class ModuleWeaver
         "PropertyChanged.AddINotifyPropertyChangedInterfaceAttribute",
         "PropertyChanged.SuppressPropertyChangedWarningsAttribute",
         "PropertyChanged.OnChangedMethodAttribute"
-    };
+    ];
 
-    HashSet<string> assemblyLevelAttributeNames = new()
-    {
-        "PropertyChanged.FilterTypeAttribute"
-    };
+    HashSet<string> assemblyLevelAttributeNames = ["PropertyChanged.FilterTypeAttribute"];
 
     void ProcessAssembly()
     {

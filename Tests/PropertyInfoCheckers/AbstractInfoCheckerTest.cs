@@ -9,7 +9,7 @@ public class AbstractInfoCheckerTest
         var weaver = new ModuleWeaver();
         var propertyDefinition = DefinitionFinder.FindType<BaseClass>()
             .Properties
-            .First(x => x.Name == "AbstractProperty");
+            .First(_ => _.Name == "AbstractProperty");
 
         var message = weaver.CheckForWarning(
             new()
@@ -26,7 +26,7 @@ public class AbstractInfoCheckerTest
         var weaver = new ModuleWeaver();
         var propertyDefinition = DefinitionFinder.FindType<BaseClass>()
             .Properties
-            .First(x => x.Name == "NonAbstractProperty");
+            .First(_ => _.Name == "NonAbstractProperty");
 
         var message = weaver.CheckForWarning(
             new()

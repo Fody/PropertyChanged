@@ -7,8 +7,8 @@ public static class SupportsCeqChecker
 
     static SupportsCeqChecker()
     {
-        ceqStructNames = new()
-        {
+        ceqStructNames =
+        [
             typeof(int).Name,
             typeof(uint).Name,
             typeof(long).Name,
@@ -20,8 +20,8 @@ public static class SupportsCeqChecker
             typeof(ushort).Name,
             typeof(byte).Name,
             typeof(sbyte).Name,
-            typeof(char).Name,
-        };
+            typeof(char).Name
+        ];
     }
 
     public static bool SupportsCeq(this TypeReference typeReference)

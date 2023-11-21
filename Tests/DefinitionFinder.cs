@@ -16,13 +16,13 @@ public static class DefinitionFinder
     public static PropertyDefinition FindProperty<T>(string name)
     {
         var typeDefinition = FindType(typeof(T));
-        return typeDefinition.Properties.First(x => x.Name == name);
+        return typeDefinition.Properties.First(_ => _.Name == name);
     }
 
     static PropertyDefinition FindType(Type declaringType, string name)
     {
         var typeDefinition = FindType(declaringType);
-        return typeDefinition.Properties.First(x => x.Name == name);
+        return typeDefinition.Properties.First(_ => _.Name == name);
     }
 
     public static MethodDefinition FindMethod<T>(Expression<Action> expression)
@@ -32,7 +32,7 @@ public static class DefinitionFinder
 
         var typeDefinition = FindType(declaringType);
 
-        return typeDefinition.Methods.First(x => x.Name == callExpression.Method.Name);
+        return typeDefinition.Methods.First(_ => _.Name == callExpression.Method.Name);
     }
 
     public static TypeDefinition FindType<T>()

@@ -73,7 +73,7 @@ public static class EventTester
         });
 
         var type = (Type) instance.GetType();
-        var propertyInfo = type.GetProperties().First(x => x.Name == propertyName);
+        var propertyInfo = type.GetProperties().First(_ => _.Name == propertyName);
         propertyInfo.SetValue(instance, propertyValue, null);
 
         Assert.True(eventCalled);
