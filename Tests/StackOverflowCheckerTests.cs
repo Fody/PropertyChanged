@@ -18,7 +18,7 @@ public class StackOverflowCheckerTests
     [InlineData("ValidName", false)]
     public void CanCheckIfGetterCallsSetter(string propertyName, bool expectedResult)
     {
-        var propertyDefinition = DefinitionFinder.FindType<ClassWithStackOverflow>().Properties.First(x => x.Name == propertyName);
+        var propertyDefinition = DefinitionFinder.FindType<ClassWithStackOverflow>().Properties.First(_ => _.Name == propertyName);
         var result = stackOverflowChecker.CheckIfGetterCallsSetter(propertyDefinition);
 
         Assert.Equal(expectedResult, result);
@@ -27,7 +27,7 @@ public class StackOverflowCheckerTests
     [Fact]
     public void CanDetectIfGetterCallsVirtualBaseSetter()
     {
-        var propertyDefinition = DefinitionFinder.FindType<ChildClassWithOverflow>().Properties.First(x => x.Name == "Property1");
+        var propertyDefinition = DefinitionFinder.FindType<ChildClassWithOverflow>().Properties.First(_ => _.Name == "Property1");
         var result = stackOverflowChecker.CheckIfGetterCallsVirtualBaseSetter(propertyDefinition);
 
         Assert.True(result);
@@ -36,7 +36,7 @@ public class StackOverflowCheckerTests
     [Fact]
     public void CanDetectIfGetterCallsVirtualBaseSetterWhenBaseClassInDifferentAssembly()
     {
-        var propertyDefinition = DefinitionFinder.FindType<ChildWithBaseInDifferentAssembly>().Properties.First(x => x.Name == "Property1");
+        var propertyDefinition = DefinitionFinder.FindType<ChildWithBaseInDifferentAssembly>().Properties.First(_ => _.Name == "Property1");
         var result = stackOverflowChecker.CheckIfGetterCallsVirtualBaseSetter(propertyDefinition);
 
         Assert.True(result);

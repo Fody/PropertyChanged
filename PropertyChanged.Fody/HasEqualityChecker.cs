@@ -13,11 +13,11 @@ public static class HasEqualityChecker
             return false;
         }
         var firstFive = list.Take(5).ToList();
-        if (firstFive.All(x => x.OpCode != OpCodes.Ldarg_1))
+        if (firstFive.All(_ => _.OpCode != OpCodes.Ldarg_1))
         {
             return false;
         }
-        if (firstFive.All(x => x.OpCode != OpCodes.Ldarg_0))
+        if (firstFive.All(_ => _.OpCode != OpCodes.Ldarg_0))
         {
             return false;
         }
@@ -26,11 +26,11 @@ public static class HasEqualityChecker
             return false;
         }
 
-        if (firstFive.Any(x => x.Operand == backingFieldReference))
+        if (firstFive.Any(_ => _.Operand == backingFieldReference))
         {
             return true;
         }
-        if (firstFive.Any(x => x.Operand == propertyDefinition))
+        if (firstFive.Any(_ => _.Operand == propertyDefinition))
         {
             return true;
         }

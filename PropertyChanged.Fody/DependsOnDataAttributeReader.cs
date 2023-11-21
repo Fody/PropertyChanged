@@ -39,7 +39,7 @@ public partial class ModuleWeaver
         if (customAttributeArguments.Count > 1)
         {
             var otherValue = (CustomAttributeArgument[]) customAttributeArguments[1].Value;
-            foreach (string other in otherValue.Select(x => x.Value))
+            foreach (string other in otherValue.Select(_ => _.Value))
             {
                 AddIfPropertyExists(property, other, node);
             }
@@ -49,7 +49,7 @@ public partial class ModuleWeaver
     void AddIfPropertyExists(PropertyDefinition targetProperty, string isGeneratedUsingPropertyName, TypeNode node)
     {
         //TODO: all properties
-        var propertyDefinition = targetProperty.DeclaringType.Properties.FirstOrDefault(x => x.Name == isGeneratedUsingPropertyName);
+        var propertyDefinition = targetProperty.DeclaringType.Properties.FirstOrDefault(_ => _.Name == isGeneratedUsingPropertyName);
         if (propertyDefinition == null)
         {
             WriteInfo($"Could not find property '{isGeneratedUsingPropertyName}' for DependsOnAttribute assigned to '{targetProperty.Name}'.");

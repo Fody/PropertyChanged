@@ -10,8 +10,8 @@ public class ClassWithExpression :
 
     public ClassWithExpression()
     {
-        Expression<Func<ClassWithExpression, string>> expressionFunc = x => x.Property1;
-        Func<ClassWithExpression, string> func = x => x.Property1;
+        Expression<Func<ClassWithExpression, string>> expressionFunc = _ => _.Property1;
+        Func<ClassWithExpression, string> func = _ => _.Property1;
 
         Action<ClassWithExpression, string> expression2 = (expression, s) => { expression.Property1 = s; };
     }

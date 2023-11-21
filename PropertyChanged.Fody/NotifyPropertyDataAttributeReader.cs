@@ -39,7 +39,7 @@ public partial class ModuleWeaver
 
     static PropertyDefinition GetPropertyDefinition(PropertyDefinition property, List<PropertyDefinition> allProperties, string argument)
     {
-        var propertyDefinition = allProperties.FirstOrDefault(x => x.Name == argument);
+        var propertyDefinition = allProperties.FirstOrDefault(_ => _.Name == argument);
         if (propertyDefinition != null)
         {
             return propertyDefinition;

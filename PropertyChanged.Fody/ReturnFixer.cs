@@ -52,7 +52,7 @@ public static class ReturnFixer
 
     static Instruction GetLast(Collection<Instruction> instructions)
     {
-        var tail = instructions.LastOrDefault(x => x.OpCode == OpCodes.Tail);
+        var tail = instructions.LastOrDefault(_ => _.OpCode == OpCodes.Tail);
         if (tail != null)
         {
             return tail;

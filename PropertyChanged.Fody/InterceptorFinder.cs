@@ -10,7 +10,7 @@ public partial class ModuleWeaver
 
     void SearchForMethod(TypeDefinition typeDefinition)
     {
-        var methodDefinition = typeDefinition.Methods.FirstOrDefault(x => x.Name == "Intercept");
+        var methodDefinition = typeDefinition.Methods.FirstOrDefault(_ => _.Name == "Intercept");
         if (methodDefinition == null)
         {
             throw new WeavingException($"Found Type '{typeDefinition.FullName}' but could not find a method named 'Intercept'.");
@@ -69,7 +69,7 @@ public partial class ModuleWeaver
 
     public void FindInterceptor()
     {
-        var typeDefinition = ModuleDefinition.Types.FirstOrDefault(x => x.Name == "PropertyChangedNotificationInterceptor");
+        var typeDefinition = ModuleDefinition.Types.FirstOrDefault(_ => _.Name == "PropertyChangedNotificationInterceptor");
         if (typeDefinition == null)
         {
             FoundInterceptor = false;

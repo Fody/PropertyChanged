@@ -9,7 +9,7 @@ public class MappingFinderSingleBackingConstantFieldGet
     public void Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsGet>()).ToList();
-        var memberMapping = memberMappings.Single(x => x.PropertyDefinition.Name == "Property1");
+        var memberMapping = memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1");
         Assert.Null(memberMapping.FieldDefinition);
     }
 

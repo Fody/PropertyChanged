@@ -209,9 +209,9 @@ public class PropertyWeaver(
 
     bool ContainsCallToMethod(string onChangingMethodName)
     {
-        return instructions.Select(x => x.Operand)
+        return instructions.Select(_ => _.Operand)
             .OfType<MethodReference>()
-            .Any(x => x.Name == onChangingMethodName);
+            .Any(_ => _.Name == onChangingMethodName);
     }
 
     int AddSimpleInvokerCall(int index, PropertyDefinition property)

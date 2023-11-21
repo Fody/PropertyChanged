@@ -18,7 +18,7 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var customAttributeArguments = filterTypeAttribute.Select(x => x.ConstructorArguments).ToList();
+        var customAttributeArguments = filterTypeAttribute.Select(_ => _.ConstructorArguments).ToList();
         NamespaceFilters = customAttributeArguments.Select(x => (string)x[0].Value).ToList();
     }
 }

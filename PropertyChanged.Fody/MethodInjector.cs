@@ -36,7 +36,7 @@ public partial class ModuleWeaver
     MethodDefinition GetMethodDefinition(TypeDefinition targetType, out InvokerTypes invokerType)
     {
         var eventInvokerName = $"Inner{EventInvokerNames.First()}";
-        var methodDefinition = targetType.Methods.FirstOrDefault(x => x.Name == eventInvokerName);
+        var methodDefinition = targetType.Methods.FirstOrDefault(_ => _.Name == eventInvokerName);
         if (methodDefinition?.Parameters.Count == 1 &&
             methodDefinition.Parameters[0].ParameterType.FullName == "System.String")
         {

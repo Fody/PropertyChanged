@@ -36,10 +36,10 @@ public partial class ModuleWeaver
     {
         var notifyPropertyData = ReadAlsoNotifyForData(propertyDefinition, node.AllProperties);
         var dependenciesForProperty = node.PropertyDependencies
-            .Where(x => x.WhenPropertyIsSet == propertyDefinition)
-            .Select(x => x.ShouldAlsoNotifyFor);
+            .Where(_ => _.WhenPropertyIsSet == propertyDefinition)
+            .Select(_ => _.ShouldAlsoNotifyFor);
 
-        var backingFieldReference = node.Mappings.First(x => x.PropertyDefinition == propertyDefinition).FieldDefinition;
+        var backingFieldReference = node.Mappings.First(_ => _.PropertyDefinition == propertyDefinition).FieldDefinition;
 
         if (backingFieldReference?.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotNotifyAttribute") == true)
         {
@@ -114,7 +114,7 @@ public partial class ModuleWeaver
         // TODO: An optimization could be done to avoid the multiple computation of one property for each property of the type
         // By keeping the in memory the full dependencies of each property of the type
 
-        foreach (var dependentProperty in node.PropertyDependencies.Where(x => x.WhenPropertyIsSet == propertyDefinition).Select(x => x.ShouldAlsoNotifyFor))
+        foreach (var dependentProperty in node.PropertyDependencies.Where(_ => _.WhenPropertyIsSet == propertyDefinition).Select(_ => _.ShouldAlsoNotifyFor))
         {
             if (fullDependencies.Contains(dependentProperty))
             {

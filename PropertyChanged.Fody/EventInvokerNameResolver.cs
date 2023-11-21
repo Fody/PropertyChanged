@@ -26,8 +26,8 @@ public partial class ModuleWeaver
         }
 
         EventInvokerNames = eventInvokerAttribute.Value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-            .Select(x => x.Trim())
-            .Where(x => x.Length > 0)
+            .Select(_ => _.Trim())
+            .Where(_ => _.Length > 0)
             .ToList();
 
         if (!EventInvokerNames.Any())

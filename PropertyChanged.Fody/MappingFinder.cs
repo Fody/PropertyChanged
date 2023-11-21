@@ -31,7 +31,9 @@ public partial class ModuleWeaver
     static FieldDefinition TryGetField(TypeDefinition typeDefinition, PropertyDefinition property)
     {
         var propertyName = property.Name;
-        var fieldsWithSameType = typeDefinition.Fields.Where(x => x.DeclaringType == typeDefinition && x.FieldType.Resolve() == property.PropertyType.Resolve()).ToList();
+        var fieldsWithSameType = typeDefinition.Fields
+            .Where(_ => _.DeclaringType == typeDefinition &&
+                        _.FieldType.Resolve() == property.PropertyType.Resolve()).ToList();
         foreach (var field in fieldsWithSameType)
         {
             //AutoProp

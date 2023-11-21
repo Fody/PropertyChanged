@@ -10,7 +10,7 @@ public class RecursiveIlFinderTests
         var typeDefinition = DefinitionFinder.FindType<InnerClass>();
         var recursiveIlFinder = new RecursiveIlFinder(typeDefinition);
 
-        var methodDefinition = typeDefinition.Methods.First(x => x.Name == "Method1");
+        var methodDefinition = typeDefinition.Methods.First(_ => _.Name == "Method1");
         recursiveIlFinder.Execute(methodDefinition);
 #if(DEBUG)
         Assert.Equal(25, recursiveIlFinder.Instructions.Count);

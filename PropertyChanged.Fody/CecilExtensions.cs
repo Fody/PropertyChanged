@@ -60,7 +60,7 @@ public static class CecilExtensions
             return false;
         }
 
-        var parameterDefinition = methodReference.Parameters.FirstOrDefault(x => x.Name == "propertyName");
+        var parameterDefinition = methodReference.Parameters.FirstOrDefault(_ => _.Name == "propertyName");
         if (parameterDefinition != null)
         {
             propertyNameIndex = methodReference.Parameters.Count - parameterDefinition.Index;
