@@ -8,6 +8,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="All" />
-    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.10.4539" PrivateAssets="all" />
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.14.6129" PrivateAssets="all" />
   </ItemGroup>
 </Project>
