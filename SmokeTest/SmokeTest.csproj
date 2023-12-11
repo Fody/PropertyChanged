@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
     <PackageReference Include="Verify.Xunit" Version="22.6.0" />
-    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit" Version="2.6.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
