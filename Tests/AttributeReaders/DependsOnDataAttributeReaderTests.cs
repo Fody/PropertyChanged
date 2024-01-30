@@ -1,5 +1,4 @@
 ﻿using PropertyChanged;
-using Xunit;
 
 // ReSharper disable UnusedVariable
 public class DependsOnDataAttributeReaderTests

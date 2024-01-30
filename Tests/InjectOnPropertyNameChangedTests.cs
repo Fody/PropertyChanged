@@ -1,20 +1,14 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Fody;
-using VerifyXunit;
-using Xunit;
-
-public class InjectOnPropertyNameChangedTests
+﻿public class InjectOnPropertyNameChangedTests
 {
     [Fact]
     public Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_WarnsForNonVoidMethods()
     {
-        var moduleWeaver = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
             InjectOnPropertyNameChanged = true
         };
 
-        var result = moduleWeaver.ExecuteTestRun(
+        var result = weaver.ExecuteTestRun(
             "AssemblyWithNonVoidOnPropertyNameChanged.dll",
             assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_Warn",
             ignoreCodes: new[] {"0x80131869"});
@@ -24,12 +18,12 @@ public class InjectOnPropertyNameChangedTests
     [Fact]
     public Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_WarnsForStaticMethods()
     {
-        var moduleWeaver = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
             InjectOnPropertyNameChanged = true
         };
 
-        var result = moduleWeaver.ExecuteTestRun(
+        var result = weaver.ExecuteTestRun(
             "AssemblyWithStaticOnPropertyNameChanged.dll",
             assemblyName: "AssemblyWithStaticOnPropertyNameChanged_Warn",
             ignoreCodes: new[] {"0x80131869"});
@@ -39,18 +33,18 @@ public class InjectOnPropertyNameChangedTests
     [Fact]
     public void ModuleWeaver_WhenInjectOnPropertyNameChangedIsFalse_DoesNotWarn()
     {
-        var moduleWeaver = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
             InjectOnPropertyNameChanged = false
         };
 
         var results = new[]
         {
-            moduleWeaver.ExecuteTestRun(
+            weaver.ExecuteTestRun(
                 "AssemblyWithNonVoidOnPropertyNameChanged.dll",
                 assemblyName: "AssemblyWithNonVoidOnPropertyNameChanged_NoWarn",
                 ignoreCodes: new[] {"0x80131869"}),
-            moduleWeaver.ExecuteTestRun(
+            weaver.ExecuteTestRun(
                 "AssemblyWithStaticOnPropertyNameChanged.dll",
                 assemblyName: "AssemblyWithStaticOnPropertyNameChanged_NoWarn",
                 ignoreCodes: new[] {"0x80131869"})

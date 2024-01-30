@@ -1,11 +1,5 @@
-using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
-using Microsoft.CodeAnalysis.Text;
-using PropertyChanged;
-
-public class SourceGeneratorTest<TSourceGenerator> : CSharpIncrementalGeneratorSnapshotTest<TSourceGenerator, XUnitVerifier>
+public class SourceGeneratorTest<TSourceGenerator> :
+    CSharpIncrementalGeneratorSnapshotTest<TSourceGenerator, XUnitVerifier>
     where TSourceGenerator : IIncrementalGenerator, new()
 {
     public SourceGeneratorTest(params string[] sources)

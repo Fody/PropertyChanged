@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using ComplexHierarchy;
-using Fody;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using Xunit;
 using Xunit.Abstractions;
 
 public class AssemblyToProcessTests(ITestOutputHelper outputHelper)

@@ -1,7 +1,4 @@
-﻿using Fody;
-using Xunit;
-
-public class AssemblyExplicitPropertyChanged
+﻿public class AssemblyExplicitPropertyChanged
 {
     [Fact]
     public void Run()

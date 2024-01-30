@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Xunit;
+﻿
 // ReSharper disable MemberCanBeMadeStatic.Local
 
 // ReSharper disable ValueParameterNotUsed
@@ -12,8 +11,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
-        var moduleWeaver = new ModuleWeaver();
-        var propertyNames = moduleWeaver .GetAlreadyNotifies(propertyDefinition);
+        var weaver = new ModuleWeaver();
+        var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition);
         Assert.Single(propertyNames);
     }
 
@@ -22,8 +21,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Multiple().Property);
 
-        var moduleWeaver = new ModuleWeaver();
-        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
+        var weaver = new ModuleWeaver();
+        var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.Contains("Property1",propertyNames);
         Assert.Contains("Property2",propertyNames);
     }
@@ -33,8 +32,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithoutNotificationProperty);
 
-        var moduleWeaver = new ModuleWeaver();
-        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
+        var weaver = new ModuleWeaver();
+        var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.Empty(propertyNames);
     }
 
@@ -43,8 +42,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Virtual().WithNotificationProperty);
 
-        var moduleWeaver = new ModuleWeaver();
-        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
+        var weaver = new ModuleWeaver();
+        var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.NotEmpty(propertyNames);
     }
 
@@ -53,8 +52,8 @@ public class AlreadyNotifyFinderTest
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
-        var moduleWeaver = new ModuleWeaver();
-        var propertyNames = moduleWeaver.GetAlreadyNotifies(propertyDefinition).ToList();
+        var weaver = new ModuleWeaver();
+        var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
         Assert.NotEmpty(propertyNames);
     }
 

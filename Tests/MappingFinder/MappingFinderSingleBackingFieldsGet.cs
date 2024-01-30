@@ -1,5 +1,4 @@
-using System.Linq;
-using Xunit;
+
 // ReSharper disable ValueParameterNotUsed
 #pragma warning disable 649
 

@@ -1,17 +1,14 @@
-using Fody;
-using Xunit;
-
 public class AssemblyWithDisabledInjectOnPropertyNameChangedTests
 {
     static TestResult testResult;
 
     static AssemblyWithDisabledInjectOnPropertyNameChangedTests()
     {
-        var weavingTask = new ModuleWeaver
+        var task = new ModuleWeaver
         {
             InjectOnPropertyNameChanged = false
         };
-        testResult = weavingTask.ExecuteTestRun(
+        testResult = task.ExecuteTestRun(
             "AssemblyWithDisabledInjectOnPropertyNameChanged.dll",
             ignoreCodes: new[] {"0x80131869"});
     }

@@ -8,38 +8,26 @@ public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
 {
     PEFile _file = new(typeof(Testee).Assembly.Location);
 
-    static CombinedChangingAndChangedWeaverTests()
-    {
+    static CombinedChangingAndChangedWeaverTests() =>
         VerifyICSharpCodeDecompiler.Initialize();
-    }
 
-    PropertyToDisassemble GetProperty(string propertyName)
-    {
-        return new PropertyToDisassemble(_file, "SmokeTest.Testee", propertyName, PropertyParts.Setter);
-    }
+    PropertyToDisassemble GetProperty(string propertyName) =>
+        new(_file, "SmokeTest.Testee", propertyName, PropertyParts.Setter);
 
     [Fact]
-    public async Task ReferenceTypeProperty()
-    {
-        await Verify(GetProperty("Property1")).UniqueForAssemblyConfiguration();
-    }
+    public Task ReferenceTypeProperty() =>
+        Verify(GetProperty("Property1")).UniqueForAssemblyConfiguration();
 
     [Fact]
-    public async Task ValueTypeProperty()
-    {
-        await Verify(GetProperty("Property2")).UniqueForAssemblyConfiguration();
-    }
+    public Task ValueTypeProperty() =>
+        Verify(GetProperty("Property2")).UniqueForAssemblyConfiguration();
 
     [Fact]
-    public async Task NullableValueTypeProperty()
-    {
-        await Verify(GetProperty("Property3")).UniqueForAssemblyConfiguration();
-    }
+    public Task NullableValueTypeProperty() =>
+        Verify(GetProperty("Property3")).UniqueForAssemblyConfiguration();
 
-    public void Dispose()
-    {
+    public void Dispose() =>
         _file.Dispose();
-    }
 }
 
 [ImplementPropertyChanging]

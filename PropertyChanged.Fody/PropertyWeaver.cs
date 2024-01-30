@@ -6,7 +6,7 @@ using Mono.Collections.Generic;
 using TypeSystem = Fody.TypeSystem;
 
 public class PropertyWeaver(
-    ModuleWeaver moduleWeaver,
+    ModuleWeaver weaver,
     PropertyData propertyData,
     TypeNode typeNode,
     TypeSystem typeSystem)
@@ -16,7 +16,7 @@ public class PropertyWeaver(
 
     public void Execute()
     {
-        moduleWeaver.WriteDebug("\t\t" + propertyData.PropertyDefinition.Name);
+        weaver.WriteDebug("\t\t" + propertyData.PropertyDefinition.Name);
         var property = propertyData.PropertyDefinition;
         setMethodBody = property.SetMethod.Body;
         instructions = property.SetMethod.Body.Instructions;
@@ -118,13 +118,13 @@ public class PropertyWeaver(
 
     int AddIsChangedSetterCall(int index)
     {
-        if (!moduleWeaver.EnableIsChangedProperty || typeNode.IsChangedInvoker == null ||
+        if (!weaver.EnableIsChangedProperty || typeNode.IsChangedInvoker == null ||
             propertyData.PropertyDefinition.CustomAttributes.ContainsAttribute("PropertyChanged.DoNotSetChangedAttribute") ||
             propertyData.PropertyDefinition.Name == "IsChanged")
         {
             return index;
         }
-        moduleWeaver.WriteDebug("\t\t\tSet IsChanged");
+        weaver.WriteDebug("\t\t\tSet IsChanged");
         return instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldc_I4, 1),
@@ -137,11 +137,11 @@ public class PropertyWeaver(
         index = AddOnChangedMethodCalls(index, onChangedMethods, property);
         if (propertyData.AlreadyNotifies.Contains(property.Name))
         {
-            moduleWeaver.WriteDebug($"\t\t\t{property.Name} skipped since call already exists");
+            weaver.WriteDebug($"\t\t\t{property.Name} skipped since call already exists");
             return index;
         }
 
-        moduleWeaver.WriteDebug($"\t\t\t{property.Name}");
+        weaver.WriteDebug($"\t\t\t{property.Name}");
         if (typeNode.EventInvoker.InvokerType == InvokerTypes.BeforeAfterGeneric)
         {
             return AddBeforeAfterGenericInvokerCall(index, property);
@@ -171,7 +171,7 @@ public class PropertyWeaver(
         {
             if (onChangedMethod.IsDefaultMethod)
             {
-                if (!moduleWeaver.InjectOnPropertyNameChanged)
+                if (!weaver.InjectOnPropertyNameChanged)
                 {
                     continue;
                 }
@@ -196,7 +196,7 @@ public class PropertyWeaver(
                     if (propertyDefinition.PropertyType.FullName != onChangedMethod.ArgumentTypeFullName)
                     {
                         var methodDefinition = onChangedMethod.MethodDefinition;
-                        moduleWeaver.EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
+                        weaver.EmitConditionalWarning(methodDefinition, $"Unsupported signature for a On_PropertyName_Changed method: {methodDefinition.Name} in {methodDefinition.DeclaringType.FullName}");
                         break;
                     }
                     index = AddBeforeAfterOnChangedCall(index, propertyDefinition, onChangedMethod.MethodReference, true);
@@ -227,7 +227,7 @@ public class PropertyWeaver(
     {
         index = instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Ldsfld, moduleWeaver.EventArgsCache.GetEventArgsField(property.Name)));
+            Instruction.Create(OpCodes.Ldsfld, weaver.EventArgsCache.GetEventArgsField(property.Name)));
 
         return instructions.Insert(index, CallEventInvoker(property).ToArray());
     }
@@ -237,7 +237,7 @@ public class PropertyWeaver(
         index = instructions.Insert(index,
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Ldsfld, moduleWeaver.EventArgsCache.GetEventArgsField(property.Name)));
+            Instruction.Create(OpCodes.Ldsfld, weaver.EventArgsCache.GetEventArgsField(property.Name)));
 
         return instructions.Insert(index, CallEventInvoker(property).ToArray());
     }

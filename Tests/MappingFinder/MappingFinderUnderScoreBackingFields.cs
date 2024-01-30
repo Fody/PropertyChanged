@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Xunit;
-
-public class MappingFinderUnderScoreBackingFields
+﻿public class MappingFinderUnderScoreBackingFields
 {
     [Fact]
     public void WithLowerUnderScoreBackingFields()

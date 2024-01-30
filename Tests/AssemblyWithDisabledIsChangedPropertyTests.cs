@@ -1,17 +1,14 @@
-using Fody;
-using Xunit;
-
 public class AssemblyWithDisabledIsChangedPropertyTests
 {
     static TestResult testResult;
 
     static AssemblyWithDisabledIsChangedPropertyTests()
     {
-        var weavingTaskFalse = new ModuleWeaver
+        var task = new ModuleWeaver
         {
             EnableIsChangedProperty = false
         };
-        testResult = weavingTaskFalse.ExecuteTestRun(
+        testResult = task.ExecuteTestRun(
             "AssemblyWithDisabledIsChangedProperty.dll",
             ignoreCodes: new[] {"0x80131869"});
     }

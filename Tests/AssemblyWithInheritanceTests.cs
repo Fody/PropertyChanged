@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 #if NETCOREAPP
 using System.Runtime.Loader;
 #endif
 
-using Fody;
-
-using Xunit;
 using Xunit.Abstractions;
 
-public class AssemblyWithInheritanceTests
+public class AssemblyWithInheritanceTests(ITestOutputHelper outputHelper)
 {
     static AssemblyWithInheritanceTests()
     {
-        var weavingTask = new ModuleWeaver();
+        var task = new ModuleWeaver();
 
         var testResults = new[]
         {
-            weavingTask.ExecuteTestRun("AssemblyWithInheritance.dll", ignoreCodes: peVerifyIgnoreCodes),
-            weavingTask.ExecuteTestRun("AssemblyWithExternalInheritance.dll", ignoreCodes: peVerifyIgnoreCodes)
+            task.ExecuteTestRun("AssemblyWithInheritance.dll", ignoreCodes: peVerifyIgnoreCodes),
+            task.ExecuteTestRun("AssemblyWithExternalInheritance.dll", ignoreCodes: peVerifyIgnoreCodes)
         };
 
 #if NETFRAMEWORK
@@ -34,11 +30,6 @@ public class AssemblyWithInheritanceTests
             .Select(result => loadContext.LoadFromAssemblyPath(result.AssemblyPath))
             .ToArray();
 #endif
-    }
-
-    public AssemblyWithInheritanceTests(ITestOutputHelper outputHelper)
-    {
-        this.outputHelper = outputHelper;
     }
 
     [Theory]
@@ -88,7 +79,6 @@ public class AssemblyWithInheritanceTests
         Assert.Equal(expected, actual);
     }
 
-    readonly ITestOutputHelper outputHelper;
     static Assembly[] assemblies;
     static readonly string[] peVerifyIgnoreCodes =
     {

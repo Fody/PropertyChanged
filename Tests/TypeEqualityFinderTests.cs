@@ -1,5 +1,4 @@
 using System.Data.SqlTypes;
-using Xunit;
 
 public class TypeEqualityFinderTests
 {

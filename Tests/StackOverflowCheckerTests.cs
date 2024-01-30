@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using Fody;
-using Xunit;
-
-public class StackOverflowCheckerTests
+﻿public class StackOverflowCheckerTests
 {
     ModuleWeaver stackOverflowChecker = new();
 

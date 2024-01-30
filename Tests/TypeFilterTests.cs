@@ -1,7 +1,4 @@
-﻿using Fody;
-using Xunit;
-
-public class TypeFilterTests
+﻿public class TypeFilterTests
 {
     TestResult testResult;
 

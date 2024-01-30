@@ -7,8 +7,8 @@ public partial class ModuleWeaver
 
     public void ResolveTriggerDependentPropertiesConfig()
     {
-        var value = Config?.Attributes("TriggerDependentProperties")
-            .Select(a => a.Value)
+        var value = Config.Attributes("TriggerDependentProperties")
+            .Select(_ => _.Value)
             .SingleOrDefault();
         if (value != null)
         {

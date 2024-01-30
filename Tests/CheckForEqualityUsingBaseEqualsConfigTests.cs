@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using Xunit;
 
 public class CheckForEqualityUsingBaseEqualsConfigTests
 {
@@ -7,43 +6,43 @@ public class CheckForEqualityUsingBaseEqualsConfigTests
     public void False()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='false'/>");
-        var moduleWeaver = new ModuleWeaver { Config = xElement };
-        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.False(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        var weaver = new ModuleWeaver { Config = xElement };
+        weaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.False(weaver.CheckForEqualityUsingBaseEquals);
     }
 
     [Fact]
     public void False0()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='0'/>");
-        var moduleWeaver = new ModuleWeaver { Config = xElement };
-        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.False(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        var weaver = new ModuleWeaver { Config = xElement };
+        weaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.False(weaver.CheckForEqualityUsingBaseEquals);
     }
 
     [Fact]
     public void True()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='true'/>");
-        var moduleWeaver = new ModuleWeaver { Config = xElement };
-        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        var weaver = new ModuleWeaver { Config = xElement };
+        weaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.True(weaver.CheckForEqualityUsingBaseEquals);
     }
 
     [Fact]
     public void True1()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEqualityUsingBaseEquals='1'/>");
-        var moduleWeaver = new ModuleWeaver { Config = xElement };
-        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        var weaver = new ModuleWeaver { Config = xElement };
+        weaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.True(weaver.CheckForEqualityUsingBaseEquals);
     }
 
     [Fact]
     public void Default()
     {
-        var moduleWeaver = new ModuleWeaver();
-        moduleWeaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
-        Assert.True(moduleWeaver.CheckForEqualityUsingBaseEquals);
+        var weaver = new ModuleWeaver();
+        weaver.ResolveCheckForEqualityUsingBaseEqualsConfig();
+        Assert.True(weaver.CheckForEqualityUsingBaseEquals);
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Xunit;
-
-public class AbstractInfoCheckerTest
+﻿public class AbstractInfoCheckerTest
 {
     [Fact]
     public void IsAbstract()

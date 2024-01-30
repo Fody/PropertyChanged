@@ -1,14 +1,12 @@
 ﻿using System.Reflection;
-using Fody;
-using Xunit;
 
 public class AssemblyWithInterceptorTests
 {
     [Fact]
     public void Simple()
     {
-        var weavingTask = new ModuleWeaver();
-        var testResult = weavingTask.ExecuteTestRun(
+        var task = new ModuleWeaver();
+        var testResult = task.ExecuteTestRun(
             "AssemblyWithInterceptor.dll",
             ignoreCodes: new[] {"0x80131869"});
 

@@ -1,6 +1,3 @@
-using Fody;
-using Xunit;
-
 public class FSharpTest
 {
     TestResult testResult;

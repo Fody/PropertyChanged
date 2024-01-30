@@ -1,5 +1,3 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Testing;
 using Test = SourceGeneratorTest<SourceGenerator>;
 
 public class CodeGeneratorTest

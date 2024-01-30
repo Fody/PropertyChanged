@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using Mono.Cecil;
-using Xunit;
 
 public class MethodFinderTest
 {

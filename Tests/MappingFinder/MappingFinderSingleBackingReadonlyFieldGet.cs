@@ -1,5 +1,4 @@
-using System.Linq;
-using Xunit;
+
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable ValueParameterNotUsed
 

@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Xunit;
-
-public class WithGenericAutoProperties
+﻿public class WithGenericAutoProperties
 {
     [Fact]
     public void Run()

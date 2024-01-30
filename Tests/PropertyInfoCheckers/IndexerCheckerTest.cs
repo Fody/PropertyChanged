@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Xunit;
+﻿
 // ReSharper disable ValueParameterNotUsed
 
 public class IndexerCheckerTest

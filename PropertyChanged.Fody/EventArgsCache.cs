@@ -5,12 +5,12 @@ using Mono.Cecil.Cil;
 
 public class EventArgsCache
 {
-    public EventArgsCache(ModuleWeaver moduleWeaver)
+    public EventArgsCache(ModuleWeaver weaver)
     {
-        this.moduleWeaver = moduleWeaver;
+        this.weaver = weaver;
         var attributes = TypeAttributes.AutoClass | TypeAttributes.AutoLayout | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.NotPublic;
-        cacheTypeDefinition = new(moduleWeaver.ModuleDefinition.Assembly.Name.Name, "<>PropertyChangedEventArgs", attributes, moduleWeaver.TypeSystem.ObjectReference);
-        moduleWeaver.MarkAsGeneratedCode(cacheTypeDefinition.CustomAttributes);
+        cacheTypeDefinition = new(weaver.ModuleDefinition.Assembly.Name.Name, "<>PropertyChangedEventArgs", attributes, weaver.TypeSystem.ObjectReference);
+        weaver.MarkAsGeneratedCode(cacheTypeDefinition.CustomAttributes);
     }
 
     public FieldReference GetEventArgsField(string propertyName)
@@ -18,7 +18,7 @@ public class EventArgsCache
         if (!properties.TryGetValue(propertyName, out var field))
         {
             var attributes = FieldAttributes.Assembly | FieldAttributes.Static | FieldAttributes.InitOnly;
-            field = new(propertyName, attributes, moduleWeaver.PropertyChangedEventArgsReference);
+            field = new(propertyName, attributes, weaver.PropertyChangedEventArgsReference);
             properties.Add(propertyName, field);
         }
 
@@ -33,7 +33,7 @@ public class EventArgsCache
         }
 
         var attributes = MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-        var cctor = new MethodDefinition(".cctor", attributes, moduleWeaver.TypeSystem.VoidReference);
+        var cctor = new MethodDefinition(".cctor", attributes, weaver.TypeSystem.VoidReference);
 
         foreach (var pair in properties.OrderBy(i => i.Key))
         {
@@ -44,7 +44,7 @@ public class EventArgsCache
 
             cctor.Body.Instructions.Append(
                 Instruction.Create(OpCodes.Ldstr, propertyName),
-                Instruction.Create(OpCodes.Newobj, moduleWeaver.PropertyChangedEventConstructorReference),
+                Instruction.Create(OpCodes.Newobj, weaver.PropertyChangedEventConstructorReference),
                 Instruction.Create(OpCodes.Stsfld, eventArgsField)
             );
         }
@@ -54,10 +54,10 @@ public class EventArgsCache
         );
 
         cacheTypeDefinition.Methods.Add(cctor);
-        moduleWeaver.ModuleDefinition.Types.Add(cacheTypeDefinition);
+        weaver.ModuleDefinition.Types.Add(cacheTypeDefinition);
     }
 
-    ModuleWeaver moduleWeaver;
+    ModuleWeaver weaver;
     TypeDefinition cacheTypeDefinition;
     Dictionary<string, FieldDefinition> properties = new();
 }

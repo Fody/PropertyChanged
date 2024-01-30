@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using AssemblyWithBase.BaseWithEquals;
-using Fody;
+﻿using AssemblyWithBase.BaseWithEquals;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using Xunit;
 
 public class AssemblyWithBaseInDifferentModuleTests
 {

@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Xunit;
-
-public class WithAutoProperties
+﻿public class WithAutoProperties
 {
     //TODO: add test for abstract
 
