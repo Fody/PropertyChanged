@@ -2,7 +2,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Test = SourceGeneratorTest<SourceGenerator>;
 
-[UsesVerify]
 public class CodeGeneratorTest
 {
     static readonly DiagnosticResult CS0535 = new DiagnosticResult("CS0535", DiagnosticSeverity.Error).WithLocation(0);

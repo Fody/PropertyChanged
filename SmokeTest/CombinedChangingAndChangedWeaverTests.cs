@@ -4,7 +4,6 @@ using PropertyChanged;
 using PropertyChanging;
 
 namespace SmokeTest;
-[UsesVerify]
 public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
 {
     PEFile _file = new(typeof(Testee).Assembly.Location);
