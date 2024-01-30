@@ -22,8 +22,8 @@ public class AssemblyWithInterceptorTests
     [Fact]
     public void BeforeAfter()
     {
-        var weavingTask = new ModuleWeaver();
-        var testResult = weavingTask.ExecuteTestRun(
+        var weaver = new ModuleWeaver();
+        var testResult = weaver.ExecuteTestRun(
             "AssemblyWithBeforeAfterInterceptor.dll",
             ignoreCodes: new[] {"0x80131869"});
         var assembly = testResult.Assembly;

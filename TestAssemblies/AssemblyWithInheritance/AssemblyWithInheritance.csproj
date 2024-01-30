@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48;net6</TargetFrameworks>
+    <TargetFrameworks>net48;net6.0</TargetFrameworks>
     <NoWarn>0067;0649</NoWarn>
     <DisableFody>true</DisableFody>
   </PropertyGroup>

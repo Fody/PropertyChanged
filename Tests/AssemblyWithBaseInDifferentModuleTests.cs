@@ -8,11 +8,11 @@ public class AssemblyWithBaseInDifferentModuleTests
 
     void Weave(bool useStaticEqualsFromBase)
     {
-        var weavingTask = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
             UseStaticEqualsFromBase = useStaticEqualsFromBase
         };
-        testResult = weavingTask.ExecuteTestRun("AssemblyWithBaseInDifferentModule.dll", ignoreCodes:new []{ "0x80131869" });
+        testResult = weaver.ExecuteTestRun("AssemblyWithBaseInDifferentModule.dll", ignoreCodes:new []{ "0x80131869" });
     }
 
     [Fact]
