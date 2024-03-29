@@ -13,7 +13,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForNonPartialClass()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public class Class1 : INotifyPropertyChanged
@@ -23,7 +22,6 @@ public class CodeGeneratorTest
                          
                          public event PropertyChangedEventHandler? PropertyChanged;
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -34,7 +32,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandler()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial class Class1 : INotifyPropertyChanged
@@ -44,7 +41,6 @@ public class CodeGeneratorTest
                          
                          public event PropertyChangedEventHandler? PropertyChanged;
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -55,7 +51,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithoutEventHandler()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial class Class1 : INotifyPropertyChanged
@@ -63,7 +58,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
         await Verify(generated);
@@ -73,7 +67,6 @@ public class CodeGeneratorTest
     public async Task CodeIsNotGeneratedForPartialRecordWithoutEventHandler()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial record Class1 : {|#0:INotifyPropertyChanged|}
@@ -81,7 +74,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var test = new Test(source)
         {
@@ -97,13 +89,11 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithFullNameInterface()
     {
         var source = """
-
                      public partial class Class1 : System.ComponentModel.INotifyPropertyChanged
                      {
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -114,7 +104,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialGenericClassWithoutEventHandler()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial class Class1<T1, T2> : INotifyPropertyChanged
@@ -122,7 +111,6 @@ public class CodeGeneratorTest
                          public T1 Property1 { get; set; } = default!;
                          public T2 Property2 { get; set; } = default!;
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -133,7 +121,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPart()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial class Class1 : INotifyPropertyChanged
@@ -141,11 +128,11 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
+
                      public partial class Class1
                      {
                          public event PropertyChangedEventHandler? PropertyChanged;
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -156,7 +143,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPartAndDifferentSource()
     {
         var source1 = """
-
                       using System.ComponentModel;
 
                       public partial class Class1 : INotifyPropertyChanged
@@ -164,17 +150,14 @@ public class CodeGeneratorTest
                           public int Property1 { get; set; }
                           public int Property2 { get; set; }
                       }
-
                       """;
         var source2 = """
-
                       using System.ComponentModel;
 
                       public partial class Class1
                       {
                           public event PropertyChangedEventHandler? PropertyChanged;
                       }
-
                       """;
         var generated = await new Test(source1, source2).RunAsync();
 
@@ -185,24 +168,20 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithRedundantInterfaceImplementation()
     {
         var source1 = """
-
                       using System.ComponentModel;
 
                       public partial class Class1 : INotifyPropertyChanged
                       {
                           public int Property1 { get; set; }
                       }
-
                       """;
         var source2 = """
-
                       using System.ComponentModel;
 
                       public partial class Class1 : INotifyPropertyChanged
                       {
                           public int Property2 { get; set; }
                       }
-
                       """;
         var generated = await new Test(source1, source2).RunAsync();
 
@@ -213,7 +192,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithRedundantInterfaceImplementationAndAttributeButNotOnTheFirstPart()
     {
         var source = """
-
                      using System.ComponentModel;
                      using PropertyChanged;
 
@@ -232,7 +210,6 @@ public class CodeGeneratorTest
                      {
                          public string? P3 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -243,7 +220,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForPartialStructWithoutEventHandler()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial struct Class1 : {|#0:INotifyPropertyChanged|}
@@ -251,7 +227,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var test = new Test(source)
         {
@@ -267,7 +242,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithAttribute()
     {
         var source = """
-
                      using PropertyChanged;
 
                      [AddINotifyPropertyChangedInterface]
@@ -276,7 +250,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -287,7 +260,6 @@ public class CodeGeneratorTest
     public async Task CodeIsNotGeneratedForPartialRecordWithAttribute()
     {
         var source = """
-
                      using PropertyChanged;
 
                      [AddINotifyPropertyChangedInterface]
@@ -296,7 +268,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -307,7 +278,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithAttributeAndInterfaceAndBaseClass()
     {
         var source = """
-
                      using PropertyChanged;
                      using System;
                      using System.ComponentModel;
@@ -318,7 +288,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -329,7 +298,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForPartialClass2WithAttributeAndAttributedBaseClass()
     {
         var source = """
-
                      using PropertyChanged;
 
                      [AddINotifyPropertyChangedInterface]
@@ -343,7 +311,6 @@ public class CodeGeneratorTest
                      {
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -354,7 +321,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForPartialClass2WithAttributeAndInterfaceImplementationInBaseClass()
     {
         var source = """
-
                      using PropertyChanged;
                      using System.ComponentModel;
 
@@ -368,7 +334,6 @@ public class CodeGeneratorTest
                      {
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -379,7 +344,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialClassWithAttributeInFileScopedNamespace()
     {
         var source = """
-
                      using PropertyChanged;
 
                      namespace Whatever;
@@ -390,7 +354,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -401,7 +364,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForPartialGenericClassWithAttribute()
     {
         var source = """
-
                      using PropertyChanged;
 
                      [AddINotifyPropertyChangedInterface]
@@ -421,7 +383,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedNoneVirtualForSealedPartialClassWithAttribute()
     {
         var source = """
-
                      using PropertyChanged;
 
                      [AddINotifyPropertyChangedInterface]
@@ -430,7 +391,6 @@ public class CodeGeneratorTest
                          public int Property1 { get; set; }
                          public int Property2 { get; set; }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -441,7 +401,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForClassesInMultipleNamespaces()
     {
         var source = """
-
                      using System.ComponentModel;
                      using PropertyChanged;
 
@@ -487,7 +446,6 @@ public class CodeGeneratorTest
                              }
                          }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -498,7 +456,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForNestedPartialClasses()
     {
         var source = """
-
                      using System.ComponentModel;
                      using PropertyChanged;
 
@@ -520,7 +477,6 @@ public class CodeGeneratorTest
                              }
                          }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -531,7 +487,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForClassesNestedInStruct()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial struct Class1
@@ -544,9 +499,7 @@ public class CodeGeneratorTest
                              public int Property1 { get; set; }
                              public int Property2 { get; set; }
                          }
-
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -557,7 +510,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForClassesNestedInRecord()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial record Class1
@@ -570,9 +522,7 @@ public class CodeGeneratorTest
                              public int Property1 { get; set; }
                              public int Property2 { get; set; }
                          }
-
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -583,7 +533,6 @@ public class CodeGeneratorTest
     public async Task CodeIsGeneratedForDeepNestedItems()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      partial record Level1
@@ -606,7 +555,6 @@ public class CodeGeneratorTest
                              }
                          }
                      }
-
                      """;
         var generated = await new Test(source).RunAsync();
 
@@ -617,7 +565,6 @@ public class CodeGeneratorTest
     public async Task NoCodeIsGeneratedForNestedPartialClassIfNotAllContainingClassesArePartial()
     {
         var source = """
-
                      using System.ComponentModel;
 
                      public partial class Class1
@@ -637,11 +584,13 @@ public class CodeGeneratorTest
                              }
                          }
                      }
-
                      """;
         var test = new Test(source)
         {
-            ExpectedDiagnostics = {CS0535.WithArguments("Class1.Class2.Class3", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged")}
+            ExpectedDiagnostics =
+            {
+                CS0535.WithArguments("Class1.Class2.Class3", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged")
+            }
         };
 
         var generated = await test.RunAsync();
