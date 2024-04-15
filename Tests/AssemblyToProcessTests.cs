@@ -13,8 +13,8 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
 
     static AssemblyToProcessTests()
     {
-        var weaver = new ModuleWeaver();
-        testResult = weaver.ExecuteTestRun(
+        var weavingTask = new ModuleWeaver();
+        testResult = weavingTask.ExecuteTestRun(
             "AssemblyToProcess.dll",
             ignoreCodes: new[] {"0x80131869"}
 #if NETCOREAPP2_0
