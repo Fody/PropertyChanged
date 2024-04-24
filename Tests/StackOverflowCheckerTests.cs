@@ -6,7 +6,7 @@
     public void CanDetectStackOverflow()
     {
         var weaver = new ModuleWeaver();
-       Assert.Throws<WeavingException>(() => { weaver.ExecuteTestRun("AssemblyWithStackOverflow.dll"); });
+        Assert.Throws<WeavingException>(() => { weaver.ExecuteTestRun("AssemblyWithStackOverflow.dll"); });
     }
 
     [Theory]
