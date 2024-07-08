@@ -9,7 +9,7 @@
     <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
     <PackageReference Include="Verify.Xunit" Version="24.1.0" />
     <PackageReference Include="xunit" Version="2.7.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all" />
     <PackageReference Include="FodyHelpers" Version="6.8.0" />
