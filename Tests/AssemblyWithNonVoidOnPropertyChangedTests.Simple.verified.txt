@@ -1,1 +1,0 @@
-The type ClassWithNonVoidOnPropertyChanged has a On_PropertyName_Changed method (OnProperty1Changed) that has a non void return value. Ensure the return type void. You can suppress this warning with [SuppressPropertyChangedWarnings].

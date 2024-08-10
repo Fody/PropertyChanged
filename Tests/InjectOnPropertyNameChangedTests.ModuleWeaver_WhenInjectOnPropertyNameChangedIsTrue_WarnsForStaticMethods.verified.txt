@@ -1,1 +1,0 @@
-The type ClassWithStaticOnPropertyChanged has a On_PropertyName_Changed method (OnProperty1Changed) which is static. You can suppress this warning with [SuppressPropertyChangedWarnings].

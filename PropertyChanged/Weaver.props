@@ -1,6 +1,0 @@
-﻿<Project>
-  <ItemGroup>
-    <WeaverFiles Include="$(MsBuildThisFileDirectory)..\weaver\$(MSBuildThisFileName).dll" />
-    <CompilerVisibleProperty Include="PropertyChangedAnalyzerConfiguration" />
-  </ItemGroup>
-</Project>
