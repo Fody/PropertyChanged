@@ -1,5 +1,5 @@
 public class SourceGeneratorTest<TSourceGenerator> :
-    CSharpIncrementalGeneratorSnapshotTest<TSourceGenerator, XUnitVerifier>
+    CSharpIncrementalGeneratorSnapshotTest<TSourceGenerator, DefaultVerifier>
     where TSourceGenerator : IIncrementalGenerator, new()
 {
     public SourceGeneratorTest(params string[] sources)
