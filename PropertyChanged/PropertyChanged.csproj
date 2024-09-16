@@ -15,7 +15,7 @@
     <WeaverPropsFile>$(MSBuildThisFileDirectory)Weaver.props</WeaverPropsFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="none" />
+    <PackageReference Include="Fody" Version="6.8.2" PrivateAssets="none" />
     <PackageReference Include="FodyPackaging" Version="6.8.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" PrivateAssets="All" />
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer/PropertyChanged.Fody.Analyzer.csproj" ReferenceOutputAssembly="false" Condition="'$(TargetFrameworkIdentifier)'!='.NetFramework'" />
