@@ -9,4 +9,8 @@
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!--<DefineConstants>$(DefineConstants);TEMP_REQUIRE_IMPLEMENTATION_SETTER_NON_INTERFERENCE</DefineConstants>-->
+  </PropertyGroup>
 </Project>
