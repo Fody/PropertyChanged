@@ -15,7 +15,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all" />
-    <PackageReference Include="FodyHelpers" Version="6.8.0" />
+    <PackageReference Include="FodyHelpers" Version="6.8.2" />
     <PackageReference Include="PropertyChanging.Fody" Version="1.30.3" PrivateAssets="all" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
