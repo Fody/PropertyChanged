@@ -37,5 +37,6 @@
     <ProjectReference Include="..\TestAssemblies\AssemblyWithStaticOnPropertyNameChanged\AssemblyWithStaticOnPropertyNameChanged.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithTypeFilter\AssemblyWithTypeFilter.csproj" />
     <ProjectReference Include="..\TestAssemblies\AssemblyWithInheritance\AssemblyWithInheritance.csproj" />
+    <ProjectReference Include="..\TestAssemblies\AssemblyWithSetterSideEffects\AssemblyWithSetterSideEffects.csproj" />
   </ItemGroup>
 </Project>

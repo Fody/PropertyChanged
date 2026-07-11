@@ -70,6 +70,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyChanged.Fody.Analyz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyChanged.Fody.Analyzer.Tests", "PropertyChanged.Fody.Analyzer.Tests\PropertyChanged.Fody.Analyzer.Tests.csproj", "{35A8A625-B010-4F9D-A901-9B07D9E13A16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithSetterSideEffects", "TestAssemblies\AssemblyWithSetterSideEffects\AssemblyWithSetterSideEffects.csproj", "{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -340,6 +342,18 @@ Global
 		{35A8A625-B010-4F9D-A901-9B07D9E13A16}.Release|ARM.Build.0 = Release|Any CPU
 		{35A8A625-B010-4F9D-A901-9B07D9E13A16}.Release|x86.ActiveCfg = Release|Any CPU
 		{35A8A625-B010-4F9D-A901-9B07D9E13A16}.Release|x86.Build.0 = Release|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Release|ARM.Build.0 = Release|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -365,6 +379,7 @@ Global
 		{89CC72A8-43A9-4593-9FA5-61091C989B40} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{9D3B5C35-6523-45D9-B11D-0FBB67C0866A} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 		{10BDE166-0BFC-41D9-9326-805717A054B3} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
+		{E4E54CE2-DD54-41B9-BDC0-DF45FA575535} = {546A6338-E25E-4796-AF08-A4742E3BDF7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ABD5CA78-3690-4D62-8642-3463D9FAE144}
