@@ -12,7 +12,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.6.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" />
-    <PackageVersion Include="Nullable.Extended.Analyzer" Version="1.15.6581" />
+    <PackageVersion Include="Nullable.Extended.Analyzer" Version="1.16.6891" />
     <PackageVersion Include="PropertyChanging.Fody" Version="1.31.0" />
     <PackageVersion Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
     <PackageVersion Include="Verify.XunitV3" Version="31.22.0" />
