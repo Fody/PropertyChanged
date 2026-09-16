@@ -1,14 +1,29 @@
-name: merge-dependabot
-on:
-  pull_request:
+# Follows https://docs.github.com/en/code-security/tutorials/secure-your-dependencies/automate-dependabot-with-actions
+#
+# Auto-merge only waits for the checks the default branch requires, so this relies on a ruleset
+# requiring the CI check, and on "Allow auto-merge" being on in the repository settings.
+name: Dependabot auto-merge
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  automerge:
+  dependabot:
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'Fody/PropertyChanged'
     steps:
-      - name: Dependabot Auto Merge
-        uses: ahmadnassri/action-dependabot-auto-merge@v2.6.6
+      # v2.3.0, pinned to a commit as in the docs
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
         with:
-          target: minor
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          command: squash and merge
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      # Patch and minor updates, squashed, as before
+      - name: Enable auto-merge for Dependabot PRs
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
