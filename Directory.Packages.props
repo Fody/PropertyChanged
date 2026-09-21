@@ -15,7 +15,7 @@
     <PackageVersion Include="Nullable.Extended.Analyzer" Version="1.16.6891" />
     <PackageVersion Include="PropertyChanging.Fody" Version="1.31.0" />
     <PackageVersion Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.22.0" />
+    <PackageVersion Include="Verify.XunitV3" Version="33.1.1" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
