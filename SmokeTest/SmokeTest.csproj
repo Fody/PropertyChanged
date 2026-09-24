@@ -6,13 +6,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Verify.ICSharpCode.Decompiler" />
-    <PackageReference Include="Verify.XunitV3" />
-    <PackageReference Include="xunit.v3" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="TUnit.Core" />
+    <PackageReference Include="TUnit.Assertions" />
+    <PackageReference Include="TUnit.Engine" />
     <PackageReference Include="Fody" PrivateAssets="all" />
     <PackageReference Include="FodyHelpers" />
     <PackageReference Include="PropertyChanging.Fody" PrivateAssets="all" />

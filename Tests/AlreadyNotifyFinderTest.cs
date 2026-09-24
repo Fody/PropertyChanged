@@ -1,4 +1,4 @@
-﻿
+
 // ReSharper disable MemberCanBeMadeStatic.Local
 
 // ReSharper disable ValueParameterNotUsed
@@ -6,55 +6,55 @@
 
 public class AlreadyNotifyFinderTest
 {
-    [Fact]
-    public void ContainsNotification()
+    [Test]
+    public async Task ContainsNotification()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
         var weaver = new ModuleWeaver();
         var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition);
-        Assert.Single(propertyNames);
+        await Assert.That(propertyNames).HasSingleItem();
     }
 
-    [Fact]
-    public void MultipleNotifications()
+    [Test]
+    public async Task MultipleNotifications()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Multiple().Property);
 
         var weaver = new ModuleWeaver();
         var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.Contains("Property1",propertyNames);
-        Assert.Contains("Property2",propertyNames);
+        await Assert.That(propertyNames).Contains("Property1");
+        await Assert.That(propertyNames).Contains("Property2");
     }
 
-    [Fact]
-    public void WithoutNotification()
+    [Test]
+    public async Task WithoutNotification()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithoutNotificationProperty);
 
         var weaver = new ModuleWeaver();
         var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.Empty(propertyNames);
+        await Assert.That(propertyNames).IsEmpty();
     }
 
-    [Fact]
-    public void AlreadyContainsNotificationVirtual()
+    [Test]
+    public async Task AlreadyContainsNotificationVirtual()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new Virtual().WithNotificationProperty);
 
         var weaver = new ModuleWeaver();
         var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.NotEmpty(propertyNames);
+        await Assert.That(propertyNames).IsNotEmpty();
     }
 
-    [Fact]
-    public void AlreadyContainsNotificationNonVirtual()
+    [Test]
+    public async Task AlreadyContainsNotificationNonVirtual()
     {
         var propertyDefinition = DefinitionFinder.FindProperty(() => new NonVirtual().WithNotificationProperty);
 
         var weaver = new ModuleWeaver();
         var propertyNames = weaver.GetAlreadyNotifies(propertyDefinition).ToList();
-        Assert.NotEmpty(propertyNames);
+        await Assert.That(propertyNames).IsNotEmpty();
     }
 
     public class NonVirtual

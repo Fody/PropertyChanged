@@ -1,5 +1,7 @@
-﻿using TestResult = Fody.TestResult;
+using TestResult = Fody.TestResult;
 
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
 public class TypeFilterTests
 {
     TestResult testResult;
@@ -12,21 +14,21 @@ public class TypeFilterTests
             ignoreCodes: ["0x80131869"]);
     }
 
-    [Fact]
+    [Test]
     public void CheckIfFilterTypeExcludeCorrectTypes()
     {
         var instance = testResult.GetInstance("TestClassExclude");
         EventTester.TestPropertyNotCalled(instance);
     }
 
-    [Fact]
+    [Test]
     public void CheckIfFilterTypeIncludeCorrectTypes()
     {
         var instance = testResult.GetInstance("PropertyChangedTest.TestClassInclude");
         EventTester.TestProperty(instance, false);
     }
 
-    [Fact]
+    [Test]
     public void CheckIfMultipleFilterTypeIncludeCorrectTypes()
     {
         var instance1 = testResult.GetInstance("PropertyChangedTest.TestClassInclude");

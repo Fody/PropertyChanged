@@ -1,6 +1,8 @@
-﻿public class InjectOnPropertyNameChangedTests
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
+public class InjectOnPropertyNameChangedTests
 {
-    [Fact]
+    [Test]
     public Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_WarnsForNonVoidMethods()
     {
         var weaver = new ModuleWeaver
@@ -15,7 +17,7 @@
         return Verifier.Verify(result.Warnings.Single().Text);
     }
 
-    [Fact]
+    [Test]
     public Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsTrue_WarnsForStaticMethods()
     {
         var weaver = new ModuleWeaver
@@ -30,8 +32,8 @@
         return Verifier.Verify(result.Warnings.Single().Text);
     }
 
-    [Fact]
-    public void ModuleWeaver_WhenInjectOnPropertyNameChangedIsFalse_DoesNotWarn()
+    [Test]
+    public async Task ModuleWeaver_WhenInjectOnPropertyNameChangedIsFalse_DoesNotWarn()
     {
         var weaver = new ModuleWeaver
         {
@@ -52,7 +54,7 @@
 
         foreach (var result in results)
         {
-            Assert.Empty(result.Warnings);
+            await Assert.That(result.Warnings).IsEmpty();
         }
     }
 }

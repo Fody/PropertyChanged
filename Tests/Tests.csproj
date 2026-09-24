@@ -7,13 +7,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FodyHelpers" />
-    <PackageReference Include="Verify.XunitV3" />
-    <PackageReference Include="xunit.v3" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="TUnit.Core" />
+    <PackageReference Include="TUnit.Assertions" />
+    <PackageReference Include="TUnit.Engine" />
     <Reference Include="Microsoft.CSharp" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" />
     <ProjectReference Include="..\PropertyChanged.Fody\PropertyChanged.Fody.csproj" />
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />

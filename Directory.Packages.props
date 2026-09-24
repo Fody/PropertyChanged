@@ -10,13 +10,14 @@
     <PackageVersion Include="FodyHelpers" Version="6.9.3" />
     <PackageVersion Include="FodyPackaging" Version="6.9.3" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.6.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" />
     <PackageVersion Include="Nullable.Extended.Analyzer" Version="1.16.6891" />
     <PackageVersion Include="PropertyChanging.Fody" Version="1.31.0" />
     <PackageVersion Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.22.0" />
-    <PackageVersion Include="xunit.v3" Version="3.2.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <!-- the TUnit metapackage is not used since it brings in a Mono.Cecil that conflicts with the Cecil used by Fody -->
+    <PackageVersion Include="TUnit.Core" Version="1.69.0" />
+    <PackageVersion Include="TUnit.Assertions" Version="1.69.0" />
+    <PackageVersion Include="TUnit.Engine" Version="1.69.0" />
+    <PackageVersion Include="Verify.TUnit" Version="31.28.0" />
   </ItemGroup>
 </Project>

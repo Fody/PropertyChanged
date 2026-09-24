@@ -1,11 +1,11 @@
 public class MappingFinderSingleBackingFieldsSet
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsSet>()).ToList();
-        Assert.Equal("propertyA", memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.Equal("propertyB", memberMappings.Single(_ => _.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        await Assert.That(memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1").FieldDefinition.Name).IsEqualTo("propertyA");
+        await Assert.That(memberMappings.Single(_ => _.PropertyDefinition.Name == "Property2").FieldDefinition.Name).IsEqualTo("propertyB");
     }
 
     public class ClassWithSingleBackingFieldsSet

@@ -1,10 +1,10 @@
-﻿
+
 // ReSharper disable ValueParameterNotUsed
 
 public class IndexerCheckerTest
 {
-    [Fact]
-    public void IsIndexer()
+    [Test]
+    public async Task IsIndexer()
     {
         var weaver = new ModuleWeaver();
         var propertyDefinitions = DefinitionFinder.FindType<IndexerClass>()
@@ -18,7 +18,7 @@ public class IndexerCheckerTest
             };
 
             var message = weaver.CheckForWarning(propertyData, InvokerTypes.String);
-            Assert.Equal("Property is an indexer.", message);
+            await Assert.That(message).IsEqualTo("Property is an indexer.");
         }
     }
 

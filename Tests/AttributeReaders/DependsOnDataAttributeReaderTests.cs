@@ -1,10 +1,10 @@
-﻿using PropertyChanged;
+using PropertyChanged;
 
 // ReSharper disable UnusedVariable
 public class DependsOnDataAttributeReaderTests
 {
-    [Fact]
-    public void Integration()
+    [Test]
+    public async Task Integration()
     {
         var reader = new ModuleWeaver();
         var node = new TypeNode
@@ -14,10 +14,10 @@ public class DependsOnDataAttributeReaderTests
         reader.ProcessDependsOnAttributes(node);
 
         var dependencies = node.PropertyDependencies;
-        Assert.Equal("FullName", dependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("GivenNames", dependencies[0].WhenPropertyIsSet.Name);
-        Assert.Equal("FullName", dependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("FamilyName", dependencies[1].WhenPropertyIsSet.Name);
+        await Assert.That(dependencies[0].ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(dependencies[0].WhenPropertyIsSet.Name).IsEqualTo("GivenNames");
+        await Assert.That(dependencies[1].ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(dependencies[1].WhenPropertyIsSet.Name).IsEqualTo("FamilyName");
     }
 
     public class Person
@@ -25,11 +25,11 @@ public class DependsOnDataAttributeReaderTests
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
 
-        [DependsOn("GivenNames", "FamilyName")]
+        [PropertyChanged.DependsOn("GivenNames", "FamilyName")]
         public string FullName => $"{GivenNames} {FamilyName}";
     }
 
-    [Fact]
+    [Test]
     public void PropertyThatDoesNotExist()
     {
         var weaver = new ModuleWeaver();
@@ -48,7 +48,7 @@ public class DependsOnDataAttributeReaderTests
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
 
-        [DependsOn("NotAProperty1", "NotAProperty2")]
+        [PropertyChanged.DependsOn("NotAProperty1", "NotAProperty2")]
         public string FullName => $"{GivenNames} {FamilyName}";
     }
 }

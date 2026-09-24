@@ -1,48 +1,48 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 
 public class SuppressOnPropertyNameChangedWarningConfigTests
 {
-    [Fact]
-    public void False()
+    [Test]
+    public async Task False()
     {
         var xElement = XElement.Parse("<PropertyChanged SuppressOnPropertyNameChangedWarning='false'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveSuppressOnPropertyNameChangedWarningConfig();
-        Assert.False(weaver.SuppressOnPropertyNameChangedWarning);
+        await Assert.That(weaver.SuppressOnPropertyNameChangedWarning).IsFalse();
     }
 
-    [Fact]
-    public void False0()
+    [Test]
+    public async Task False0()
     {
         var xElement = XElement.Parse("<PropertyChanged SuppressOnPropertyNameChangedWarning='0'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveSuppressOnPropertyNameChangedWarningConfig();
-        Assert.False(weaver.SuppressOnPropertyNameChangedWarning);
+        await Assert.That(weaver.SuppressOnPropertyNameChangedWarning).IsFalse();
     }
 
-    [Fact]
-    public void True()
+    [Test]
+    public async Task True()
     {
         var xElement = XElement.Parse("<PropertyChanged SuppressOnPropertyNameChangedWarning='True'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveSuppressOnPropertyNameChangedWarningConfig();
-        Assert.True(weaver.SuppressOnPropertyNameChangedWarning);
+        await Assert.That(weaver.SuppressOnPropertyNameChangedWarning).IsTrue();
     }
 
-    [Fact]
-    public void True1()
+    [Test]
+    public async Task True1()
     {
         var xElement = XElement.Parse("<PropertyChanged SuppressOnPropertyNameChangedWarning='1'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveSuppressOnPropertyNameChangedWarningConfig();
-        Assert.True(weaver.SuppressOnPropertyNameChangedWarning);
+        await Assert.That(weaver.SuppressOnPropertyNameChangedWarning).IsTrue();
     }
 
-    [Fact]
-    public void Default()
+    [Test]
+    public async Task Default()
     {
         var weaver = new ModuleWeaver();
         weaver.ResolveSuppressOnPropertyNameChangedWarningConfig();
-        Assert.False(weaver.SuppressOnPropertyNameChangedWarning);
+        await Assert.That(weaver.SuppressOnPropertyNameChangedWarning).IsFalse();
     }
 }

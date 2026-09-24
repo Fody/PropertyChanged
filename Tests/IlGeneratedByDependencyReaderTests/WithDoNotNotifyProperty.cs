@@ -1,9 +1,9 @@
-﻿using PropertyChanged;
+using PropertyChanged;
 
 public class WithDoNotNotifyProperty
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
         var node = new TypeNode
@@ -12,7 +12,7 @@ public class WithDoNotNotifyProperty
             Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
         };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.Empty(node.PropertyDependencies);
+        await Assert.That(node.PropertyDependencies).IsEmpty();
     }
 
     public class Person

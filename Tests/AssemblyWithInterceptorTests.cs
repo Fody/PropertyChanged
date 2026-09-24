@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+using System.Reflection;
 
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
 public class AssemblyWithInterceptorTests
 {
-    [Fact]
-    public void Simple()
+    [Test]
+    public async Task Simple()
     {
         var task = new ModuleWeaver();
         var testResult = task.ExecuteTestRun(
@@ -16,11 +18,11 @@ public class AssemblyWithInterceptorTests
         var type = assembly.GetType("PropertyChangedNotificationInterceptor");
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public)!;
         var value = (bool)propertyInfo.GetValue(null, null);
-        Assert.True(value);
+        await Assert.That(value).IsTrue();
     }
 
-    [Fact]
-    public void BeforeAfter()
+    [Test]
+    public async Task BeforeAfter()
     {
         var weaver = new ModuleWeaver();
         var testResult = weaver.ExecuteTestRun(
@@ -32,6 +34,6 @@ public class AssemblyWithInterceptorTests
         var type = assembly.GetType("PropertyChangedNotificationInterceptor");
         var propertyInfo = type.GetProperty("InterceptCalled", BindingFlags.Static | BindingFlags.Public)!;
         var value = (bool)propertyInfo.GetValue(null, null);
-        Assert.True(value);
+        await Assert.That(value).IsTrue();
     }
 }

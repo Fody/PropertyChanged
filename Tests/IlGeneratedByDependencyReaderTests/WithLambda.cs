@@ -1,7 +1,7 @@
 public class WithLambda
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<TestClass>();
         var node = new TypeNode
@@ -10,9 +10,9 @@ public class WithLambda
                            Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
                        };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.Single(node.PropertyDependencies);
-        Assert.Equal("PropertyWithLambda", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("Property1", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
+        await Assert.That(node.PropertyDependencies).HasSingleItem();
+        await Assert.That(node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name).IsEqualTo("PropertyWithLambda");
+        await Assert.That(node.PropertyDependencies[0].WhenPropertyIsSet.Name).IsEqualTo("Property1");
     }
 
     public class TestClass

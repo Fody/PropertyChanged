@@ -1,12 +1,12 @@
-﻿
+
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
 public class WithCamelCaseFields
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
         var node = new TypeNode
@@ -15,11 +15,11 @@ public class WithCamelCaseFields
                            Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
                        };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.Equal(2, node.PropertyDependencies.Count);
-        Assert.Equal("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
-        Assert.Equal("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
+        await Assert.That(node.PropertyDependencies.Count).IsEqualTo(2);
+        await Assert.That(node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(node.PropertyDependencies[0].WhenPropertyIsSet.Name).IsEqualTo("GivenNames");
+        await Assert.That(node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(node.PropertyDependencies[1].WhenPropertyIsSet.Name).IsEqualTo("FamilyName");
     }
 
     public class Person

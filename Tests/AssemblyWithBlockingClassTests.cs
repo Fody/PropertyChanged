@@ -1,6 +1,8 @@
-﻿public class AssemblyWithBlockingClassTests
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
+public class AssemblyWithBlockingClassTests
 {
-    [Fact]
+    [Test]
     public void TestClassIsNotBlocked()
     {
         var task = new ModuleWeaver();

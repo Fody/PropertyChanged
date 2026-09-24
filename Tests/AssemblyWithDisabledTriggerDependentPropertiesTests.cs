@@ -1,5 +1,7 @@
 using TestResult = Fody.TestResult;
 
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
 public class AssemblyWithDisabledTriggerDependentPropertiesTests
 {
     static TestResult testResult;
@@ -15,13 +17,13 @@ public class AssemblyWithDisabledTriggerDependentPropertiesTests
             ignoreCodes: ["0x80131869"]);
     }
 
-    [Fact]
-    public void TriggerDependentPropertiesDisabled()
+    [Test]
+    public async Task TriggerDependentPropertiesDisabled()
     {
         var instance = testResult.GetInstance(nameof(DependentPropertiesClassToTest));
         instance.Property1 = "foo";
 
-        Assert.Equal(1, instance.OnProperty1ChangedCallCount);
-        Assert.Equal(0, instance.OnProperty2ChangedCallCount);
+        await Assert.That((int)instance.OnProperty1ChangedCallCount).IsEqualTo(1);
+        await Assert.That((int)instance.OnProperty2ChangedCallCount).IsEqualTo(0);
     }
 }

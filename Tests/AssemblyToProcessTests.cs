@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,7 +8,9 @@ using Mono.Cecil.Cil;
 
 using TestResult = Fody.TestResult;
 
-public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
+public class AssemblyToProcessTests
 {
     static TestResult testResult;
 
@@ -24,20 +26,20 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
         );
     }
 
-    [Theory]
-    [InlineData("ClassWithInlineInitializedAutoProperties",
+    [Test]
+    [Arguments("ClassWithInlineInitializedAutoProperties",
         "Test", "Test2", false, new string[0])]
-    [InlineData("ClassWithExplicitInitializedAutoProperties",
+    [Arguments("ClassWithExplicitInitializedAutoProperties",
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
-    [InlineData("ClassWithExplicitInitializedAutoPropertiesDerivedWeakDesign",
+    [Arguments("ClassWithExplicitInitializedAutoPropertiesDerivedWeakDesign",
         "test", "test2", true, new[] { "IsChanged", "Property1", "Property2", "Property1", "Property2", "Property3" })]
-    [InlineData("ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign",
+    [Arguments("ClassWithExplicitInitializedAutoPropertiesDerivedProperDesign",
         "test", "test2", true, new[] { "IsChanged", "Property1", "Property2", "Property3" })]
-    [InlineData("ClassWithAutoPropertiesInitializedInSeparateMethod",
+    [Arguments("ClassWithAutoPropertiesInitializedInSeparateMethod",
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
-    [InlineData("ClassWithExplicitInitializedBackingFieldProperties",
+    [Arguments("ClassWithExplicitInitializedBackingFieldProperties",
         "Test", "Test2", true, new[] { "IsChanged", "Property1", "Property2" })]
-    public void TypesWithInitializedPropertiesTest(string className, string property1Value, string property2Value, bool isChangedStateAfterConstructor, string[] propertyChangedCallsInConstructor)
+    public async Task TypesWithInitializedPropertiesTest(string className, string property1Value, string property2Value, bool isChangedStateAfterConstructor, string[] propertyChangedCallsInConstructor)
     {
         var instance = testResult.GetInstance(className);
 
@@ -47,95 +49,95 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
             eventCount++;
         };
 
-        Assert.Equal(property1Value, instance.Property1);
-        Assert.Equal(property2Value, instance.Property2);
+        await Assert.That((object)instance.Property1).IsEqualTo(property1Value);
+        await Assert.That((object)instance.Property2).IsEqualTo(property2Value);
 
         var actualPropertyChangedCalls = (IList<string>)instance.PropertyChangedCalls;
         Debug.WriteLine("PropertyChanged calls: " + string.Join(", ", actualPropertyChangedCalls));
 
-        Assert.True(propertyChangedCallsInConstructor.SequenceEqual(actualPropertyChangedCalls));
-        Assert.Equal(isChangedStateAfterConstructor, instance.IsChanged);
+        await Assert.That(propertyChangedCallsInConstructor.SequenceEqual(actualPropertyChangedCalls)).IsTrue();
+        await Assert.That((object)instance.IsChanged).IsEqualTo(isChangedStateAfterConstructor);
 
         var initial = isChangedStateAfterConstructor ? 1 : 2;
 
         instance.Property1 = "a";
-        Assert.Equal(initial, eventCount);
-        Assert.True(instance.IsChanged);
+        await Assert.That(eventCount).IsEqualTo(initial);
+        await Assert.That((bool)instance.IsChanged).IsTrue();
 
         instance.IsChanged = false;
-        Assert.Equal(initial + 1, eventCount);
+        await Assert.That(eventCount).IsEqualTo(initial + 1);
 
         instance.Property2 = "b";
-        Assert.Equal(initial + 3, eventCount);
-        Assert.True(instance.IsChanged);
+        await Assert.That(eventCount).IsEqualTo(initial + 3);
+        await Assert.That((bool)instance.IsChanged).IsTrue();
     }
 
-    [Fact]
+    [Test]
     public void ClassWithIndirectImplementation()
     {
         var instance = testResult.GetInstance("ClassWithIndirectImplementation");
         EventTester.TestProperty(instance, false);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithTaskReturningPropertyChangedNotifier()
     {
         var instance = testResult.GetInstance("ClassWithTaskReturningPropertyChangedNotifier");
         EventTester.TestProperty(instance, false, true);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithInferredShouldAlsoNotifyFor()
     {
         var instance = testResult.GetInstance("ClassWithInferredShouldAlsoNotifyFor");
         EventTester.TestProperty(instance, true);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithAlsoNotifyFor()
     {
         var instance = testResult.GetInstance("ClassWithAlsoNotifyFor");
         EventTester.TestProperty(instance, true);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithDependsOn()
     {
         var instance = testResult.GetInstance("ClassWithDependsOn");
         EventTester.TestProperty(instance, true);
     }
 
-    [Fact]
-    public void ClassWithDependsOnAndPropertyChanged()
+    [Test]
+    public async Task ClassWithDependsOnAndPropertyChanged()
     {
         var instance = testResult.GetInstance("ClassWithDependsOnAndPropertyChanged");
         EventTester.TestProperty(instance, true);
-        Assert.Equal(1, instance.Property2ChangedCalled);
+        await Assert.That((int)instance.Property2ChangedCalled).IsEqualTo(1);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithIndexerReferencingPropertyAndBeforeAfter()
     {
         var instance = testResult.GetInstance(nameof(ClassWithIndexerReferencingPropertyAndBeforeAfter));
         EventTester.TestProperty(instance, false);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithIndexerDependsOnAndBeforeAfter()
     {
         var instance = testResult.GetInstance(nameof(ClassWithIndexerDependsOnAndBeforeAfter));
         EventTester.TestProperty(instance, false);
     }
 
-    [Fact]
+    [Test]
     public void ClassWithDoNotNotifyField()
     {
         var instance = testResult.GetInstance(nameof(ClassWithDoNotNotifyField));
         EventTester.TestPropertyNotCalled(instance);
     }
 
-    [Fact]
-    public void UseSingleEventInstance()
+    [Test]
+    public async Task UseSingleEventInstance()
     {
         var instance = testResult.GetInstance("ClassWithNotifyPropertyChangedAttribute");
 
@@ -145,12 +147,12 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
         instance.Property1 = "a";
         instance.Property1 = "b";
 
-        Assert.Equal(2, argsList.Count);
-        Assert.Same(argsList[0], argsList[1]);
+        await Assert.That(argsList.Count).IsEqualTo(2);
+        await Assert.That(argsList[1]).IsSameReferenceAs(argsList[0]);
     }
 
-    [Fact]
-    public void SupportedLibrariesClassReactiveUI()
+    [Test]
+    public async Task SupportedLibrariesClassReactiveUI()
     {
         var instance = testResult.GetInstance("ClassReactiveUI2");
 
@@ -160,13 +162,13 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
         instance.Property1 = "a";
         instance.Property2 = "b";
 
-        Assert.Equal(2, argsList.Count);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal("Property2", argsList[1].PropertyName);
+        await Assert.That(argsList.Count).IsEqualTo(2);
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[1].PropertyName).IsEqualTo("Property2");
     }
 
-    [Fact]
-    public void ClassWithOpenGenerics()
+    [Test]
+    public async Task ClassWithOpenGenerics()
     {
         var instance = testResult.GetGenericInstance("ClassWithOpenGenerics`1", typeof(int));
 
@@ -177,69 +179,69 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
 
         instance.Property1 = value1;
 
-        Assert.Single(argsList);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal(value1, instance.Property1);
-        Assert.Equal(new KeyValuePair<string, int>("a", 1), instance.Property1);
+        await Assert.That(argsList).HasSingleItem();
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That((KeyValuePair<string, int>)instance.Property1).IsEqualTo(value1);
+        await Assert.That((KeyValuePair<string, int>)instance.Property1).IsEqualTo(new KeyValuePair<string, int>("a", 1));
 
         instance.Property1 = new KeyValuePair<string, int>("a", 1);
 
-        Assert.Single(argsList);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal(value1, instance.Property1);
-        Assert.Equal(new KeyValuePair<string, int>("a", 1), instance.Property1);
+        await Assert.That(argsList).HasSingleItem();
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That((KeyValuePair<string, int>)instance.Property1).IsEqualTo(value1);
+        await Assert.That((KeyValuePair<string, int>)instance.Property1).IsEqualTo(new KeyValuePair<string, int>("a", 1));
 
         instance.Property1 = new KeyValuePair<string, int>("a", 2);
 
-        Assert.Equal(2, argsList.Count);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal("Property1", argsList[1].PropertyName);
-        Assert.NotEqual(value1, instance.Property1);
-        Assert.NotEqual(new KeyValuePair<string, int>("a", 1), instance.Property1);
+        await Assert.That(argsList.Count).IsEqualTo(2);
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[1].PropertyName).IsEqualTo("Property1");
+        await Assert.That((KeyValuePair<string, int>)instance.Property1).IsNotEqualTo(value1);
+        await Assert.That((KeyValuePair<string, int>)instance.Property1).IsNotEqualTo(new KeyValuePair<string, int>("a", 1));
 
         var value2 = new Tuple<string, int>("b", 2);
 
         instance.Property2 = value2;
 
-        Assert.Equal(3, argsList.Count);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal("Property1", argsList[1].PropertyName);
-        Assert.Equal("Property2", argsList[2].PropertyName);
-        Assert.Equal(value2, instance.Property2);
-        Assert.Equal(new Tuple<string, int>("b", 2), instance.Property2);
+        await Assert.That(argsList.Count).IsEqualTo(3);
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[1].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[2].PropertyName).IsEqualTo("Property2");
+        await Assert.That((Tuple<string, int>)instance.Property2).IsEqualTo(value2);
+        await Assert.That((Tuple<string, int>)instance.Property2).IsEqualTo(new Tuple<string, int>("b", 2));
 
         instance.Property2 = new Tuple<string, int>("b", 2);
 
-        Assert.Equal(3, argsList.Count);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal("Property1", argsList[1].PropertyName);
-        Assert.Equal("Property2", argsList[2].PropertyName);
-        Assert.Equal(value2, instance.Property2);
-        Assert.Equal(new Tuple<string, int>("b", 2), instance.Property2);
+        await Assert.That(argsList.Count).IsEqualTo(3);
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[1].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[2].PropertyName).IsEqualTo("Property2");
+        await Assert.That((Tuple<string, int>)instance.Property2).IsEqualTo(value2);
+        await Assert.That((Tuple<string, int>)instance.Property2).IsEqualTo(new Tuple<string, int>("b", 2));
 
         instance.Property2 = new Tuple<string, int>("b", 1);
 
-        Assert.Equal(4, argsList.Count);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal("Property1", argsList[1].PropertyName);
-        Assert.Equal("Property2", argsList[2].PropertyName);
-        Assert.Equal("Property2", argsList[3].PropertyName);
-        Assert.NotEqual(value2, instance.Property2);
-        Assert.NotEqual(new Tuple<string, int>("b", 2), instance.Property2);
+        await Assert.That(argsList.Count).IsEqualTo(4);
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[1].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[2].PropertyName).IsEqualTo("Property2");
+        await Assert.That(argsList[3].PropertyName).IsEqualTo("Property2");
+        await Assert.That((Tuple<string, int>)instance.Property2).IsNotEqualTo(value2);
+        await Assert.That((Tuple<string, int>)instance.Property2).IsNotEqualTo(new Tuple<string, int>("b", 2));
     }
 
-    [Fact]
-    public void InvalidOnPropertyNameChangedMethodSignatureEmitsWarning()
+    [Test]
+    public async Task InvalidOnPropertyNameChangedMethodSignatureEmitsWarning()
     {
         const string className = nameof(ClassWithInvalidOnChanged);
 
-        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethod)));
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethodSuppressed)));
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithValidOnChangedMethod)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethod)))).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithInvalidOnChangedMethodSuppressed)))).IsFalse();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.PropertyWithValidOnChangedMethod)))).IsFalse();
     }
 
-    [Fact]
-    public void ClassWithWarnings()
+    [Test]
+    public async Task ClassWithWarnings()
     {
         var instance = testResult.GetInstance("ClassWithWarnings");
         instance.Property1 = "foo";
@@ -249,9 +251,9 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
             .Select(w => w.Text.Replace(" You can suppress this warning with [SuppressPropertyChangedWarnings].", ""))
             .ToArray();
 
-        outputHelper.WriteLine(string.Join(Environment.NewLine, warnings.Select(w => $"\"{w}\"")));
+        Console.WriteLine(string.Join(Environment.NewLine, warnings.Select(w => $"\"{w}\"")));
 
-        Assert.Equal(warnings, new[]
+        await Assert.That(warnings).IsEquivalentTo(new[]
         {
             "Type ClassWithWarnings contains a method OnProperty1Changed which will not be called as Property1 is attributed with [DoNotNotify].",
             "Type ClassWithWarnings contains a method OnProperty2Changed which will not be called as Property2 is attributed with an alternative [OnChangedMethod].",
@@ -260,256 +262,256 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
         });
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithoutMatchingPropertyEmitsWarning()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithoutMatchingPropertyEmitsWarning()
     {
         const string className = nameof(ClassWithInvalidOnChanged);
 
         DumpWarnings(nameof(ClassWithInvalidOnChanged));
 
-        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnNonExistingPropertyChanged)));
-        Assert.Contains(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnIgnoredPropertyChanged)));
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnNonExistingPropertySuppressedChanged)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnNonExistingPropertyChanged)))).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnIgnoredPropertyChanged)))).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithInvalidOnChanged.OnNonExistingPropertySuppressedChanged)))).IsFalse();
 
         DumpWarnings(nameof(ClassWithOnChangedConcrete));
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(nameof(ClassWithOnChangedConcrete)) && w.Text.Contains(nameof(ClassWithOnChangedConcrete.OnProperty1Changed)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(nameof(ClassWithOnChangedConcrete)) && w.Text.Contains(nameof(ClassWithOnChangedConcrete.OnProperty1Changed)))).IsFalse();
     }
 
-    [Fact]
-    public void ClassWithIgnoredPropertyOnChanged()
+    [Test]
+    public async Task ClassWithIgnoredPropertyOnChanged()
     {
         var instance = testResult.GetInstance(nameof(ClassWithInvalidOnChanged));
         instance.IgnoredProperty = "ignore me";
 
-        Assert.False(instance.OnIgnorePropertyChangedCalled);
+        await Assert.That((bool)instance.OnIgnorePropertyChangedCalled).IsFalse();
     }
 
-    [Fact]
-    public void IgnoreSuppressedProperties()
+    [Test]
+    public async Task IgnoreSuppressedProperties()
     {
         const string className = nameof(ClassWithInvalidOnChanged);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(ClassWithInvalidOnChanged.IndexerName));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(ClassWithInvalidOnChanged.IndexerName))).IsFalse();
     }
 
-    [Fact]
-    public void IgnoreSuppressedClasses()
+    [Test]
+    public async Task IgnoreSuppressedClasses()
     {
         const string className = nameof(ClassWithSuppressedInvalidOnChanged);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithSuppressedInvalidOnChanged.OnNonExistingPropertyChanged)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.Contains(className) && w.Text.Contains(nameof(ClassWithSuppressedInvalidOnChanged.OnNonExistingPropertyChanged)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChanged));
         instance.Property1 = "foo";
 
-        Assert.True(instance.OnProperty1ChangedCalled);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChanged)));
+        await Assert.That((bool)instance.OnProperty1ChangedCalled).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChanged)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodIsCalledForCalculatedProperty()
+    [Test]
+    public async Task OnPropertyNameChangedMethodIsCalledForCalculatedProperty()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedCalculatedProperty));
         instance.Property1 = "foo";
 
-        Assert.True(instance.OnProperty2ChangedCalled);
-        Assert.True(instance.OnProperty3ChangedCalled);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCalculatedProperty)));
+        await Assert.That((bool)instance.OnProperty2ChangedCalled).IsTrue();
+        await Assert.That((bool)instance.OnProperty3ChangedCalled).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCalculatedProperty)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfter));
         instance.Property2 = "foo";
 
-        Assert.True(instance.OnProperty2ChangedCalled);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfter)));
+        await Assert.That((bool)instance.OnProperty2ChangedCalled).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfter)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTyped));
         instance.Property1 = "foo";
         instance.Property2 = 1;
 
-        Assert.Equal("-foo", instance.OnProperty1ChangedCalled);
-        Assert.Equal("0-1", instance.OnProperty2ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("-foo");
+        await Assert.That((string)instance.OnProperty2ChangedCalled).IsEqualTo("0-1");
 
         instance.Property1 = "bar";
         instance.Property2 = 2;
 
-        Assert.Equal("foo-bar", instance.OnProperty1ChangedCalled);
-        Assert.Equal("1-2", instance.OnProperty2ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("foo-bar");
+        await Assert.That((string)instance.OnProperty2ChangedCalled).IsEqualTo("1-2");
 
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTyped)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTyped)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithNullableValueTypeIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedWithNullableValueTypeIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedWithNullableValueType));
         instance.Property1 = 1;
 
-        Assert.Equal("-1", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("-1");
 
         instance.Property1 = 2;
 
-        Assert.Equal("1-2", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("1-2");
 
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedWithNullableValueType)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedWithNullableValueType)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithWithGenericObjectIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedWithWithGenericObjectIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedWithGenericObject));
         instance.Property1 = new List<int> { 1, 2 };
 
-        Assert.Equal("-1,2", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("-1,2");
 
         instance.Property1 = new List<int> { 3, 4 };
 
-        Assert.Equal("1,2-3,4", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("1,2-3,4");
 
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedWithGenericObject)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedWithGenericObject)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureDefaultIsNotCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureDefaultIsNotCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault));
         instance.Property1 = "foo";
 
-        Assert.Null(instance.OnProperty1ChangedCalled);
+        await Assert.That((object)instance.OnProperty1ChangedCalled).IsNull();
 
         instance.Property1 = "bar";
 
-        Assert.Null(instance.OnProperty1ChangedCalled);
+        await Assert.That((object)instance.OnProperty1ChangedCalled).IsNull();
 
-        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureDefault)))).IsTrue();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedGenericIntegerIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedGenericIntegerIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedGenericInteger));
         instance.Property1 = 1;
 
-        Assert.Equal("0-1", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("0-1");
 
         instance.Property1 = 2;
 
-        Assert.Equal("1-2", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("1-2");
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedGenericStringIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedGenericStringIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedGenericString));
         instance.Property1 = "foo";
 
-        Assert.Equal("-foo", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("-foo");
 
         instance.Property1 = "bar";
 
-        Assert.Equal("foo-bar", instance.OnProperty1ChangedCalled);
+        await Assert.That((string)instance.OnProperty1ChangedCalled).IsEqualTo("foo-bar");
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureExplicitIsNotCalledAndAWarningIsGenerated()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterTypedWithInvalidSignatureExplicitIsNotCalledAndAWarningIsGenerated()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureExplicit));
         instance.Property1 = "foo";
 
-        Assert.Null(instance.OnProperty1ChangedCalled);
+        await Assert.That((object)instance.OnProperty1ChangedCalled).IsNull();
 
         instance.Property1 = "bar";
 
-        Assert.Null(instance.OnProperty1ChangedCalled);
+        await Assert.That((object)instance.OnProperty1ChangedCalled).IsNull();
 
-        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureExplicit)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterTypedInvalidSignatureExplicit)))).IsTrue();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodWithBeforeAfterCalculatedPropertyIsCalled()
+    [Test]
+    public async Task OnPropertyNameChangedMethodWithBeforeAfterCalculatedPropertyIsCalled()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty));
         instance.Property1 = "foo";
 
         DumpWarnings(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty));
 
-        Assert.Equal("From 0 to 3", instance.Property2ChangeValue);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty)));
+        await Assert.That((string)instance.Property2ChangeValue).IsEqualTo("From 0 to 3");
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedBeforeAfterCalculatedProperty)))).IsFalse();
     }
 
-    [Fact]
-    public void OnPropertyNameChangedMethodCallInOriginalCodePreventsInsertingAdditionalCall()
+    [Test]
+    public async Task OnPropertyNameChangedMethodCallInOriginalCodePreventsInsertingAdditionalCall()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedAndNoPropertyChanged));
         instance.Property1 = "foo";
 
-        Assert.Equal(1, instance.OnProperty1ChangedCalled);
-        Assert.DoesNotContain(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedAndNoPropertyChanged)));
+        await Assert.That((int)instance.OnProperty1ChangedCalled).IsEqualTo(1);
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedAndNoPropertyChanged)))).IsFalse();
     }
 
-    [Fact]
-    public void OnChangedMethodAttributeCustomizesCalledMethods()
+    [Test]
+    public async Task OnChangedMethodAttributeCustomizesCalledMethods()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedCustomized));
         instance.Property1 = "foo";
 
         DumpWarnings(nameof(ClassWithOnChangedCustomized));
 
-        Assert.False(instance.OnProperty1ChangedCalled);
-        Assert.True(instance.FirstCustomCalled);
-        Assert.True(instance.SecondCustomCalled);
+        await Assert.That((bool)instance.OnProperty1ChangedCalled).IsFalse();
+        await Assert.That((bool)instance.FirstCustomCalled).IsTrue();
+        await Assert.That((bool)instance.SecondCustomCalled).IsTrue();
         //Warnings tested in ClassWithOnChangedCustomizedWarnings
     }
 
-    [Fact]
-    public void ClassWithOnChangedCustomizedWarnings()
+    [Test]
+    public async Task ClassWithOnChangedCustomizedWarnings()
     {
         var warnings = testResult.Warnings
             .Where(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized)))
             .ToArray();
 
-        Assert.Contains(warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized))
-                                       && w.Text.Contains(nameof(ClassWithOnChangedCustomized.OnProperty1Changed)));
+        await Assert.That(warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedCustomized))
+                                       && w.Text.Contains(nameof(ClassWithOnChangedCustomized.OnProperty1Changed)))).IsTrue();
 
-        Assert.True(warnings.Length == 1);
+        await Assert.That(warnings.Length == 1).IsTrue();
     }
 
 
-    [Fact]
-    public void OnChangedMethodAttributeAlwaysCallsMethod()
+    [Test]
+    public async Task OnChangedMethodAttributeAlwaysCallsMethod()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedCustomized));
         instance.Property2 = "foo";
 
         DumpWarnings(nameof(ClassWithOnChangedCustomized));
 
-        Assert.False(instance.OnProperty1ChangedCalled);
-        Assert.Equal(2, instance.PropertyChangedCounterValue);
+        await Assert.That((bool)instance.OnProperty1ChangedCalled).IsFalse();
+        await Assert.That((int)instance.PropertyChangedCounterValue).IsEqualTo(2);
 
         //Warnings tested in ClassWithOnChangedCustomizedWarnings
     }
 
-    [Fact]
-    public void OnChangedMethodAttributeCanCallSameMethodSeveralTimes()
+    [Test]
+    public async Task OnChangedMethodAttributeCanCallSameMethodSeveralTimes()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedCustomized));
         instance.Property3 = "foo";
 
-        Assert.Equal(3, instance.PropertyChangedCounterValue);
+        await Assert.That((int)instance.PropertyChangedCounterValue).IsEqualTo(3);
         //Warnings tested in ClassWithOnChangedCustomizedWarnings
     }
 
-    [Fact]
-    public void OnChangedMethodAttributeSuppressedDefaultMethodsWhenMethodNameIsNullOrEmpty()
+    [Test]
+    public async Task OnChangedMethodAttributeSuppressedDefaultMethodsWhenMethodNameIsNullOrEmpty()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnChangedSuppressed));
         instance.Property1 = "foo";
@@ -517,15 +519,15 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
 
         DumpWarnings(nameof(ClassWithOnChangedSuppressed));
 
-        Assert.False(instance.OnProperty1ChangedCalled);
-        Assert.False(instance.OnProperty2ChangedCalled);
+        await Assert.That((bool)instance.OnProperty1ChangedCalled).IsFalse();
+        await Assert.That((bool)instance.OnProperty2ChangedCalled).IsFalse();
 
-        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)) && w.Text.Contains(nameof(ClassWithOnChangedSuppressed.Property1)));
-        Assert.Contains(testResult.Warnings, w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)) && w.Text.Contains(nameof(ClassWithOnChangedSuppressed.Property2)));
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)) && w.Text.Contains(nameof(ClassWithOnChangedSuppressed.Property1)))).IsTrue();
+        await Assert.That(testResult.Warnings.Any(w => w.Text.ContainsWholeWord(nameof(ClassWithOnChangedSuppressed)) && w.Text.Contains(nameof(ClassWithOnChangedSuppressed.Property2)))).IsTrue();
     }
 
-    [Fact]
-    public void ClassWithIntermediateGenericBaseHandlesPropertyChanged()
+    [Test]
+    public async Task ClassWithIntermediateGenericBaseHandlesPropertyChanged()
     {
         var instance = testResult.GetInstance(nameof(ClassWithIntermediateGenericBase));
 
@@ -536,43 +538,43 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
         instance.Property2 = "b";
         instance.Property3 = "c";
 
-        Assert.Equal(3, argsList.Count);
-        Assert.Equal("Property1", argsList[0].PropertyName);
-        Assert.Equal("Property2", argsList[1].PropertyName);
-        Assert.Equal("Property3", argsList[2].PropertyName);
+        await Assert.That(argsList.Count).IsEqualTo(3);
+        await Assert.That(argsList[0].PropertyName).IsEqualTo("Property1");
+        await Assert.That(argsList[1].PropertyName).IsEqualTo("Property2");
+        await Assert.That(argsList[2].PropertyName).IsEqualTo("Property3");
     }
 
-    [Fact]
-    public void EventInvokersUseCorrectMethodDeclaringType()
+    [Test]
+    public async Task EventInvokersUseCorrectMethodDeclaringType()
     {
         using (var module = ModuleDefinition.ReadModule(testResult.AssemblyPath))
         {
             // Non generic
-            AssertInvoker(typeof(ClassChild1), nameof(ClassChild1.Property1), typeof(ClassParent).FullName);
-            AssertInvoker(typeof(ClassChild3), nameof(ClassChild3.Property2), typeof(ClassParent).FullName);
+            await AssertInvoker(typeof(ClassChild1), nameof(ClassChild1.Property1), typeof(ClassParent).FullName);
+            await AssertInvoker(typeof(ClassChild3), nameof(ClassChild3.Property2), typeof(ClassParent).FullName);
 
             // Issue #477
-            AssertInvoker(typeof(ClassWithGenericMiddleBase), nameof(ClassWithGenericMiddleBase.Property1), nameof(ClassWithGenericMiddleBase));
-            AssertInvoker(typeof(ClassWithGenericMiddle<>), nameof(ClassWithGenericMiddle<int>.Property2), nameof(ClassWithGenericMiddleBase));
-            AssertInvoker(typeof(ClassWithGenericMiddleChild), nameof(ClassWithGenericMiddleChild.Property3), nameof(ClassWithGenericMiddleBase));
+            await AssertInvoker(typeof(ClassWithGenericMiddleBase), nameof(ClassWithGenericMiddleBase.Property1), nameof(ClassWithGenericMiddleBase));
+            await AssertInvoker(typeof(ClassWithGenericMiddle<>), nameof(ClassWithGenericMiddle<int>.Property2), nameof(ClassWithGenericMiddleBase));
+            await AssertInvoker(typeof(ClassWithGenericMiddleChild), nameof(ClassWithGenericMiddleChild.Property3), nameof(ClassWithGenericMiddleBase));
 
             // Issue #516
-            AssertInvoker(typeof(ClassWithGenericParent<>), nameof(ClassWithGenericParent<int>.Property1), "ClassWithGenericParent`1<T>");
-            AssertInvoker(typeof(IntermediateGenericClass<>), nameof(IntermediateGenericClass<int>.Property2), "ClassWithGenericParent`1<T>");
-            AssertInvoker(typeof(ClassWithIntermediateGenericBase), nameof(ClassWithIntermediateGenericBase.Property3), "IntermediateGenericClass`1<System.String>");
+            await AssertInvoker(typeof(ClassWithGenericParent<>), nameof(ClassWithGenericParent<int>.Property1), "ClassWithGenericParent`1<T>");
+            await AssertInvoker(typeof(IntermediateGenericClass<>), nameof(IntermediateGenericClass<int>.Property2), "ClassWithGenericParent`1<T>");
+            await AssertInvoker(typeof(ClassWithIntermediateGenericBase), nameof(ClassWithIntermediateGenericBase.Property3), "IntermediateGenericClass`1<System.String>");
 
-            void AssertInvoker(Type type, string propertyName, string invokerDeclaringType)
+            async Task AssertInvoker(Type type, string propertyName, string invokerDeclaringType)
             {
                 var typeDef = module.GetType(type.FullName);
                 var setter = typeDef.Methods.Single(m => m.Name == "set_" + propertyName);
                 var callInstruction = setter.Body.Instructions.Single(i => i.OpCode == OpCodes.Callvirt);
-                Assert.Equal(invokerDeclaringType, ((MethodReference)callInstruction.Operand).DeclaringType.FullName);
+                await Assert.That(((MethodReference)callInstruction.Operand).DeclaringType.FullName).IsEqualTo(invokerDeclaringType);
             }
         }
     }
 
-    [Fact]
-    public void ClassWithNullableBackingField()
+    [Test]
+    public async Task ClassWithNullableBackingField()
     {
         var instance = testResult.GetInstance("ClassWithNullableBackingField");
         var isFlagEventCalled = false;
@@ -584,42 +586,42 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
             }
         };
         instance.IsFlag = true;
-        Assert.True(isFlagEventCalled);
+        await Assert.That(isFlagEventCalled).IsTrue();
 
         isFlagEventCalled = false;
         instance.IsFlag = true;
-        Assert.False(isFlagEventCalled);
+        await Assert.That(isFlagEventCalled).IsFalse();
     }
 
-    [Fact]
+    [Test]
     public void ClassWithGeneratedPropertyChanged()
     {
         var instance = testResult.GetInstance("ClassWithGeneratedPropertyChanged");
         EventTester.TestProperty(instance, false);
     }
 
-    [Fact]
+    [Test]
     public void StructWithNotify()
     {
         var instance = testResult.GetInstance("StructWithNotify");
         EventTester.TestValueTypeProperty(instance);
     }
 
-    [Fact]
+    [Test]
     public void StructWithNotifyGeneric()
     {
         var instance = testResult.GetGenericInstance("StructWithNotify`1", typeof(string));
         EventTester.TestValueTypeProperty(instance);
     }
 
-    [Fact]
+    [Test]
     public void StructWithNotifyAttribute()
     {
         var instance = testResult.GetInstance("StructWithNotifyAttribute");
         EventTester.TestValueTypeProperty(instance);
     }
 
-    [Fact]
+    [Test]
     public void StructWithNotifyAttributeGeneric()
     {
         var instance = testResult.GetGenericInstance("StructWithNotifyAttribute`1", typeof(string));
@@ -629,6 +631,6 @@ public class AssemblyToProcessTests(ITestOutputHelper outputHelper)
     void DumpWarnings(string containingWord = null)
     {
         foreach (var warning in testResult.Warnings.Where(w => containingWord == null || w.Text.ContainsWholeWord(containingWord)))
-            outputHelper.WriteLine($"WARNING: {warning.Text}");
+            Console.WriteLine($"WARNING: {warning.Text}");
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 
 public class EventInvokerNamesConfigTests
 {
-    [Fact]
-    public void GetStringComparisonFromXml()
+    [Test]
+    public async Task GetStringComparisonFromXml()
     {
         var xElement = XElement.Parse("<PropertyChanged EventInvokerNames='A,B'/>");
         var weaver = new ModuleWeaver
@@ -14,26 +14,24 @@ public class EventInvokerNamesConfigTests
 
         // Custom values should override the defaults, but the injected method name should always be included
 
-        Assert.Equal(
-            new[]
+        await Assert.That(weaver.EventInvokerNames).IsEquivalentTo(new[]
             {
                 "A", "B", "<>OnPropertyChanged"
-            },
-            weaver.EventInvokerNames);
+            });
     }
 
-    [Fact]
-    public void Default()
+    [Test]
+    public async Task Default()
     {
         var weaver = new ModuleWeaver();
         weaver.ResolveEventInvokerName();
-        Assert.Contains("OnPropertyChanged", weaver.EventInvokerNames);
-        Assert.Contains("SetProperty", weaver.EventInvokerNames);
-        Assert.Contains("NotifyOfPropertyChange", weaver.EventInvokerNames);
-        Assert.Contains("RaisePropertyChanged", weaver.EventInvokerNames);
-        Assert.Contains("NotifyPropertyChanged", weaver.EventInvokerNames);
-        Assert.Contains("NotifyChanged", weaver.EventInvokerNames);
-        Assert.Contains("ReactiveUI.IReactiveObject.RaisePropertyChanged", weaver.EventInvokerNames);
-        Assert.Contains("<>OnPropertyChanged", weaver.EventInvokerNames);
+        await Assert.That(weaver.EventInvokerNames).Contains("OnPropertyChanged");
+        await Assert.That(weaver.EventInvokerNames).Contains("SetProperty");
+        await Assert.That(weaver.EventInvokerNames).Contains("NotifyOfPropertyChange");
+        await Assert.That(weaver.EventInvokerNames).Contains("RaisePropertyChanged");
+        await Assert.That(weaver.EventInvokerNames).Contains("NotifyPropertyChanged");
+        await Assert.That(weaver.EventInvokerNames).Contains("NotifyChanged");
+        await Assert.That(weaver.EventInvokerNames).Contains("ReactiveUI.IReactiveObject.RaisePropertyChanged");
+        await Assert.That(weaver.EventInvokerNames).Contains("<>OnPropertyChanged");
     }
 }

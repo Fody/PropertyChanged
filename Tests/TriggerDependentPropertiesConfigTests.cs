@@ -1,9 +1,9 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 
 public class TriggerDependentPropertiesConfigTests
 {
-    [Fact]
-    public void False()
+    [Test]
+    public async Task False()
     {
         var xElement = XElement.Parse("<PropertyChanged TriggerDependentProperties='false'/>");
         var weaver = new ModuleWeaver
@@ -11,11 +11,11 @@ public class TriggerDependentPropertiesConfigTests
             Config = xElement
         };
         weaver.ResolveTriggerDependentPropertiesConfig();
-        Assert.False(weaver.TriggerDependentProperties);
+        await Assert.That(weaver.TriggerDependentProperties).IsFalse();
     }
 
-    [Fact]
-    public void True()
+    [Test]
+    public async Task True()
     {
         var xElement = XElement.Parse("<PropertyChanged TriggerDependentProperties='true'/>");
         var weaver = new ModuleWeaver
@@ -23,14 +23,14 @@ public class TriggerDependentPropertiesConfigTests
             Config = xElement
         };
         weaver.ResolveTriggerDependentPropertiesConfig();
-        Assert.True(weaver.TriggerDependentProperties);
+        await Assert.That(weaver.TriggerDependentProperties).IsTrue();
     }
 
-    [Fact]
-    public void Default()
+    [Test]
+    public async Task Default()
     {
         var weaver = new ModuleWeaver();
         weaver.ResolveOnPropertyNameChangedConfig();
-        Assert.True(weaver.TriggerDependentProperties);
+        await Assert.That(weaver.TriggerDependentProperties).IsTrue();
     }
 }

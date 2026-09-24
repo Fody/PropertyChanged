@@ -1,10 +1,10 @@
-﻿
+
 
 // ReSharper disable UnusedMember.Global
 public class WithGenericFields
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person<int>>();
         var node = new TypeNode
@@ -14,10 +14,10 @@ public class WithGenericFields
                        };
 
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.Equal("FullName", node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("GivenNames", node.PropertyDependencies[0].WhenPropertyIsSet.Name);
-        Assert.Equal("FullName", node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name);
-        Assert.Equal("FamilyName", node.PropertyDependencies[1].WhenPropertyIsSet.Name);
+        await Assert.That(node.PropertyDependencies[0].ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(node.PropertyDependencies[0].WhenPropertyIsSet.Name).IsEqualTo("GivenNames");
+        await Assert.That(node.PropertyDependencies[1].ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(node.PropertyDependencies[1].WhenPropertyIsSet.Name).IsEqualTo("FamilyName");
     }
 
     public class Person<T>

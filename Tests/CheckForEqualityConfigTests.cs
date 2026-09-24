@@ -1,48 +1,48 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 
 public class CheckForEqualityConfigTests
 {
-    [Fact]
-    public void False()
+    [Test]
+    public async Task False()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEquality='false'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveCheckForEqualityConfig();
-        Assert.False(weaver.CheckForEquality);
+        await Assert.That(weaver.CheckForEquality).IsFalse();
     }
 
-    [Fact]
-    public void False0()
+    [Test]
+    public async Task False0()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEquality='0'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveCheckForEqualityConfig();
-        Assert.False(weaver.CheckForEquality);
+        await Assert.That(weaver.CheckForEquality).IsFalse();
     }
 
-    [Fact]
-    public void True()
+    [Test]
+    public async Task True()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEquality='True'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveCheckForEqualityConfig();
-        Assert.True(weaver.CheckForEquality);
+        await Assert.That(weaver.CheckForEquality).IsTrue();
     }
 
-    [Fact]
-    public void True1()
+    [Test]
+    public async Task True1()
     {
         var xElement = XElement.Parse("<PropertyChanged CheckForEquality='1'/>");
         var weaver = new ModuleWeaver { Config = xElement };
         weaver.ResolveCheckForEqualityConfig();
-        Assert.True(weaver.CheckForEquality);
+        await Assert.That(weaver.CheckForEquality).IsTrue();
     }
 
-    [Fact]
-    public void Default()
+    [Test]
+    public async Task Default()
     {
         var weaver = new ModuleWeaver();
         weaver.ResolveCheckForEqualityConfig();
-        Assert.True(weaver.CheckForEquality);
+        await Assert.That(weaver.CheckForEquality).IsTrue();
     }
 }

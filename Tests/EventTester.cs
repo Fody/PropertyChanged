@@ -1,9 +1,17 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Reflection;
 
 public static class EventTester
 {
+    static void Ensure(bool condition)
+    {
+        if (!condition)
+        {
+            throw new("Expected condition to be true.");
+        }
+    }
+
     internal static void TestPropertyNotCalled(dynamic instance)
     {
         var property1EventCalled = false;
@@ -15,7 +23,7 @@ public static class EventTester
             }
         };
         instance.Property1 = "a";
-        Assert.False(property1EventCalled);
+        Ensure(!property1EventCalled);
     }
 
     internal static void TestProperty(dynamic instance, bool checkProperty2, bool delayAfterSetProperty1 = false)
@@ -41,20 +49,20 @@ public static class EventTester
             Task.Delay(TimeSpan.FromMilliseconds(25)).Wait();
         }
 
-        Assert.True(property1EventCalled);
+        Ensure(property1EventCalled);
         if (checkProperty2)
         {
-            Assert.True(property2EventCalled);
+            Ensure(property2EventCalled);
         }
 
         property1EventCalled = false;
         property2EventCalled = false;
         //Property has not changed on re-set so event not fired
         instance.Property1 = "a";
-        Assert.False(property1EventCalled);
+        Ensure(!property1EventCalled);
         if (checkProperty2)
         {
-            Assert.False(property2EventCalled);
+            Ensure(!property2EventCalled);
         }
     }
 
@@ -73,7 +81,7 @@ public static class EventTester
         var propertyInfo = type.GetProperties().First(_ => _.Name == propertyName);
         propertyInfo.SetValue(instance, propertyValue, null);
 
-        Assert.True(eventCalled);
+        Ensure(eventCalled);
         if (ignoreEquality)
         {
             return;
@@ -81,7 +89,7 @@ public static class EventTester
 
         eventCalled = false;
         propertyInfo.SetValue(instance, propertyValue, null);
-        Assert.False(eventCalled);
+        Ensure(!eventCalled);
     }
 
     internal static void TestValueTypeProperty(dynamic instance)
@@ -97,11 +105,11 @@ public static class EventTester
         });
 
         instance.Property1 = "a";
-        Assert.True(property1EventCalled);
+        Ensure(property1EventCalled);
 
         property1EventCalled = false;
         instance.Property1 = "a";
-        Assert.False(property1EventCalled);
+        Ensure(!property1EventCalled);
     }
 
     public static dynamic GetInstance(this Assembly assembly, string className, params object[] args)

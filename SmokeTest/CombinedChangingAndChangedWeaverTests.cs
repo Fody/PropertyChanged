@@ -1,4 +1,4 @@
-﻿#if NETFRAMEWORK
+#if NETFRAMEWORK
 using ICSharpCode.Decompiler.Metadata;
 using PropertyChanged;
 using PropertyChanging;
@@ -14,15 +14,15 @@ public sealed class CombinedChangingAndChangedWeaverTests : IDisposable
     PropertyToDisassemble GetProperty(string propertyName) =>
         new(_file, "SmokeTest.Testee", propertyName, PropertyParts.Setter);
 
-    [Fact]
+    [Test]
     public Task ReferenceTypeProperty() =>
         Verify(GetProperty("Property1")).UniqueForAssemblyConfiguration();
 
-    [Fact]
+    [Test]
     public Task ValueTypeProperty() =>
         Verify(GetProperty("Property2")).UniqueForAssemblyConfiguration();
 
-    [Fact]
+    [Test]
     public Task NullableValueTypeProperty() =>
         Verify(GetProperty("Property3")).UniqueForAssemblyConfiguration();
 

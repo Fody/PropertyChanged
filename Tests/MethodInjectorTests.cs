@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Mono.Cecil;
 
@@ -6,90 +6,90 @@ using Mono.Cecil;
 [SuppressMessage("ReSharper", "DelegateSubtraction")]
 public class MethodInjectorTests
 {
-    [Fact]
-    public void ShouldFindCorrectHandlerFieldInDefaultImpl()
+    [Test]
+    public async Task ShouldFindCorrectHandlerFieldInDefaultImpl()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithMultipleHandlerFieldsDefaultImpl).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.NotNull(field);
-        Assert.NotEqual(ClassWithMultipleHandlerFieldsDefaultImpl.UnexpectedFieldName, field.Name);
+        await Assert.That(field).IsNotNull();
+        await Assert.That(field.Name).IsNotEqualTo(ClassWithMultipleHandlerFieldsDefaultImpl.UnexpectedFieldName);
     }
 
-    [Fact]
-    public void ShouldFindCorrectHandlerFieldInCustomImpl()
+    [Test]
+    public async Task ShouldFindCorrectHandlerFieldInCustomImpl()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithMultipleHandlerFieldsCustomImpl).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.NotNull(field);
-        Assert.Equal(ClassWithMultipleHandlerFieldsCustomImpl.ExpectedFieldName, field.Name);
+        await Assert.That(field).IsNotNull();
+        await Assert.That(field.Name).IsEqualTo(ClassWithMultipleHandlerFieldsCustomImpl.ExpectedFieldName);
     }
 
-    [Fact]
-    public void ShouldFindCorrectHandlerFieldInExplicitImpl()
+    [Test]
+    public async Task ShouldFindCorrectHandlerFieldInExplicitImpl()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithMultipleHandlerFieldsExplicitImpl).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.NotNull(field);
-        Assert.Equal(ClassWithMultipleHandlerFieldsExplicitImpl.ExpectedFieldName, field.Name);
+        await Assert.That(field).IsNotNull();
+        await Assert.That(field.Name).IsEqualTo(ClassWithMultipleHandlerFieldsExplicitImpl.ExpectedFieldName);
     }
 
-    [Fact]
-    public void ShouldNotConfuseExplicitImplWithUnrelatedEvent()
+    [Test]
+    public async Task ShouldNotConfuseExplicitImplWithUnrelatedEvent()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithExplicitImplAndPropertyChangedEvent).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.NotNull(field);
-        Assert.Equal(ClassWithExplicitImplAndPropertyChangedEvent.ExpectedFieldName, field.Name);
+        await Assert.That(field).IsNotNull();
+        await Assert.That(field.Name).IsEqualTo(ClassWithExplicitImplAndPropertyChangedEvent.ExpectedFieldName);
     }
 
-    [Fact]
-    public void ShouldFindCorrectHandlerFieldInClassThatReImplementsInterface()
+    [Test]
+    public async Task ShouldFindCorrectHandlerFieldInClassThatReImplementsInterface()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassThatReImplementsInterface).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.NotNull(field);
-        Assert.Equal(ClassThatReImplementsInterface.ExpectedFieldName, field.Name);
+        await Assert.That(field).IsNotNull();
+        await Assert.That(field.Name).IsEqualTo(ClassThatReImplementsInterface.ExpectedFieldName);
     }
 
-    [Fact]
-    public void ShouldNotFindUnrelatedFields()
+    [Test]
+    public async Task ShouldNotFindUnrelatedFields()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithMultipleHandlerFieldsCustomInvalid).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.Null(field);
+        await Assert.That(field).IsNull();
     }
 
-    [Fact]
-    public void ShouldNotFindUnrelatedFieldsInExplicitImpl()
+    [Test]
+    public async Task ShouldNotFindUnrelatedFieldsInExplicitImpl()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithMultipleHandlerFieldsExplicitInvalid).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.Null(field);
+        await Assert.That(field).IsNull();
     }
 
-    [Fact]
-    public void ShouldNotFindHandlerFieldInDerivedClass()
+    [Test]
+    public async Task ShouldNotFindHandlerFieldInDerivedClass()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassDerivedFromExplicit).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.Null(field);
+        await Assert.That(field).IsNull();
     }
 
-    [Fact]
-    public void ShouldNotFindAmbiguousField()
+    [Test]
+    public async Task ShouldNotFindAmbiguousField()
     {
         var type = methodInjector.ModuleDefinition.GetType(typeof(ClassWithMultipleHandlerFieldReferences).FullName, true).Resolve();
         var field = methodInjector.GetEventHandlerField(type);
 
-        Assert.Null(field);
+        await Assert.That(field).IsNull();
     }
 
     ModuleWeaver methodInjector = new()

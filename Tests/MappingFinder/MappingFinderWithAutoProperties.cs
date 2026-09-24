@@ -1,12 +1,12 @@
 public class MappingFinderWithAutoProperties
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
 
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithAutoProperties>()).ToList();
-        Assert.Equal("<Property1>k__BackingField", memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.Equal("<Property2>k__BackingField", memberMappings.Single(_ => _.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        await Assert.That(memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1").FieldDefinition.Name).IsEqualTo("<Property1>k__BackingField");
+        await Assert.That(memberMappings.Single(_ => _.PropertyDefinition.Name == "Property2").FieldDefinition.Name).IsEqualTo("<Property2>k__BackingField");
     }
 
     public class ClassWithAutoProperties

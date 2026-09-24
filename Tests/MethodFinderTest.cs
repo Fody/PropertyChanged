@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using Mono.Cecil;
 
 public class MethodFinderTest
@@ -18,14 +18,14 @@ public class MethodFinderTest
         typeDefinition = module.Types.First(_ => _.Name.EndsWith("MethodFinderTest"));
     }
 
-    [Fact]
-    public void WithStringParamTest()
+    [Test]
+    public async Task WithStringParamTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "WithStringParam");
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
-        Assert.NotNull(methodReference);
-        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
-        Assert.Equal(InvokerTypes.String, methodReference.InvokerType);
+        await Assert.That(methodReference).IsNotNull();
+        await Assert.That(methodReference.MethodReference.Name).IsEqualTo("OnPropertyChanged");
+        await Assert.That(methodReference.InvokerType).IsEqualTo(InvokerTypes.String);
     }
 
     public class WithStringParam
@@ -35,14 +35,14 @@ public class MethodFinderTest
         }
     }
 
-    [Fact]
-    public void WithStringAndBeforeAfterParamTest()
+    [Test]
+    public async Task WithStringAndBeforeAfterParamTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "WithStringAndBeforeAfter");
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
-        Assert.NotNull(methodReference);
-        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
-        Assert.Equal(InvokerTypes.BeforeAfter, methodReference.InvokerType);
+        await Assert.That(methodReference).IsNotNull();
+        await Assert.That(methodReference.MethodReference.Name).IsEqualTo("OnPropertyChanged");
+        await Assert.That(methodReference.InvokerType).IsEqualTo(InvokerTypes.BeforeAfter);
     }
 
     public class WithStringAndBeforeAfter
@@ -52,14 +52,14 @@ public class MethodFinderTest
         }
     }
 
-    [Fact]
-    public void WithPropertyChangedArgTest()
+    [Test]
+    public async Task WithPropertyChangedArgTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "WithPropertyChangedArg");
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
-        Assert.NotNull(methodReference);
-        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
-        Assert.Equal(InvokerTypes.PropertyChangedArg, methodReference.InvokerType);
+        await Assert.That(methodReference).IsNotNull();
+        await Assert.That(methodReference.MethodReference.Name).IsEqualTo("OnPropertyChanged");
+        await Assert.That(methodReference.InvokerType).IsEqualTo(InvokerTypes.PropertyChangedArg);
     }
 
     public class WithPropertyChangedArg
@@ -69,14 +69,14 @@ public class MethodFinderTest
         }
     }
 
-    [Fact]
-    public void WithSenderPropertyChangedArgTest()
+    [Test]
+    public async Task WithSenderPropertyChangedArgTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "WithSenderPropertyChangedArg");
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
-        Assert.NotNull(methodReference);
-        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
-        Assert.Equal(InvokerTypes.SenderPropertyChangedArg, methodReference.InvokerType);
+        await Assert.That(methodReference).IsNotNull();
+        await Assert.That(methodReference.MethodReference.Name).IsEqualTo("OnPropertyChanged");
+        await Assert.That(methodReference.InvokerType).IsEqualTo(InvokerTypes.SenderPropertyChangedArg);
     }
 
     public class WithSenderPropertyChangedArg
@@ -86,20 +86,20 @@ public class MethodFinderTest
         }
     }
 
-    [Fact]
-    public void NoMethodTest()
+    [Test]
+    public async Task NoMethodTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "NoMethod");
-        Assert.Null(methodFinder.RecursiveFindEventInvoker(definitionToProcess));
+        await Assert.That(methodFinder.RecursiveFindEventInvoker(definitionToProcess)).IsNull();
     }
 
     public class NoMethod;
 
-    [Fact]
-    public void NoParamsTest()
+    [Test]
+    public async Task NoParamsTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "NoParams");
-        Assert.Null(methodFinder.RecursiveFindEventInvoker(definitionToProcess));
+        await Assert.That(methodFinder.RecursiveFindEventInvoker(definitionToProcess)).IsNull();
     }
 
     public class NoParams
@@ -109,11 +109,11 @@ public class MethodFinderTest
         }
     }
 
-    [Fact]
-    public void WrongParamsTest()
+    [Test]
+    public async Task WrongParamsTest()
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == "WrongParams");
-        Assert.Null(methodFinder.RecursiveFindEventInvoker(definitionToProcess));
+        await Assert.That(methodFinder.RecursiveFindEventInvoker(definitionToProcess)).IsNull();
     }
 
     public class WrongParams
@@ -123,17 +123,17 @@ public class MethodFinderTest
         }
     }
 
-    [Theory]
-    [InlineData(nameof(MultipleInvokersStringFirst))]
-    [InlineData(nameof(ClassWithMultipleInvokersEventArgsFirst))]
-    public void PreferEventArgsOverString(string typeName)
+    [Test]
+    [Arguments(nameof(MultipleInvokersStringFirst))]
+    [Arguments(nameof(ClassWithMultipleInvokersEventArgsFirst))]
+    public async Task PreferEventArgsOverString(string typeName)
     {
         var definitionToProcess = typeDefinition.NestedTypes.First(_ => _.Name == typeName);
         var methodReference = methodFinder.RecursiveFindEventInvoker(definitionToProcess);
-        Assert.NotNull(methodReference);
-        Assert.Equal("OnPropertyChanged", methodReference.MethodReference.Name);
-        Assert.Equal(nameof(PropertyChangedEventArgs), methodReference.MethodReference.Parameters.First().ParameterType.Name);
-        Assert.Equal(InvokerTypes.PropertyChangedArg, methodReference.InvokerType);
+        await Assert.That(methodReference).IsNotNull();
+        await Assert.That(methodReference.MethodReference.Name).IsEqualTo("OnPropertyChanged");
+        await Assert.That(methodReference.MethodReference.Parameters.First().ParameterType.Name).IsEqualTo(nameof(PropertyChangedEventArgs));
+        await Assert.That(methodReference.InvokerType).IsEqualTo(InvokerTypes.PropertyChangedArg);
     }
 
     public class MultipleInvokersStringFirst

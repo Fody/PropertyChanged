@@ -1,7 +1,7 @@
-﻿public class WithGenericAutoProperties
+public class WithGenericAutoProperties
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person<int>>();
         var node = new TypeNode
@@ -11,11 +11,11 @@
                        };
         new IlGeneratedByDependencyReader(node).Process();
         var first = node.PropertyDependencies[0];
-        Assert.Equal("FullName", first.ShouldAlsoNotifyFor.Name);
-        Assert.Equal("GivenNames", first.WhenPropertyIsSet.Name);
+        await Assert.That(first.ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(first.WhenPropertyIsSet.Name).IsEqualTo("GivenNames");
         var second = node.PropertyDependencies[1];
-        Assert.Equal("FullName", second.ShouldAlsoNotifyFor.Name);
-        Assert.Equal("FamilyName", second.WhenPropertyIsSet.Name);
+        await Assert.That(second.ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(second.WhenPropertyIsSet.Name).IsEqualTo("FamilyName");
     }
 
     public class Person<T>

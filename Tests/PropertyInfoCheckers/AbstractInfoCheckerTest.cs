@@ -1,7 +1,7 @@
-﻿public class AbstractInfoCheckerTest
+public class AbstractInfoCheckerTest
 {
-    [Fact]
-    public void IsAbstract()
+    [Test]
+    public async Task IsAbstract()
     {
         var weaver = new ModuleWeaver();
         var propertyDefinition = DefinitionFinder.FindType<BaseClass>()
@@ -14,11 +14,11 @@
                 PropertyDefinition = propertyDefinition,
             },
             InvokerTypes.String);
-        Assert.NotNull(message);
+        await Assert.That(message).IsNotNull();
     }
 
-    [Fact]
-    public void NonAbstract()
+    [Test]
+    public async Task NonAbstract()
     {
         var weaver = new ModuleWeaver();
         var propertyDefinition = DefinitionFinder.FindType<BaseClass>()
@@ -31,7 +31,7 @@
                 PropertyDefinition = propertyDefinition,
             },
             InvokerTypes.String);
-        Assert.Null(message);
+        await Assert.That(message).IsNull();
     }
 
     public abstract class BaseClass

@@ -3,11 +3,11 @@
 
 public class MappingFinderInnerClass
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<Model>()).ToList();
-        Assert.Null(memberMappings.Single().FieldDefinition);
+        await Assert.That(memberMappings.Single().FieldDefinition).IsNull();
     }
 
     public class Model

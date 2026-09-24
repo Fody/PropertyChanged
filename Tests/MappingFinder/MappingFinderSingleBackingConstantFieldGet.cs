@@ -4,12 +4,12 @@
 
 public class MappingFinderSingleBackingConstantFieldGet
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithSingleBackingFieldsGet>()).ToList();
         var memberMapping = memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1");
-        Assert.Null(memberMapping.FieldDefinition);
+        await Assert.That(memberMapping.FieldDefinition).IsNull();
     }
 
     public class ClassWithSingleBackingFieldsGet

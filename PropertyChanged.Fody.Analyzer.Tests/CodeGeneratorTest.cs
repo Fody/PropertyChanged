@@ -9,7 +9,7 @@ public class CodeGeneratorTest
         SourceGeneratorEngine.GeneratorVersion = "TEST";
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForNonPartialClass()
     {
         var source = """
@@ -25,12 +25,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandler()
     {
         var source = """
@@ -46,12 +46,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithoutEventHandler()
     {
         var source = """
@@ -65,11 +65,11 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsNotGeneratedForPartialRecordWithoutEventHandler()
     {
         var source = """
@@ -88,12 +88,12 @@ public class CodeGeneratorTest
             ExpectedDiagnostics = { CS0535.WithArguments("Class1", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged") }
         };
 
-        var generated = await test.RunAsync(TestContext.Current.CancellationToken);
+        var generated = await test.RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithFullNameInterface()
     {
         var source = """
@@ -105,12 +105,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialGenericClassWithoutEventHandler()
     {
         var source = """
@@ -124,12 +124,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPart()
     {
         var source = """
@@ -147,12 +147,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForPartialClassWithEventHandlerInDifferentPartAndDifferentSource()
     {
         var source1 = """
@@ -176,12 +176,12 @@ public class CodeGeneratorTest
                       }
 
                       """;
-        var generated = await new Test(source1, source2).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source1, source2).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithRedundantInterfaceImplementation()
     {
         var source1 = """
@@ -204,12 +204,12 @@ public class CodeGeneratorTest
                       }
 
                       """;
-        var generated = await new Test(source1, source2).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source1, source2).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithRedundantInterfaceImplementationAndAttributeButNotOnTheFirstPart()
     {
         var source = """
@@ -234,12 +234,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForPartialStructWithoutEventHandler()
     {
         var source = """
@@ -258,12 +258,12 @@ public class CodeGeneratorTest
             ExpectedDiagnostics = { CS0535.WithArguments("Class1", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged") }
         };
 
-        var generated = await test.RunAsync(TestContext.Current.CancellationToken);
+        var generated = await test.RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithAttribute()
     {
         var source = """
@@ -278,12 +278,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsNotGeneratedForPartialRecordWithAttribute()
     {
         var source = """
@@ -298,12 +298,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithAttributeAndInterfaceAndBaseClass()
     {
         var source = """
@@ -320,12 +320,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForPartialClass2WithAttributeAndAttributedBaseClass()
     {
         var source = """
@@ -345,12 +345,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForPartialClass2WithAttributeAndInterfaceImplementationInBaseClass()
     {
         var source = """
@@ -370,12 +370,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialClassWithAttributeInFileScopedNamespace()
     {
         var source = """
@@ -392,12 +392,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForPartialGenericClassWithAttribute()
     {
         var source = """
@@ -412,12 +412,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedNoneVirtualForSealedPartialClassWithAttribute()
     {
         var source = """
@@ -432,12 +432,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForClassesInMultipleNamespaces()
     {
         var source = """
@@ -489,12 +489,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForNestedPartialClasses()
     {
         var source = """
@@ -522,12 +522,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForClassesNestedInStruct()
     {
         var source = """
@@ -548,12 +548,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForClassesNestedInRecord()
     {
         var source = """
@@ -574,12 +574,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task CodeIsGeneratedForDeepNestedItems()
     {
         var source = """
@@ -608,12 +608,12 @@ public class CodeGeneratorTest
                      }
 
                      """;
-        var generated = await new Test(source).RunAsync(TestContext.Current.CancellationToken);
+        var generated = await new Test(source).RunAsync(TestContext.Current!.Execution.CancellationToken);
 
         await Verify(generated);
     }
 
-    [Fact]
+    [Test]
     public async Task NoCodeIsGeneratedForNestedPartialClassIfNotAllContainingClassesArePartial()
     {
         var source = """
@@ -644,8 +644,8 @@ public class CodeGeneratorTest
             ExpectedDiagnostics = { CS0535.WithArguments("Class1.Class2.Class3", "System.ComponentModel.INotifyPropertyChanged.PropertyChanged") }
         };
 
-        var generated = await test.RunAsync(TestContext.Current.CancellationToken);
+        var generated = await test.RunAsync(TestContext.Current!.Execution.CancellationToken);
 
-        Assert.Empty(generated);
+        await Assert.That(generated).IsEmpty();
     }
 }

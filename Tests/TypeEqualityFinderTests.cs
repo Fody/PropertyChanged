@@ -2,27 +2,27 @@ using System.Data.SqlTypes;
 
 public class TypeEqualityFinderTests
 {
-    [Fact]
-    public void TestSqlGuid()
+    [Test]
+    public async Task TestSqlGuid()
     {
         var typeDefinition = DefinitionFinder.FindType<SqlGuid>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
-        Assert.Null(findNamedMethod);
+        await Assert.That(findNamedMethod).IsNull();
     }
 
-    [Fact]
-    public void TestInt()
+    [Test]
+    public async Task TestInt()
     {
         var typeDefinition = DefinitionFinder.FindType<int>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
-        Assert.Null(findNamedMethod);
+        await Assert.That(findNamedMethod).IsNull();
     }
 
-    [Fact]
-    public void TestString()
+    [Test]
+    public async Task TestString()
     {
         var typeDefinition = DefinitionFinder.FindType<string>();
         var findNamedMethod = ModuleWeaver.FindNamedMethod(typeDefinition);
-        Assert.Equal("System.Boolean System.String::Equals(System.String,System.String)", findNamedMethod.FullName);
+        await Assert.That(findNamedMethod.FullName).IsEqualTo("System.Boolean System.String::Equals(System.String,System.String)");
     }
 }

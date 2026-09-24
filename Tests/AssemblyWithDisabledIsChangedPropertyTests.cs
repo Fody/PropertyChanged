@@ -1,5 +1,7 @@
 using TestResult = Fody.TestResult;
 
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
 public class AssemblyWithDisabledIsChangedPropertyTests
 {
     static TestResult testResult;
@@ -15,12 +17,12 @@ public class AssemblyWithDisabledIsChangedPropertyTests
             ignoreCodes: ["0x80131869"]);
     }
 
-    [Fact]
-    public void DisabledIsChangedProperty()
+    [Test]
+    public async Task DisabledIsChangedProperty()
     {
         var instance = testResult.GetInstance(nameof(IsChangedClassToTest));
         instance.Property1 = "foo";
 
-        Assert.True(instance.IsChanged != true);
+        await Assert.That((bool)instance.IsChanged).IsFalse();
     }
 }

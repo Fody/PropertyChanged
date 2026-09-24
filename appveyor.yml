@@ -10,7 +10,8 @@ build_script:
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
     ./dotnet-install.ps1 -JSonFile global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
 - dotnet build --configuration Release
-- dotnet test --configuration Release --no-build --no-restore
 test: off
+test_script:
+- ps: .\runTests.ps1
 artifacts:
   - path: nugets\**\*.nupkg

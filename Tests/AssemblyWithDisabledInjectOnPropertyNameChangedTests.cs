@@ -1,5 +1,7 @@
 using TestResult = Fody.TestResult;
 
+// weaved assemblies are written to a shared fodytemp folder and loaded into the process
+[NotInParallel]
 public class AssemblyWithDisabledInjectOnPropertyNameChangedTests
 {
     static TestResult testResult;
@@ -15,21 +17,21 @@ public class AssemblyWithDisabledInjectOnPropertyNameChangedTests
             ignoreCodes: ["0x80131869"]);
     }
 
-    [Fact]
-    public void DefaultMethodCallsAreNotInjected()
+    [Test]
+    public async Task DefaultMethodCallsAreNotInjected()
     {
         var instance = testResult.GetInstance(nameof(ClassWithOnPropertyChangedMethod));
         instance.Property1 = "foo";
 
-        Assert.Equal(0, instance.OnProperty1ChangedCallCount);
+        await Assert.That((int)instance.OnProperty1ChangedCallCount).IsEqualTo(0);
     }
 
-    [Fact]
-    public void CustomMethodCallsAreInjected()
+    [Test]
+    public async Task CustomMethodCallsAreInjected()
     {
         var instance = testResult.GetInstance(nameof(ClassWithConfiguredOnPropertyChanged));
         instance.Property1 = "foo";
 
-        Assert.Equal(1, instance.OnProperty1ChangedCallCount);
+        await Assert.That((int)instance.OnProperty1ChangedCallCount).IsEqualTo(1);
     }
 }

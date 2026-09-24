@@ -2,8 +2,8 @@ using System.Diagnostics;
 
 public class RecursiveIlFinderTests
 {
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<InnerClass>();
         var recursiveIlFinder = new RecursiveIlFinder(typeDefinition);
@@ -11,9 +11,9 @@ public class RecursiveIlFinderTests
         var methodDefinition = typeDefinition.Methods.First(_ => _.Name == "Method1");
         recursiveIlFinder.Execute(methodDefinition);
 #if(DEBUG)
-        Assert.Equal(25, recursiveIlFinder.Instructions.Count);
+        await Assert.That(recursiveIlFinder.Instructions.Count).IsEqualTo(25);
 #else
-        Assert.Equal(15, recursiveIlFinder.Instructions.Count);
+        await Assert.That(recursiveIlFinder.Instructions.Count).IsEqualTo(15);
 #endif
     }
 

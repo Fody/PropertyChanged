@@ -20,125 +20,125 @@ public class HasEqualityCheckerTests
         fields = typeDefinition.Fields;
     }
 
-    [Fact]
-    public void EqualityShortCutTest()
+    [Test]
+    public async Task EqualityShortCutTest()
     {
         var instructions = GetInstructions("EqualityShortCut");
         var field = GetField("intField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void EqualsNoFieldTest()
+    [Test]
+    public async Task EqualsNoFieldTest()
     {
         var instructions = GetInstructions("EqualsNoField");
         var field = GetField("intField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, null));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, null)).IsTrue();
     }
-    [Fact]
-    public void NoEqualsNoFieldTest()
+    [Test]
+    public async Task NoEqualsNoFieldTest()
     {
         var instructions = GetInstructions("NoEqualsNoField");
         var field = GetField("intField");
-        Assert.False(HasEqualityChecker.AlreadyHasEquality(instructions, null));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, null)).IsFalse();
     }
-    [Fact]
-    public void EqualityShortCutInverseTest()
+    [Test]
+    public async Task EqualityShortCutInverseTest()
     {
         var instructions = GetInstructions("EqualityShortCutInverse");
         var field = GetField("intField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void EqualityNestedTest()
+    [Test]
+    public async Task EqualityNestedTest()
     {
         var instructions = GetInstructions("EqualityNested");
         var field = GetField("intField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
-    [Fact]
-    public void EqualityNestedInverseTest()
+    [Test]
+    public async Task EqualityNestedInverseTest()
     {
         var instructions = GetInstructions("EqualityNestedInverse");
         var field = GetField("intField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void EqualsShortCutTest()
+    [Test]
+    public async Task EqualsShortCutTest()
     {
         var instructions = GetInstructions("EqualsShortCut");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
-    [Fact]
-    public void EqualsShortCutInverseTest()
+    [Test]
+    public async Task EqualsShortCutInverseTest()
     {
         var instructions = GetInstructions("EqualsShortCutInverse");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void EqualsNestedInverseTest()
+    [Test]
+    public async Task EqualsNestedInverseTest()
     {
         var instructions = GetInstructions("EqualsNestedInverse");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
-    [Fact]
-    public void EqualsNestedTest()
+    [Test]
+    public async Task EqualsNestedTest()
     {
         var instructions = GetInstructions("EqualsNested");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
-    [Fact]
-    public void StringEqualsShortCutTest()
+    [Test]
+    public async Task StringEqualsShortCutTest()
     {
         var instructions = GetInstructions("StringEqualsShortCut");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
-    [Fact]
-    public void StringEqualsShortCutInverseTest()
+    [Test]
+    public async Task StringEqualsShortCutInverseTest()
     {
         var instructions = GetInstructions("StringEqualsShortCutInverse");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void StringEqualsNestedTest()
+    [Test]
+    public async Task StringEqualsNestedTest()
     {
         var instructions = GetInstructions("StringEqualsNested");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void StringEqualsOrdinalTest()
+    [Test]
+    public async Task StringEqualsOrdinalTest()
     {
         var instructions = GetInstructions("StringEqualsOrdinal");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void StringEqualsNestedInverseTest()
+    [Test]
+    public async Task StringEqualsNestedInverseTest()
     {
         var instructions = GetInstructions("StringEqualsNestedInverse");
         var field = GetField("stringField");
-        Assert.True(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsTrue();
     }
 
-    [Fact]
-    public void NoEqualityTest()
+    [Test]
+    public async Task NoEqualityTest()
     {
         var instructions = GetInstructions("NoEquality");
         var field = GetField("stringField");
-        Assert.False(HasEqualityChecker.AlreadyHasEquality(instructions, field));
+        await Assert.That(HasEqualityChecker.AlreadyHasEquality(instructions, field)).IsFalse();
     }
 
     PropertyDefinition GetInstructions(string equalityShortcut)

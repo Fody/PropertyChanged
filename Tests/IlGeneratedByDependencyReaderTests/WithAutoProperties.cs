@@ -1,9 +1,9 @@
-﻿public class WithAutoProperties
+public class WithAutoProperties
 {
     //TODO: add test for abstract
 
-    [Fact]
-    public void Run()
+    [Test]
+    public async Task Run()
     {
         var typeDefinition = DefinitionFinder.FindType<Person>();
         var node = new TypeNode
@@ -12,13 +12,13 @@
             Mappings = ModuleWeaver.GetMappings(typeDefinition).ToList()
         };
         new IlGeneratedByDependencyReader(node).Process();
-        Assert.Equal(2, node.PropertyDependencies.Count);
+        await Assert.That(node.PropertyDependencies.Count).IsEqualTo(2);
         var first = node.PropertyDependencies[0];
-        Assert.Equal("FullName", first.ShouldAlsoNotifyFor.Name);
-        Assert.Equal("GivenNames", first.WhenPropertyIsSet.Name);
+        await Assert.That(first.ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(first.WhenPropertyIsSet.Name).IsEqualTo("GivenNames");
         var second = node.PropertyDependencies[1];
-        Assert.Equal("FullName", second.ShouldAlsoNotifyFor.Name);
-        Assert.Equal("FamilyName", second.WhenPropertyIsSet.Name);
+        await Assert.That(second.ShouldAlsoNotifyFor.Name).IsEqualTo("FullName");
+        await Assert.That(second.WhenPropertyIsSet.Name).IsEqualTo("FamilyName");
     }
 
     public class Person

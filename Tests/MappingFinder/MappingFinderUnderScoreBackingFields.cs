@@ -1,11 +1,11 @@
-﻿public class MappingFinderUnderScoreBackingFields
+public class MappingFinderUnderScoreBackingFields
 {
-    [Fact]
-    public void WithLowerUnderScoreBackingFields()
+    [Test]
+    public async Task WithLowerUnderScoreBackingFields()
     {
         var memberMappings = ModuleWeaver.GetMappings(DefinitionFinder.FindType<ClassWithUnderScoreBackingFields>()).ToList();
-        Assert.Equal("_property1", memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1").FieldDefinition.Name);
-        Assert.Equal("_property2", memberMappings.Single(_ => _.PropertyDefinition.Name == "Property2").FieldDefinition.Name);
+        await Assert.That(memberMappings.Single(_ => _.PropertyDefinition.Name == "Property1").FieldDefinition.Name).IsEqualTo("_property1");
+        await Assert.That(memberMappings.Single(_ => _.PropertyDefinition.Name == "Property2").FieldDefinition.Name).IsEqualTo("_property2");
     }
 
     public class ClassWithUnderScoreBackingFields
