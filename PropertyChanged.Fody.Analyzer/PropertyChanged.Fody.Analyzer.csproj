@@ -6,8 +6,8 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" VersionOverride="3.3.4" PrivateAssets="all" IsPinned="true" Justification="Stick with this version for compatibility with older VS versions"/>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="4.0.1" PrivateAssets="all" IsPinned="true" Justification="Stick with this version for compatibility with older VS versions"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" VersionOverride="5.9.0" PrivateAssets="all" IsPinned="true" Justification="Stick with this version for compatibility with older VS versions"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="5.9.0" PrivateAssets="all" IsPinned="true" Justification="Stick with this version for compatibility with older VS versions"/>
     <PackageReference Include="Nullable.Extended.Analyzer" PrivateAssets="all" />
   </ItemGroup>
 </Project>
