@@ -1,29 +1,45 @@
-# Follows https://docs.github.com/en/code-security/tutorials/secure-your-dependencies/automate-dependabot-with-actions
-#
-# Auto-merge only waits for the checks the default branch requires, so this relies on a ruleset
-# requiring the CI check, and on "Allow auto-merge" being on in the repository settings.
-name: Dependabot auto-merge
-on: pull_request
+name: merge-dependabot
+
+# Merges minor and patch Dependabot pull requests once the Build workflow has passed on them.
+# Triggering on workflow_run rather than pull_request means an untested bump is never merged, and
+# no branch protection is needed (a required check would also block the docs workflow's pushes).
+# No personal access token: GITHUB_TOKEN gets write access through the permissions block below.
+# Major version bumps are left for a person.
+on:
+  workflow_run:
+    workflows: [Build]
+    types: [completed]
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  dependabot:
+  merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'Fody/PropertyChanged'
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]'
     steps:
-      # v2.3.0, pinned to a commit as in the docs
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      # Patch and minor updates, squashed, as before
-      - name: Enable auto-merge for Dependabot PRs
-        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
-        run: gh pr merge --auto --squash "$PR_URL"
+      # Dependabot records the update type in its commit message metadata, for example
+      # "update-type: version-update:semver-minor". A grouped bump lists one per dependency.
+      # --match-head-commit refuses the merge if the branch moved after this build ran.
+      - name: Merge when the bump is minor or patch
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          MESSAGE: ${{ github.event.workflow_run.head_commit.message }}
+        run: |
+          if grep -q 'update-type: version-update:semver-major' <<< "$MESSAGE"; then
+            echo "Major version bump, leaving for review"
+            exit 0
+          fi
+          pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+          if [ -z "$pr" ]; then
+            echo "::warning::No open pull request for $BRANCH"
+            exit 0
+          fi
+          gh pr merge "$pr" --squash --match-head-commit "$HEAD_SHA"
