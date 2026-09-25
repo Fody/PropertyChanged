@@ -1,5 +1,3 @@
-using PropertyChanged;
-
 // ReSharper disable UnusedVariable
 public class DependsOnDataAttributeReaderTests
 {

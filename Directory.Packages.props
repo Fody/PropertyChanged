@@ -9,6 +9,20 @@
     <PackageVersion Include="Fody" Version="6.9.3" />
     <PackageVersion Include="FodyHelpers" Version="6.9.3" />
     <PackageVersion Include="FodyPackaging" Version="6.9.3" />
+    <!-- The Roslyn floor: a shipping contract, not a dependency to keep current. Any
+         compiler older than the one an analyzer was built against skips it with CS9057,
+         silently losing every diagnostic — and takes the source generator with it, so
+         consumers also get a CS0246 cascade on [UnionSyntax] / [ReturnSyntax].
+
+         4.11 is the .NET 8 SDK's compiler, so this loads on .NET 8, 9 and 10. It is also
+         the practical lower bound: Roslyn 4.8 and below bundle a System.Collections.
+         Immutable predating CollectionBuilderAttribute, and every collection expression
+         over ImmutableArray in this repo fails there with CS9210.
+
+         Raising this drops every toolchain below the new value. RoslynFloorTests pins the
+         version actually compiled into the analyzer so that cannot happen by accident. -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" Pinned="true" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" Pinned="true" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" />
     <PackageVersion Include="Nullable.Extended.Analyzer" Version="1.16.6891" />

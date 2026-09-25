@@ -9,12 +9,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AnalyzerTesting.CSharp.Extensions" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <PackageReference Include="Verify.TUnit" />
     <PackageReference Include="TUnit.Core" />
     <PackageReference Include="TUnit.Assertions" />
     <PackageReference Include="TUnit.Engine" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PropertyChanged\PropertyChanged.csproj" />
     <ProjectReference Include="..\PropertyChanged.Fody.Analyzer\PropertyChanged.Fody.Analyzer.csproj" NoWarn="NU1608" />
   </ItemGroup>
