@@ -32,6 +32,6 @@
     <PackageVersion Include="TUnit.Core" Version="1.72.16" />
     <PackageVersion Include="TUnit.Assertions" Version="1.72.16" />
     <PackageVersion Include="TUnit.Engine" Version="1.72.16" />
-    <PackageVersion Include="Verify.TUnit" Version="33.3.0" />
+    <PackageVersion Include="Verify.TUnit" Version="33.3.2-beta.1" />
   </ItemGroup>
 </Project>
