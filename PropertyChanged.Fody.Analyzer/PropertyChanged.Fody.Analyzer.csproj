@@ -9,6 +9,5 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
-    <PackageReference Include="Nullable.Extended.Analyzer" PrivateAssets="all" />
   </ItemGroup>
 </Project>
