@@ -11,6 +11,7 @@
     <PackageReference Include="AnalyzerTesting.CSharp.Extensions" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
     <PackageReference Include="TUnit.Core" />
     <PackageReference Include="TUnit.Assertions" />
     <PackageReference Include="TUnit.Engine" />
