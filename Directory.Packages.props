@@ -21,9 +21,9 @@
 
          Raising this drops every toolchain below the new value. RoslynFloorTests pins the
          version actually compiled into the analyzer so that cannot happen by accident. -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" Pinned="true" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" Pinned="true" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" Pinned="true" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.12.0" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" />
     <PackageVersion Include="PropertyChanging.Fody" Version="1.31.0" />
     <PackageVersion Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
