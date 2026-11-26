@@ -5,3 +5,7 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  # Pinned in Directory.Packages.props: the Roslyn floor the analyzer supports.
+  ignore:
+  - dependency-name: "Microsoft.CodeAnalysis.CSharp"
+  - dependency-name: "Microsoft.CodeAnalysis.CSharp.Workspaces"
